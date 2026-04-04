@@ -50,6 +50,7 @@ export type ClientFeatures = {
 export type ClientConfig = {
   clientId: string
   displayName: string
+  sanityProjectId: string
   sanityDataset: string
   customDomain: string
   swaResourceName: string

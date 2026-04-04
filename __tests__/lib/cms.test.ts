@@ -22,7 +22,6 @@ describe('createCMSClient', () => {
 
   beforeEach(() => {
     vi.resetModules()
-    process.env.SANITY_PROJECT_ID = 'testproject'
     mockFetch = vi.fn()
     vi.mocked(createClient).mockReturnValue({ fetch: mockFetch } as any)
   })
@@ -35,7 +34,7 @@ describe('createCMSClient', () => {
         { slug: { current: 'menu' } },
       ])
 
-      const cms = createCMSClient('restaurante-pepe-prod')
+      const cms = createCMSClient('testproject', 'restaurante-pepe-prod')
       const pages = await cms.getPages()
 
       expect(pages).toEqual([
@@ -47,7 +46,7 @@ describe('createCMSClient', () => {
 
     it('returns empty array when no pages exist', async () => {
       mockFetch.mockResolvedValue([])
-      const cms = createCMSClient('restaurante-pepe-prod')
+      const cms = createCMSClient('testproject', 'restaurante-pepe-prod')
       expect(await cms.getPages()).toEqual([])
     })
   })
@@ -62,7 +61,7 @@ describe('createCMSClient', () => {
         ],
       })
 
-      const cms = createCMSClient('restaurante-pepe-prod')
+      const cms = createCMSClient('testproject', 'restaurante-pepe-prod')
       const page = await cms.getPage('about')
 
       expect(page?.blocks[0]._type).toBe('hero')
@@ -71,7 +70,7 @@ describe('createCMSClient', () => {
 
     it('returns null when page is not found', async () => {
       mockFetch.mockResolvedValue(null)
-      const cms = createCMSClient('restaurante-pepe-prod')
+      const cms = createCMSClient('testproject', 'restaurante-pepe-prod')
       expect(await cms.getPage('nonexistent')).toBeNull()
     })
   })

@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 export async function generateStaticParams() {
   const clientId = process.env.CLIENT_ID!
   const config = getClientConfig(clientId)
-  const cms = createCMSClient(config.sanityDataset)
+  const cms = createCMSClient(config.sanityProjectId, config.sanityDataset)
   const pages = await cms.getPages()
 
   return pages.map((p) => ({
@@ -22,7 +22,7 @@ export default async function Page({ params }: PageProps) {
   const { slug } = await params
   const clientId = process.env.CLIENT_ID!
   const config = getClientConfig(clientId)
-  const cms = createCMSClient(config.sanityDataset)
+  const cms = createCMSClient(config.sanityProjectId, config.sanityDataset)
 
   const slugString = slug ? slug.join('/') : ''
   const page = await cms.getPage(slugString)

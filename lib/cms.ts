@@ -5,9 +5,9 @@ import type { Block } from '@/types/cms'
 type SanityPageSlug = { slug: { current: string } }
 type SanityPage = { slug: { current: string }; blocks: Block[] }
 
-export function createCMSClient(dataset: string) {
+export function createCMSClient(projectId: string, dataset: string) {
   const client = createClient({
-    projectId: process.env.SANITY_PROJECT_ID!,
+    projectId,
     dataset,
     apiVersion: '2024-01-01',
     useCdn: true,
