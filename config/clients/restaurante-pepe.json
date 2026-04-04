@@ -1,8 +1,8 @@
 {
   "clientId": "restaurante-pepe",
   "displayName": "Restaurante Pepe",
-  "sanityProjectId": "replace-with-sanity-project-id",
-  "sanityDataset": "restaurante-pepe-prod",
+  "sanityProjectId": "7a3w4stg",
+  "sanityDataset": "production",
   "customDomain": "restaurante-pepe.com",
   "swaResourceName": "swa-restaurante-pepe",
   "features": {

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "serve": "next export && npx serve out",
+    "serve": "npm run build && npx serve out",
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest"
