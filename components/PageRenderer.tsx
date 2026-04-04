@@ -1,4 +1,7 @@
 import type { Block } from '@/types/cms'
+import PricingPageBlock from '@/components/blocks/PricingPageBlock'
+import ServicesPageBlock from '@/components/blocks/ServicesPageBlock'
+import TestimonialsPageBlock from '@/components/blocks/TestimonialsPageBlock'
 import HeroBlock from '@/components/blocks/HeroBlock'
 import ServicesBlock from '@/components/blocks/ServicesBlock'
 import ContactBlock from '@/components/blocks/ContactBlock'
@@ -69,6 +72,12 @@ export default function PageRenderer({ blocks }: PageRendererProps) {
             return <FeatureGridBlock key={i} {...block} />
           case 'testimonialsBlock':
             return <TestimonialsBlock key={i} {...block} />
+          case 'pricingPageBlock':
+            return <PricingPageBlock key={i} {...block} />
+          case 'servicesPageBlock':
+            return <ServicesPageBlock key={i} {...block} />
+          case 'testimonialsPageBlock':
+            return <TestimonialsPageBlock key={i} {...block} />
           default:
             return null
         }

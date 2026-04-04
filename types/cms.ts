@@ -215,6 +215,48 @@ export type CaseStudiesBlock = {
   items: CaseStudyItem[]
 }
 
+// Pricing page block types
+
+export type PricingTierItem = {
+  name: string
+  price: number
+  billingCadence: string
+  features: string[]
+  recommended: boolean
+  ctaLabel: string
+  ctaHref?: string | null
+}
+
+export type PromotionBanner = {
+  message: string
+  expiresAt: string
+}
+
+export type PricingTestimonialItem = {
+  name: string
+  company?: string | null
+  role?: string | null
+  quote: string
+  avatarUrl?: string | null
+}
+
+export type PricingFaqItem = {
+  question: string
+  answer: string
+}
+
+export type PricingPageBlock = {
+  _type: 'pricingPageBlock'
+  tiers: PricingTierItem[]
+  promotionBanner?: PromotionBanner | null
+  testimonials: PricingTestimonialItem[]
+  faqItems: PricingFaqItem[]
+  navbarLogo?: string | null
+  navbarLinks?: Array<{ label: string; href: string }> | null
+  footerColumns?: Array<{ title: string; links: Array<{ label: string; href: string }> }> | null
+  footerCopyright?: string | null
+}
+
 export type Block =
   | HeroBlock
   | ServicesBlock
@@ -236,6 +278,81 @@ export type Block =
   | HomepageHeroBlock
   | FeatureGridBlock
   | TestimonialsBlock
+  | PricingPageBlock
+  | ServicesPageBlock
+  | TestimonialsPageBlock
+
+// Services page block types
+
+export type ServiceFeatureCategory = {
+  title: string
+  summary: string
+  categoryBadge: string
+}
+
+export type ServiceCardItem = {
+  title: string
+  description: string
+  deliverables: string[]
+  imageUrl?: string | null
+  imageAlt?: string | null
+  ctaLabel?: string | null
+  ctaHref?: string | null
+  slug?: string | null
+}
+
+export type ServicesFaqItem = {
+  question: string
+  answer: string
+}
+
+export type ServicesPageBlock = {
+  _type: 'servicesPageBlock'
+  heroHeading?: string | null
+  heroText?: string | null
+  featureCategories?: ServiceFeatureCategory[] | null
+  serviceCards?: ServiceCardItem[] | null
+  faqItems?: ServicesFaqItem[] | null
+  navbarLogo?: string | null
+  navbarLinks?: Array<{ label: string; href: string }> | null
+  footerColumns?: Array<{ title: string; links: Array<{ label: string; href: string }> }> | null
+  footerCopyright?: string | null
+}
+
+// Testimonials page block types
+
+export type TestimonialsPageTestimonial = {
+  authorName: string
+  authorRole?: string | null
+  authorCompany?: string | null
+  authorPhotoUrl?: string | null
+  quote: string
+  featured: boolean
+  publishedAt?: string | null
+}
+
+export type TestimonialsPageLogoItem = {
+  src?: string | null
+  alt: string
+  name?: string | null
+}
+
+export type TestimonialsPageStatItem = {
+  value: string
+  label: string
+}
+
+export type TestimonialsPageBlock = {
+  _type: 'testimonialsPageBlock'
+  stats?: TestimonialsPageStatItem[] | null
+  featuredTestimonials?: TestimonialsPageTestimonial[] | null
+  allTestimonials?: TestimonialsPageTestimonial[] | null
+  logoCloudLogos?: TestimonialsPageLogoItem[] | null
+  navbarLogo?: string | null
+  navbarLinks?: Array<{ label: string; href: string }> | null
+  footerColumns?: Array<{ title: string; links: Array<{ label: string; href: string }> }> | null
+  footerCopyright?: string | null
+}
 
 // Client config types
 export type ClientTheme = {
@@ -264,4 +381,6 @@ export type ClientConfig = {
   features: ClientFeatures
   theme: ClientTheme
   contactEndpoint?: string
+  externalReviewUrl?: string
+  externalReviewPlatform?: string
 }

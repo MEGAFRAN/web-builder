@@ -134,6 +134,123 @@ const BLOCK_PROJECTION = `
       quote,
       "avatarUrl": avatar.asset->url
     }
+  },
+  _type == "servicesPageBlock" => {
+    heroHeading,
+    heroText,
+    "featureCategories": featureCategories[]{
+      title,
+      summary,
+      categoryBadge
+    },
+    "serviceCards": serviceCards[]{
+      title,
+      description,
+      deliverables,
+      "imageUrl": image.asset->url,
+      imageAlt,
+      ctaLabel,
+      ctaHref,
+      "slug": slug.current
+    },
+    "faqItems": faqItems[]{
+      question,
+      answer
+    },
+    navbarLogo,
+    "navbarLinks": navbarLinks[]{
+      label,
+      href
+    },
+    "footerColumns": footerColumns[]{
+      title,
+      "links": links[]{
+        label,
+        href
+      }
+    },
+    footerCopyright
+  },
+  _type == "testimonialsPageBlock" => {
+    "stats": stats[]{
+      value,
+      label
+    },
+    "featuredTestimonials": *[_type == "testimonial" && featured == true] | order(publishedAt desc) {
+      authorName,
+      authorRole,
+      authorCompany,
+      "authorPhotoUrl": authorPhoto.asset->url,
+      quote,
+      featured,
+      publishedAt
+    },
+    "allTestimonials": *[_type == "testimonial" && featured != true] | order(publishedAt desc) {
+      authorName,
+      authorRole,
+      authorCompany,
+      "authorPhotoUrl": authorPhoto.asset->url,
+      quote,
+      featured,
+      publishedAt
+    },
+    "logoCloudLogos": *[_type == "logoCloud" && context == "testimonials"][0].logos[]{
+      "src": asset->url,
+      alt,
+      name
+    },
+    navbarLogo,
+    "navbarLinks": navbarLinks[]{
+      label,
+      href
+    },
+    "footerColumns": footerColumns[]{
+      title,
+      "links": links[]{
+        label,
+        href
+      }
+    },
+    footerCopyright
+  },
+  _type == "pricingPageBlock" => {
+    "tiers": *[_type == "pricingTier"] | order(price asc) {
+      name,
+      price,
+      billingCadence,
+      features,
+      recommended,
+      ctaLabel,
+      "ctaHref": ctaHref
+    },
+    "promotionBanner": *[_type == "promotionBanner"][0]{
+      message,
+      expiresAt
+    },
+    "testimonials": *[_type == "testimonial" && "pricing" in tags && "value" in tags]{
+      name,
+      company,
+      role,
+      quote,
+      "avatarUrl": avatar.asset->url
+    },
+    "faqItems": faqItems[]{
+      question,
+      answer
+    },
+    navbarLogo,
+    "navbarLinks": navbarLinks[]{
+      label,
+      href
+    },
+    "footerColumns": footerColumns[]{
+      title,
+      "links": links[]{
+        label,
+        href
+      }
+    },
+    footerCopyright
   }
 `
 
