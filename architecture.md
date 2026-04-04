@@ -17,39 +17,6 @@ No runtime switching. Each deployment is a completely isolated static site.
 
 ---
 
-## Directory Structure
-
-```
-web-builder/
-├── app/
-│   ├── layout.tsx               # Root layout — reads CLIENT_ID, injects theme
-│   ├── [[...slug]]/
-│   │   └── page.tsx             # Catch-all route — fetches pages from Sanity at build time
-│   └── globals.css              # CSS variable fallbacks, semantic utility classes
-├── components/
-│   ├── PageRenderer.tsx         # Block dispatcher — switch on _type
-│   └── blocks/
-│       ├── HeroBlock.tsx
-│       ├── ServicesBlock.tsx
-│       ├── ContactBlock.tsx
-│       └── BlogListBlock.tsx
-├── lib/
-│   ├── client-config.ts         # Loads /config/clients/{clientId}.json at build time
-│   ├── cms.ts                   # Sanity client factory — getPages(), getPage(), imageUrl()
-│   └── sanity-image-loader.ts   # Next.js custom image loader backed by Sanity
-├── types/
-│   └── cms.ts                   # ClientConfig, ClientTheme, Block discriminated union
-├── config/
-│   └── clients/
-│       ├── restaurante-pepe.json
-│       └── peluqueria-ana.json
-├── __tests__/                   # Vitest suite mirroring source structure
-└── .github/workflows/
-    └── deploy-client.yml        # Manual workflow — one run per client
-```
-
----
-
 ## Build Flow
 
 ```
@@ -203,29 +170,3 @@ The workflow reads `sanityProjectId` and `sanityDataset` directly from the confi
 Build cache is keyed by `{clientId}-{package-lock-hash}` so each client gets its own cache entry.
 
 ---
-
-## Testing
-
-Vitest suite in `__tests__/` mirrors the source tree:
-
-| Layer | Strategy |
-|-------|---------|
-| Components | `@testing-library/react` — render + assert DOM |
-| Lib functions | `vi.mock()` for Sanity client and `fs`, test pure logic |
-| Types | `expectTypeOf()` — validate discriminated union narrowing |
-| Integration | Slug page generation with mocked CMS responses |
-
-Environment: `jsdom` for React tests, `node` for build-time modules.
-
----
-
-## Technology Choices
-
-| Concern | Choice | Why |
-|---------|--------|-----|
-| Framework | Next.js 16 (App Router, SSG `output: 'export'`) | Static output, file-system routing, Image optimization |
-| CMS | Sanity | Per-project datasets → natural tenant isolation |
-| Styling | TailwindCSS 4 + CSS variables | Utility-first + zero-JS theming |
-| Hosting | Azure Static Web Apps | Per-client SWA resource, free tier scales |
-| CI/CD | GitHub Actions (manual dispatch) | On-demand per-client builds, secrets per client |
-| Testing | Vitest + Testing Library | Fast, ESM-native, Vite-aligned |

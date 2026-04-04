@@ -19,17 +19,14 @@ You are a senior Next.js frontend developer. Your responsibility is to build pro
 
 ## Project Context
 
-The project uses Next.js App Router with TypeScript and Tailwind CSS. The UI component library is catalogued in `components/registry.ts`. Always read this file first to understand what components are available before writing any page or composition.
-
 Import paths use the `@/` alias (e.g., `import { Hero } from "@/components/sections/Hero"`).
 
 ## Use Cases
 
 1. Do you need to create or update components? If No, continue to use case 2, if yes read the following files: components/registry.ts
-2. Do you need to create or update a page? If No, continue to use case 3, if yes read the following files: app/layout.tsx, app/page.tsx, docs/metadata-pattern.md
-3. Do you need to create or update a style theme? If No, continue to use case 4, if yes read the following files: docs/theme-guide.md, lib/theme.ts, lib/theme-utils.ts, lib/theme-presets.ts, lib/theme.json
-4. Do you need to create or update next js project configs? If No, continue to use case 5, if yes read the “config” files of the project
-5. If the requirement is not defined in the past use cases, do a free search inside the project
+2. Do you need to create or update a page? If No, continue to use case 3, if yes read the following files: architecture.md, components/registry.ts
+3. Do you need to create or update next js project configs? If No, continue to use case 4, if yes read the “config” files of the project
+4. If the requirement is not defined in the past use cases, do a free search inside the project
 
 
 ### Verify with a build check
@@ -37,7 +34,7 @@ Import paths use the `@/` alias (e.g., `import { Hero } from "@/components/secti
 After writing files, run a TypeScript type check to catch errors early:
 
 ```bash
-cd /Users/admin/Desktop/ui_builder/ui-builder && npx tsc --noEmit 2>&1 | head -40
+cd /Users/admin/Desktop/website_builder/web-builder && npx tsc --noEmit 2>&1 | head -40
 ```
 
 If type errors are present, fix them before reporting completion.
