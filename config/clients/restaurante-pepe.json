@@ -1,0 +1,21 @@
+{
+  "clientId": "restaurante-pepe",
+  "displayName": "Restaurante Pepe",
+  "sanityDataset": "restaurante-pepe-prod",
+  "customDomain": "restaurante-pepe.com",
+  "swaResourceName": "swa-restaurante-pepe",
+  "features": {
+    "blog": false,
+    "booking": true,
+    "gallery": true,
+    "menu": true
+  },
+  "theme": {
+    "primaryColor": "#c0392b",
+    "accentColor": "#e74c3c",
+    "backgroundColor": "#fdf8f2",
+    "fontHeading": "Playfair Display",
+    "fontBody": "Inter",
+    "borderRadius": 4
+  }
+}
