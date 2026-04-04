@@ -133,20 +133,25 @@ type Block = HeroBlock | ServicesBlock | ContactBlock | BlogListBlock
 //           _type: 'hero' | 'services' | 'contact' | 'blog_list'
 ```
 
-`PageRenderer` maps block type to component via an exhaustive switch:
+`PageRenderer` dispatches blocks through a **component registry** (`componentRegistry.ts`):
 
 ```
 Sanity page.blocks[]
     │
     ▼
-PageRenderer (switch on block._type)
-    ├── 'hero'      → <HeroBlock title subtitle cta />
-    ├── 'services'  → <ServicesBlock items[] />
-    ├── 'contact'   → <ContactBlock showMap phone email address />
-    └── 'blog_list' → <BlogListBlock postsPerPage />
+PageRenderer (registry lookup on block._type)
+    │
+    ▼
+componentRegistry: Record<string, React.ComponentType>
+    ├── 'hero'      → dynamic(() => import('./blocks/HeroBlock'))
+    ├── 'services'  → dynamic(() => import('./blocks/ServicesBlock'))
+    ├── 'contact'   → dynamic(() => import('./blocks/ContactBlock'))
+    └── ...23 entries total
 ```
 
-Adding a new block type = add a Sanity schema field, extend the `Block` union, add a component, add a case in the switch.
+Each entry uses `next/dynamic` with a static import path — no computed paths. This gives route-level code splitting: blocks not used on a given page are not included in that page's JS bundle. Unknown `_type` values log a warning and render nothing.
+
+Adding a new block type = add a Sanity schema field, extend the `Block` union, add a component, add one entry to `componentRegistry.ts`.
 
 ---
 
