@@ -26,6 +26,7 @@ describe('ClientConfig', () => {
     const config: ClientConfig = {
       clientId: 'test',
       displayName: 'Test Client',
+      sanityProjectId: 'abc123',
       sanityDataset: 'test-prod',
       customDomain: 'test.com',
       swaResourceName: 'swa-test',
