@@ -48,11 +48,11 @@ jobs:
 
       - name: Build static site
         env:
-          CLIENT_ID: ${{ github.event.inputs.clientId }}
-          SANITY_PROJECT_ID: ${{ env.SANITY_PROJECT_ID }}
-          SANITY_DATASET: ${{ env.SANITY_DATASET }}
           SANITY_API_TOKEN: ${{ secrets[format('CMS_TOKEN_{0}', env.CLIENT_KEY)] }}
-        run: npm run build
+        run: |
+          echo "CLIENT_ID=${{ github.event.inputs.clientId }}" > .env.local
+          echo "SANITY_API_TOKEN=$SANITY_API_TOKEN" >> .env.local
+          npm run build
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
