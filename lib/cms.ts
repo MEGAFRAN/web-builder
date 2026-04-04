@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client'
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 import type { Block } from '@/types/cms'
 
 type SanityPageSlug = { slug: { current: string } }
@@ -13,7 +13,7 @@ export function createCMSClient(projectId: string, dataset: string) {
     useCdn: true,
   })
 
-  const builder = imageUrlBuilder(client)
+  const builder = createImageUrlBuilder(client)
 
   return {
     async getPages(): Promise<{ slug: string }[]> {

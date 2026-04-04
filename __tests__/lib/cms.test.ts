@@ -9,7 +9,7 @@ vi.mock('@sanity/client', () => ({
 }))
 
 vi.mock('@sanity/image-url', () => ({
-  default: vi.fn(() => ({
+  createImageUrlBuilder: vi.fn(() => ({
     image: vi.fn(() => ({ url: vi.fn(() => 'https://cdn.sanity.io/test') })),
   })),
 }))

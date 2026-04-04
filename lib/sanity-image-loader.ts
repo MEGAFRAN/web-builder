@@ -1,4 +1,4 @@
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 import { createClient } from '@sanity/client'
 import type { ImageLoaderProps } from 'next/image'
 
@@ -9,7 +9,7 @@ const sanityClient = createClient({
   useCdn: true,
 })
 
-const builder = imageUrlBuilder(sanityClient)
+const builder = createImageUrlBuilder(sanityClient)
 
 export default function sanityImageLoader({ src, width, quality }: ImageLoaderProps): string {
   return builder.image(src).width(width).quality(quality ?? 75).auto('format').url()
