@@ -1,0 +1,56 @@
+name: Deploy Client
+
+on:
+  workflow_dispatch:
+    inputs:
+      clientId:
+        description: 'Client ID to rebuild (e.g. restaurante-pepe)'
+        required: true
+        type: string
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy ${{ github.event.inputs.clientId }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set SANITY_DATASET from client config
+        run: |
+          DATASET=$(jq -r '.sanityDataset' config/clients/${{ github.event.inputs.clientId }}.json)
+          echo "SANITY_DATASET=$DATASET" >> $GITHUB_ENV
+
+      - name: Restore Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ github.event.inputs.clientId }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            nextjs-${{ github.event.inputs.clientId }}-
+
+      - name: Build static site
+        env:
+          CLIENT_ID: ${{ github.event.inputs.clientId }}
+          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          SANITY_API_TOKEN: ${{ secrets[format('CMS_TOKEN_{0}', github.event.inputs.clientId)] }}
+        run: npm run build
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets[format('SWA_TOKEN_{0}', github.event.inputs.clientId)] }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: /
+          output_location: out
