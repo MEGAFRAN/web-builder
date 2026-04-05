@@ -30,10 +30,10 @@
 .text-foreground { color: var(--color-text); }
 .text-primary-fg { color: #ffffff; }
 .text-accent     { color: var(--color-accent); }
-.text-muted      { color: var(--color-text); opacity: 0.6; }
+.text-muted      { color: color-mix(in srgb, var(--color-text) 60%, transparent); }
 
 /* Borders */
-.border-border   { border-color: var(--color-text); opacity: 0.15; }
+.border-border   { border-color: color-mix(in srgb, var(--color-text) 15%, transparent); }
 
 /* Destructive (not theme-driven, but used in Button.tsx) */
 .bg-destructive      { background-color: #dc2626; }
