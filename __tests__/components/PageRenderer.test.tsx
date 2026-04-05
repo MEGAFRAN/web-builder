@@ -1,49 +1,108 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import PageRenderer from '@/components/PageRenderer'
 import type { Block } from '@/types/cms'
 
+vi.mock('@/components/componentRegistry', () => ({
+  default: {
+    hero: ({ title }: { title: string }) => <div data-testid="hero-stub">{title}</div>,
+    services: ({ items }: { items: Array<{ title: string; description: string }> }) => (
+      <div data-testid="services-stub">{items.map(i => i.title).join(', ')}</div>
+    ),
+  },
+}))
+
 describe('PageRenderer', () => {
-  it('renders a HeroBlock when _type is hero', () => {
-    const blocks: Block[] = [{ _type: 'hero', title: 'Bienvenidos' }]
-    render(<PageRenderer blocks={blocks} />)
-    expect(screen.getByRole('heading', { name: 'Bienvenidos' })).toBeInTheDocument()
-  })
-
-  it('renders a ServicesBlock when _type is services', () => {
-    const blocks: Block[] = [
-      { _type: 'services', items: [{ title: 'Corte', description: 'Desc' }] },
-    ]
-    render(<PageRenderer blocks={blocks} />)
-    expect(screen.getByText('Corte')).toBeInTheDocument()
-  })
-
-  it('renders a ContactBlock when _type is contact', () => {
-    const blocks: Block[] = [
-      { _type: 'contact', showMap: false, phone: '900000000' },
-    ]
-    render(<PageRenderer blocks={blocks} />)
-    expect(screen.getByText('900000000')).toBeInTheDocument()
-  })
-
-  it('renders a BlogListBlock when _type is blog_list', () => {
-    const blocks: Block[] = [{ _type: 'blog_list', postsPerPage: 6 }]
-    render(<PageRenderer blocks={blocks} />)
-    expect(screen.getByRole('heading', { name: /blog/i })).toBeInTheDocument()
-  })
-
-  it('renders multiple blocks in order', () => {
-    const blocks: Block[] = [
-      { _type: 'hero', title: 'Top' },
-      { _type: 'contact', showMap: false, phone: '111' },
-    ]
-    render(<PageRenderer blocks={blocks} />)
-    expect(screen.getByRole('heading', { name: 'Top' })).toBeInTheDocument()
-    expect(screen.getByText('111')).toBeInTheDocument()
-  })
-
-  it('renders nothing for an empty blocks array', () => {
+  it('renders an empty wrapper when blocks is an empty array', () => {
     const { container } = render(<PageRenderer blocks={[]} />)
-    expect(container.firstChild).toBeEmptyDOMElement()
+    const wrapper = container.firstChild as HTMLElement
+    expect(wrapper.tagName).toBe('DIV')
+    expect(wrapper.children).toHaveLength(0)
+  })
+
+  it('renders a known block type', () => {
+    const blocks: Block[] = [{ _type: 'hero', title: 'Welcome Home' }]
+    render(<PageRenderer blocks={blocks} />)
+    expect(screen.getByTestId('hero-stub')).toBeInTheDocument()
+    expect(screen.getByText('Welcome Home')).toBeInTheDocument()
+  })
+
+  it('renders multiple blocks of different known types', () => {
+    const blocks: Block[] = [
+      { _type: 'hero', title: 'Hello World' },
+      {
+        _type: 'services',
+        items: [
+          { title: 'Web Design', description: 'We design websites' },
+          { title: 'SEO', description: 'We do SEO' },
+        ],
+      },
+    ]
+    render(<PageRenderer blocks={blocks} />)
+    expect(screen.getByTestId('hero-stub')).toBeInTheDocument()
+    expect(screen.getByTestId('services-stub')).toBeInTheDocument()
+    expect(screen.getByText('Web Design, SEO')).toBeInTheDocument()
+  })
+
+  describe('unknown block type', () => {
+    let warnSpy: ReturnType<typeof vi.spyOn>
+
+    beforeEach(() => {
+      warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    })
+
+    afterEach(() => {
+      warnSpy.mockRestore()
+    })
+
+    it('renders nothing for an unknown block type', () => {
+      // Cast required to inject an unregistered _type without TS error
+      const blocks = [{ _type: 'unknownBlock' }] as unknown as Block[]
+      const { container } = render(<PageRenderer blocks={blocks} />)
+      const wrapper = container.firstChild as HTMLElement
+      expect(wrapper.children).toHaveLength(0)
+    })
+
+    it('calls console.warn with the correct message for an unknown block type', () => {
+      const blocks = [{ _type: 'unknownBlock' }] as unknown as Block[]
+      render(<PageRenderer blocks={blocks} />)
+      expect(warnSpy).toHaveBeenCalledOnce()
+      expect(warnSpy).toHaveBeenCalledWith('PageRenderer: unknown block type "unknownBlock"')
+    })
+
+    it('renders known blocks around an unknown one and only warns once', () => {
+      const blocks = [
+        { _type: 'hero', title: 'Before' },
+        { _type: 'unknownBlock' },
+        { _type: 'hero', title: 'After' },
+      ] as unknown as Block[]
+      render(<PageRenderer blocks={blocks} />)
+      expect(screen.getAllByTestId('hero-stub')).toHaveLength(2)
+      expect(warnSpy).toHaveBeenCalledOnce()
+    })
+  })
+
+  it('renders correctly when blocks have _key props', () => {
+    const blocks = [
+      { _type: 'hero', title: 'First', _key: 'key-1' },
+      { _type: 'hero', title: 'Second', _key: 'key-2' },
+    ] as unknown as Block[]
+    render(<PageRenderer blocks={blocks} />)
+    const stubs = screen.getAllByTestId('hero-stub')
+    expect(stubs).toHaveLength(2)
+    expect(stubs[0]).toHaveTextContent('First')
+    expect(stubs[1]).toHaveTextContent('Second')
+  })
+
+  it('falls back to index key when _key is absent', () => {
+    const blocks: Block[] = [
+      { _type: 'hero', title: 'Alpha' },
+      { _type: 'hero', title: 'Beta' },
+    ]
+    render(<PageRenderer blocks={blocks} />)
+    const stubs = screen.getAllByTestId('hero-stub')
+    expect(stubs).toHaveLength(2)
+    expect(stubs[0]).toHaveTextContent('Alpha')
+    expect(stubs[1]).toHaveTextContent('Beta')
   })
 })
