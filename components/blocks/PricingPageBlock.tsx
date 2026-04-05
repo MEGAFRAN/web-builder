@@ -1,7 +1,5 @@
 import type { PricingPageBlock as PricingPageBlockType } from '@/types/cms'
-import { Navbar } from '@/components/navigation/Navbar'
 import { Breadcrumb } from '@/components/navigation/Breadcrumb'
-import { Footer } from '@/components/navigation/Footer'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Stack } from '@/components/layout/Stack'
@@ -19,10 +17,6 @@ export default function PricingPageBlock({
   promotionBanner,
   testimonials,
   faqItems,
-  navbarLogo,
-  navbarLinks,
-  footerColumns,
-  footerCopyright,
 }: PricingPageBlockType) {
   // Conditionally show promotion banner only if expiresAt is in the future at build time
   const now = new Date()
@@ -96,18 +90,6 @@ export default function PricingPageBlock({
 
   return (
     <>
-      {/* Navigation */}
-      <Navbar
-        logo={navbarLogo ?? 'Brand'}
-        links={navbarLinks ?? [
-          { label: 'Home', href: '/' },
-          { label: 'Features', href: '/features' },
-          { label: 'Pricing', href: '/pricing' },
-          { label: 'Contact', href: '/contact' },
-        ]}
-        ctaLabel="Get started"
-      />
-
       {/* Breadcrumb */}
       <Section background="white" paddingY="sm">
         <Container maxWidth="2xl" padding="md">
@@ -211,8 +193,6 @@ export default function PricingPageBlock({
         </Container>
       </Section>
 
-      {/* Footer */}
-      <Footer columns={footerColumns ?? null} copyright={footerCopyright ?? null} />
     </>
   )
 }

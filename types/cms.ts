@@ -376,6 +376,18 @@ export type ClientPage = {
   blocks: Block[]
 }
 
+export type ClientHeader = {
+  logo: string
+  links?: NavLink[] | null
+  ctaLabel?: string | null
+  ctaAction?: string | null
+}
+
+export type ClientFooter = {
+  columns?: FooterColumn[] | null
+  copyright?: string | null
+}
+
 export type ClientConfig = {
   clientId: string
   displayName: string
@@ -383,6 +395,8 @@ export type ClientConfig = {
   swaResourceName: string
   features: ClientFeatures
   theme: ClientTheme
+  header?: ClientHeader | null
+  footer?: ClientFooter | null
   pages: ClientPage[]
   contactEndpoint?: string
   externalReviewUrl?: string

@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { getClientConfig } from '@/lib/client-config'
 import type { ClientTheme } from '@/types/cms'
+import { Navbar } from '@/components/navigation/Navbar'
+import { Footer } from '@/components/navigation/Footer'
 
 export const metadata: Metadata = {
   title: 'Web Builder',
@@ -32,7 +34,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
       </head>
       <body style={{ fontFamily: 'var(--font-body)', backgroundColor: 'var(--color-bg)' }}>
+        {config.header && (
+          <Navbar
+            logo={config.header.logo}
+            links={config.header.links}
+            ctaLabel={config.header.ctaLabel}
+            ctaAction={config.header.ctaAction}
+          />
+        )}
         {children}
+        {config.footer && (
+          <Footer
+            columns={config.footer.columns}
+            copyright={config.footer.copyright}
+          />
+        )}
       </body>
     </html>
   )

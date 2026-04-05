@@ -1,8 +1,6 @@
 import type { TestimonialsPageBlock as TestimonialsPageBlockType } from '@/types/cms'
 import { getClientConfig } from '@/lib/client-config'
-import { Navbar } from '@/components/navigation/Navbar'
 import { Breadcrumb } from '@/components/navigation/Breadcrumb'
-import { Footer } from '@/components/navigation/Footer'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Grid } from '@/components/layout/Grid'
@@ -28,10 +26,6 @@ export default function TestimonialsPageBlock({
   featuredTestimonials,
   allTestimonials,
   logoCloudLogos,
-  navbarLogo,
-  navbarLinks,
-  footerColumns,
-  footerCopyright,
 }: TestimonialsPageBlockType) {
   const clientId = process.env.CLIENT_ID!
   const config = getClientConfig(clientId)
@@ -44,20 +38,6 @@ export default function TestimonialsPageBlock({
 
   return (
     <>
-      {/* Navigation */}
-      <Navbar
-        logo={navbarLogo ?? 'Brand'}
-        links={
-          navbarLinks ?? [
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: 'Testimonials', href: '/testimonials' },
-            { label: 'Contact', href: '/contact' },
-          ]
-        }
-        ctaLabel="Get in Touch"
-      />
-
       {/* Breadcrumb */}
       <Section background="white" paddingY="sm">
         <Container maxWidth="2xl" padding="md">
@@ -270,8 +250,6 @@ export default function TestimonialsPageBlock({
         </Container>
       </Section>
 
-      {/* Footer */}
-      <Footer columns={footerColumns ?? null} copyright={footerCopyright ?? null} />
     </>
   )
 }

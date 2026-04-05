@@ -1,7 +1,5 @@
 import type { ServicesPageBlock as ServicesPageBlockType } from '@/types/cms'
-import { Navbar } from '@/components/navigation/Navbar'
 import { Breadcrumb } from '@/components/navigation/Breadcrumb'
-import { Footer } from '@/components/navigation/Footer'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Grid } from '@/components/layout/Grid'
@@ -57,10 +55,6 @@ export default function ServicesPageBlock({
   featureCategories,
   serviceCards,
   faqItems,
-  navbarLogo,
-  navbarLinks,
-  footerColumns,
-  footerCopyright,
 }: ServicesPageBlockType) {
   const resolvedFaqItems =
     faqItems && faqItems.length > 0 ? faqItems : defaultFaqItems
@@ -76,20 +70,6 @@ export default function ServicesPageBlock({
 
   return (
     <>
-      {/* Navigation */}
-      <Navbar
-        logo={navbarLogo ?? 'Brand'}
-        links={
-          navbarLinks ?? [
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: 'About', href: '/about' },
-            { label: 'Contact', href: '/contact' },
-          ]
-        }
-        ctaLabel="Talk to Us"
-      />
-
       {/* Breadcrumb */}
       <Section background="white" paddingY="sm">
         <Container maxWidth="2xl" padding="md">
@@ -242,8 +222,6 @@ export default function ServicesPageBlock({
         </Container>
       </Section>
 
-      {/* Footer */}
-      <Footer columns={footerColumns ?? null} copyright={footerCopyright ?? null} />
     </>
   )
 }

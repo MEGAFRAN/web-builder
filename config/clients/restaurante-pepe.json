@@ -17,22 +17,50 @@
     "fontBody": "Inter",
     "borderRadius": 4
   },
+  "header": {
+    "logo": "Restaurante Pepe",
+    "ctaLabel": "Reservar mesa",
+    "ctaAction": "/contacto",
+    "links": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Menú", "href": "/menu" },
+      { "label": "Nosotros", "href": "/nosotros" },
+      { "label": "Contacto", "href": "/contacto" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2025 Restaurante Pepe. Todos los derechos reservados.",
+    "columns": [
+      {
+        "title": "Navegación",
+        "links": [
+          { "label": "Inicio", "href": "/" },
+          { "label": "Menú", "href": "/menu" },
+          { "label": "Nosotros", "href": "/nosotros" },
+          { "label": "Contacto", "href": "/contacto" }
+        ]
+      },
+      {
+        "title": "Horario",
+        "links": [
+          { "label": "Lun–Vie: 13:00–16:00, 20:00–23:30", "href": "#" },
+          { "label": "Sáb–Dom: 13:00–17:00, 20:00–00:00", "href": "#" }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "links": [
+          { "label": "info@restaurante-pepe.com", "href": "mailto:info@restaurante-pepe.com" },
+          { "label": "+34 91 234 56 78", "href": "tel:+34912345678" },
+          { "label": "Calle Mayor 12, Madrid", "href": "#" }
+        ]
+      }
+    ]
+  },
   "pages": [
     {
       "slug": "",
       "blocks": [
-        {
-          "_type": "navbar",
-          "logo": "Restaurante Pepe",
-          "ctaLabel": "Reservar mesa",
-          "ctaAction": "/contacto",
-          "links": [
-            { "label": "Inicio", "href": "/" },
-            { "label": "Menú", "href": "/menu" },
-            { "label": "Nosotros", "href": "/nosotros" },
-            { "label": "Contacto", "href": "/contacto" }
-          ]
-        },
         {
           "_type": "heroBlock",
           "heading": "Cocina tradicional española con alma",
@@ -113,54 +141,12 @@
           "ctaLabel": "Solicitar información",
           "ctaHref": "/contacto",
           "background": "gray"
-        },
-        {
-          "_type": "footer",
-          "copyright": "© 2025 Restaurante Pepe. Todos los derechos reservados.",
-          "columns": [
-            {
-              "title": "Navegación",
-              "links": [
-                { "label": "Inicio", "href": "/" },
-                { "label": "Menú", "href": "/menu" },
-                { "label": "Nosotros", "href": "/nosotros" },
-                { "label": "Contacto", "href": "/contacto" }
-              ]
-            },
-            {
-              "title": "Horario",
-              "links": [
-                { "label": "Lun–Vie: 13:00–16:00, 20:00–23:30", "href": "#" },
-                { "label": "Sáb–Dom: 13:00–17:00, 20:00–00:00", "href": "#" }
-              ]
-            },
-            {
-              "title": "Contacto",
-              "links": [
-                { "label": "info@restaurante-pepe.com", "href": "mailto:info@restaurante-pepe.com" },
-                { "label": "+34 91 234 56 78", "href": "tel:+34912345678" },
-                { "label": "Calle Mayor 12, Madrid", "href": "#" }
-              ]
-            }
-          ]
         }
       ]
     },
     {
       "slug": "menu",
       "blocks": [
-        {
-          "_type": "navbar",
-          "logo": "Restaurante Pepe",
-          "ctaLabel": "Reservar mesa",
-          "ctaAction": "/contacto",
-          "links": [
-            { "label": "Inicio", "href": "/" },
-            { "label": "Menú", "href": "/menu" },
-            { "label": "Nosotros", "href": "/nosotros" },
-            { "label": "Contacto", "href": "/contacto" }
-          ]
-        },
         {
           "_type": "breadcrumb",
           "items": [
@@ -209,46 +195,12 @@
           "ctaLabel": "Reservar",
           "ctaHref": "/contacto",
           "background": "white"
-        },
-        {
-          "_type": "footer",
-          "copyright": "© 2025 Restaurante Pepe. Todos los derechos reservados.",
-          "columns": [
-            {
-              "title": "Navegación",
-              "links": [
-                { "label": "Inicio", "href": "/" },
-                { "label": "Menú", "href": "/menu" },
-                { "label": "Nosotros", "href": "/nosotros" },
-                { "label": "Contacto", "href": "/contacto" }
-              ]
-            },
-            {
-              "title": "Contacto",
-              "links": [
-                { "label": "info@restaurante-pepe.com", "href": "mailto:info@restaurante-pepe.com" },
-                { "label": "+34 91 234 56 78", "href": "tel:+34912345678" }
-              ]
-            }
-          ]
         }
       ]
     },
     {
       "slug": "nosotros",
       "blocks": [
-        {
-          "_type": "navbar",
-          "logo": "Restaurante Pepe",
-          "ctaLabel": "Reservar mesa",
-          "ctaAction": "/contacto",
-          "links": [
-            { "label": "Inicio", "href": "/" },
-            { "label": "Menú", "href": "/menu" },
-            { "label": "Nosotros", "href": "/nosotros" },
-            { "label": "Contacto", "href": "/contacto" }
-          ]
-        },
         {
           "_type": "breadcrumb",
           "items": [
@@ -320,46 +272,12 @@
             { "value": "12", "label": "Personas en el equipo" },
             { "value": "8", "label": "Productores locales" }
           ]
-        },
-        {
-          "_type": "footer",
-          "copyright": "© 2025 Restaurante Pepe. Todos los derechos reservados.",
-          "columns": [
-            {
-              "title": "Navegación",
-              "links": [
-                { "label": "Inicio", "href": "/" },
-                { "label": "Menú", "href": "/menu" },
-                { "label": "Nosotros", "href": "/nosotros" },
-                { "label": "Contacto", "href": "/contacto" }
-              ]
-            },
-            {
-              "title": "Contacto",
-              "links": [
-                { "label": "info@restaurante-pepe.com", "href": "mailto:info@restaurante-pepe.com" },
-                { "label": "+34 91 234 56 78", "href": "tel:+34912345678" }
-              ]
-            }
-          ]
         }
       ]
     },
     {
       "slug": "contacto",
       "blocks": [
-        {
-          "_type": "navbar",
-          "logo": "Restaurante Pepe",
-          "ctaLabel": "Reservar mesa",
-          "ctaAction": "/contacto",
-          "links": [
-            { "label": "Inicio", "href": "/" },
-            { "label": "Menú", "href": "/menu" },
-            { "label": "Nosotros", "href": "/nosotros" },
-            { "label": "Contacto", "href": "/contacto" }
-          ]
-        },
         {
           "_type": "breadcrumb",
           "items": [
@@ -407,28 +325,6 @@
             {
               "question": "¿Se puede aparcar cerca?",
               "answer": "Hay un parking público a 100 metros en la Calle Arenal. También hay zona de aparcamiento regulado en las calles adyacentes."
-            }
-          ]
-        },
-        {
-          "_type": "footer",
-          "copyright": "© 2025 Restaurante Pepe. Todos los derechos reservados.",
-          "columns": [
-            {
-              "title": "Navegación",
-              "links": [
-                { "label": "Inicio", "href": "/" },
-                { "label": "Menú", "href": "/menu" },
-                { "label": "Nosotros", "href": "/nosotros" },
-                { "label": "Contacto", "href": "/contacto" }
-              ]
-            },
-            {
-              "title": "Horario",
-              "links": [
-                { "label": "Lun–Vie: 13:00–16:00, 20:00–23:30", "href": "#" },
-                { "label": "Sáb–Dom: 13:00–17:00, 20:00–00:00", "href": "#" }
-              ]
             }
           ]
         }
