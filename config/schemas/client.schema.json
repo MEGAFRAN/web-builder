@@ -26,15 +26,26 @@
     "theme": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["primaryColor", "accentColor", "backgroundColor", "fontHeading", "fontBody", "borderRadius"],
       "properties": {
+        "preset": {
+          "type": "string",
+          "enum": ["bold-restaurant", "modern-minimal", "professional-law", "vibrant-retail", "default"]
+        },
         "primaryColor": { "type": "string" },
         "accentColor": { "type": "string" },
         "backgroundColor": { "type": "string" },
         "fontHeading": { "type": "string" },
         "fontBody": { "type": "string" },
         "borderRadius": { "type": "number" }
-      }
+      },
+      "oneOf": [
+        {
+          "required": ["preset"]
+        },
+        {
+          "required": ["primaryColor", "accentColor", "backgroundColor", "fontHeading", "fontBody", "borderRadius"]
+        }
+      ]
     },
     "header": {
       "oneOf": [

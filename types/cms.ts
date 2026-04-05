@@ -356,12 +356,13 @@ export type TestimonialsPageBlock = {
 
 // Client config types
 export type ClientTheme = {
-  primaryColor: string
-  accentColor: string
-  backgroundColor: string
-  fontHeading: string
-  fontBody: string
-  borderRadius: number
+  preset?: string
+  primaryColor?: string
+  accentColor?: string
+  backgroundColor?: string
+  fontHeading?: string
+  fontBody?: string
+  borderRadius?: number
 }
 
 export type ClientFeatures = {

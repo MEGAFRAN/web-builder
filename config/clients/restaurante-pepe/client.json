@@ -10,12 +10,7 @@
     "menu": true
   },
   "theme": {
-    "primaryColor": "#c0392b",
-    "accentColor": "#e74c3c",
-    "backgroundColor": "#fdf8f2",
-    "fontHeading": "Playfair Display",
-    "fontBody": "Inter",
-    "borderRadius": 4
+    "preset": "bold-restaurant"
   },
   "header": {
     "logo": "Restaurante Pepe",

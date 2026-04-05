@@ -1,6 +1,46 @@
 import fs from 'fs'
 import path from 'path'
-import type { ClientConfig, ClientPage, Block } from '@/types/cms'
+import type { ClientConfig, ClientPage, Block, ClientTheme } from '@/types/cms'
+import { THEME_PRESETS, getPreset } from '@/lib/theme-presets'
+import type { ThemePreset } from '@/lib/theme-presets'
+
+/**
+ * Resolves a raw ClientTheme (which may contain a `preset` key and/or partial
+ * explicit fields) into a fully-specified ThemePreset with no `preset` key.
+ *
+ * Resolution order: preset base → client explicit overrides (shallow merge).
+ * If no preset is specified and any of the 6 fields are missing, the "default"
+ * preset fills the gaps.
+ */
+function resolveTheme(raw: ClientTheme): ThemePreset {
+  const { preset: presetName, ...explicitFields } = raw
+
+  let base: ThemePreset
+
+  if (presetName !== undefined) {
+    const found = getPreset(presetName)
+    if (!found) {
+      console.warn(
+        `[client-config] Unknown theme preset "${presetName}". Falling back to "default".`
+      )
+      base = THEME_PRESETS['default']
+    } else {
+      base = found
+    }
+  } else {
+    // No preset specified — use "default" as fallback for any missing fields.
+    base = THEME_PRESETS['default']
+  }
+
+  return {
+    primaryColor: explicitFields.primaryColor ?? base.primaryColor,
+    accentColor: explicitFields.accentColor ?? base.accentColor,
+    backgroundColor: explicitFields.backgroundColor ?? base.backgroundColor,
+    fontHeading: explicitFields.fontHeading ?? base.fontHeading,
+    fontBody: explicitFields.fontBody ?? base.fontBody,
+    borderRadius: explicitFields.borderRadius ?? base.borderRadius,
+  }
+}
 
 /**
  * Derives a page slug from a filename.
@@ -31,19 +71,22 @@ export function getClientConfig(clientId: string): ClientConfig {
 
   // New directory-based structure: config/clients/{clientId}/client.json
   if (fs.existsSync(clientJsonPath)) {
-    const raw = fs.readFileSync(clientJsonPath, 'utf-8')
-    const base = JSON.parse(raw) as Omit<ClientConfig, 'pages'>
+    const rawText = fs.readFileSync(clientJsonPath, 'utf-8')
+    const base = JSON.parse(rawText) as Omit<ClientConfig, 'pages'>
 
     const pagesDir = path.join(clientDir, 'pages')
     const pages: ClientPage[] = fs.existsSync(pagesDir)
       ? loadPagesFromDirectory(pagesDir)
       : []
 
-    return { ...base, pages }
+    const resolvedTheme = resolveTheme(base.theme)
+    return { ...base, theme: resolvedTheme, pages }
   }
 
   // Legacy flat-file structure: config/clients/{clientId}.json
   const legacyPath = path.join(process.cwd(), 'config', 'clients', `${clientId}.json`)
-  const raw = fs.readFileSync(legacyPath, 'utf-8')
-  return JSON.parse(raw) as ClientConfig
+  const rawText = fs.readFileSync(legacyPath, 'utf-8')
+  const legacy = JSON.parse(rawText) as ClientConfig
+  const resolvedTheme = resolveTheme(legacy.theme)
+  return { ...legacy, theme: resolvedTheme }
 }
