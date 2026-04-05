@@ -1,8 +1,6 @@
 {
   "clientId": "peluqueria-ana",
   "displayName": "Peluquería Ana",
-  "sanityProjectId": "replace-with-sanity-project-id",
-  "sanityDataset": "peluqueria-ana-prod",
   "customDomain": "peluqueria-ana.com",
   "swaResourceName": "swa-peluqueria-ana",
   "features": {
@@ -18,5 +16,6 @@
     "fontHeading": "Cormorant Garamond",
     "fontBody": "Lato",
     "borderRadius": 24
-  }
+  },
+  "pages": []
 }

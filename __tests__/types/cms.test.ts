@@ -26,8 +26,6 @@ describe('ClientConfig', () => {
     const config: ClientConfig = {
       clientId: 'test',
       displayName: 'Test Client',
-      sanityProjectId: 'abc123',
-      sanityDataset: 'test-prod',
       customDomain: 'test.com',
       swaResourceName: 'swa-test',
       features: { blog: false, booking: true, gallery: false, menu: true },
@@ -39,6 +37,7 @@ describe('ClientConfig', () => {
         fontBody: 'Inter',
         borderRadius: 8,
       },
+      pages: [],
     }
     expectTypeOf(config.clientId).toEqualTypeOf<string>()
   })

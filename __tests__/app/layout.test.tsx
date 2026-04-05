@@ -4,7 +4,6 @@ vi.mock('@/lib/client-config', () => ({
   getClientConfig: vi.fn(() => ({
     clientId: 'restaurante-pepe',
     displayName: 'Restaurante Pepe',
-    sanityDataset: 'restaurante-pepe-prod',
     customDomain: 'restaurante-pepe.com',
     swaResourceName: 'swa-restaurante-pepe',
     features: { blog: false, booking: true, gallery: true, menu: true },

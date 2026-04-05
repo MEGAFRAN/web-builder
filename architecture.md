@@ -2,18 +2,18 @@
 
 ## Goal
 
-A multi-tenant Next.js SSG platform where a single codebase builds isolated static sites for 100+ clients. Each client is driven by a dedicated Sanity CMS dataset and deployed independently to Azure Static Web Apps.
+A multi-tenant Next.js SSG platform where a single codebase builds isolated static sites for 100+ clients. Each client is fully described by a single JSON config file and deployed independently to Azure Static Web Apps.
 
 ---
 
 ## Core Principle: Build-Time Tenant Isolation
 
-The `CLIENT_ID` environment variable is the single gate for every build. It selects exactly one client config JSON, which injects:
-- Sanity project ID and dataset (CMS data source)
+The `CLIENT_ID` environment variable is the single gate for every build. It selects exactly one client config JSON, which contains:
+- All page content (slugs + block arrays)
 - Theme tokens (CSS variables)
 - Feature flags (which blocks are enabled)
 
-No runtime switching. Each deployment is a completely isolated static site.
+No runtime switching. No external API calls. Each deployment is a completely isolated static site baked entirely from local files.
 
 ---
 
@@ -23,21 +23,20 @@ No runtime switching. Each deployment is a completely isolated static site.
 GitHub Actions (manual dispatch, input: clientId)
         │
         ▼
-Read config/clients/{clientId}.json (jq)
-        │
-        ├── sanityProjectId, sanityDataset ──► set as env vars
-        └── swaResourceName ──────────────► used for Azure deploy target
+echo CLIENT_ID={clientId} > .env.local
         │
         ▼
 npm run build
-  (env: CLIENT_ID, SANITY_PROJECT_ID, SANITY_DATASET, SANITY_API_TOKEN)
+  (env: CLIENT_ID)
         │
         ├── app/layout.tsx
         │     getClientConfig(CLIENT_ID) → load theme → buildThemeStyles()
         │     inject <style>:root { --color-primary: ...; ... }</style>
         │
         └── app/[[...slug]]/page.tsx
-              generateStaticParams() → createCMSClient() → getPages() → slugs[]
+              getClientConfig(CLIENT_ID) → config.pages[]
+              createJSONCMSClient(config.pages)
+              generateStaticParams() → slugs[]
               Page() → getPage(slug) → <PageRenderer blocks={blocks} />
         │
         ▼
@@ -51,14 +50,12 @@ Azure Static Web Apps (deploy token: SWA_TOKEN_{CLIENT_KEY})
 
 ## Multi-Tenancy: Client Config Schema
 
-Each file at `config/clients/{clientId}.json` fully describes a tenant:
+Each file at `config/clients/{clientId}.json` fully describes a tenant — theme, features, and all page content:
 
 ```typescript
 type ClientConfig = {
   clientId: string          // "restaurante-pepe"
   displayName: string       // "Restaurante Pepe"
-  sanityProjectId: string   // Sanity project ID
-  sanityDataset: string     // Sanity dataset name
   customDomain: string      // "restaurante-pepe.com"
   swaResourceName: string   // Azure SWA resource name
   features: {
@@ -75,16 +72,22 @@ type ClientConfig = {
     fontBody: string        // "Inter"
     borderRadius: number    // 4
   }
+  pages: Array<{
+    slug: string            // "" for home, "menu", "contacto", etc.
+    blocks: Block[]         // typed block objects (see Block Rendering System)
+  }>
 }
 ```
 
-Adding a new client = adding one JSON file + two GitHub secrets (`CMS_TOKEN_{CLIENT_KEY}`, `SWA_TOKEN_{CLIENT_KEY}`).
+Adding a new client = adding one JSON file + one GitHub secret (`SWA_TOKEN_{CLIENT_KEY}`).
+
+Content changes = editing the `pages` array in the JSON file (typically done by an AI agent acting on client instructions) + triggering a rebuild.
 
 ---
 
 ## Theming System
 
-Theming is pure CSS variables — no runtime JS, no styled-components.
+Theming is pure CSS variables — no runtime JS.
 
 1. `globals.css` defines fallback values in `:root`
 2. `layout.tsx` reads the client theme at build time and generates:
@@ -101,42 +104,40 @@ Theming is pure CSS variables — no runtime JS, no styled-components.
 3. Injected as a `<style>` tag in `<head>` — overrides fallbacks
 4. Components consume vars via Tailwind utilities and semantic classes (`.btn-primary`, `.text-brand`, `.section`)
 
-Each client's static site is baked with different CSS variable values — no per-request computation.
-
 ---
 
-## CMS Layer (Sanity)
+## Content Layer (`lib/json-cms.ts`)
 
-`lib/cms.ts` is a thin factory abstraction over `@sanity/client`:
+`createJSONCMSClient(pages)` is a thin wrapper over the `pages` array from the client config JSON:
 
 ```typescript
-createCMSClient(projectId, dataset) → {
-  getPages()       // *[_type == "page"]{ slug }
-  getPage(slug)    // *[_type == "page" && slug.current == $slug][0]{ slug, blocks[]{ _type, ... } }
-  imageUrl(source) // imageUrlBuilder chain
+createJSONCMSClient(pages: ClientPage[]) → {
+  getPages()       // returns { slug: string }[] — array map
+  getPage(slug)    // returns ClientPage | null — array find
+  imageUrl(source) // passthrough — image URLs are pre-resolved absolute URLs
 }
 ```
 
-- API version pinned to `'2024-01-01'`
-- CDN enabled for read queries
+- No network calls — all data is already in memory from the JSON file
+- Promises are preserved on the interface so the page route is async-compatible
+- Image URLs in the JSON must be absolute (any public CDN, Azure Blob, etc.)
 - Called only during `next build` — results are baked into static HTML
-- `sanity-image-loader.ts` implements the Next.js `ImageLoader` interface on top of the same Sanity client, enabling `<Image>` to serve optimized CDN URLs
 
 ---
 
 ## Block Rendering System
 
-Pages in Sanity are arrays of typed blocks. The TypeScript model is a discriminated union:
+Pages are arrays of typed blocks. The TypeScript model is a discriminated union:
 
 ```typescript
-type Block = HeroBlock | ServicesBlock | ContactBlock | BlogListBlock
-//           _type: 'hero' | 'services' | 'contact' | 'blog_list'
+type Block = HeroBlock | ServicesBlock | ContactBlock | BlogListBlock | ...
+//           _type: 'hero' | 'services' | 'contact' | 'blog_list' | ...
 ```
 
 `PageRenderer` dispatches blocks through a **component registry** (`componentRegistry.ts`):
 
 ```
-Sanity page.blocks[]
+config.pages[n].blocks[]
     │
     ▼
 PageRenderer (registry lookup on block._type)
@@ -149,9 +150,9 @@ componentRegistry: Record<string, React.ComponentType>
     └── ...23 entries total
 ```
 
-Each entry uses `next/dynamic` with a static import path — no computed paths. This gives route-level code splitting: blocks not used on a given page are not included in that page's JS bundle. Unknown `_type` values log a warning and render nothing.
+Each entry uses `next/dynamic` with a static import path — no computed paths. Unknown `_type` values log a warning and render nothing.
 
-Adding a new block type = add a Sanity schema field, extend the `Block` union, add a component, add one entry to `componentRegistry.ts`.
+Adding a new block type = extend the `Block` union, add a component, add one entry to `componentRegistry.ts`, use it in a client's `pages` JSON.
 
 ---
 
@@ -167,10 +168,9 @@ Secret naming convention (hyphens → underscores):
 
 | Secret | Purpose |
 |--------|---------|
-| `CMS_TOKEN_{CLIENT_KEY}` | Sanity read API token |
 | `SWA_TOKEN_{CLIENT_KEY}` | Azure SWA deployment token |
 
-The workflow reads `sanityProjectId` and `sanityDataset` directly from the config JSON using `jq` — no hardcoding in the workflow file itself.
+No CMS tokens. No external API credentials. The only secret per client is the Azure deploy token.
 
 Build cache is keyed by `{clientId}-{package-lock-hash}` so each client gets its own cache entry.
 

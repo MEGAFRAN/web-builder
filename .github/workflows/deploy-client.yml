@@ -31,12 +31,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Set Sanity vars from client config
-        run: |
-          CONFIG=config/clients/${{ github.event.inputs.clientId }}.json
-          echo "SANITY_PROJECT_ID=$(jq -r '.sanityProjectId' $CONFIG)" >> $GITHUB_ENV
-          echo "SANITY_DATASET=$(jq -r '.sanityDataset' $CONFIG)" >> $GITHUB_ENV
-          echo "CLIENT_KEY=$(echo '${{ github.event.inputs.clientId }}' | tr '-' '_')" >> $GITHUB_ENV
+      - name: Derive client key
+        run: echo "CLIENT_KEY=$(echo '${{ github.event.inputs.clientId }}' | tr '-' '_')" >> $GITHUB_ENV
 
       - name: Restore Next.js build cache
         uses: actions/cache@v4
@@ -47,11 +43,8 @@ jobs:
             nextjs-${{ github.event.inputs.clientId }}-
 
       - name: Build static site
-        env:
-          SANITY_API_TOKEN: ${{ secrets[format('CMS_TOKEN_{0}', env.CLIENT_KEY)] }}
         run: |
           echo "CLIENT_ID=${{ github.event.inputs.clientId }}" > .env.local
-          echo "SANITY_API_TOKEN=$SANITY_API_TOKEN" >> .env.local
           npm run build
 
       - name: Deploy to Azure Static Web Apps

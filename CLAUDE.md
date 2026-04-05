@@ -1,3 +1,3 @@
-**Goal:** Build a multi-tenant Next.js SSG platform where a single codebase builds isolated static sites for 100+ clients, each driven by Sanity CMS and deployed independently to Azure Static Web Apps.
+**Goal:** Build a multi-tenant Next.js SSG platform where a single codebase builds isolated static sites for 100+ clients, each driven by a per-client JSON config file and deployed independently to Azure Static Web Apps.
 
-**Architecture:** A `CLIENT_ID` environment variable gates every build to one client, reading that client's config JSON to connect to their dedicated Sanity dataset and inject their theme. An optional catch-all route `app/[[...slug]]/page.tsx` fetches all pages from Sanity at build time and dispatches rendering to typed block components.
+**Architecture:** A `CLIENT_ID` environment variable gates every build to one client, reading that client's `config/clients/{clientId}.json` to load pages, blocks, and theme. A catch-all route `app/[[...slug]]/page.tsx` reads pages from the JSON at build time and dispatches rendering to typed block components via `createJSONCMSClient`.

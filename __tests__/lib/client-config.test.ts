@@ -7,8 +7,6 @@ describe('getClientConfig', () => {
     const config = getClientConfig('restaurante-pepe')
     expect(config.clientId).toBe('restaurante-pepe')
     expect(config.displayName).toBe('Restaurante Pepe')
-    expect(config.sanityProjectId).toBe('7a3w4stg')
-    expect(config.sanityDataset).toBe('production')
     expect(config.theme.primaryColor).toBe('#c0392b')
     expect(config.features.menu).toBe(true)
     expect(config.features.blog).toBe(false)

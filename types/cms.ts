@@ -371,15 +371,19 @@ export type ClientFeatures = {
   menu: boolean
 }
 
+export type ClientPage = {
+  slug: string
+  blocks: Block[]
+}
+
 export type ClientConfig = {
   clientId: string
   displayName: string
-  sanityProjectId: string
-  sanityDataset: string
   customDomain: string
   swaResourceName: string
   features: ClientFeatures
   theme: ClientTheme
+  pages: ClientPage[]
   contactEndpoint?: string
   externalReviewUrl?: string
   externalReviewPlatform?: string

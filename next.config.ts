@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   output: 'export',
   images: {
     loader: 'custom',
-    loaderFile: './lib/sanity-image-loader.ts',
+    loaderFile: './lib/image-loader.ts',
   },
 }
 

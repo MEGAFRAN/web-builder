@@ -6,7 +6,7 @@ export default function LogoCloudBlock({
   context,
   logos,
 }: LogoCloudBlockType) {
-  // `context` allows the Sanity document to differentiate instances (e.g. "partners" vs "featured-in").
+  // `context` differentiates logo cloud instances (e.g. "partners" vs "featured-in").
   // We surface it as the display title when no explicit title is provided.
   const displayTitle = title ?? context ?? null
 
