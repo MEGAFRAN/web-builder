@@ -12,7 +12,7 @@ import type { ThemePreset } from '@/lib/theme-presets'
  * If no preset is specified and any of the 6 fields are missing, the "default"
  * preset fills the gaps.
  */
-function resolveTheme(raw: ClientTheme): ThemePreset {
+export function resolveTheme(raw: ClientTheme): ThemePreset {
   const { preset: presetName, ...explicitFields } = raw
 
   let base: ThemePreset
@@ -36,6 +36,9 @@ function resolveTheme(raw: ClientTheme): ThemePreset {
     primaryColor: explicitFields.primaryColor ?? base.primaryColor,
     accentColor: explicitFields.accentColor ?? base.accentColor,
     backgroundColor: explicitFields.backgroundColor ?? base.backgroundColor,
+    textColor: explicitFields.textColor ?? base.textColor,
+    surfaceColor: explicitFields.surfaceColor ?? base.surfaceColor,
+    surfaceDark: explicitFields.surfaceDark ?? base.surfaceDark,
     fontHeading: explicitFields.fontHeading ?? base.fontHeading,
     fontBody: explicitFields.fontBody ?? base.fontBody,
     borderRadius: explicitFields.borderRadius ?? base.borderRadius,

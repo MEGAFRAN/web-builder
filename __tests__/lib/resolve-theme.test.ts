@@ -56,11 +56,14 @@ describe('resolveTheme (via getClientConfig)', () => {
     expect(config.theme).not.toHaveProperty('preset')
   })
 
-  it('all 6 explicit fields, no preset — returns those exact values', async () => {
+  it('all 9 explicit fields, no preset — returns those exact values', async () => {
     const explicit = {
       primaryColor: '#111111',
       accentColor: '#222222',
       backgroundColor: '#333333',
+      textColor: '#444444',
+      surfaceColor: '#555555',
+      surfaceDark: '#666666',
       fontHeading: 'Georgia',
       fontBody: 'Arial',
       borderRadius: 0,
@@ -99,13 +102,13 @@ describe('resolveTheme (via getClientConfig)', () => {
     expect(config.theme).toEqual(THEME_PRESETS['default'])
   })
 
-  it('resolved theme always has exactly the 6 expected keys', async () => {
+  it('resolved theme always has exactly the 9 expected keys', async () => {
     mockFs.readFileSync = vi.fn(() => makeClientJson({ preset: 'vibrant-retail' }))
     const { getClientConfig } = await import('@/lib/client-config')
     const config = getClientConfig('test-client')
     const keys = Object.keys(config.theme).sort()
     expect(keys).toEqual(
-      ['accentColor', 'backgroundColor', 'borderRadius', 'fontBody', 'fontHeading', 'primaryColor']
+      ['accentColor', 'backgroundColor', 'borderRadius', 'fontBody', 'fontHeading', 'primaryColor', 'surfaceColor', 'surfaceDark', 'textColor']
     )
   })
 })

@@ -21,7 +21,7 @@ The `nextjs-frontend-developer` agent handles implementation. Your output feeds 
 
 ## Project Context
 
-This project is a Next.js App Router application with a structured component library. The registry lives at `components/registry.ts`. Always read it before making component recommendations so your advice references real, available components by their exact names.
+Always read: architecture.md
 
 ## Use Cases
 

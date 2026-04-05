@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { getClientConfig } from '@/lib/client-config'
-import type { ClientTheme } from '@/types/cms'
+import { getClientConfig, resolveTheme } from '@/lib/client-config'
+import type { ThemePreset } from '@/lib/theme-presets'
 import { Navbar } from '@/components/navigation/Navbar'
 import { Footer } from '@/components/navigation/Footer'
 
@@ -10,12 +10,15 @@ export const metadata: Metadata = {
 }
 
 // Exported for unit testing without rendering the full layout tree
-export function buildThemeStyles(theme: ClientTheme): string {
+export function buildThemeStyles(theme: ThemePreset): string {
   return `
     :root {
       --color-primary: ${theme.primaryColor};
       --color-accent: ${theme.accentColor};
       --color-bg: ${theme.backgroundColor};
+      --color-text: ${theme.textColor};
+      --color-surface: ${theme.surfaceColor};
+      --color-surface-dark: ${theme.surfaceDark};
       --font-heading: '${theme.fontHeading}', serif;
       --font-body: '${theme.fontBody}', sans-serif;
       --radius: ${theme.borderRadius}px;
@@ -26,7 +29,7 @@ export function buildThemeStyles(theme: ClientTheme): string {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const clientId = process.env.CLIENT_ID!
   const config = getClientConfig(clientId)
-  const themeStyles = buildThemeStyles(config.theme)
+  const themeStyles = buildThemeStyles(resolveTheme(config.theme))
 
   return (
     <html lang="es">

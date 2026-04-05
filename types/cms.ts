@@ -360,6 +360,9 @@ export type ClientTheme = {
   primaryColor?: string
   accentColor?: string
   backgroundColor?: string
+  textColor?: string
+  surfaceColor?: string
+  surfaceDark?: string
   fontHeading?: string
   fontBody?: string
   borderRadius?: number

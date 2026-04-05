@@ -30,8 +30,8 @@ npm run build
   (env: CLIENT_ID)
         │
         ├── app/layout.tsx
-        │     getClientConfig(CLIENT_ID) → load theme → buildThemeStyles()
-        │     inject <style>:root { --color-primary: ...; ... }</style>
+        │     getClientConfig(CLIENT_ID) → resolveTheme() → buildThemeStyles()
+        │     inject <style>:root { --color-primary: ...; --color-text: ...; ... }</style>
         │
         └── app/[[...slug]]/page.tsx
               getClientConfig(CLIENT_ID) → config.pages[]
@@ -87,12 +87,16 @@ type ClientConfig = {
     menu: boolean
   }
   theme: {
-    primaryColor: string    // "#c0392b"
-    accentColor: string     // "#e74c3c"
-    backgroundColor: string // "#fdf8f2"
-    fontHeading: string     // "Playfair Display"
-    fontBody: string        // "Inter"
-    borderRadius: number    // 4
+    preset?: string          // "bold-restaurant" — resolved via THEME_PRESETS
+    primaryColor?: string    // overrides preset value
+    accentColor?: string
+    backgroundColor?: string
+    textColor?: string       // primary text color on backgroundColor
+    surfaceColor?: string    // card/panel background
+    surfaceDark?: string     // background for dark-variant sections
+    fontHeading?: string
+    fontBody?: string
+    borderRadius?: number
   }
   pages: Array<{
     slug: string            // "" for home, "menu", "contacto", etc.
@@ -122,13 +126,18 @@ AI agents must validate their output against the relevant schema before writing.
 
 Theming is pure CSS variables — no runtime JS.
 
+**Preset resolution**: `lib/theme-presets.ts` exports `THEME_PRESETS` (5 named presets) and `THEME_PRESET_META` (machine-readable metadata for AI agent preset selection). `resolveTheme(clientTheme)` in `lib/client-config.ts` merges the client's optional overrides on top of the selected preset, always returning a fully-populated `ThemePreset` with 9 required fields.
+
 1. `globals.css` defines fallback values in `:root`
-2. `layout.tsx` reads the client theme at build time and generates:
+2. `layout.tsx` calls `resolveTheme(config.theme)` then `buildThemeStyles(preset)` to generate:
    ```css
    :root {
      --color-primary: #c0392b;
      --color-accent: #e74c3c;
      --color-bg: #fdf8f2;
+     --color-text: #2d1a0e;
+     --color-surface: #ffffff;
+     --color-surface-dark: #3b1c14;
      --font-heading: 'Playfair Display', serif;
      --font-body: 'Inter', sans-serif;
      --radius: 4px;
@@ -136,6 +145,8 @@ Theming is pure CSS variables — no runtime JS.
    ```
 3. Injected as a `<style>` tag in `<head>` — overrides fallbacks
 4. Components consume vars via Tailwind utilities and semantic classes (`.btn-primary`, `.text-brand`, `.section`)
+
+Available presets: `bold-restaurant`, `modern-minimal`, `professional-law`, `vibrant-retail`, `default`. AI agents selecting a preset should consult `THEME_PRESET_META` (keyed by preset name) which exposes `industries`, `mood`, `colorTemperature`, and `formality`.
 
 ---
 

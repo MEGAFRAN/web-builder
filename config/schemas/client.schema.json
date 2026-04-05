@@ -34,6 +34,9 @@
         "primaryColor": { "type": "string" },
         "accentColor": { "type": "string" },
         "backgroundColor": { "type": "string" },
+        "textColor": { "type": "string" },
+        "surfaceColor": { "type": "string" },
+        "surfaceDark": { "type": "string" },
         "fontHeading": { "type": "string" },
         "fontBody": { "type": "string" },
         "borderRadius": { "type": "number" }

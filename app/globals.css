@@ -21,6 +21,9 @@
   --color-primary: #000000;
   --color-accent: #333333;
   --color-bg: #ffffff;
+  --color-text: #111827;
+  --color-surface: #f9fafb;
+  --color-surface-dark: #1a1a1a;
   --font-heading: sans-serif;
   --font-body: sans-serif;
   --radius: 4px;
