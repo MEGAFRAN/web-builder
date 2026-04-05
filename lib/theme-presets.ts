@@ -72,6 +72,110 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     borderRadius: 8,
   },
 
+  /** Teal-blue primary, off-white background, humanist sans-serif for healthcare */
+  'calm-healthcare': {
+    primaryColor: '#0891b2',
+    accentColor: '#06b6d4',
+    backgroundColor: '#f0fafa',
+    textColor: '#0c2a33',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#064e63',
+    fontHeading: 'Lato',
+    fontBody: 'Lato',
+    borderRadius: 6,
+  },
+
+  /** Warm orange primary, sky blue accent, rounded corners for education */
+  'bright-education': {
+    primaryColor: '#f97316',
+    accentColor: '#0ea5e9',
+    backgroundColor: '#fffbf5',
+    textColor: '#1c1917',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#7c2d0e',
+    fontHeading: 'Nunito',
+    fontBody: 'Nunito',
+    borderRadius: 12,
+  },
+
+  /** Slate blue-gray primary, warm gold accent, editorial heading for real estate */
+  'modern-realestate': {
+    primaryColor: '#334155',
+    accentColor: '#d4a847',
+    backgroundColor: '#ffffff',
+    textColor: '#1e293b',
+    surfaceColor: '#f8fafc',
+    surfaceDark: '#1e293b',
+    fontHeading: 'Raleway',
+    fontBody: 'Inter',
+    borderRadius: 4,
+  },
+
+  /** Terracotta primary, sand accent, luxury serif heading for boutique hospitality */
+  'warm-hospitality': {
+    primaryColor: '#c2714f',
+    accentColor: '#e8c97e',
+    backgroundColor: '#fdf6ee',
+    textColor: '#2c1810',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#6b3420',
+    fontHeading: 'Cormorant Garamond',
+    fontBody: 'Lato',
+    borderRadius: 4,
+  },
+
+  /** Charcoal primary, high-energy red accent, condensed heading for fitness */
+  'strong-fitness': {
+    primaryColor: '#1c1c1e',
+    accentColor: '#ef4444',
+    backgroundColor: '#f9f9f9',
+    textColor: '#1c1c1e',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#0a0a0a',
+    fontHeading: 'Barlow Condensed',
+    fontBody: 'Open Sans',
+    borderRadius: 4,
+  },
+
+  /** Deep indigo primary, coral-pink accent, editorial serif for creative studios */
+  'creative-studio': {
+    primaryColor: '#312e81',
+    accentColor: '#f472b6',
+    backgroundColor: '#faf9ff',
+    textColor: '#1e1b4b',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#1e1b4b',
+    fontHeading: 'DM Serif Display',
+    fontBody: 'DM Sans',
+    borderRadius: 8,
+  },
+
+  /** Forest green primary, amber accent, editorial serif for non-profits */
+  'community-nonprofit': {
+    primaryColor: '#166534',
+    accentColor: '#f59e0b',
+    backgroundColor: '#f0fdf4',
+    textColor: '#14401f',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#0d3d1e',
+    fontHeading: 'Libre Baskerville',
+    fontBody: 'Source Sans Pro',
+    borderRadius: 8,
+  },
+
+  /** Dark slate primary, safety-orange accent, bold condensed heading for trades */
+  'industrial-trades': {
+    primaryColor: '#1e293b',
+    accentColor: '#ea580c',
+    backgroundColor: '#fafaf9',
+    textColor: '#1e293b',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#0f172a',
+    fontHeading: 'Oswald',
+    fontBody: 'Roboto',
+    borderRadius: 2,
+  },
+
   /** Safe fallback used when no preset is specified and not all fields are explicit */
   default: {
     primaryColor: '#2563eb',
@@ -130,6 +234,62 @@ export const THEME_PRESET_META: Record<string, ThemePresetMeta> = {
     formality: 'low',
     description:
       'Bright purple and amber for retail and lifestyle brands targeting younger, energetic audiences.',
+  },
+  'calm-healthcare': {
+    industries: ['healthcare', 'medical-clinic', 'dental', 'pharmacy', 'physiotherapy', 'mental-health', 'veterinary'],
+    mood: ['calm', 'clean', 'trustworthy', 'caring', 'reassuring'],
+    colorTemperature: 'cool',
+    formality: 'medium',
+    description: 'Teal blues and clean whites for medical and health service providers that need to project calm, cleanliness, and patient trust.',
+  },
+  'bright-education': {
+    industries: ['education', 'tutoring', 'school', 'e-learning', 'coaching', 'childcare', 'university'],
+    mood: ['energetic', 'optimistic', 'friendly', 'curious', 'approachable'],
+    colorTemperature: 'warm',
+    formality: 'low',
+    description: 'Warm orange and sky blue for educational businesses and learning platforms that need to feel engaging, approachable, and encouraging.',
+  },
+  'modern-realestate': {
+    industries: ['real-estate', 'property-management', 'mortgage', 'architecture', 'interior-design', 'home-staging'],
+    mood: ['aspirational', 'confident', 'premium', 'trustworthy', 'contemporary'],
+    colorTemperature: 'cool',
+    formality: 'high',
+    description: 'Slate blue-gray and warm gold for real estate agencies and property professionals projecting confidence and premium market positioning.',
+  },
+  'warm-hospitality': {
+    industries: ['hotel', 'bed-and-breakfast', 'resort', 'vacation-rental', 'guesthouse', 'spa', 'retreat'],
+    mood: ['welcoming', 'luxurious', 'warm', 'intimate', 'refined'],
+    colorTemperature: 'warm',
+    formality: 'medium',
+    description: 'Terracotta and sand tones for boutique hotels and hospitality businesses that want to feel warm, curated, and memorable.',
+  },
+  'strong-fitness': {
+    industries: ['gym', 'personal-training', 'sports-club', 'martial-arts', 'crossfit', 'yoga-studio', 'athletics'],
+    mood: ['intense', 'powerful', 'motivating', 'energetic', 'bold'],
+    colorTemperature: 'neutral',
+    formality: 'low',
+    description: 'High-contrast charcoal and red for gyms and fitness businesses that want to project intensity, performance, and results.',
+  },
+  'creative-studio': {
+    industries: ['music', 'photography', 'film', 'art-gallery', 'design-studio', 'entertainment', 'performing-arts'],
+    mood: ['artistic', 'expressive', 'contemporary', 'imaginative', 'distinctive'],
+    colorTemperature: 'cool',
+    formality: 'low',
+    description: 'Deep indigo and coral pink for creative studios, artists, and entertainment businesses that need an expressive, editorial presence.',
+  },
+  'community-nonprofit': {
+    industries: ['non-profit', 'charity', 'ngo', 'foundation', 'community-org', 'social-enterprise', 'volunteer'],
+    mood: ['hopeful', 'mission-driven', 'warm', 'trustworthy', 'community-focused'],
+    colorTemperature: 'cool',
+    formality: 'medium',
+    description: 'Forest green and amber for non-profit organizations and charities that need to feel credible, mission-driven, and community-rooted.',
+  },
+  'industrial-trades': {
+    industries: ['construction', 'contracting', 'plumbing', 'electrical', 'roofing', 'landscaping', 'home-services'],
+    mood: ['reliable', 'strong', 'no-nonsense', 'professional', 'dependable'],
+    colorTemperature: 'neutral',
+    formality: 'medium',
+    description: 'Dark slate and safety orange for construction firms and trade businesses that need to project rugged reliability and professional competence.',
   },
   default: {
     industries: [],
