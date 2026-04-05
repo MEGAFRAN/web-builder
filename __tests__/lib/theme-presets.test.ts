@@ -7,6 +7,9 @@ const REQUIRED_FIELDS: (keyof ThemePreset)[] = [
   'primaryColor',
   'accentColor',
   'backgroundColor',
+  'textColor',
+  'surfaceColor',
+  'surfaceDark',
   'fontHeading',
   'fontBody',
   'borderRadius',
@@ -18,7 +21,7 @@ describe('THEME_PRESETS', () => {
     expect(THEME_PRESETS).toHaveProperty('default')
   })
 
-  it.each(Object.keys(THEME_PRESETS))('preset "%s" has all 6 required fields', (name) => {
+  it.each(Object.keys(THEME_PRESETS))('preset "%s" has all 9 required fields', (name) => {
     const preset = THEME_PRESETS[name]
     for (const field of REQUIRED_FIELDS) {
       expect(preset).toHaveProperty(field)

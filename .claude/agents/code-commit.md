@@ -126,6 +126,7 @@ Suggested fix: <one-line actionable hint>
 
 ## Constraints
 
+- Always push to remote after committing — this is required, not optional, and requires no user confirmation
 - Never force push (`--force`, `--force-with-lease`)
 - Never amend existing commits
 - Never skip pre-commit hooks (`--no-verify`)
