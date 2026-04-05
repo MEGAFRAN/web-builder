@@ -16,6 +16,33 @@
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16;
 }
 
+/* Semantic bridge layer — maps component class names to CSS variables */
+
+/* Backgrounds */
+.bg-primary      { background-color: var(--color-primary); }
+.bg-accent       { background-color: var(--color-accent); }
+.bg-background   { background-color: var(--color-bg); }
+.bg-surface      { background-color: var(--color-surface); }
+.bg-surface-dark { background-color: var(--color-surface-dark); }
+.bg-muted-bg     { background-color: var(--color-surface); }
+
+/* Text */
+.text-foreground { color: var(--color-text); }
+.text-primary-fg { color: #ffffff; }
+.text-accent     { color: var(--color-accent); }
+.text-muted      { color: var(--color-text); opacity: 0.6; }
+
+/* Borders */
+.border-border   { border-color: var(--color-text); opacity: 0.15; }
+
+/* Destructive (not theme-driven, but used in Button.tsx) */
+.bg-destructive      { background-color: #dc2626; }
+.text-destructive-fg { color: #ffffff; }
+
+/* Typography — element-level, fonts only */
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
+body                    { font-family: var(--font-body); }
+
 /* Fallback values — overridden per-client by layout.tsx */
 :root {
   --color-primary: #000000;

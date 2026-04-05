@@ -4,7 +4,7 @@ export default function BlogListBlock({ postsPerPage }: BlogListBlockType) {
   return (
     <section className="section">
       <h2 className="text-3xl font-bold text-brand mb-8">Blog</h2>
-      <p className="text-zinc-500 text-sm">
+      <p className="text-muted text-sm">
         Mostrando{' '}
         <span data-testid="posts-per-page">{postsPerPage}</span>{' '}
         entradas por página.
