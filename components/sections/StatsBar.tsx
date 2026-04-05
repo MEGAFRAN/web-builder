@@ -13,7 +13,7 @@ const valueColorMap: Record<string, string> = {
 const labelColorMap: Record<string, string> = {
   white: "text-muted",
   gray: "text-muted",
-  dark: "text-primary-fg/70",
+  dark: "text-primary-fg-muted",
 };
 
 const colsMap: Record<number, string> = {

@@ -132,9 +132,3 @@ Suggested fix: <one-line actionable hint>
 - Never modify `.gitignore` or any tracked file — this agent only commits, it does not author changes
 - Never ask the user for clarification mid-run — infer everything from the diff
 - If the repo has no remote named `origin`, report it and stop
-
-
-# Documentation
-Read the following project docs to gather additional context relevant to your task. Especially when the task involves specifics not covered in your system prompt.
-
-- ""

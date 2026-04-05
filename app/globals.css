@@ -39,6 +39,40 @@
 .bg-destructive      { background-color: #dc2626; }
 .text-destructive-fg { color: #ffffff; }
 
+/* Focus ring — used by Input, Textarea, Select, Checkbox, ContactForm */
+.ring-primary {
+  --tw-ring-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+/* Placeholder text — used by Input, Textarea, Select, ContactForm */
+.placeholder-muted::placeholder {
+  color: var(--color-text);
+  opacity: 0.4;
+}
+
+/* Primary-colored border — used by PricingTable for highlighted tier */
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+/* Primary text color — canonical name; text-brand is a legacy alias */
+.text-primary {
+  color: var(--color-primary);
+}
+
+/* Dimmed white text for use on primary-colored or dark sections */
+.text-primary-fg-muted {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Frosted glass card for use on dark/primary-colored section backgrounds */
+.card-overlay {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius);
+}
+
 /* Typography — element-level, fonts only */
 h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
 body                    { font-family: var(--font-body); }

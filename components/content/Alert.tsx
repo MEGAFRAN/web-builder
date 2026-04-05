@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 const variantMap: Record<string, string> = {
   info: "bg-blue-50 border-blue-200 text-blue-800",
   success: "bg-green-50 border-green-200 text-green-800",
@@ -7,16 +9,17 @@ const variantMap: Record<string, string> = {
 
 interface AlertProps {
   title?: string | null;
-  message: string;
+  message?: string | null;
   variant?: string | null;
+  children?: ReactNode;
 }
 
-export function Alert({ title, message, variant }: AlertProps) {
+export function Alert({ title, message, variant, children }: AlertProps) {
   const styles = variantMap[variant ?? "info"] ?? "bg-blue-50 border-blue-200 text-blue-800";
   return (
     <div data-component="alert" className={`rounded-lg border p-4 ${styles}`}>
       {title && <p className="mb-1 font-semibold">{title}</p>}
-      <p>{message}</p>
+      <p>{children ?? message}</p>
     </div>
   );
 }

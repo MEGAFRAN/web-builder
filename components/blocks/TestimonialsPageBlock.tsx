@@ -88,7 +88,7 @@ export default function TestimonialsPageBlock({
                 {featured.map((t, i) => (
                   <div
                     key={i}
-                    className="rounded-xl border border-white/20 bg-white/10 p-8"
+                    className="card-overlay p-8"
                   >
                     <p className="mb-6 text-lg leading-relaxed text-primary-fg">
                       &ldquo;{t.quote}&rdquo;
@@ -200,17 +200,15 @@ export default function TestimonialsPageBlock({
       {externalReviewUrl && externalReviewPlatform && (
         <Section background="white" paddingY="sm">
           <Container maxWidth="2xl" padding="md">
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-blue-800">
-              <p>
-                Verified reviews from{' '}
-                <a
-                  href={externalReviewUrl}
-                  className="font-semibold underline hover:opacity-80"
-                >
-                  {externalReviewPlatform}
-                </a>
-              </p>
-            </div>
+            <Alert variant="info">
+              Verified reviews from{' '}
+              <a
+                href={externalReviewUrl}
+                className="font-semibold underline hover:opacity-80"
+              >
+                {externalReviewPlatform}
+              </a>
+            </Alert>
           </Container>
         </Section>
       )}
