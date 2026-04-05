@@ -15,5 +15,9 @@ export default function TestimonialsBlock({
     }
   })
 
-  return <Testimonials title={heading} testimonials={testimonials} />
+  return (
+    <div data-component="testimonials-block">
+      <Testimonials title={heading} testimonials={testimonials} />
+    </div>
+  )
 }

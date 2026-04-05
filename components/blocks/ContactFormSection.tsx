@@ -36,7 +36,7 @@ export default function ContactFormSection({ fallbackEmail }: ContactFormSection
     : 'Something went wrong. Please try again later.'
 
   return (
-    <div className="flex flex-col gap-6">
+    <div data-component="contact-form-section" className="flex flex-col gap-6">
       <ContactForm
         isSubmitting={state === 'submitting'}
         onSubmitData={handleSubmit}

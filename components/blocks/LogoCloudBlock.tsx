@@ -10,5 +10,9 @@ export default function LogoCloudBlock({
   // We surface it as the display title when no explicit title is provided.
   const displayTitle = title ?? context ?? null
 
-  return <LogoCloud title={displayTitle} logos={logos} />
+  return (
+    <div data-component="logo-cloud-block">
+      <LogoCloud title={displayTitle} logos={logos} />
+    </div>
+  )
 }

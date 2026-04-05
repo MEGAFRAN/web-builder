@@ -8,11 +8,13 @@ export default function CTABlock({
   background,
 }: CTABlockType) {
   return (
-    <CTA
-      headline={headline}
-      subtext={subtext}
-      ctaLabel={ctaLabel}
-      background={background ?? 'gray'}
-    />
+    <div data-component="cta-block">
+      <CTA
+        headline={headline}
+        subtext={subtext}
+        ctaLabel={ctaLabel}
+        background={background ?? 'gray'}
+      />
+    </div>
   )
 }

@@ -13,26 +13,28 @@ export default function MissionBlock({
   imageAlt,
 }: MissionBlockType) {
   return (
-    <Section background="white" paddingY="xl">
-      <Container maxWidth="2xl" padding="md">
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-center">
-          <div className="flex-1">
-            <Stack gap="lg">
-              <Heading text={heading} level="h1" align="left" color="default" />
-              <Text content={body} size="lg" color="muted" align="left" />
-            </Stack>
-          </div>
-          {imageUrl && (
+    <div data-component="mission-block">
+      <Section background="white" paddingY="xl">
+        <Container maxWidth="2xl" padding="md">
+          <div className="flex flex-col gap-12 lg:flex-row lg:items-center">
             <div className="flex-1">
-              <Image
-                src={imageUrl}
-                alt={imageAlt ?? heading}
-                rounded={false}
-              />
+              <Stack gap="lg">
+                <Heading text={heading} level="h1" align="left" color="default" />
+                <Text content={body} size="lg" color="muted" align="left" />
+              </Stack>
             </div>
-          )}
-        </div>
-      </Container>
-    </Section>
+            {imageUrl && (
+              <div className="flex-1">
+                <Image
+                  src={imageUrl}
+                  alt={imageAlt ?? heading}
+                  rounded={false}
+                />
+              </div>
+            )}
+          </div>
+        </Container>
+      </Section>
+    </div>
   )
 }

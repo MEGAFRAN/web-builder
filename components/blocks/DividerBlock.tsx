@@ -3,8 +3,10 @@ import { Container } from '@/components/layout/Container'
 
 export default function DividerBlock() {
   return (
-    <Container maxWidth="2xl" padding="md">
-      <Divider />
-    </Container>
+    <div data-component="divider-block">
+      <Container maxWidth="2xl" padding="md">
+        <Divider />
+      </Container>
+    </div>
   )
 }

@@ -4,8 +4,10 @@ import { Section } from '@/components/layout/Section'
 
 export default function FaqBlock({ title, items }: FaqBlockType) {
   return (
-    <Section background="white" paddingY="lg">
-      <FAQ title={title} items={items} />
-    </Section>
+    <div data-component="faq-block">
+      <Section background="white" paddingY="lg">
+        <FAQ title={title} items={items} />
+      </Section>
+    </div>
   )
 }

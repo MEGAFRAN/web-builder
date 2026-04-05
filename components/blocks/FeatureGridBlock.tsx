@@ -11,5 +11,9 @@ export default function FeatureGridBlock({
     description: item.description,
   }))
 
-  return <FeatureGrid title={heading} features={features} />
+  return (
+    <div data-component="feature-grid-block">
+      <FeatureGrid title={heading} features={features} />
+    </div>
+  )
 }

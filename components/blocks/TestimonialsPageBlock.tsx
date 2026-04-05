@@ -37,7 +37,7 @@ export default function TestimonialsPageBlock({
   const extended = allTestimonials ?? []
 
   return (
-    <>
+    <div data-component="testimonials-page-block">
       {/* Breadcrumb */}
       <Section background="white" paddingY="sm">
         <Container maxWidth="2xl" padding="md">
@@ -248,6 +248,6 @@ export default function TestimonialsPageBlock({
         </Container>
       </Section>
 
-    </>
+    </div>
   )
 }

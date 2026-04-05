@@ -89,7 +89,7 @@ export default function PricingPageBlock({
     faqItems && faqItems.length > 0 ? faqItems : defaultFaqItems
 
   return (
-    <>
+    <div data-component="pricing-page-block">
       {/* Breadcrumb */}
       <Section background="white" paddingY="sm">
         <Container maxWidth="2xl" padding="md">
@@ -193,6 +193,6 @@ export default function PricingPageBlock({
         </Container>
       </Section>
 
-    </>
+    </div>
   )
 }

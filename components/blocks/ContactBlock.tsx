@@ -2,7 +2,7 @@ import type { ContactBlock as ContactBlockType } from '@/types/cms'
 
 export default function ContactBlock({ showMap, phone, email, address }: ContactBlockType) {
   return (
-    <section className="section">
+    <section data-component="contact-block" className="section">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div className="space-y-4">
           {phone && (

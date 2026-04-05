@@ -2,7 +2,7 @@ import type { BlogListBlock as BlogListBlockType } from '@/types/cms'
 
 export default function BlogListBlock({ postsPerPage }: BlogListBlockType) {
   return (
-    <section className="section">
+    <section data-component="blog-list-block" className="section">
       <h2 className="text-3xl font-bold text-brand mb-8">Blog</h2>
       <p className="text-muted text-sm">
         Mostrando{' '}

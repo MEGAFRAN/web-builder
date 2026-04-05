@@ -8,11 +8,13 @@ export default function HomepageHeroBlock({
   secondaryButtonLabel,
 }: HomepageHeroBlockType) {
   return (
-    <Hero
-      headline={heading}
-      subtext={subtext}
-      ctaLabel={primaryButtonLabel}
-      secondaryLabel={secondaryButtonLabel}
-    />
+    <div data-component="homepage-hero-block">
+      <Hero
+        headline={heading}
+        subtext={subtext}
+        ctaLabel={primaryButtonLabel}
+        secondaryLabel={secondaryButtonLabel}
+      />
+    </div>
   )
 }

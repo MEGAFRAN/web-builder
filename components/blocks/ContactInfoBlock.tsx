@@ -9,7 +9,7 @@ import ContactFormSection from '@/components/blocks/ContactFormSection'
 
 export default function ContactInfoBlock({ email, phone, address, fallbackEmail }: ContactInfoBlockType) {
   return (
-    <>
+    <div data-component="contact-info-block">
       {/* Page Header */}
       <Section background="white" paddingY="lg">
         <Container maxWidth="2xl" padding="md">
@@ -65,6 +65,6 @@ export default function ContactInfoBlock({ email, phone, address, fallbackEmail 
       <Container maxWidth="2xl" padding="md">
         <Divider />
       </Container>
-    </>
+    </div>
   )
 }

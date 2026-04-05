@@ -69,7 +69,7 @@ export default function ServicesPageBlock({
   }))
 
   return (
-    <>
+    <div data-component="services-page-block">
       {/* Breadcrumb */}
       <Section background="white" paddingY="sm">
         <Container maxWidth="2xl" padding="md">
@@ -222,6 +222,6 @@ export default function ServicesPageBlock({
         </Container>
       </Section>
 
-    </>
+    </div>
   )
 }
