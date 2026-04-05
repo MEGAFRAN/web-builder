@@ -1,0 +1,74 @@
+[
+  {
+    "_type": "breadcrumb",
+    "items": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Nosotros", "href": null }
+    ]
+  },
+  {
+    "_type": "missionBlock",
+    "heading": "Nuestra historia",
+    "body": "Restaurante Pepe nació en 1993 de la mano de José 'Pepe' Sánchez, cocinero autodidacta que aprendió el oficio junto a su madre en un pequeño pueblo de Castilla. Con la ilusión de preservar la cocina tradicional española en la ciudad, abrió las puertas de este local en el corazón de Madrid. Hoy, su hijo David continúa el legado con el mismo amor por los ingredientes honestos y las recetas de toda la vida.",
+    "imageUrl": "https://picsum.photos/seed/restaurant-story/800/600",
+    "imageAlt": "Pepe Sánchez en la cocina del restaurante"
+  },
+  {
+    "_type": "valuesBlock",
+    "heading": "Nuestros valores",
+    "items": [
+      {
+        "title": "Honestidad en el producto",
+        "description": "Nunca usamos precocinados. Todo lo que sale de nuestra cocina se elabora desde cero cada día.",
+        "icon": null
+      },
+      {
+        "title": "Sostenibilidad",
+        "description": "Trabajamos con productores locales y de temporada para reducir la huella de carbono y apoyar la economía cercana.",
+        "icon": null
+      },
+      {
+        "title": "Hospitalidad",
+        "description": "Cada comensal es un invitado en nuestra casa. Nos esforzamos para que cada visita sea una experiencia memorable.",
+        "icon": null
+      }
+    ]
+  },
+  {
+    "_type": "teamBlock",
+    "heading": "El equipo",
+    "members": [
+      {
+        "name": "David Sánchez",
+        "role": "Chef y propietario",
+        "bio": "Hijo del fundador, David lleva desde los 14 años entre fogones. Formado en la Escuela de Hostelería de Madrid y con experiencia en restaurantes con estrella Michelin, ahora aplica esa técnica a la cocina más cercana.",
+        "photoUrl": "https://picsum.photos/seed/chef-david/400/400",
+        "order": 1
+      },
+      {
+        "name": "Carmen López",
+        "role": "Jefa de sala",
+        "bio": "Con 15 años de experiencia en hostelería de alto nivel, Carmen garantiza que cada servicio fluya con elegancia y cercanía.",
+        "photoUrl": "https://picsum.photos/seed/sala-carmen/400/400",
+        "order": 2
+      },
+      {
+        "name": "Roberto Díaz",
+        "role": "Sommelier",
+        "bio": "Apasionado del vino español, Roberto selecciona personalmente cada referencia de la carta y asesora a los comensales con paciencia y entusiasmo.",
+        "photoUrl": "https://picsum.photos/seed/sommelier-roberto/400/400",
+        "order": 3
+      }
+    ]
+  },
+  {
+    "_type": "statsBlock",
+    "background": "gray",
+    "stats": [
+      { "value": "1993", "label": "Año de apertura" },
+      { "value": "3ª", "label": "Generación familiar" },
+      { "value": "12", "label": "Personas en el equipo" },
+      { "value": "8", "label": "Productores locales" }
+    ]
+  }
+]

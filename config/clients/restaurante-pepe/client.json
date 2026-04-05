@@ -1,0 +1,60 @@
+{
+  "clientId": "restaurante-pepe",
+  "displayName": "Restaurante Pepe",
+  "customDomain": "restaurante-pepe.com",
+  "swaResourceName": "swa-restaurante-pepe",
+  "features": {
+    "blog": false,
+    "booking": true,
+    "gallery": true,
+    "menu": true
+  },
+  "theme": {
+    "primaryColor": "#c0392b",
+    "accentColor": "#e74c3c",
+    "backgroundColor": "#fdf8f2",
+    "fontHeading": "Playfair Display",
+    "fontBody": "Inter",
+    "borderRadius": 4
+  },
+  "header": {
+    "logo": "Restaurante Pepe",
+    "ctaLabel": "Reservar mesa",
+    "ctaAction": "/contacto",
+    "links": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Menú", "href": "/menu" },
+      { "label": "Nosotros", "href": "/nosotros" },
+      { "label": "Contacto", "href": "/contacto" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2025 Restaurante Pepe. Todos los derechos reservados.",
+    "columns": [
+      {
+        "title": "Navegación",
+        "links": [
+          { "label": "Inicio", "href": "/" },
+          { "label": "Menú", "href": "/menu" },
+          { "label": "Nosotros", "href": "/nosotros" },
+          { "label": "Contacto", "href": "/contacto" }
+        ]
+      },
+      {
+        "title": "Horario",
+        "links": [
+          { "label": "Lun–Vie: 13:00–16:00, 20:00–23:30", "href": "#" },
+          { "label": "Sáb–Dom: 13:00–17:00, 20:00–00:00", "href": "#" }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "links": [
+          { "label": "info@restaurante-pepe.com", "href": "mailto:info@restaurante-pepe.com" },
+          { "label": "+34 91 234 56 78", "href": "tel:+34912345678" },
+          { "label": "Calle Mayor 12, Madrid", "href": "#" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "_type": "breadcrumb",
+    "items": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Menú", "href": null }
+    ]
+  },
+  {
+    "_type": "hero",
+    "title": "Nuestra carta",
+    "subtitle": "Platos elaborados con ingredientes frescos de temporada. Cada semana actualizamos la carta del día.",
+    "cta": { "label": "Reservar mesa", "href": "/contacto" }
+  },
+  {
+    "_type": "services",
+    "items": [
+      {
+        "title": "Entrantes",
+        "description": "Croquetas caseras de jamón ibérico, Jamón de bellota D.O. Jabugo, Patatas bravas con alioli de ajo negro, Pulpo a la gallega con pimentón de La Vera.",
+        "icon": null
+      },
+      {
+        "title": "Pescados",
+        "description": "Merluza a la vasca con almejas, Bacalao al pil-pil, Rodaballo al horno con verduras de temporada, Paella de mariscos (para 2 personas).",
+        "icon": null
+      },
+      {
+        "title": "Carnes",
+        "description": "Cocido madrileño (jueves), Cordero asado al horno de leña, Solomillo de ternera con salsa de boletus, Carrilleras de cerdo ibérico estofadas.",
+        "icon": null
+      },
+      {
+        "title": "Postres",
+        "description": "Tarta de queso de La Viña, Tocino de cielo casero, Natillas de vainilla con galleta María, Fresones de temporada con nata.",
+        "icon": null
+      }
+    ]
+  },
+  {
+    "_type": "divider"
+  },
+  {
+    "_type": "ctaBlock",
+    "headline": "Menú del día a 14,50 €",
+    "subtext": "Incluye primero, segundo, postre, pan y bebida. Disponible de lunes a viernes al mediodía.",
+    "ctaLabel": "Reservar",
+    "ctaHref": "/contacto",
+    "background": "white"
+  }
+]

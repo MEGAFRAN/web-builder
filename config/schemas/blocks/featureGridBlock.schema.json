@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "featureGridBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_type", "items"],
+  "properties": {
+    "_type": { "type": "string", "const": "featureGridBlock" },
+    "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["heading", "description"],
+        "properties": {
+          "heading": { "type": "string" },
+          "description": { "type": "string" },
+          "iconUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+        }
+      }
+    }
+  }
+}

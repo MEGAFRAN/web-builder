@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "teamBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_type", "members"],
+  "properties": {
+    "_type": { "type": "string", "const": "teamBlock" },
+    "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "role", "bio", "order"],
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string" },
+          "bio": { "type": "string" },
+          "photoUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "order": { "type": "number" }
+        }
+      }
+    }
+  }
+}

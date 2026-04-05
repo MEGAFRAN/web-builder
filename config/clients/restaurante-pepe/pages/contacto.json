@@ -1,0 +1,52 @@
+[
+  {
+    "_type": "breadcrumb",
+    "items": [
+      { "label": "Inicio", "href": "/" },
+      { "label": "Contacto", "href": null }
+    ]
+  },
+  {
+    "_type": "hero",
+    "title": "Reservas y contacto",
+    "subtitle": "Llámanos, escríbenos o rellena el formulario. Confirmamos tu reserva en menos de 2 horas.",
+    "cta": null
+  },
+  {
+    "_type": "contactInfoBlock",
+    "email": "info@restaurante-pepe.com",
+    "phone": "+34 91 234 56 78",
+    "address": "Calle Mayor 12, 28013 Madrid",
+    "fallbackEmail": "reservas@restaurante-pepe.com"
+  },
+  {
+    "_type": "contact",
+    "showMap": true,
+    "phone": "+34 91 234 56 78",
+    "email": "info@restaurante-pepe.com",
+    "address": "Calle Mayor 12, 28013 Madrid"
+  },
+  {
+    "_type": "faqBlock",
+    "title": "Preguntas frecuentes",
+    "context": "reservations",
+    "items": [
+      {
+        "question": "¿Cuánto tiempo con antelación debo reservar?",
+        "answer": "Para fines de semana y festivos recomendamos reservar con al menos 48 horas de antelación. Entre semana solemos tener disponibilidad el mismo día."
+      },
+      {
+        "question": "¿Admitís grupos grandes?",
+        "answer": "Sí, disponemos de un salón privado para grupos de hasta 40 personas. Para grupos de más de 10 personas contactad directamente por teléfono."
+      },
+      {
+        "question": "¿Tenéis opciones vegetarianas o sin gluten?",
+        "answer": "Contamos con varios platos vegetarianos y adaptamos el menú para alergias e intolerancias. Indicadlo al reservar para prepararlo con antelación."
+      },
+      {
+        "question": "¿Se puede aparcar cerca?",
+        "answer": "Hay un parking público a 100 metros en la Calle Arenal. También hay zona de aparcamiento regulado en las calles adyacentes."
+      }
+    ]
+  }
+]

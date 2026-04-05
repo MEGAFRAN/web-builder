@@ -19,12 +19,12 @@ You are a senior Next.js frontend developer. Your responsibility is to build pro
 
 ## Project Context
 
-Import paths use the `@/` alias (e.g., `import { Hero } from "@/components/sections/Hero"`).
+Always read: architecture.md
 
 ## Use Cases
 
 1. Do you need to create or update components? If No, continue to use case 2, if yes read the following files: components/registry.ts
-2. Do you need to create or update a page? If No, continue to use case 3, if yes read the following files: architecture.md, components/registry.ts
+2. Do you need to create or update a page? If No, continue to use case 3, if yes read the following files: components/registry.ts
 3. Do you need to create or update next js project configs? If No, continue to use case 4, if yes read the “config” files of the project
 4. If the requirement is not defined in the past use cases, do a free search inside the project
 

@@ -50,7 +50,29 @@ Azure Static Web Apps (deploy token: SWA_TOKEN_{CLIENT_KEY})
 
 ## Multi-Tenancy: Client Config Schema
 
-Each file at `config/clients/{clientId}.json` fully describes a tenant — theme, features, and all page content:
+Each client lives in its own directory under `config/clients/{clientId}/`:
+
+```
+config/
+  clients/
+    restaurante-pepe/
+      client.json          ← metadata, theme, header, footer, features
+      pages/
+        index.json         ← blocks for slug "" (home)
+        menu.json          ← blocks for slug "menu"
+        nosotros.json      ← blocks for slug "nosotros"
+        contacto.json      ← blocks for slug "contacto"
+  schemas/
+    client.schema.json     ← JSON Schema for client.json
+    blocks/
+      heroBlock.schema.json
+      statsBlock.schema.json
+      ...one schema per block type
+```
+
+**Slug derivation**: the filename is the canonical slug. `index.json` → `""`, `menu.json` → `"menu"`. No slug field inside the file.
+
+The loader (`lib/client-config.ts`) reads `client.json` then globs all `pages/*.json` files, assembling a `ClientConfig` object with the same TypeScript shape the rest of the app expects:
 
 ```typescript
 type ClientConfig = {
@@ -79,9 +101,20 @@ type ClientConfig = {
 }
 ```
 
-Adding a new client = adding one JSON file + one GitHub secret (`SWA_TOKEN_{CLIENT_KEY}`).
+**Legacy fallback**: if no directory is found, the loader falls back to reading `config/clients/{clientId}.json` (single-file format) so older clients continue to work during migration.
 
-Content changes = editing the `pages` array in the JSON file (typically done by an AI agent acting on client instructions) + triggering a rebuild.
+Adding a new client = creating a `config/clients/{clientId}/` directory with `client.json` + one JSON file per page + one GitHub secret (`SWA_TOKEN_{CLIENT_KEY}`).
+
+Content changes = editing the relevant `pages/*.json` file (typically done by an AI agent acting on client instructions) + triggering a rebuild. Each page file is an independent unit — agents read and write only the file for the page being changed.
+
+## JSON Schema Validation
+
+Every block type has a corresponding JSON Schema file under `config/schemas/blocks/`. All schemas enforce:
+- `_type` as a `const` — the exact block type string, no guessing
+- `"additionalProperties": false` — rejects unknown fields immediately
+- Nullable fields declared explicitly with `oneOf: [{type: "string"}, {type: "null"}]`
+
+AI agents must validate their output against the relevant schema before writing. The build pipeline rejects any page file that fails schema validation.
 
 ---
 
