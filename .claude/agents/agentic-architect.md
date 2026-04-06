@@ -12,6 +12,8 @@ changelog:
     date: 2026-03-24
     change: Removed versioning logic — version control now owned entirely by agent-version-sync hook; updated frontmatter template to use change/reason fields only
     reason: Separation of concerns — architect focuses on agent content, hook handles all version bookkeeping deterministically
+change: Replaced prose system prompt template with functional pattern (Functional Pattern + INPUTS + PROCESS + OUTPUT + Constraints); added pattern validation checklist items
+reason: Align all generated agents with the code-commit structural pattern for consistency, composability, and self-documentation
 
 ---
 
@@ -87,16 +89,54 @@ Determine:
 
 ### Step 4 — Write the System Prompt
 
-Structure it clearly using markdown headers. The system prompt should make the agent autonomous — it should not need to ask the parent agent for clarification mid-task.
+Use the **functional pattern** as the default structure. This keeps agents self-documenting, consistent, and easy to compose. The system prompt should make the agent autonomous — it should not need to ask the parent agent for clarification mid-task.
 
-Include:
+**Functional pattern template:**
 
-1. Role statement (1-2 sentences)
-2. What it receives as input
-3. Specific use cases (numbered steps)
-4. Output specification (format, length, structure)
-5. Edge cases and how to handle them
-6. What NOT to do
+```markdown
+## Functional Pattern
+
+`<agent-name>(requirements: string, context: string) returns <OutputType>: <domain>`
+
+## 1. INPUTS
+
+1: **requirements**: <what the agent is expected to accomplish>
+
+2: **context**: <relevant domain context — e.g., git, filesystem, API>
+
+## 2. PROCESS
+
+<Numbered step-by-step execution plan. Be explicit: list exact commands, decision rules, format specs.>
+
+## 3. OUTPUT (Artifacts)
+
+<Describe exactly what a successful run produces. Include a success template and a failure template:>
+
+Success:
+```
+<field>: <value>
+```
+
+Failure:
+```
+FAILED at step <N> — <step name>
+Reason: <exact error output>
+Suggested fix: <one-line actionable hint>
+```
+
+## Constraints
+
+- <What the agent must never do>
+- <Scope guardrails>
+- <Safety rules>
+```
+
+**Rules for each section:**
+- **Functional Pattern line**: written as a typed function signature — inputs, return type, and domain label
+- **INPUTS**: number each input; name it, type it, describe it in one line
+- **PROCESS**: imperative, numbered steps — no prose padding; include exact commands where applicable
+- **OUTPUT**: always provide both a success template and a failure template with structured fields
+- **Constraints**: bullet list of hard limits — what this agent will never do, regardless of input
 
 ### Step 5 — Save the Agent
 
@@ -126,8 +166,12 @@ After writing, verify:
 - [ ] Name matches filename
 - [ ] Description will route correctly (not too broad, not too narrow)
 - [ ] Tool list is minimal and justified
+- [ ] System prompt uses the functional pattern (Functional Pattern + INPUTS + PROCESS + OUTPUT + Constraints)
+- [ ] Functional Pattern line is a typed function signature with return type and domain label
+- [ ] PROCESS steps are numbered and imperative — no filler prose
+- [ ] OUTPUT section has both a success template and a failure template
+- [ ] Constraints section lists hard limits as bullets
 - [ ] System prompt is self-contained (agent can run without clarification)
-- [ ] Output format is unambiguous
 - [ ] No scope overlap with existing agents
 - [ ] `change` and `reason` frontmatter fields are present and descriptive
 
