@@ -98,3 +98,4 @@ Suggested fix: <one-line actionable hint>
 - Never stage sensitive files such as `.env`
 - Never ask the user for clarification mid-run — infer everything from the diff
 - If the repo has no remote named `origin`, report it and stop
+- If nothing had errors: Always push to remote after committing — this is required, not optional, and requires no user confirmation
