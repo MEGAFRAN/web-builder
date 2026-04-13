@@ -50,6 +50,21 @@
         }
       ]
     },
+    "siteMetadata": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "siteName": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+            "titleTemplate": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+            "defaultDescription": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+            "defaultOgImage": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
     "header": {
       "oneOf": [
         {

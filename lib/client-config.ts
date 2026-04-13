@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import type { ClientConfig, ClientPage, Block, ClientTheme } from '@/types/cms'
+import type { ClientConfig, ClientPage, Block, ClientTheme, PageMetadata } from '@/types/cms'
 import { THEME_PRESETS, getPreset } from '@/lib/theme-presets'
 import type { ThemePreset } from '@/lib/theme-presets'
 
@@ -55,16 +55,22 @@ function slugFromFilename(filename: string): string {
   return base === 'index' ? '' : base
 }
 
+type RawPageFile = { metadata?: PageMetadata | null; blocks: Block[] }
+
 /**
  * Loads pages from `config/clients/{clientId}/pages/` directory.
- * Each JSON file is an array of Block objects.
+ * Each JSON file must be an object with `metadata` and `blocks` fields.
  */
 function loadPagesFromDirectory(pagesDir: string): ClientPage[] {
   const files = fs.readdirSync(pagesDir).filter((f) => f.endsWith('.json'))
   return files.map((filename) => {
     const raw = fs.readFileSync(path.join(pagesDir, filename), 'utf-8')
-    const blocks = JSON.parse(raw) as Block[]
-    return { slug: slugFromFilename(filename), blocks }
+    const parsed = JSON.parse(raw) as RawPageFile
+    return {
+      slug: slugFromFilename(filename),
+      blocks: parsed.blocks,
+      metadata: parsed.metadata ?? null,
+    }
   })
 }
 

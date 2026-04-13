@@ -1,0 +1,61 @@
+{
+  "clientId": "portfolio-francisco",
+  "displayName": "Francisco Cruz — Analytics Engineer & Frontend Developer",
+  "customDomain": "portfolio-francisco.com",
+  "swaResourceName": "swa-portfolio-francisco",
+  "features": {
+    "blog": false,
+    "booking": false,
+    "gallery": false,
+    "menu": false
+  },
+  "theme": {
+    "preset": "modern-minimal"
+  },
+  "siteMetadata": {
+    "siteName": "Francisco Cruz",
+    "titleTemplate": "%s | Francisco Cruz",
+    "defaultDescription": "Analytics Engineer & Frontend Developer con 6+ años de experiencia construyendo arquitecturas de datos escalables para empresas como Abercrombie & Fitch, Toyota y Whirlpool.",
+    "defaultOgImage": null
+  },
+  "header": {
+    "logo": "Francisco Cruz",
+    "ctaLabel": "Hire me",
+    "ctaAction": "/contact",
+    "links": [
+      { "label": "Home", "href": "/" },
+      { "label": "Success Cases", "href": "/success-cases" },
+      { "label": "Contact", "href": "/contact" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026 Francisco Cruz. All rights reserved.",
+    "columns": [
+      {
+        "title": "Navigation",
+        "links": [
+          { "label": "Home", "href": "/" },
+          { "label": "Success Cases", "href": "/success-cases" },
+          { "label": "Contact", "href": "/contact" }
+        ]
+      },
+      {
+        "title": "Services",
+        "links": [
+          { "label": "Analytics Engineering", "href": "/" },
+          { "label": "Data Layer Design", "href": "/" },
+          { "label": "A/B Testing Strategy", "href": "/" },
+          { "label": "Frontend Development", "href": "/" }
+        ]
+      },
+      {
+        "title": "Contact",
+        "links": [
+          { "label": "hello@franciscocruz.dev", "href": "mailto:hello@franciscocruz.dev" },
+          { "label": "+34 91 567 89 01", "href": "tel:+34915678901" },
+          { "label": "Madrid, Spain", "href": "#" }
+        ]
+      }
+    ]
+  }
+}

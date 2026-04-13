@@ -1,83 +1,91 @@
-[
-  {
-    "_type": "heroBlock",
-    "heading": "Cocina tradicional española con alma",
-    "subtext": "Más de 30 años llevando los sabores de la abuela a tu mesa. Ingredientes frescos, recetas de siempre y el cariño de una familia.",
-    "primaryButtonLabel": "Ver el menú",
-    "primaryButtonHref": "/menu",
-    "secondaryButtonLabel": "Reservar mesa",
-    "secondaryButtonHref": "/contacto",
-    "backgroundImageUrl": "https://picsum.photos/seed/restaurant-hero/1600/900"
+{
+  "metadata": {
+    "title": "Inicio",
+    "description": "Cocina tradicional española con más de 30 años de experiencia. Ingredientes frescos, recetas de siempre y el cariño de una familia en el corazón de Madrid.",
+    "ogImage": null,
+    "noIndex": false
   },
-  {
-    "_type": "statsBlock",
-    "background": "dark",
-    "stats": [
-      { "value": "+30", "label": "Años de experiencia" },
-      { "value": "100%", "label": "Ingredientes frescos" },
-      { "value": "+500", "label": "Platos servidos al día" },
-      { "value": "4.9★", "label": "Valoración media" }
-    ]
-  },
-  {
-    "_type": "featureGridBlock",
-    "heading": "Por qué elegir Restaurante Pepe",
-    "items": [
-      {
-        "heading": "Cocina de mercado",
-        "description": "Seleccionamos los mejores productos de temporada cada mañana en el mercado local para garantizar frescura y sabor.",
-        "iconUrl": null
-      },
-      {
-        "heading": "Recetas de generación en generación",
-        "description": "Nuestras recetas llevan décadas perfeccionándose, transmitidas de abuelos a padres y de padres a hijos.",
-        "iconUrl": null
-      },
-      {
-        "heading": "Vinos de la tierra",
-        "description": "Carta de vinos cuidadosamente seleccionada con las mejores referencias de La Rioja, Ribera del Duero y otras D.O. españolas.",
-        "iconUrl": null
-      },
-      {
-        "heading": "Ambiente familiar",
-        "description": "Un espacio acogedor para celebrar desde una cena romántica hasta un banquete familiar con capacidad para 80 comensales.",
-        "iconUrl": null
-      }
-    ]
-  },
-  {
-    "_type": "testimonialsBlock",
-    "heading": "Lo que dicen nuestros clientes",
-    "items": [
-      {
-        "name": "María García",
-        "company": null,
-        "role": null,
-        "quote": "El mejor cocido madrileño que he probado fuera de casa de mi madre. Volveré sin duda.",
-        "avatarUrl": "https://picsum.photos/seed/avatar-maria/100/100"
-      },
-      {
-        "name": "Carlos Fernández",
-        "company": "Grupo Empresarial Norte",
-        "role": "Director Comercial",
-        "quote": "Llevamos años celebrando nuestras comidas de empresa aquí. Trato excelente y calidad constante.",
-        "avatarUrl": "https://picsum.photos/seed/avatar-carlos/100/100"
-      },
-      {
-        "name": "Ana Martínez",
-        "company": null,
-        "role": null,
-        "quote": "La paella de mariscos es espectacular. El sitio es acogedor y el servicio muy atento.",
-        "avatarUrl": "https://picsum.photos/seed/avatar-ana/100/100"
-      }
-    ]
-  },
-  {
-    "_type": "ctaBlock",
-    "headline": "¿Tienes una celebración especial?",
-    "subtext": "Organizamos eventos privados, celebraciones de empresa y banquetes a medida. Contáctanos para más información.",
-    "ctaLabel": "Solicitar información",
-    "ctaHref": "/contacto",
-    "background": "gray"
-  }
-]
+  "blocks": [
+    {
+      "_type": "heroBlock",
+      "heading": "Cocina tradicional española con alma",
+      "subtext": "Más de 30 años llevando los sabores de la abuela a tu mesa. Ingredientes frescos, recetas de siempre y el cariño de una familia.",
+      "primaryButtonLabel": "Ver el menú",
+      "primaryButtonHref": "/menu",
+      "secondaryButtonLabel": "Reservar mesa",
+      "secondaryButtonHref": "/contacto",
+      "backgroundImageUrl": "https://picsum.photos/seed/restaurant-hero/1600/900"
+    },
+    {
+      "_type": "statsBlock",
+      "background": "dark",
+      "stats": [
+        { "value": "+30", "label": "Años de experiencia" },
+        { "value": "100%", "label": "Ingredientes frescos" },
+        { "value": "+500", "label": "Platos servidos al día" },
+        { "value": "4.9★", "label": "Valoración media" }
+      ]
+    },
+    {
+      "_type": "featureGridBlock",
+      "heading": "Por qué elegir Restaurante Pepe",
+      "items": [
+        {
+          "heading": "Cocina de mercado",
+          "description": "Seleccionamos los mejores productos de temporada cada mañana en el mercado local para garantizar frescura y sabor.",
+          "iconUrl": null
+        },
+        {
+          "heading": "Recetas de generación en generación",
+          "description": "Nuestras recetas llevan décadas perfeccionándose, transmitidas de abuelos a padres y de padres a hijos.",
+          "iconUrl": null
+        },
+        {
+          "heading": "Vinos de la tierra",
+          "description": "Carta de vinos cuidadosamente seleccionada con las mejores referencias de La Rioja, Ribera del Duero y otras D.O. españolas.",
+          "iconUrl": null
+        },
+        {
+          "heading": "Ambiente familiar",
+          "description": "Un espacio acogedor para celebrar desde una cena romántica hasta un banquete familiar con capacidad para 80 comensales.",
+          "iconUrl": null
+        }
+      ]
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "Lo que dicen nuestros clientes",
+      "items": [
+        {
+          "name": "María García",
+          "company": null,
+          "role": null,
+          "quote": "El mejor cocido madrileño que he probado fuera de casa de mi madre. Volveré sin duda.",
+          "avatarUrl": "https://picsum.photos/seed/avatar-maria/100/100"
+        },
+        {
+          "name": "Carlos Fernández",
+          "company": "Grupo Empresarial Norte",
+          "role": "Director Comercial",
+          "quote": "Llevamos años celebrando nuestras comidas de empresa aquí. Trato excelente y calidad constante.",
+          "avatarUrl": "https://picsum.photos/seed/avatar-carlos/100/100"
+        },
+        {
+          "name": "Ana Martínez",
+          "company": null,
+          "role": null,
+          "quote": "La paella de mariscos es espectacular. El sitio es acogedor y el servicio muy atento.",
+          "avatarUrl": "https://picsum.photos/seed/avatar-ana/100/100"
+        }
+      ]
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "¿Tienes una celebración especial?",
+      "subtext": "Organizamos eventos privados, celebraciones de empresa y banquetes a medida. Contáctanos para más información.",
+      "ctaLabel": "Solicitar información",
+      "ctaHref": "/contacto",
+      "background": "gray"
+    }
+  ]
+}

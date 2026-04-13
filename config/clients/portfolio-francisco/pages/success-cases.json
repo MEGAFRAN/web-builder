@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "title": "Success Cases",
+    "description": "Real client engagements with measurable outcomes — from a $100k Tealium migration at Abercrombie & Fitch to a 15% lead gen lift at K12.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+  {
+    "_type": "breadcrumb",
+    "items": [
+      { "label": "Home", "href": "/" },
+      { "label": "Success Cases", "href": "/success-cases" }
+    ]
+  },
+  {
+    "_type": "heroBlock",
+    "heading": "Real clients. Real constraints. Measurable results.",
+    "subtext": "Six years of enterprise analytics and frontend engagements across retail, education, travel, and e-commerce — from Abercrombie & Fitch to Toyota.",
+    "primaryButtonLabel": "Let's Work Together",
+    "primaryButtonHref": "/contact",
+    "secondaryButtonLabel": null,
+    "secondaryButtonHref": null,
+    "backgroundImageUrl": null
+  },
+  {
+    "_type": "caseStudiesBlock",
+    "heading": "Selected Work",
+    "items": [
+      {
+        "title": "Segment → Tealium Migration — Abercrombie & Fitch",
+        "description": "The global clothing retailer needed to migrate their entire analytics data collection infrastructure from Segment to Tealium across multiple code repositories. I led the end-to-end migration, architecting a standardized tracking framework that worked consistently across all codebases. I also implemented an automated tracking governance system using schema validation to trigger pipeline blockers and real-time alerting — eliminating manual QA overhead. The migration was delivered 2 months ahead of the original schedule.",
+        "outcome": "$100k+ estimated annual savings in licensing and data overages. New feature implementation time reduced by 40%. 100% cross-platform data consistency achieved at scale.",
+        "tags": ["Tealium", "Adobe Analytics", "AEM", "React", "TypeScript", "JavaScript", "Data Governance", "Schema Validation"]
+      },
+      {
+        "title": "A/B Testing Programme — Abercrombie & Fitch",
+        "description": "While embedded in the Abercrombie & Fitch engineering org as Web Analytics Tech Lead, I designed and executed a high-impact experimentation programme using Adobe Target and Tealium. I provided end-to-end guidance to 40+ developers to ensure marketing and data requirements were met for every test variant. Each experiment was instrumented with precise event tracking to produce statistically reliable results, with reporting piped directly into Adobe Analytics.",
+        "outcome": "12% increase in checkout conversion rates directly attributable to A/B test outcomes. Developer alignment rate reached 100% through architectural guidance and technical roadmap ownership.",
+        "tags": ["Adobe Target", "Tealium", "Adobe Analytics", "A/B Testing", "TypeScript", "React", "Data Layer Design"]
+      },
+      {
+        "title": "End-to-End ETL & Data Governance — Buendia Tours",
+        "description": "A Spanish travel agency needed full marketing attribution visibility across their digital properties. I orchestrated a complete ETL pipeline — Website → GTM → GA4 → BigQuery — enabling real-time marketing attribution dashboards for the team. I also designed a comprehensive Data Governance guide integrating consent rules via oneTrust, and built an automated event framework between the website and GTM that dramatically reduced the time needed to instrument new user interactions.",
+        "outcome": "New GTM event implementation time reduced by 80%. Real-time attribution dashboards delivered to the marketing team. Full GDPR consent compliance integrated into the data collection layer.",
+        "tags": ["Google Tag Manager", "GA4", "BigQuery", "oneTrust", "JavaScript", "SQL", "Drupal", "Data Governance"]
+      },
+      {
+        "title": "CRO & Enrollment Funnel Tracking — K12",
+        "description": "K12, a US online education company, needed to boost lead generation and gain accurate visibility into their enrollment funnel. I designed and executed complex A/B tests in Adobe Target, targeting key moments in the user journey to increase form submissions and enrollment starts. In parallel, I refined the data collection pipeline by integrating Adobe Launch with custom AEM components, creating a single source of truth for funnel analytics.",
+        "outcome": "15% increase in lead generation attributed to A/B test outcomes. 100% accuracy achieved in enrollment funnel tracking, enabling the analytics team to make confident decisions on campaign spend.",
+        "tags": ["Adobe Target", "Adobe Launch", "Adobe Analytics", "AEM", "DAM", "JavaScript", "CRO"]
+      },
+      {
+        "title": "Server-Side Tagging Implementation — Farmatodo",
+        "description": "The Colombian drugstore chain was losing significant conversion signal data to ad-blockers across both web and mobile apps. I pioneered a server-side tagging architecture using Google Tag Manager that routed events through a trusted first-party domain, bypassing client-side blocking entirely. I integrated the full marketing stack — Meta Pixel, Google Ads, Braze, AppsFlyer, and Hotjar — and built real-time dashboards connecting BigQuery to Looker for C-suite reporting.",
+        "outcome": "20% increase in conversion signal tracking accuracy for both web and mobile. Executive team gained actionable real-time retention dashboards. Full marketing stack integrated and firing reliably.",
+        "tags": ["Server-Side Tagging", "Google Tag Manager", "GA4", "BigQuery", "Looker", "GCP", "JavaScript", "SQL", "Meta Pixel"]
+      }
+    ]
+  },
+  {
+    "_type": "ctaBlock",
+    "headline": "Have a challenge that fits this profile?",
+    "subtext": "I take on a limited number of engagements at a time to ensure every client gets my full attention. If your project is a good fit, let's find out.",
+    "ctaLabel": "Get in Touch",
+    "ctaHref": "/contact",
+    "background": "gray"
+  }
+  ]
+}

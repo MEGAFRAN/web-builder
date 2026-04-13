@@ -354,6 +354,22 @@ export type TestimonialsPageBlock = {
   footerCopyright?: string | null
 }
 
+// Page metadata
+export type PageMetadata = {
+  title?: string | null
+  description?: string | null
+  ogImage?: string | null
+  noIndex?: boolean | null
+}
+
+// Site-level SEO defaults (lives in client.json)
+export type SiteMetadata = {
+  siteName?: string | null
+  titleTemplate?: string | null
+  defaultDescription?: string | null
+  defaultOgImage?: string | null
+}
+
 // Client config types
 export type ClientTheme = {
   preset?: string
@@ -378,6 +394,7 @@ export type ClientFeatures = {
 export type ClientPage = {
   slug: string
   blocks: Block[]
+  metadata?: PageMetadata | null
 }
 
 export type ClientHeader = {
@@ -402,6 +419,7 @@ export type ClientConfig = {
   header?: ClientHeader | null
   footer?: ClientFooter | null
   pages: ClientPage[]
+  siteMetadata?: SiteMetadata | null
   contactEndpoint?: string
   externalReviewUrl?: string
   externalReviewPlatform?: string

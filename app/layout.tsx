@@ -1,13 +1,8 @@
-import type { Metadata } from 'next'
 import './globals.css'
 import { getClientConfig, resolveTheme } from '@/lib/client-config'
 import type { ThemePreset } from '@/lib/theme-presets'
 import { Navbar } from '@/components/navigation/Navbar'
 import { Footer } from '@/components/navigation/Footer'
-
-export const metadata: Metadata = {
-  title: 'Web Builder',
-}
 
 // Exported for unit testing without rendering the full layout tree
 export function buildThemeStyles(theme: ThemePreset): string {

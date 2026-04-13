@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "title": "Contact",
+    "description": "Get in touch with Francisco Cruz. Available for analytics engineering engagements, frontend development contracts, and martech consulting.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "breadcrumb",
+      "items": [
+        { "label": "Home", "href": "/" },
+        { "label": "Contact", "href": "/contact" }
+      ]
+    },
+    {
+      "_type": "contactBlock",
+      "heading": "Let's talk about your project.",
+      "subtext": "Available for analytics engineering engagements, frontend development contracts, and martech consulting retainers. I respond to every message within one business day."
+    },
+    {
+      "_type": "contactInfoBlock",
+      "email": "hello@franciscocruz.dev",
+      "phone": "+34 91 567 89 01",
+      "location": "Madrid, Spain (CET/CEST — UTC+1 / UTC+2)"
+    },
+    {
+      "_type": "faqBlock",
+      "title": "Common questions before hiring",
+      "items": [
+        {
+          "question": "What types of engagements do you take on?",
+          "answer": "I work on analytics architecture builds, martech migrations, tracking governance frameworks, A/B testing programmes, and frontend development projects. I'm comfortable working solo, embedding in an existing engineering team, or providing technical leadership across multiple squads. Minimum engagement length is typically 4 weeks."
+        },
+        {
+          "question": "What tools and platforms do you specialise in?",
+          "answer": "My core stack is Tealium, Adobe Experience Cloud (Analytics, Target, Launch), Google Stack (GA4, GTM, BigQuery), and oneTrust. On the frontend side: React, Next.js, TypeScript, and Adobe Experience Manager (AEM). I also have hands-on experience with Braze, AppsFlyer, Meta Pixel, Google Ads, Hotjar, Looker, and server-side tagging architectures."
+        },
+        {
+          "question": "What is your availability and time zone?",
+          "answer": "I'm based in Madrid, Spain (CET/CEST). I work standard European business hours and can accommodate daily overlap with teams in US time zones when planned ahead. Reach out to discuss current availability."
+        },
+        {
+          "question": "Do you have experience with regulated industries or sensitive data?",
+          "answer": "Yes. I've worked in digital health and financial services contexts, and I follow GDPR-aligned data handling practices. I have deep experience integrating consent management platforms (oneTrust) into data collection architectures and designing governance frameworks that satisfy compliance requirements without breaking the analytics stack."
+        }
+      ]
+    }
+  ]
+}

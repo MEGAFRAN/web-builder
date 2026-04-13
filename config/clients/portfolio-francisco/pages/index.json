@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "title": "Home",
+    "description": "Strategic Analytics Engineer & Frontend Developer with 6+ years of experience. Expert in Tealium, Adobe Analytics, GA4, and React. Trusted by Abercrombie & Fitch, Toyota, and Whirlpool.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "heroBlock",
+      "heading": "Analytics Engineer who turns data into decisions — and code into results.",
+      "subtext": "Hi, I'm Francisco Cruz — a Strategic Analytics Engineer & Frontend Developer with 6+ years of experience building scalable analytics architectures trusted by Toyota, Whirlpool, and Abercrombie & Fitch.",
+      "primaryButtonLabel": "See My Work",
+      "primaryButtonHref": "/success-cases",
+      "secondaryButtonLabel": "Get in Touch",
+      "secondaryButtonHref": "/contact",
+      "backgroundImageUrl": "https://picsum.photos/seed/dev-hero/1600/900"
+    },
+    {
+      "_type": "statsBlock",
+      "background": "dark",
+      "stats": [
+        { "value": "6+", "label": "Years of Experience" },
+        { "value": "$100k+", "label": "Annual Savings Delivered" },
+        { "value": "6", "label": "Enterprise Clients" },
+        { "value": "100%", "label": "Data Accuracy Guaranteed" }
+      ]
+    },
+    {
+      "_type": "featureGridBlock",
+      "heading": "What I bring to the table",
+      "items": [
+        {
+          "heading": "Analytics Engineering",
+          "description": "End-to-end analytics architecture using Tealium, Adobe Analytics, GA4, and BigQuery. I design data collection pipelines that are accurate, scalable, and built for long-term ROI.",
+          "iconUrl": null
+        },
+        {
+          "heading": "Data Layer Design & Governance",
+          "description": "Standardized tracking frameworks, schema validation, and automated governance pipelines that ensure data consistency across complex multi-repository environments.",
+          "iconUrl": null
+        },
+        {
+          "heading": "A/B Testing Strategy",
+          "description": "High-impact experimentation via Adobe Target and Tealium. From hypothesis design to statistical analysis — turning test results into measurable conversion lifts.",
+          "iconUrl": null
+        },
+        {
+          "heading": "Frontend Development",
+          "description": "Building web components and full interfaces with React, Next.js, TypeScript, and Adobe Experience Manager. Clean code, unit tested, and built for performance.",
+          "iconUrl": null
+        },
+        {
+          "heading": "Server-Side Tagging",
+          "description": "Bypassing ad-blockers and improving signal fidelity through server-side GTM implementations. Better data quality for marketing attribution and retargeting.",
+          "iconUrl": null
+        },
+        {
+          "heading": "Martech Integration",
+          "description": "Connecting the full martech stack: Tealium, Adobe Launch, GTM, oneTrust, Meta Pixel, Google Ads, Braze, AppsFlyer, and Hotjar — wired up correctly from day one.",
+          "iconUrl": null
+        }
+      ]
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "What clients say",
+      "items": [
+        {
+          "quote": "I would recommend Francisco to any team/company - he is always on top of all his development work and goes the extra mile to figure out solutions. He also takes the initiative to help out other team members who need help !",
+          "name": "Kelly Wiest",
+          "role": "Digital Analyst"
+        },
+        {
+          "quote": "Francisco was one of the dev's in the team i have been working on and it was a complete pleasure working with him! He is so efficient, clear and professional in coding and accepting any defects that might have come while validations.\n\nAlso a true Agile team member who is always on top of requirements and always calls out any changes needed prior to dev work so there is balanced support for QA.\n\nVery good at coding that it is sometimes hard to find defects and very experienced person! Learnt a lot while working with you and I wish good luck for all your future projects.",
+          "name": "Sivaramya Muktinuthalapati",
+          "role": "QA Lead"
+        },
+        {
+          "quote": "I'm so fortunate to work with Francisco!\n\nHe's a self-starter, collaborative and engaged in the work we do — all with an inspiring level of commitment to our team. He's a great communicator and presenter, able to gracefully and effectively speak to technical and non-technical audiences.\n\nHe has strong design and engineering skills and is an intuitive, out-of-the-box thinker who's passionate about technology, architecture and optimization. You can count on him to deliver high-quality, modern solutions with fast turnaround times. Most impressively, he's cultivated these skills at an incredible pace.\n\nI'm excited to see all that Francisco will achieve throughout his career!",
+          "name": "Dominic Minischetti III",
+          "role": "Software Engineer"
+        }
+      ]
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "Ready to build something great together?",
+      "subtext": "Whether you need a scalable analytics architecture, a tracking framework that won't break, or a frontend that performs — let's talk.",
+      "ctaLabel": "Start a Conversation",
+      "ctaHref": "/contact",
+      "background": "dark"
+    }
+  ]
+}

@@ -12,6 +12,12 @@
   "theme": {
     "preset": "bold-restaurant"
   },
+  "siteMetadata": {
+    "siteName": "Restaurante Pepe",
+    "titleTemplate": "%s | Restaurante Pepe",
+    "defaultDescription": "Cocina tradicional española con más de 30 años de experiencia en el corazón de Madrid. Reserva tu mesa.",
+    "defaultOgImage": null
+  },
   "header": {
     "logo": "Restaurante Pepe",
     "ctaLabel": "Reservar mesa",
