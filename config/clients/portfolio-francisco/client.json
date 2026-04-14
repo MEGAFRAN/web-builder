@@ -50,7 +50,7 @@
       {
         "title": "Contact",
         "links": [
-          { "label": "hello@franciscocruz.dev", "href": "mailto:hello@franciscocruz.dev" },
+          { "label": "francisco.cruz.contact@gmail.com", "href": "mailto:francisco.cruz.contact@gmail.com" },
           { "label": "+34 91 567 89 01", "href": "tel:+34915678901" },
           { "label": "Madrid, Spain", "href": "#" }
         ]

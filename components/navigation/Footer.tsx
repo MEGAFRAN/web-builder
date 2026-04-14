@@ -1,8 +1,8 @@
 const colsMap: Record<number, string> = {
   1: "grid-cols-1",
-  2: "grid-cols-2",
-  3: "grid-cols-3",
-  4: "grid-cols-4",
+  2: "grid-cols-1 sm:grid-cols-2",
+  3: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
+  4: "grid-cols-1 sm:grid-cols-2 md:grid-cols-4",
 };
 
 interface FooterProps {
@@ -28,7 +28,7 @@ export function Footer({ columns, copyright }: FooterProps) {
                     <li key={j}>
                       <a
                         href={link.href}
-                        className="text-sm text-muted transition-colors hover:text-foreground"
+                        className="text-sm text-muted transition-colors hover:text-foreground break-words"
                       >
                         {link.label}
                       </a>
@@ -40,7 +40,7 @@ export function Footer({ columns, copyright }: FooterProps) {
           </div>
         )}
         {copyright && (
-          <p className="border-t border-border pt-6 text-sm text-muted">
+          <p className="border-t border-border pt-6 text-sm text-muted break-words">
             {copyright}
           </p>
         )}
