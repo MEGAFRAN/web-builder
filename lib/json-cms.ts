@@ -6,7 +6,7 @@ export function createJSONCMSClient(pages: ClientPage[]) {
       return pages.map((p) => ({ slug: p.slug }))
     },
 
-    async getPage(slug: string): Promise<{ slug: string; blocks: Block[] } | null> {
+    async getPage(slug: string): Promise<ClientPage | null> {
       return pages.find((p) => p.slug === slug) ?? null
     },
 

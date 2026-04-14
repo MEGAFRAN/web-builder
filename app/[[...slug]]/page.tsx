@@ -1,6 +1,8 @@
 import { createJSONCMSClient } from '@/lib/json-cms'
 import { getClientConfig } from '@/lib/client-config'
+import { buildJsonLd } from '@/lib/json-ld'
 import PageRenderer from '@/components/PageRenderer'
+import { JsonLdScript } from '@/components/seo/JsonLdScript'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
@@ -63,9 +65,14 @@ export default async function Page({ params }: PageProps) {
     notFound()
   }
 
+  const schema = buildJsonLd(config, page)
+
   return (
-    <main>
-      <PageRenderer blocks={page.blocks} />
-    </main>
+    <>
+      <JsonLdScript schema={schema} />
+      <main>
+        <PageRenderer blocks={page.blocks} />
+      </main>
+    </>
   )
 }

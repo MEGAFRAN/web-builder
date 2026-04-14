@@ -10,7 +10,7 @@
 The build is gated by a `CLIENT_ID` environment variable. Set it to the client's folder name under `config/clients/`.
 
 ```bash
-CLIENT_ID=restaurante-pepe npm run dev
+CLIENT_ID=portfolio-francisco npm run dev
 ```
 
 Then open `http://localhost:3000`.

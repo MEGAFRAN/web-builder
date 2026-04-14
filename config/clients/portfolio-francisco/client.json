@@ -20,7 +20,6 @@
   },
   "header": {
     "logo": "Francisco Cruz",
-    "ctaLabel": "Hire me",
     "ctaAction": "/contact",
     "links": [
       { "label": "Success Cases", "href": "/success-cases" },
@@ -51,8 +50,8 @@
         "title": "Contact",
         "links": [
           { "label": "francisco.cruz.contact@gmail.com", "href": "mailto:francisco.cruz.contact@gmail.com" },
-          { "label": "+34 91 567 89 01", "href": "tel:+34915678901" },
-          { "label": "Madrid, Spain", "href": "#" }
+          { "label": "+57 311 275 77 93", "href": "tel:+573112757793" },
+          { "label": "Bogota, Colombia", "href": "#" }
         ]
       }
     ]
