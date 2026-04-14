@@ -65,7 +65,7 @@ export default function CaseStudiesBlock({
                       />
                     </Stack>
                     <a
-                      href={`/case-studies/${item.slug}`}
+                      href={item.href ?? `/case-studies/${item.slug}`}
                       className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg transition-opacity hover:opacity-90 self-start"
                     >
                       Read Case Study

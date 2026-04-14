@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "title": "Full-Stack Analytics Pipeline & Governance — Buendía Tours",
+    "description": "How I built an end-to-end ETL pipeline from browser to BigQuery for a Spanish travel agency, enabling real-time marketing attribution dashboards and 100% GDPR compliance via OneTrust/GTM integration.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "caseStudyDetailBlock",
+      "title": "Full-Stack Analytics Pipeline & Governance: Buendía Tours",
+      "breadcrumbItems": [
+        { "label": "Home", "href": "/" },
+        { "label": "Success Cases", "href": "/success-cases" },
+        { "label": "Buendía Tours" }
+      ],
+      "challengeHeading": "The Challenge",
+      "challengeBody": "Buendía Tours needed to move beyond basic reporting to a sophisticated, data-driven marketing strategy. The primary hurdles were a lack of raw data access for deep analysis, inconsistent event tracking across their Drupal-based site, and the urgent need to comply with stringent EU privacy regulations (GDPR) without losing marketing visibility.",
+      "techStackHeading": "The Tech Stack",
+      "techStack": [
+        {
+          "category": "Data Collection",
+          "items": ["Google Tag Manager (GTM)", "JavaScript"]
+        },
+        {
+          "category": "Analytics & Storage",
+          "items": ["GA4", "BigQuery (SQL)"]
+        },
+        {
+          "category": "Privacy & Consent",
+          "items": ["OneTrust"]
+        },
+        {
+          "category": "CMS",
+          "items": ["Drupal"]
+        }
+      ],
+      "solutionHeading": "The Solution",
+      "solutionItems": [
+        {
+          "title": "End-to-End ETL Orchestration",
+          "description": "Designed the automated pipeline to flow from the browser to BigQuery. By bypassing the limitations of the GA4 UI, I enabled the team to perform complex SQL-based attribution modeling and lifetime value (LTV) analysis."
+        },
+        {
+          "title": "Automated Event Framework",
+          "description": "Instead of manual tagging for every new tour or landing page, I engineered a dynamic framework between the Drupal backend and GTM. This utilized a standardized dataLayer schema that auto-populated event parameters based on site metadata."
+        },
+        {
+          "title": "Privacy-First Governance",
+          "description": "Authored a comprehensive Data Governance guide and integrated OneTrust consent signals directly into GTM. This ensured that tracking only fired when legal consent was present, protecting the brand from compliance risks."
+        }
+      ],
+      "ahaHeading": "The \"Aha!\" Moment",
+      "ahaBody": "By centralizing the data in BigQuery, we were able to join website behavior with booking data. We discovered that a significant portion of \"lost\" conversions weren't due to price, but due to users checking the \"meeting point\" maps on mobile and getting lost in a navigation loop. This insight allowed the team to prioritize a UI fix for the map integration.",
+      "impactHeading": "The Business Impact",
+      "impactItems": [
+        {
+          "label": "Implementation Velocity — reduction in time to deploy new tracking events through the automated framework",
+          "value": "80% faster"
+        },
+        {
+          "label": "Data Accessibility — enabled real-time marketing attribution dashboards, allowing budget to shift to high-performing channels instantly",
+          "value": "Real-time"
+        },
+        {
+          "label": "Regulatory Compliance — alignment with GDPR standards through the OneTrust/GTM integration",
+          "value": "100%"
+        },
+        {
+          "label": "Technical Debt Reduction — eliminated hard-coded tags, creating a clean, maintainable GTM container",
+          "value": "Zero tags"
+        }
+      ],
+      "tags": ["Google Tag Manager", "GA4", "BigQuery", "OneTrust", "Drupal", "JavaScript", "Data Engineering", "Analytics", "Privacy", "GDPR"]
+    }
+  ]
+}

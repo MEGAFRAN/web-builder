@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "title": "Server-Side Tagging Implementation — Farmatodo",
+    "description": "How I pioneered a server-side tagging infrastructure on GCP for a major pharmacy chain, recovering 20% of lost conversion signals and delivering the C-suite their first real-time retention dashboard.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "caseStudyDetailBlock",
+      "title": "Pioneering Server-Side Infrastructure: Farmatodo",
+      "breadcrumbItems": [
+        { "label": "Home", "href": "/" },
+        { "label": "Success Cases", "href": "/success-cases" },
+        { "label": "Farmatodo" }
+      ],
+      "challengeHeading": "The Challenge",
+      "challengeBody": "As a major pharmacy chain, Farmatodo faced a significant data gap caused by aggressive ad-blockers and ITP (Intelligent Tracking Prevention) on mobile browsers. Traditional client-side tracking was losing roughly 20% of conversion signals, leading to undervalued marketing spend and incomplete user retention data for the C-suite.",
+      "techStackHeading": "The Tech Stack",
+      "techStack": [
+        {
+          "category": "Infrastructure",
+          "items": ["Google Cloud Platform (GCP)", "GTM Server-Side"]
+        },
+        {
+          "category": "Tracking & Marketing",
+          "items": ["GA4", "Meta Pixel", "Google Ads", "AppsFlyer (Mobile)", "Braze (CRM)"]
+        },
+        {
+          "category": "Behavioral & BI",
+          "items": ["Hotjar", "BigQuery", "SQL", "Looker"]
+        }
+      ],
+      "solutionHeading": "The Solution",
+      "solutionItems": [
+        {
+          "title": "Server-Side Implementation",
+          "description": "Deployed a GTM Server-Side container on GCP to intercept web and mobile app requests. This transitioned third-party cookies to a first-party context, effectively bypassing ad-blockers and extending cookie longevity."
+        },
+        {
+          "title": "Omnichannel Integration",
+          "description": "Streamlined the data flow to multiple vendors (Meta, Google Ads, Braze, and Hotjar) through a single server-side request, reducing the heavy JavaScript execution on the client-side and improving page load speeds."
+        },
+        {
+          "title": "C-Suite Retention Dashboards",
+          "description": "Developed a custom ETL process to pipe raw event data from BigQuery into Looker. Authored the SQL logic to calculate rolling retention cohorts, giving leadership a real-time view of customer loyalty."
+        }
+      ],
+      "ahaHeading": "The \"Aha!\" Moment",
+      "ahaBody": "After going live with Server-Side tagging, we realized that the \"Marketing\" budget was significantly more efficient than previously thought. We discovered that mobile app users who were \"invisible\" to our old tracking were actually our most frequent buyers, shifting the entire company's focus toward a \"Mobile-First\" loyalty strategy.",
+      "impactHeading": "The Business Impact",
+      "impactItems": [
+        {
+          "label": "Data Recovery — increased conversion signal tracking across Web and Mobile platforms",
+          "value": "+20%"
+        },
+        {
+          "label": "Marketing Efficiency — improved attribution accuracy for Meta and Google Ads, lowering Cost Per Acquisition by identifying previously untracked conversions",
+          "value": "Lower CPA"
+        },
+        {
+          "label": "Strategic Insight — provided the C-suite with the company's first real-time retention dashboard, directly influencing the 2021 marketing roadmap",
+          "value": "1st Dashboard"
+        },
+        {
+          "label": "Performance — improved website performance by offloading tracking scripts to the server, resulting in a snappier user experience",
+          "value": "Faster UX"
+        }
+      ],
+      "tags": ["Server-Side Tagging", "GCP", "Analytics", "GTM Server-Side", "GA4", "Meta Pixel", "Google Ads", "AppsFlyer", "Braze", "BigQuery", "Looker", "SQL"]
+    }
+  ]
+}

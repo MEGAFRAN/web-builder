@@ -45,29 +45,57 @@ export function resolveTheme(raw: ClientTheme): ThemePreset {
   }
 }
 
-/**
- * Derives a page slug from a filename.
- * "index.json" → "" (home page)
- * "menu.json"  → "menu"
- */
-function slugFromFilename(filename: string): string {
-  const base = path.basename(filename, '.json')
-  return base === 'index' ? '' : base
-}
-
 type RawPageFile = { metadata?: PageMetadata | null; blocks: Block[] }
 
 /**
- * Loads pages from `config/clients/{clientId}/pages/` directory.
+ * Recursively collects all JSON files under a directory, returning their
+ * absolute path and relative slug prefix.
+ *
+ * Example: pages/success-cases/abercrombie-fitch.json → slug "success-cases/abercrombie-fitch"
+ *          pages/index.json → slug ""
+ *          pages/menu.json  → slug "menu"
+ */
+function collectJsonFiles(
+  dir: string,
+  prefix: string = ''
+): Array<{ filePath: string; slug: string }> {
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  const result: Array<{ filePath: string; slug: string }> = []
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name)
+
+    if (entry.isDirectory()) {
+      const subPrefix = prefix ? `${prefix}/${entry.name}` : entry.name
+      result.push(...collectJsonFiles(fullPath, subPrefix))
+    } else if (entry.isFile() && entry.name.endsWith('.json')) {
+      const base = path.basename(entry.name, '.json')
+      const slug =
+        base === 'index'
+          ? prefix
+          : prefix
+          ? `${prefix}/${base}`
+          : base
+      result.push({ filePath: fullPath, slug })
+    }
+  }
+
+  return result
+}
+
+/**
+ * Loads pages from `config/clients/{clientId}/pages/` directory recursively.
+ * Subdirectory structure maps to nested slugs:
+ *   pages/success-cases/abercrombie-fitch.json → slug "success-cases/abercrombie-fitch"
  * Each JSON file must be an object with `metadata` and `blocks` fields.
  */
 function loadPagesFromDirectory(pagesDir: string): ClientPage[] {
-  const files = fs.readdirSync(pagesDir).filter((f) => f.endsWith('.json'))
-  return files.map((filename) => {
-    const raw = fs.readFileSync(path.join(pagesDir, filename), 'utf-8')
+  const files = collectJsonFiles(pagesDir)
+  return files.map(({ filePath, slug }) => {
+    const raw = fs.readFileSync(filePath, 'utf-8')
     const parsed = JSON.parse(raw) as RawPageFile
     return {
-      slug: slugFromFilename(filename),
+      slug,
       blocks: parsed.blocks,
       metadata: parsed.metadata ?? null,
     }

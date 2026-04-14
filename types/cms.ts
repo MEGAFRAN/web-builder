@@ -206,6 +206,8 @@ export type CaseStudyItem = {
   coverImageUrl: string | null
   slug: string
   publishedAt: string | null
+  /** Optional explicit href. When provided, overrides the auto-generated /case-studies/{slug} link. */
+  href?: string | null
 }
 
 export type CaseStudiesBlock = {
@@ -257,6 +259,40 @@ export type PricingPageBlock = {
   footerCopyright?: string | null
 }
 
+// Case study detail page block type
+
+export type CaseStudyDetailTechStack = {
+  category: string
+  items: string[]
+}
+
+export type CaseStudyDetailSolutionItem = {
+  title: string
+  description: string
+}
+
+export type CaseStudyDetailImpactItem = {
+  label: string
+  value: string
+}
+
+export type CaseStudyDetailBlock = {
+  _type: 'caseStudyDetailBlock'
+  title: string
+  breadcrumbItems?: Array<{ label: string; href?: string | null }> | null
+  challengeHeading?: string | null
+  challengeBody: string
+  techStackHeading?: string | null
+  techStack: CaseStudyDetailTechStack[]
+  solutionHeading?: string | null
+  solutionItems: CaseStudyDetailSolutionItem[]
+  ahaHeading?: string | null
+  ahaBody: string
+  impactHeading?: string | null
+  impactItems: CaseStudyDetailImpactItem[]
+  tags?: string[] | null
+}
+
 export type Block =
   | HeroBlock
   | ServicesBlock
@@ -281,6 +317,7 @@ export type Block =
   | PricingPageBlock
   | ServicesPageBlock
   | TestimonialsPageBlock
+  | CaseStudyDetailBlock
 
 // Services page block types
 

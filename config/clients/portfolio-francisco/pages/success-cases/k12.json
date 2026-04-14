@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "title": "CRO & Enrollment Funnel Tracking — K12",
+    "description": "How I boosted lead generation by 15% and reduced LCP from 5s to 2s for a leading US EdTech provider by achieving 100% enrollment funnel tracking accuracy and targeted A/B testing.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "caseStudyDetailBlock",
+      "title": "Optimizing the Enrollment Funnel for a Leading US EdTech Provider",
+      "breadcrumbItems": [
+        { "label": "Home", "href": "/" },
+        { "label": "Success Cases", "href": "/success-cases" },
+        { "label": "K12" }
+      ],
+      "challengeHeading": "The Challenge",
+      "challengeBody": "The enrollment funnel suffered from significant data gaps between the CMS (AEM) and the analytics suite, making it impossible to identify where prospective students were dropping off. Additionally, slow page performance (5s LCP) was hurting the user experience and potentially lowering lead conversion rates.\n\nThe goal: ensure 100% tracking accuracy across the enrollment journey and improve site performance to boost total lead generation.",
+      "techStackHeading": "The Tech Stack",
+      "techStack": [
+        {
+          "category": "Platform",
+          "items": ["Adobe Analytics", "Adobe Target"]
+        },
+        {
+          "category": "Implementation",
+          "items": ["Adobe Launch (Tags)", "JavaScript (ES6+)", "Adobe Experience Manager (AEM)"]
+        },
+        {
+          "category": "Storage/Analysis",
+          "items": ["AEM DAM (Digital Asset Management)"]
+        },
+        {
+          "category": "Optimization",
+          "items": ["A/B Testing", "Web Vitals Monitoring"]
+        }
+      ],
+      "solutionHeading": "The Solution",
+      "solutionItems": [
+        {
+          "title": "Pipeline Integration",
+          "description": "Engineered a seamless integration between Adobe Launch and custom AEM components, utilizing a standardized Data Layer to capture granular user interactions within the enrollment funnel."
+        },
+        {
+          "title": "Performance Engineering",
+          "description": "Executed a series of iterative A/B tests in Adobe Target specifically focused on \"above-the-fold\" content optimization and asset delivery."
+        },
+        {
+          "title": "Custom Tracking Logic",
+          "description": "Developed custom JavaScript listeners to bridge the gap between dynamic CMS components and Adobe Analytics, ensuring every step of the multi-page enrollment form was validated and tracked."
+        }
+      ],
+      "ahaHeading": "The \"Aha!\" Moment",
+      "ahaBody": "By syncing the data collection pipeline, we realized that the high \"Largest Contentful Paint\" (LCP) wasn't just a technical metric — it was directly correlated with form abandonment. Once we optimized the hero assets and reduced load times, we saw an immediate uptick in users staying to complete the first step of the lead form.",
+      "impactHeading": "The Business Impact",
+      "impactItems": [
+        {
+          "label": "Conversion Growth — boost in total lead generation through targeted A/B testing and CRO strategies",
+          "value": "+15%"
+        },
+        {
+          "label": "Performance Optimization — decrease in LCP from 5 seconds to 2 seconds, a 60% improvement in perceived load speed",
+          "value": "2s LCP"
+        },
+        {
+          "label": "Data Integrity — accuracy in enrollment funnel tracking, giving the marketing team a single source of truth for the first time",
+          "value": "100%"
+        }
+      ],
+      "tags": ["CRO", "Adobe Analytics", "Performance"]
+    }
+  ]
+}

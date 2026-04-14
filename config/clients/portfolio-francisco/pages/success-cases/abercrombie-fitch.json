@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "title": "Segment → Tealium Migration — Abercrombie & Fitch",
+    "description": "How I led a $100k+ savings migration from Segment to Tealium for a global retail giant, reducing feature implementation time by 40% and delivering 2 months ahead of schedule.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "caseStudyDetailBlock",
+      "title": "Strategic Migration & Analytics Governance: Abercrombie & Fitch",
+      "breadcrumbItems": [
+        { "label": "Home", "href": "/" },
+        { "label": "Success Cases", "href": "/success-cases" },
+        { "label": "Abercrombie & Fitch" }
+      ],
+      "challengeHeading": "The Challenge",
+      "challengeBody": "As the Web Analytics Tech Lead, I was tasked with modernizing the tracking infrastructure for a global retail giant. The existing setup (Segment) was becoming cost-prohibitive due to data overages, and the decentralized nature of their code repositories led to fragmented data and slow deployment cycles for new marketing initiatives.",
+      "techStackHeading": "The Tech Stack",
+      "techStack": [
+        {
+          "category": "Tag Management & CDP",
+          "items": ["Tealium iQ", "Tealium EventStream"]
+        },
+        {
+          "category": "Analytics & Optimization",
+          "items": ["Adobe Analytics", "Adobe Target"]
+        },
+        {
+          "category": "Engineering",
+          "items": ["React", "TypeScript", "Node.js", "AEM (Adobe Experience Manager)"]
+        },
+        {
+          "category": "AI & Automation",
+          "items": ["Agentic AI Workflows (LLM-based code generation/QA)"]
+        }
+      ],
+      "solutionHeading": "The Solution",
+      "solutionItems": [
+        {
+          "title": "Accelerated Migration",
+          "description": "Orchestrated the transition from Segment to Tealium. By prioritizing high-value event streams and mapping a clean transition logic, we cut the project timeline by 2 months."
+        },
+        {
+          "title": "Unified Tracking Architecture",
+          "description": "Developed a standardized, \"write-once-deploy-anywhere\" tracking framework across multiple repositories. This involved creating custom TypeScript interfaces to ensure strict data-layer compliance across different product teams."
+        },
+        {
+          "title": "Automated Governance",
+          "description": "To solve the \"broken tag\" problem, I engineered a schema validation layer. This framework acts as a pipeline blocker; if a developer pushes code that violates the tracking schema, the build fails, and a real-time alert is triggered."
+        },
+        {
+          "title": "AI-Enhanced Productivity",
+          "description": "Integrated Agentic AI workflows into the development lifecycle to automate boilerplate tracking code and documentation, significantly reducing the \"time-to-tag.\""
+        }
+      ],
+      "ahaHeading": "The \"Aha!\" Moment",
+      "ahaBody": "While auditing the checkout flow during the migration, we utilized Adobe Target and Tealium to identify a friction point in the mobile payment selector. By deploying a series of high-impact A/B tests, we validated that a simplified UI outperformed the legacy version, providing a clear data-backed mandate for the permanent UI change.",
+      "impactHeading": "The Business Impact",
+      "impactItems": [
+        {
+          "label": "Cost Efficiency — annual savings in licensing fees and data overage costs",
+          "value": "$100k+"
+        },
+        {
+          "label": "Operational Velocity — reduction in feature implementation time through standardized framework",
+          "value": "40% faster"
+        },
+        {
+          "label": "Conversion Lift — increase in checkout conversion rates via optimized A/B testing",
+          "value": "+12%"
+        },
+        {
+          "label": "Developer Output — increase in internal developer productivity through AI-assisted workflows",
+          "value": "50% more"
+        },
+        {
+          "label": "Leadership — developers guided to achieve full alignment with global marketing requirements",
+          "value": "40+ devs"
+        },
+        {
+          "label": "Delivery — ahead of the original project schedule",
+          "value": "2 months"
+        }
+      ],
+      "tags": ["Tealium", "Adobe Analytics", "Adobe Target", "AEM", "React", "TypeScript", "Data Governance", "Schema Validation", "AI Workflows"]
+    }
+  ]
+}
