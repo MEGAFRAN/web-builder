@@ -23,7 +23,6 @@
     "ctaLabel": "Hire me",
     "ctaAction": "/contact",
     "links": [
-      { "label": "Home", "href": "/" },
       { "label": "Success Cases", "href": "/success-cases" },
       { "label": "Contact", "href": "/contact" }
     ]

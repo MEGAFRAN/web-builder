@@ -23,7 +23,6 @@
     "ctaLabel": "Reservar mesa",
     "ctaAction": "/contacto",
     "links": [
-      { "label": "Inicio", "href": "/" },
       { "label": "Menú", "href": "/menu" },
       { "label": "Nosotros", "href": "/nosotros" },
       { "label": "Contacto", "href": "/contacto" }

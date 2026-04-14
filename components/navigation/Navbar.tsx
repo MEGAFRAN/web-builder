@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export function Navbar({
   logo,
   links,
@@ -13,7 +15,7 @@ export function Navbar({
   return (
     <nav data-component="navbar" className="w-full border-b border-border bg-background px-6 py-4">
       <div className="mx-auto flex max-w-6xl items-center justify-between">
-        <span className="text-lg font-bold text-foreground">{logo}</span>
+        <Link href="/" className="text-lg font-bold text-foreground">{logo}</Link>
         <div className="flex items-center gap-6">
           {links?.map((link, i) => (
             <a key={`${i}-${link.href}`} href={link.href} className="text-sm text-muted hover:text-foreground">
