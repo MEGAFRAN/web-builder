@@ -17,6 +17,7 @@ export function buildThemeStyles(theme: ThemePreset): string {
       --font-heading: '${theme.fontHeading}', serif;
       --font-body: '${theme.fontBody}', sans-serif;
       --radius: ${theme.borderRadius}px;
+      --page-inset: ${theme.pageInset};
     }
   `
 }

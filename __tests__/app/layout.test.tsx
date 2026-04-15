@@ -38,6 +38,7 @@ const resolvedTheme = {
   fontHeading: 'Playfair Display',
   fontBody: 'Inter',
   borderRadius: 4,
+  pageInset: 'clamp(1rem, 5vw, 2rem)',
 }
 
 const mockGetClientConfig = vi.mocked(getClientConfig)
@@ -68,6 +69,7 @@ describe('buildThemeStyles', () => {
     expect(css).toContain("--font-heading: 'Playfair Display'")
     expect(css).toContain("--font-body: 'Inter'")
     expect(css).toContain('--radius: 4px')
+    expect(css).toContain('--page-inset: clamp(1rem, 5vw, 2rem)')
   })
 })
 

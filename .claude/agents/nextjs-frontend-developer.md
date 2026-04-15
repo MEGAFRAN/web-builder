@@ -31,10 +31,10 @@ Always read: architecture.md
 
 ### Verify with a build check
 
-After writing files, run a TypeScript type check to catch errors early:
+After writing files, run a TypeScript type check to catch errors early and check if test are failing:
 
 ```bash
-cd /Users/admin/Desktop/website_builder/web-builder && npx tsc --noEmit 2>&1 | head -40
+npx tsc --noEmit 2>&1 | head -40 && npm run test
 ```
 
 If type errors are present, fix them before reporting completion.

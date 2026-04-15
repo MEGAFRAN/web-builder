@@ -42,6 +42,7 @@ export function resolveTheme(raw: ClientTheme): ThemePreset {
     fontHeading: explicitFields.fontHeading ?? base.fontHeading,
     fontBody: explicitFields.fontBody ?? base.fontBody,
     borderRadius: explicitFields.borderRadius ?? base.borderRadius,
+    pageInset: explicitFields.pageInset ?? base.pageInset,
   }
 }
 
@@ -106,8 +107,6 @@ export function getClientConfig(clientId: string): ClientConfig {
   const clientDir = path.join(process.cwd(), 'config', 'clients', clientId)
   const clientJsonPath = path.join(clientDir, 'client.json')
 
-  // New directory-based structure: config/clients/{clientId}/client.json
-  if (fs.existsSync(clientJsonPath)) {
     const rawText = fs.readFileSync(clientJsonPath, 'utf-8')
     const base = JSON.parse(rawText) as Omit<ClientConfig, 'pages'>
 
@@ -118,12 +117,4 @@ export function getClientConfig(clientId: string): ClientConfig {
 
     const resolvedTheme = resolveTheme(base.theme)
     return { ...base, theme: resolvedTheme, pages }
-  }
-
-  // Legacy flat-file structure: config/clients/{clientId}.json
-  const legacyPath = path.join(process.cwd(), 'config', 'clients', `${clientId}.json`)
-  const rawText = fs.readFileSync(legacyPath, 'utf-8')
-  const legacy = JSON.parse(rawText) as ClientConfig
-  const resolvedTheme = resolveTheme(legacy.theme)
-  return { ...legacy, theme: resolvedTheme }
 }

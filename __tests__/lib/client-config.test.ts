@@ -18,13 +18,6 @@ describe('getClientConfig (integration)', () => {
     expect(config.theme).not.toHaveProperty('preset')
   })
 
-  it('loads peluqueria-ana', () => {
-    const config = getClientConfig('peluqueria-ana')
-    expect(config.clientId).toBe('peluqueria-ana')
-    expect(config.features.booking).toBe(true)
-    expect(config.theme).not.toHaveProperty('preset')
-  })
-
   it('throws when clientId does not exist', () => {
     expect(() => getClientConfig('nonexistent-client')).toThrow()
   })

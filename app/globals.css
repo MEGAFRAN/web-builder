@@ -13,7 +13,8 @@
 }
 
 .section {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16;
+  @apply max-w-7xl mx-auto py-16;
+  padding-inline: var(--page-inset);
 }
 
 /* Semantic bridge layer — maps component class names to CSS variables */
@@ -88,4 +89,5 @@ body                    { font-family: var(--font-body); }
   --font-heading: sans-serif;
   --font-body: sans-serif;
   --radius: 4px;
+  --page-inset: clamp(1rem, 5vw, 2rem);
 }

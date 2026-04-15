@@ -97,6 +97,7 @@ type ClientConfig = {
     fontHeading?: string
     fontBody?: string
     borderRadius?: number
+    pageInset?: string        // overrides preset value, e.g. "clamp(1rem, 5vw, 2rem)"
   }
   pages: Array<{
     slug: string            // "" for home, "menu", "contacto", etc.
@@ -126,7 +127,7 @@ AI agents must validate their output against the relevant schema before writing.
 
 Theming is pure CSS variables — no runtime JS.
 
-**Preset resolution**: `lib/theme-presets.ts` exports `THEME_PRESETS` (5 named presets) and `THEME_PRESET_META` (machine-readable metadata for AI agent preset selection). `resolveTheme(clientTheme)` in `lib/client-config.ts` merges the client's optional overrides on top of the selected preset, always returning a fully-populated `ThemePreset` with 9 required fields.
+**Preset resolution**: `lib/theme-presets.ts` exports `THEME_PRESETS` (5 named presets) and `THEME_PRESET_META` (machine-readable metadata for AI agent preset selection). `resolveTheme(clientTheme)` in `lib/client-config.ts` merges the client's optional overrides on top of the selected preset, always returning a fully-populated `ThemePreset` with 10 required fields.
 
 1. `globals.css` defines fallback values in `:root`
 2. `layout.tsx` calls `resolveTheme(config.theme)` then `buildThemeStyles(preset)` to generate:
@@ -141,12 +142,15 @@ Theming is pure CSS variables — no runtime JS.
      --font-heading: 'Playfair Display', serif;
      --font-body: 'Inter', sans-serif;
      --radius: 4px;
+     --page-inset: clamp(1rem, 5vw, 2rem);
    }
    ```
 3. Injected as a `<style>` tag in `<head>` — overrides fallbacks
 4. Components consume vars via Tailwind utilities and semantic classes (`.btn-primary`, `.text-brand`, `.section`)
 
-Available presets: `bold-restaurant`, `modern-minimal`, `professional-law`, `vibrant-retail`, `default`. AI agents selecting a preset should consult `THEME_PRESET_META` (keyed by preset name) which exposes `industries`, `mood`, `colorTemperature`, and `formality`.
+**Horizontal padding (`--page-inset`)**: all horizontal page padding is driven by a single `--page-inset` CSS variable rather than per-component Tailwind classes. The `.section` utility and the `Container` component (default `padding="theme"`) both consume it. Each preset ships a `pageInset` value (a `clamp()` expression tuned to the preset's density and feel); clients can override it with `"pageInset"` in their `client.json` theme object. Do **not** apply horizontal padding at the layout level (e.g., wrapping `{children}`) — this would clip full-bleed section backgrounds.
+
+Available presets: `bold-restaurant`, `modern-minimal`, `professional-law`, `vibrant-retail`, `calm-healthcare`, `bright-education`, `modern-realestate`, `warm-hospitality`, `strong-fitness`, `creative-studio`, `community-nonprofit`, `industrial-trades`, `default`. AI agents selecting a preset should consult `THEME_PRESET_META` (keyed by preset name) which exposes `industries`, `mood`, `colorTemperature`, and `formality`.
 
 ---
 

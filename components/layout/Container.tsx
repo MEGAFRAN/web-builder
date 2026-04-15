@@ -10,14 +10,23 @@ const paddingMap = { none: "", sm: "px-4", md: "px-6", lg: "px-8" };
 export function Container({
   children,
   maxWidth = "xl",
-  padding = "md",
+  padding = "theme",
 }: {
   children?: ReactNode;
   maxWidth?: keyof typeof maxWidthMap | null;
-  padding?: keyof typeof paddingMap | null;
+  padding?: keyof typeof paddingMap | "theme" | null;
 }) {
+  const paddingStyle =
+    padding === "theme" ? { paddingInline: "var(--page-inset)" } : undefined;
+  const paddingClass =
+    padding && padding !== "theme" ? paddingMap[padding] : "";
+
   return (
-    <div data-component="container" className={`mx-auto w-full ${maxWidthMap[maxWidth ?? "xl"]} ${paddingMap[padding ?? "md"]}`}>
+    <div
+      data-component="container"
+      className={`mx-auto w-full ${maxWidthMap[maxWidth ?? "xl"]} ${paddingClass}`}
+      style={paddingStyle}
+    >
       {children}
     </div>
   );

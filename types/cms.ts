@@ -419,6 +419,7 @@ export type ClientTheme = {
   fontHeading?: string
   fontBody?: string
   borderRadius?: number
+  pageInset?: string   // e.g. "clamp(1rem, 5vw, 2rem)" or "1.5rem"
 }
 
 export type ClientFeatures = {

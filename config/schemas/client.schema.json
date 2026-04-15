@@ -39,7 +39,11 @@
         "surfaceDark": { "type": "string" },
         "fontHeading": { "type": "string" },
         "fontBody": { "type": "string" },
-        "borderRadius": { "type": "number" }
+        "borderRadius": { "type": "number" },
+        "pageInset": {
+          "type": "string",
+          "description": "CSS value for horizontal page padding. Overrides the preset default. E.g. 'clamp(1rem, 5vw, 2rem)' or '1.5rem'."
+        }
       },
       "oneOf": [
         {
