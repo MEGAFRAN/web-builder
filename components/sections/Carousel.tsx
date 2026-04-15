@@ -395,7 +395,7 @@ export function Carousel({
   // ---------------------------------------------------------------------------
 
   const trackHeightStyle: React.CSSProperties =
-    carouselMode === 'image' ? {} : { minHeight: '200px' }
+    carouselMode === 'image' ? {} : { minHeight: '300px' }
 
   // ---------------------------------------------------------------------------
   // Render
@@ -483,38 +483,11 @@ export function Carousel({
                 {safeItems.map((item, index) => renderSlide(item, index))}
               </div>
 
-              {/* Desktop overlay arrows (md and above) */}
-              {!isSingleItem && (
-                <>
-                  <div
-                    className="absolute inset-block-0 start-2 hidden items-center md:flex"
-                    style={{ top: 0, bottom: 0, left: '0.5rem' }}
-                  >
-                    <ArrowButton
-                      direction="prev"
-                      onClick={goPrev}
-                      disabled={!canGoPrev}
-                      hidden={!showArrowsResolved}
-                    />
-                  </div>
-                  <div
-                    className="absolute inset-block-0 end-2 hidden items-center md:flex"
-                    style={{ top: 0, bottom: 0, right: '0.5rem' }}
-                  >
-                    <ArrowButton
-                      direction="next"
-                      onClick={goNext}
-                      disabled={!canGoNext}
-                      hidden={!showArrowsResolved}
-                    />
-                  </div>
-                </>
-              )}
             </div>
 
-            {/* Mobile arrows — rendered below track on small screens */}
+            {/* Arrows — rendered below track on all screen sizes */}
             {!isSingleItem && (
-              <div className="flex justify-center gap-3 md:hidden">
+              <div className="flex justify-center gap-3">
                 <ArrowButton
                   direction="prev"
                   onClick={goPrev}
@@ -563,8 +536,9 @@ export function Carousel({
                           <span
                             className="block rounded-full transition-all duration-200"
                             style={{
-                              width: isCurrent ? '12px' : '8px',
-                              height: isCurrent ? '12px' : '8px',
+                              width: '12px',
+                              height: '12px',
+                              transform: isCurrent ? 'scale(1)' : 'scale(0.667)',
                               backgroundColor: isCurrent
                                 ? 'var(--color-primary)'
                                 : 'color-mix(in srgb, var(--color-text) 30%, transparent)',
