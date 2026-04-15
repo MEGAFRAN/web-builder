@@ -17,7 +17,10 @@ export function Footer({ columns, copyright }: FooterProps) {
   const colCount = Math.min(columns?.length ?? 0, 4);
   return (
     <footer data-component="footer" className="w-full border-t border-border bg-background py-12">
-      <div className="mx-auto max-w-7xl px-6">
+      <div
+        className="mx-auto max-w-6xl"
+        style={{ paddingInline: "var(--page-inset)" }}
+      >
         {columns && columns.length > 0 && (
           <div className={`grid ${colsMap[colCount] ?? "grid-cols-3"} gap-8 mb-8`}>
             {columns.map((col, i) => (

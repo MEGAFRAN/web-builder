@@ -13,8 +13,11 @@ export function Navbar({
   ctaAction?: string | null;
 }) {
   return (
-    <nav data-component="navbar" className="w-full border-b border-border bg-background px-6 py-4">
-      <div className="mx-auto flex max-w-6xl items-center justify-between">
+    <nav data-component="navbar" className="w-full border-b border-border bg-background py-4">
+      <div
+        className="mx-auto flex max-w-6xl items-center justify-between"
+        style={{ paddingInline: "var(--page-inset)" }}
+      >
         <Link href="/" className="text-lg font-bold text-foreground">{logo}</Link>
         <div className="flex items-center gap-6">
           {links?.map((link, i) => (

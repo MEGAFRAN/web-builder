@@ -223,3 +223,20 @@ No CMS tokens. No external API credentials. The only secret per client is the Az
 Build cache is keyed by `{clientId}-{package-lock-hash}` so each client gets its own cache entry.
 
 ---
+
+## Spacing Conventions
+
+Inter-section vertical rhythm is controlled exclusively by `Section paddingY`.
+No block component may apply `mt-*`, `mb-*`, or `my-*` on its own root element.
+
+Horizontal inset is controlled exclusively by `Container padding="theme"` which
+consumes `var(--page-inset)` from the theme. No component may apply `px-*`,
+`mx-*`, or any inline horizontal padding on its own root element.
+
+Internal element spacing uses `Stack gap="sm|md|lg"`. Raw `mb-*`/`mt-*` between
+siblings is forbidden.
+
+### Container maxWidth convention
+- `2xl` — wide content sections (FeatureGrid, Testimonials, StatsBar)
+- `xl`  — narrow content sections (Hero text, CTA, contact forms)
+- `full` — full-bleed inner content

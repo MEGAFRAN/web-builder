@@ -1,7 +1,11 @@
-const bgMap: Record<string, string> = {
-  white: "bg-background",
-  gray: "bg-muted-bg",
-  dark: "bg-primary",
+import { Section } from "@/components/layout/Section";
+import { Container } from "@/components/layout/Container";
+import { Stack } from "@/components/layout/Stack";
+
+const bgMap: Record<string, "white" | "gray" | "dark"> = {
+  white: "white",
+  gray: "gray",
+  dark: "dark",
 };
 
 const valueColorMap: Record<string, string> = {
@@ -30,23 +34,26 @@ interface StatsBarProps {
 
 export function StatsBar({ stats, background }: StatsBarProps) {
   const bg = background ?? "white";
+  const sectionBg = bgMap[bg] ?? "white";
   const colCount = Math.min(stats?.length ?? 0, 4);
   return (
-    <div data-component="stats-bar" className={`w-full px-6 py-12 ${bgMap[bg] ?? "bg-background"}`}>
-      <div className="mx-auto max-w-6xl">
+    <Section data-component="stats-bar" background={sectionBg} paddingY="md">
+      <Container maxWidth="2xl" padding="theme">
         <dl className={`grid ${colsMap[colCount] ?? "grid-cols-4"} gap-8 text-center`}>
           {stats?.map((stat, i) => (
             <div key={i}>
-              <dt className={`text-4xl font-bold ${valueColorMap[bg] ?? "text-foreground"}`}>
-                {stat.value}
-              </dt>
-              <dd className={`mt-2 text-sm ${labelColorMap[bg] ?? "text-muted"}`}>
-                {stat.label}
-              </dd>
+              <Stack gap="sm">
+                <dt className={`text-4xl font-bold ${valueColorMap[bg] ?? "text-foreground"}`}>
+                  {stat.value}
+                </dt>
+                <dd className={`text-sm ${labelColorMap[bg] ?? "text-muted"}`}>
+                  {stat.label}
+                </dd>
+              </Stack>
             </div>
           ))}
         </dl>
-      </div>
-    </div>
+      </Container>
+    </Section>
   );
 }
