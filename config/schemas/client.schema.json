@@ -41,8 +41,23 @@
         "fontBody": { "type": "string" },
         "borderRadius": { "type": "number" },
         "pageInset": {
-          "type": "string",
-          "description": "CSS value for horizontal page padding. Overrides the preset default. E.g. 'clamp(1rem, 5vw, 2rem)' or '1.5rem'."
+          "description": "Horizontal page padding. Accepts a raw CSS value or a responsive object with mobile/tablet/desktop breakpoints.",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Raw CSS value, e.g. 'clamp(1rem, 5vw, 2rem)' or '1.5rem'."
+            },
+            {
+              "type": "object",
+              "required": ["mobile", "desktop"],
+              "additionalProperties": false,
+              "properties": {
+                "mobile":  { "type": "string", "description": "Applied below 768px." },
+                "tablet":  { "type": "string", "description": "Applied 768px–1279px (optional)." },
+                "desktop": { "type": "string", "description": "Applied at 1280px and above." }
+              }
+            }
+          ]
         }
       },
       "oneOf": [

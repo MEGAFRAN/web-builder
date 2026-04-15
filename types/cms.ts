@@ -407,6 +407,15 @@ export type SiteMetadata = {
   defaultOgImage?: string | null
 }
 
+// Page inset types
+export type PageInsetResponsive = {
+  mobile: string   // applied below the tablet breakpoint
+  tablet?: string  // optional mid-breakpoint (768px–1279px)
+  desktop: string  // applied at 1280px and above
+}
+
+export type PageInset = string | PageInsetResponsive
+
 // Client config types
 export type ClientTheme = {
   preset?: string
@@ -419,7 +428,7 @@ export type ClientTheme = {
   fontHeading?: string
   fontBody?: string
   borderRadius?: number
-  pageInset?: string   // e.g. "clamp(1rem, 5vw, 2rem)" or "1.5rem"
+  pageInset?: PageInset   // e.g. "clamp(1rem, 5vw, 2rem)", "1.5rem", or { mobile: "10px", desktop: "30px" }
 }
 
 export type ClientFeatures = {

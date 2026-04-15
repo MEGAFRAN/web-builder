@@ -1,8 +1,28 @@
 import fs from 'fs'
 import path from 'path'
-import type { ClientConfig, ClientPage, Block, ClientTheme, PageMetadata } from '@/types/cms'
+import type { ClientConfig, ClientPage, Block, ClientTheme, PageMetadata, PageInset } from '@/types/cms'
 import { THEME_PRESETS, getPreset } from '@/lib/theme-presets'
 import type { ThemePreset } from '@/lib/theme-presets'
+
+/**
+ * Resolves a `PageInset` value (string or responsive object) to a plain CSS string.
+ * - String values are passed through unchanged.
+ * - Responsive objects with `mobile` and `desktop` are converted to a `clamp()` expression
+ *   that smoothly interpolates between the two values across the 320px–1280px viewport range.
+ *   The optional `tablet` breakpoint is accepted but not currently used in the clamp formula.
+ */
+export function resolvePageInset(value: PageInset): string {
+  if (typeof value === 'string') return value
+  return buildClamp(value.mobile, value.desktop)
+}
+
+function buildClamp(min: string, max: string): string {
+  return `clamp(${min}, calc(${min} + (${stripUnit(max)} - ${stripUnit(min)}) * ((100vw - 320px) / (1280 - 320))), ${max})`
+}
+
+function stripUnit(value: string): number {
+  return parseFloat(value)
+}
 
 /**
  * Resolves a raw ClientTheme (which may contain a `preset` key and/or partial
@@ -42,7 +62,7 @@ export function resolveTheme(raw: ClientTheme): ThemePreset {
     fontHeading: explicitFields.fontHeading ?? base.fontHeading,
     fontBody: explicitFields.fontBody ?? base.fontBody,
     borderRadius: explicitFields.borderRadius ?? base.borderRadius,
-    pageInset: explicitFields.pageInset ?? base.pageInset,
+    pageInset: resolvePageInset(explicitFields.pageInset ?? base.pageInset),
   }
 }
 

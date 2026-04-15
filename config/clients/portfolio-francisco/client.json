@@ -10,7 +10,11 @@
     "menu": false
   },
   "theme": {
-    "preset": "modern-minimal"
+    "preset": "modern-minimal",
+    "pageInset": {
+      "mobile": "30px",
+      "desktop": "30px"
+    }
   },
   "siteMetadata": {
     "siteName": "Francisco Cruz",

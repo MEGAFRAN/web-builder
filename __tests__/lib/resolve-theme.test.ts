@@ -112,4 +112,39 @@ describe('resolveTheme (via getClientConfig)', () => {
       ['accentColor', 'backgroundColor', 'borderRadius', 'fontBody', 'fontHeading', 'pageInset', 'primaryColor', 'surfaceColor', 'surfaceDark', 'textColor']
     )
   })
+
+  it('responsive pageInset object resolves to a clamp() string', async () => {
+    mockFs.readFileSync = vi.fn(() =>
+      makeClientJson({ preset: 'modern-minimal', pageInset: { mobile: '10px', desktop: '30px' } })
+    )
+    const { getClientConfig } = await import('@/lib/client-config')
+    const config = getClientConfig('test-client')
+    expect(typeof config.theme.pageInset).toBe('string')
+    expect(config.theme.pageInset).toBe(
+      'clamp(10px, calc(10px + (30 - 10) * ((100vw - 320px) / (1280 - 320))), 30px)'
+    )
+  })
+
+  it('existing string pageInset passes through unchanged', async () => {
+    mockFs.readFileSync = vi.fn(() =>
+      makeClientJson({ preset: 'modern-minimal', pageInset: 'clamp(1rem, 5vw, 2rem)' })
+    )
+    const { getClientConfig } = await import('@/lib/client-config')
+    const config = getClientConfig('test-client')
+    expect(config.theme.pageInset).toBe('clamp(1rem, 5vw, 2rem)')
+  })
+
+  it('three-breakpoint responsive pageInset resolves using mobile+desktop only', async () => {
+    mockFs.readFileSync = vi.fn(() =>
+      makeClientJson({
+        preset: 'modern-minimal',
+        pageInset: { mobile: '10px', tablet: '20px', desktop: '30px' },
+      })
+    )
+    const { getClientConfig } = await import('@/lib/client-config')
+    const config = getClientConfig('test-client')
+    expect(config.theme.pageInset).toBe(
+      'clamp(10px, calc(10px + (30 - 10) * ((100vw - 320px) / (1280 - 320))), 30px)'
+    )
+  })
 })
