@@ -30,6 +30,7 @@ const componentRegistry: Record<string, React.ComponentType<any>> = {
   servicesPageBlock: dynamic(() => import('@/components/blocks/ServicesPageBlock')),
   testimonialsPageBlock: dynamic(() => import('@/components/blocks/TestimonialsPageBlock')),
   caseStudyDetailBlock: dynamic(() => import('@/components/blocks/CaseStudyDetailBlock')),
+  carouselBlock: dynamic(() => import('@/components/blocks/CarouselBlock')),
 }
 
 export default componentRegistry

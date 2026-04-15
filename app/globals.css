@@ -73,6 +73,14 @@
 h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
 body                    { font-family: var(--font-body); }
 
+/* Carousel: disable all transitions for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-component="carousel"] .carousel-track * {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
+
 /* Fallback values — overridden per-client by layout.tsx */
 :root {
   --color-primary: #000000;
@@ -85,4 +93,5 @@ body                    { font-family: var(--font-body); }
   --font-body: sans-serif;
   --radius: 4px;
   --page-inset: clamp(1rem, 5vw, 2rem);
+  --carousel-transition-duration: 400ms;
 }

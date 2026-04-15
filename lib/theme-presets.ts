@@ -1,7 +1,7 @@
 import type { ClientTheme } from '@/types/cms'
 
 /**
- * A fully-specified theme — identical to ClientTheme but with all 9 fields
+ * A fully-specified theme — identical to ClientTheme but with all fields
  * required and no optional `preset` key.
  */
 export type ThemePreset = Required<
@@ -20,7 +20,10 @@ export type ThemePreset = Required<
     | 'sectionSpacing'
     | 'contentGap'
   >
->
+> & {
+  /** Duration for the carousel slide/fade transition. Mood-based default injected by buildThemeStyles. */
+  carouselTransitionDuration?: string
+}
 
 export const THEME_PRESETS: Record<string, ThemePreset> = {
   /** Warm reds, serif heading font, soft cream background */

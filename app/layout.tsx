@@ -4,8 +4,30 @@ import type { ThemePreset } from '@/lib/theme-presets'
 import { Navbar } from '@/components/navigation/Navbar'
 import { Footer } from '@/components/navigation/Footer'
 
+/**
+ * Derives the carousel transition duration from mood-based preset metadata.
+ * - formality:high presets (professional-law, modern-realestate) → 600ms (measured, formal)
+ * - high-energy presets (strong-fitness, vibrant-retail) → 250ms (snappy)
+ * - All others → 400ms
+ * An explicit `carouselTransitionDuration` on the preset always takes precedence.
+ */
+function resolveCarouselTransitionDuration(theme: ThemePreset): string {
+  if (theme.carouselTransitionDuration) return theme.carouselTransitionDuration
+  // Identify preset by its unique combination of colors (no preset name stored on ThemePreset)
+  const isHighFormality =
+    (theme.primaryColor === '#1a2e4a') || // professional-law
+    (theme.primaryColor === '#334155')    // modern-realestate
+  const isHighEnergy =
+    (theme.primaryColor === '#1c1c1e' && theme.accentColor === '#ef4444') || // strong-fitness
+    (theme.primaryColor === '#7c3aed')                                         // vibrant-retail
+  if (isHighFormality) return '600ms'
+  if (isHighEnergy) return '250ms'
+  return '400ms'
+}
+
 // Exported for unit testing without rendering the full layout tree
 export function buildThemeStyles(theme: ThemePreset): string {
+  const carouselDuration = resolveCarouselTransitionDuration(theme)
   return `
     :root {
       --color-primary: ${theme.primaryColor};
@@ -20,6 +42,7 @@ export function buildThemeStyles(theme: ThemePreset): string {
       --page-inset: ${theme.pageInset};
       --section-spacing: ${theme.sectionSpacing};
       --content-gap: ${theme.contentGap};
+      --carousel-transition-duration: ${carouselDuration};
     }
   `
 }

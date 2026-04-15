@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "carouselBlock",
+  "description": "A multi-mode carousel block. Recommended: ≤12 slides in image mode, ≤8 slides in card mode. A 1-item carousel renders as static content — use a dedicated image/card block instead.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_type", "mode", "items"],
+  "properties": {
+    "_type": { "type": "string", "const": "carouselBlock" },
+    "title": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "mode": {
+      "type": "string",
+      "enum": ["image", "testimonial", "card"],
+      "description": "Rendering mode. 'image' renders figures with optional captions; 'testimonial' renders blockquotes with author attribution; 'card' wraps content in the Card component."
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Slide items. All items must be valid for the chosen mode.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "imageUrl":    { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "imageAlt":    { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "caption":     { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "quote":       { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "author":      { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "role":        { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "company":     { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "avatarUrl":   { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "title":       { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "description": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+        }
+      }
+    },
+    "slidesVisible": {
+      "type": "integer",
+      "enum": [1, 2, 3],
+      "description": "Number of slides visible at once. Defaults to 1."
+    },
+    "aspectRatio": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }],
+      "description": "CSS aspect-ratio value for image slides, e.g. '16/9', '4/3', '1/1'."
+    },
+    "imageFit": {
+      "oneOf": [
+        { "type": "string", "enum": ["cover", "contain", "fill"] },
+        { "type": "null" }
+      ],
+      "description": "CSS object-fit for image slides. Defaults to 'cover'."
+    },
+    "autoPlay": {
+      "oneOf": [{ "type": "boolean" }, { "type": "null" }],
+      "description": "Enable auto-advance. Off by default. Pauses on hover, focus, and prefers-reduced-motion."
+    },
+    "autoPlayInterval": {
+      "oneOf": [
+        { "type": "integer", "minimum": 2000 },
+        { "type": "null" }
+      ],
+      "description": "Milliseconds between auto-advances. Minimum 2000. Defaults to 4000."
+    },
+    "loop": {
+      "oneOf": [{ "type": "boolean" }, { "type": "null" }],
+      "description": "Whether navigation wraps around from last to first slide."
+    },
+    "showArrows": {
+      "oneOf": [{ "type": "boolean" }, { "type": "null" }],
+      "description": "Show previous/next arrow buttons. Defaults to true."
+    },
+    "showIndicators": {
+      "oneOf": [{ "type": "boolean" }, { "type": "null" }],
+      "description": "Show slide indicator dots (or counter for >8 items). Defaults to true."
+    },
+    "background": {
+      "oneOf": [
+        { "type": "string", "enum": ["white", "gray", "dark"] },
+        { "type": "null" }
+      ]
+    },
+    "paddingY": {
+      "oneOf": [
+        { "type": "string", "enum": ["none", "sm", "md", "lg", "xl"] },
+        { "type": "null" }
+      ]
+    },
+    "transition": {
+      "oneOf": [
+        { "type": "string", "enum": ["slide", "fade"] },
+        { "type": "null" }
+      ],
+      "description": "Slide transition animation. 'slide' uses translateX (GPU composited); 'fade' uses opacity crossfade."
+    }
+  },
+  "if": { "properties": { "mode": { "const": "image" } } },
+  "then": {
+    "properties": {
+      "items": {
+        "items": {
+          "required": ["imageUrl", "imageAlt"]
+        }
+      }
+    }
+  },
+  "else": {
+    "if": { "properties": { "mode": { "const": "testimonial" } } },
+    "then": {
+      "properties": {
+        "items": {
+          "items": {
+            "required": ["quote", "author"]
+          }
+        }
+      }
+    },
+    "else": {
+      "if": { "properties": { "mode": { "const": "card" } } },
+      "then": {
+        "properties": {
+          "items": {
+            "items": {
+              "required": ["title"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

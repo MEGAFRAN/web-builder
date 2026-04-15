@@ -318,6 +318,7 @@ export type Block =
   | ServicesPageBlock
   | TestimonialsPageBlock
   | CaseStudyDetailBlock
+  | CarouselBlock
 
 // Services page block types
 
@@ -389,6 +390,38 @@ export type TestimonialsPageBlock = {
   navbarLinks?: Array<{ label: string; href: string }> | null
   footerColumns?: Array<{ title: string; links: Array<{ label: string; href: string }> }> | null
   footerCopyright?: string | null
+}
+
+// Carousel block
+export type CarouselItem = {
+  imageUrl?: string | null
+  imageAlt?: string | null
+  caption?: string | null
+  quote?: string | null
+  author?: string | null
+  role?: string | null
+  company?: string | null
+  avatarUrl?: string | null
+  title?: string | null
+  description?: string | null
+}
+
+export type CarouselBlock = {
+  _type: 'carouselBlock'
+  title?: string | null
+  items: CarouselItem[]
+  mode: 'image' | 'testimonial' | 'card'
+  slidesVisible?: 1 | 2 | 3 | null
+  aspectRatio?: string | null
+  imageFit?: 'cover' | 'contain' | 'fill' | null
+  autoPlay?: boolean | null
+  autoPlayInterval?: number | null
+  loop?: boolean | null
+  showArrows?: boolean | null
+  showIndicators?: boolean | null
+  background?: 'white' | 'gray' | 'dark' | null
+  paddingY?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | null
+  transition?: 'slide' | 'fade' | null
 }
 
 // Page metadata
