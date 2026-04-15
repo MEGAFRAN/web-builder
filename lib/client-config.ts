@@ -63,6 +63,8 @@ export function resolveTheme(raw: ClientTheme): ThemePreset {
     fontBody: explicitFields.fontBody ?? base.fontBody,
     borderRadius: explicitFields.borderRadius ?? base.borderRadius,
     pageInset: resolvePageInset(explicitFields.pageInset ?? base.pageInset),
+    sectionSpacing: resolvePageInset(explicitFields.sectionSpacing ?? base.sectionSpacing),
+    contentGap: resolvePageInset(explicitFields.contentGap ?? base.contentGap),
   }
 }
 

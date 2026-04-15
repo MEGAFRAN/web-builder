@@ -14,7 +14,9 @@
     "pageInset": {
       "mobile": "30px",
       "desktop": "30px"
-    }
+    },
+    "sectionSpacing": { "mobile": "2.5rem", "desktop": "6rem" },
+    "contentGap":    { "mobile": "0.75rem", "desktop": "1.5rem" }
   },
   "siteMetadata": {
     "siteName": "Francisco Cruz",

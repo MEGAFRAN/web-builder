@@ -97,7 +97,13 @@ type ClientConfig = {
     fontHeading?: string
     fontBody?: string
     borderRadius?: number
-    pageInset?: string        // overrides preset value, e.g. "clamp(1rem, 5vw, 2rem)"
+    pageInset?: string | {    // overrides preset value — raw CSS string or responsive object
+      mobile: string          //   e.g. "10px" (applied below 768px)
+      tablet?: string         //   e.g. "20px" (768px–1279px, optional)
+      desktop: string         //   e.g. "30px" (applied at 1280px and above)
+    }
+    sectionSpacing?: string | { mobile: string; tablet?: string; desktop: string }
+    contentGap?:     string | { mobile: string; tablet?: string; desktop: string }
   }
   pages: Array<{
     slug: string            // "" for home, "menu", "contacto", etc.
@@ -127,7 +133,7 @@ AI agents must validate their output against the relevant schema before writing.
 
 Theming is pure CSS variables — no runtime JS.
 
-**Preset resolution**: `lib/theme-presets.ts` exports `THEME_PRESETS` (5 named presets) and `THEME_PRESET_META` (machine-readable metadata for AI agent preset selection). `resolveTheme(clientTheme)` in `lib/client-config.ts` merges the client's optional overrides on top of the selected preset, always returning a fully-populated `ThemePreset` with 10 required fields.
+**Preset resolution**: `lib/theme-presets.ts` exports `THEME_PRESETS` (5 named presets) and `THEME_PRESET_META` (machine-readable metadata for AI agent preset selection). `resolveTheme(clientTheme)` in `lib/client-config.ts` merges the client's optional overrides on top of the selected preset, always returning a fully-populated `ThemePreset` with 12 required fields.
 
 1. `globals.css` defines fallback values in `:root`
 2. `layout.tsx` calls `resolveTheme(config.theme)` then `buildThemeStyles(preset)` to generate:
@@ -143,12 +149,22 @@ Theming is pure CSS variables — no runtime JS.
      --font-body: 'Inter', sans-serif;
      --radius: 4px;
      --page-inset: clamp(1rem, 5vw, 2rem);
+     --section-spacing: 5rem;
+     --content-gap: 1rem;
    }
    ```
 3. Injected as a `<style>` tag in `<head>` — overrides fallbacks
 4. Components consume vars via Tailwind utilities and semantic classes (`.btn-primary`, `.text-brand`, `.section`)
 
 **Horizontal padding (`--page-inset`)**: all horizontal page padding is driven by a single `--page-inset` CSS variable rather than per-component Tailwind classes. The `.section` utility and the `Container` component (default `padding="theme"`) both consume it. Each preset ships a `pageInset` value (a `clamp()` expression tuned to the preset's density and feel); clients can override it with `"pageInset"` in their `client.json` theme object. Do **not** apply horizontal padding at the layout level (e.g., wrapping `{children}`) — this would clip full-bleed section backgrounds.
+
+**Vertical section rhythm (`--section-spacing`)**: controls the `paddingBlock` of every `Section` component. The `paddingY` prop becomes a proportional multiplier of this token (`sm` = ×0.4, `md` = ×0.6, `lg` = ×1.0, `xl` = ×1.4) rather than a hardcoded Tailwind class. Clients set it via `"sectionSpacing"` in `client.json`. Spacious presets (`bold-restaurant`, `warm-hospitality`) default to `6rem`; energetic presets (`strong-fitness`, `vibrant-retail`) default to `4rem`; all others default to `5rem`.
+
+**Internal element spacing (`--content-gap`)**: controls the `gap` of every `Stack` component. The `gap` prop is a proportional multiplier (`sm` = ×0.5, `md` = ×1.0, `lg` = ×2, `xl` = ×3). Clients set it via `"contentGap"` in `client.json`. All presets default to `1rem`.
+
+All three spacing tokens (`pageInset`, `sectionSpacing`, `contentGap`) accept the same two formats:
+- **Raw CSS string**: `"5rem"` or any valid CSS length — injected verbatim into the variable.
+- **Responsive object**: `{ "mobile": "2rem", "desktop": "6rem" }` with an optional `"tablet"` key. `resolvePageInset()` in `lib/client-config.ts` converts this to a fluid `clamp()` expression using linear interpolation between a 320px and 1280px viewport. `buildThemeStyles` and `app/layout.tsx` always receive a resolved `string` — they are unaware of the object format.
 
 Available presets: `bold-restaurant`, `modern-minimal`, `professional-law`, `vibrant-retail`, `calm-healthcare`, `bright-education`, `modern-realestate`, `warm-hospitality`, `strong-fitness`, `creative-studio`, `community-nonprofit`, `industrial-trades`, `default`. AI agents selecting a preset should consult `THEME_PRESET_META` (keyed by preset name) which exposes `industries`, `mood`, `colorTemperature`, and `formality`.
 
@@ -226,15 +242,13 @@ Build cache is keyed by `{clientId}-{package-lock-hash}` so each client gets its
 
 ## Spacing Conventions
 
-Inter-section vertical rhythm is controlled exclusively by `Section paddingY`.
-No block component may apply `mt-*`, `mb-*`, or `my-*` on its own root element.
+Inter-section vertical rhythm is controlled exclusively by `Section paddingY`, which scales `var(--section-spacing)` proportionally. No block component may apply `mt-*`, `mb-*`, or `my-*` on its own root element.
 
-Horizontal inset is controlled exclusively by `Container padding="theme"` which
-consumes `var(--page-inset)` from the theme. No component may apply `px-*`,
-`mx-*`, or any inline horizontal padding on its own root element.
+Horizontal inset is controlled exclusively by `Container padding="theme"` which consumes `var(--page-inset)` from the theme. No component may apply `px-*`, `mx-*`, or any inline horizontal padding on its own root element.
 
-Internal element spacing uses `Stack gap="sm|md|lg"`. Raw `mb-*`/`mt-*` between
-siblings is forbidden.
+Internal element spacing uses `Stack gap="sm|md|lg"`, which scales `var(--content-gap)` proportionally. Raw `mb-*`/`mt-*` between siblings is forbidden.
+
+All three spacing tokens are theme-controlled CSS variables emitted by `buildThemeStyles` and can be overridden per-client in `client.json`. They all accept a raw CSS string or a responsive `{ mobile, tablet?, desktop }` object (resolved to `clamp()` by `resolvePageInset`).
 
 ### Container maxWidth convention
 - `2xl` — wide content sections (FeatureGrid, Testimonials, StatsBar)

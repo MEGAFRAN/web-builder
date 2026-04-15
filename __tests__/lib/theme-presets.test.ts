@@ -14,6 +14,8 @@ const REQUIRED_FIELDS: (keyof ThemePreset)[] = [
   'fontBody',
   'borderRadius',
   'pageInset',
+  'sectionSpacing',
+  'contentGap',
 ]
 
 describe('THEME_PRESETS', () => {
@@ -22,7 +24,7 @@ describe('THEME_PRESETS', () => {
     expect(THEME_PRESETS).toHaveProperty('default')
   })
 
-  it.each(Object.keys(THEME_PRESETS))('preset "%s" has all 10 required fields', (name) => {
+  it.each(Object.keys(THEME_PRESETS))('preset "%s" has all 12 required fields', (name) => {
     const preset = THEME_PRESETS[name]
     for (const field of REQUIRED_FIELDS) {
       expect(preset).toHaveProperty(field)

@@ -17,6 +17,8 @@ export type ThemePreset = Required<
     | 'fontBody'
     | 'borderRadius'
     | 'pageInset'
+    | 'sectionSpacing'
+    | 'contentGap'
   >
 >
 
@@ -33,6 +35,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Inter',
     borderRadius: 4,
     pageInset: 'clamp(1rem, 5vw, 2rem)',
+    sectionSpacing: '6rem',
+    contentGap: '1rem',
   },
 
   /** Neutral grays, clean sans-serif fonts, sharp corners */
@@ -47,6 +51,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Inter',
     borderRadius: 2,
     pageInset: 'clamp(1.5rem, 6vw, 3rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Deep navy, gold accent, conservative serif heading, white background */
@@ -61,6 +67,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Source Sans Pro',
     borderRadius: 2,
     pageInset: 'clamp(1.5rem, 6vw, 3rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Bright accent color, bold sans-serif, high contrast */
@@ -75,6 +83,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Poppins',
     borderRadius: 8,
     pageInset: 'clamp(1rem, 4vw, 1.5rem)',
+    sectionSpacing: '4rem',
+    contentGap: '1rem',
   },
 
   /** Teal-blue primary, off-white background, humanist sans-serif for healthcare */
@@ -89,6 +99,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Lato',
     borderRadius: 6,
     pageInset: 'clamp(1rem, 5vw, 2rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Warm orange primary, sky blue accent, rounded corners for education */
@@ -103,6 +115,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Nunito',
     borderRadius: 12,
     pageInset: 'clamp(1rem, 4vw, 1.5rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Slate blue-gray primary, warm gold accent, editorial heading for real estate */
@@ -117,6 +131,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Inter',
     borderRadius: 4,
     pageInset: 'clamp(1.5rem, 6vw, 2.5rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Terracotta primary, sand accent, luxury serif heading for boutique hospitality */
@@ -131,6 +147,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Lato',
     borderRadius: 4,
     pageInset: 'clamp(1.5rem, 5vw, 2.5rem)',
+    sectionSpacing: '6rem',
+    contentGap: '1rem',
   },
 
   /** Charcoal primary, high-energy red accent, condensed heading for fitness */
@@ -145,6 +163,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Open Sans',
     borderRadius: 4,
     pageInset: 'clamp(0.75rem, 4vw, 1.5rem)',
+    sectionSpacing: '4rem',
+    contentGap: '1rem',
   },
 
   /** Deep indigo primary, coral-pink accent, editorial serif for creative studios */
@@ -159,6 +179,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'DM Sans',
     borderRadius: 8,
     pageInset: 'clamp(1.5rem, 6vw, 3rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Forest green primary, amber accent, editorial serif for non-profits */
@@ -173,6 +195,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Source Sans Pro',
     borderRadius: 8,
     pageInset: 'clamp(1rem, 5vw, 2rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Dark slate primary, safety-orange accent, bold condensed heading for trades */
@@ -187,6 +211,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Roboto',
     borderRadius: 2,
     pageInset: 'clamp(1rem, 4vw, 1.5rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 
   /** Safe fallback used when no preset is specified and not all fields are explicit */
@@ -201,6 +227,8 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     fontBody: 'Inter',
     borderRadius: 4,
     pageInset: 'clamp(1rem, 5vw, 2rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
   },
 }
 

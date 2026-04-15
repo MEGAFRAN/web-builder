@@ -56,7 +56,7 @@ describe('resolveTheme (via getClientConfig)', () => {
     expect(config.theme).not.toHaveProperty('preset')
   })
 
-  it('all 10 explicit fields, no preset — returns those exact values', async () => {
+  it('all 12 explicit fields, no preset — returns those exact values', async () => {
     const explicit = {
       primaryColor: '#111111',
       accentColor: '#222222',
@@ -68,6 +68,8 @@ describe('resolveTheme (via getClientConfig)', () => {
       fontBody: 'Arial',
       borderRadius: 0,
       pageInset: '1.5rem',
+      sectionSpacing: '4rem',
+      contentGap: '0.5rem',
     }
     mockFs.readFileSync = vi.fn(() => makeClientJson(explicit))
     const { getClientConfig } = await import('@/lib/client-config')
@@ -103,14 +105,45 @@ describe('resolveTheme (via getClientConfig)', () => {
     expect(config.theme).toEqual(THEME_PRESETS['default'])
   })
 
-  it('resolved theme always has exactly the 10 expected keys', async () => {
+  it('resolved theme always has exactly the 12 expected keys', async () => {
     mockFs.readFileSync = vi.fn(() => makeClientJson({ preset: 'vibrant-retail' }))
     const { getClientConfig } = await import('@/lib/client-config')
     const config = getClientConfig('test-client')
     const keys = Object.keys(config.theme).sort()
     expect(keys).toEqual(
-      ['accentColor', 'backgroundColor', 'borderRadius', 'fontBody', 'fontHeading', 'pageInset', 'primaryColor', 'surfaceColor', 'surfaceDark', 'textColor']
+      ['accentColor', 'backgroundColor', 'borderRadius', 'contentGap', 'fontBody', 'fontHeading', 'pageInset', 'primaryColor', 'sectionSpacing', 'surfaceColor', 'surfaceDark', 'textColor']
     )
+  })
+
+  it('responsive sectionSpacing object resolves to a clamp() string', async () => {
+    mockFs.readFileSync = vi.fn(() =>
+      makeClientJson({ preset: 'modern-minimal', sectionSpacing: { mobile: '3rem', desktop: '7rem' } })
+    )
+    const { getClientConfig } = await import('@/lib/client-config')
+    const config = getClientConfig('test-client')
+    expect(typeof config.theme.sectionSpacing).toBe('string')
+    expect(config.theme.sectionSpacing).toBe(
+      'clamp(3rem, calc(3rem + (7 - 3) * ((100vw - 320px) / (1280 - 320))), 7rem)'
+    )
+  })
+
+  it('plain string contentGap passes through unchanged', async () => {
+    mockFs.readFileSync = vi.fn(() =>
+      makeClientJson({ preset: 'modern-minimal', contentGap: '1.5rem' })
+    )
+    const { getClientConfig } = await import('@/lib/client-config')
+    const config = getClientConfig('test-client')
+    expect(config.theme.contentGap).toBe('1.5rem')
+  })
+
+  it('resolved theme includes sectionSpacing and contentGap fields', async () => {
+    mockFs.readFileSync = vi.fn(() => makeClientJson({ preset: 'bold-restaurant' }))
+    const { getClientConfig } = await import('@/lib/client-config')
+    const config = getClientConfig('test-client')
+    expect(config.theme).toHaveProperty('sectionSpacing')
+    expect(config.theme).toHaveProperty('contentGap')
+    expect(typeof config.theme.sectionSpacing).toBe('string')
+    expect(typeof config.theme.contentGap).toBe('string')
   })
 
   it('responsive pageInset object resolves to a clamp() string', async () => {

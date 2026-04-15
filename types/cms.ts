@@ -429,6 +429,8 @@ export type ClientTheme = {
   fontBody?: string
   borderRadius?: number
   pageInset?: PageInset   // e.g. "clamp(1rem, 5vw, 2rem)", "1.5rem", or { mobile: "10px", desktop: "30px" }
+  sectionSpacing?: PageInset  // controls --section-spacing
+  contentGap?: PageInset      // controls --content-gap
 }
 
 export type ClientFeatures = {

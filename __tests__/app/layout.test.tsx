@@ -39,6 +39,8 @@ const resolvedTheme = {
   fontBody: 'Inter',
   borderRadius: 4,
   pageInset: 'clamp(1rem, 5vw, 2rem)',
+  sectionSpacing: '6rem',
+  contentGap: '1rem',
 }
 
 const mockGetClientConfig = vi.mocked(getClientConfig)
@@ -70,6 +72,8 @@ describe('buildThemeStyles', () => {
     expect(css).toContain("--font-body: 'Inter'")
     expect(css).toContain('--radius: 4px')
     expect(css).toContain('--page-inset: clamp(1rem, 5vw, 2rem)')
+    expect(css).toContain('--section-spacing: 6rem')
+    expect(css).toContain('--content-gap: 1rem')
   })
 })
 

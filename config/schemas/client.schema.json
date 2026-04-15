@@ -58,6 +58,38 @@
               }
             }
           ]
+        },
+        "sectionSpacing": {
+          "description": "Vertical padding for page sections. Accepts a raw CSS value or a responsive object.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "required": ["mobile", "desktop"],
+              "additionalProperties": false,
+              "properties": {
+                "mobile":  { "type": "string" },
+                "tablet":  { "type": "string" },
+                "desktop": { "type": "string" }
+              }
+            }
+          ]
+        },
+        "contentGap": {
+          "description": "Gap between stacked content elements. Accepts a raw CSS value or a responsive object.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "required": ["mobile", "desktop"],
+              "additionalProperties": false,
+              "properties": {
+                "mobile":  { "type": "string" },
+                "tablet":  { "type": "string" },
+                "desktop": { "type": "string" }
+              }
+            }
+          ]
         }
       },
       "oneOf": [

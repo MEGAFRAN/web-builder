@@ -1,7 +1,13 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 
-const gapMap = { none: "gap-0", sm: "gap-2", md: "gap-4", lg: "gap-8", xl: "gap-12" };
+const gapScale: Record<string, string | 0> = {
+  none: 0,
+  sm:   'calc(var(--content-gap) * 0.5)',
+  md:   'var(--content-gap)',
+  lg:   'calc(var(--content-gap) * 2)',
+  xl:   'calc(var(--content-gap) * 3)',
+}
 const alignMap = { start: "items-start", center: "items-center", end: "items-end", stretch: "items-stretch" };
 
 export function Stack({
@@ -10,11 +16,14 @@ export function Stack({
   align = "stretch",
 }: {
   children?: ReactNode;
-  gap?: keyof typeof gapMap | null;
+  gap?: keyof typeof gapScale | null;
   align?: keyof typeof alignMap | null;
 }) {
+  const gapValue = gapScale[gap ?? "md"]
+  const stackStyle: CSSProperties = { gap: gapValue === 0 ? 0 : gapValue }
+
   return (
-    <div data-component="stack" className={`flex flex-col ${gapMap[gap ?? "md"]} ${alignMap[align ?? "stretch"]}`}>
+    <div data-component="stack" className={`flex flex-col ${alignMap[align ?? "stretch"]}`} style={stackStyle}>
       {children}
     </div>
   );

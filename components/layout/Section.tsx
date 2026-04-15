@@ -1,12 +1,19 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 
 const bgMap = {
   white: "bg-background",
   gray: "bg-muted-bg",
   dark: "bg-primary",
 };
-const pyMap = { none: "", sm: "py-8", md: "py-12", lg: "py-20", xl: "py-28" };
+
+const pyScale: Record<string, string | 0> = {
+  none: 0,
+  sm:   'calc(var(--section-spacing) * 0.4)',
+  md:   'calc(var(--section-spacing) * 0.6)',
+  lg:   'var(--section-spacing)',
+  xl:   'calc(var(--section-spacing) * 1.4)',
+}
 
 /**
  * Layout contract:
@@ -30,14 +37,18 @@ export function Section({
 }: {
   children?: ReactNode;
   background?: keyof typeof bgMap | null;
-  paddingY?: keyof typeof pyMap | null;
+  paddingY?: keyof typeof pyScale | null;
   fullBleed?: boolean;
 }) {
+  const py = pyScale[paddingY ?? "lg"]
+  const sectionStyle: CSSProperties = { paddingBlock: py === 0 ? 0 : py }
+
   return (
     <section
       data-component="section"
       data-full-bleed={fullBleed ? "true" : undefined}
-      className={`w-full ${bgMap[background ?? "white"]} ${pyMap[paddingY ?? "lg"]}`}
+      className={`w-full ${bgMap[background ?? "white"]}`}
+      style={sectionStyle}
     >
       {children}
     </section>

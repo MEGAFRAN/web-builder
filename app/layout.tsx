@@ -18,6 +18,8 @@ export function buildThemeStyles(theme: ThemePreset): string {
       --font-body: '${theme.fontBody}', sans-serif;
       --radius: ${theme.borderRadius}px;
       --page-inset: ${theme.pageInset};
+      --section-spacing: ${theme.sectionSpacing};
+      --content-gap: ${theme.contentGap};
     }
   `
 }
