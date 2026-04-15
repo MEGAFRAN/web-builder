@@ -28,7 +28,7 @@
     },
     {
       "_type": "featureGridBlock",
-      "heading": "What I bring to the table",
+      "heading": "Services",
       "items": [
         {
           "heading": "Analytics Engineering",
@@ -69,7 +69,8 @@
         {
           "quote": "I would recommend Francisco to any team/company - he is always on top of all his development work and goes the extra mile to figure out solutions. He also takes the initiative to help out other team members who need help !",
           "name": "Kelly Wiest",
-          "role": "Digital Analyst"
+          "role": "Digital Analyst",
+          "company": "Abercrombie & Fitch"
         },
         {
           "quote": "Francisco was one of the dev's in the team i have been working on and it was a complete pleasure working with him! He is so efficient, clear and professional in coding and accepting any defects that might have come while validations.\n\nAlso a true Agile team member who is always on top of requirements and always calls out any changes needed prior to dev work so there is balanced support for QA.\n\nVery good at coding that it is sometimes hard to find defects and very experienced person! Learnt a lot while working with you and I wish good luck for all your future projects.",

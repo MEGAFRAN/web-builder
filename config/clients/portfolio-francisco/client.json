@@ -12,8 +12,8 @@
   "theme": {
     "preset": "modern-minimal",
     "pageInset": {
-      "mobile": "30px",
-      "desktop": "30px"
+      "mobile": "20px",
+      "desktop": "0px"
     },
     "sectionSpacing": { "mobile": "2.5rem", "desktop": "6rem" },
     "contentGap":    { "mobile": "0.75rem", "desktop": "1.5rem" }
