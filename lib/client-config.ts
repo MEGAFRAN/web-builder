@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import type { ClientConfig, ClientPage, Block, ClientTheme, PageMetadata, PageInset } from '@/types/cms'
+import type { ClientConfig, ClientPage, Block, ClientTheme, ClientHeader, ClientFooter, PageMetadata, PageInset } from '@/types/cms'
 import { THEME_PRESETS, getPreset } from '@/lib/theme-presets'
 import type { ThemePreset } from '@/lib/theme-presets'
 
@@ -125,6 +125,61 @@ function loadPagesFromDirectory(pagesDir: string): ClientPage[] {
   })
 }
 
+/**
+ * Merges template pages with client-specific pages.
+ * Client pages override template pages by slug — last writer wins.
+ */
+export function mergeTemplatePages(
+  templatePages: ClientPage[],
+  clientPages: ClientPage[]
+): ClientPage[] {
+  const map = new Map<string, ClientPage>()
+  for (const page of templatePages) map.set(page.slug, page)
+  for (const page of clientPages) map.set(page.slug, page)
+  return Array.from(map.values())
+}
+
+type TemplateMeta = {
+  templateId?: string
+  displayName?: string
+  description?: string
+  defaultThemePreset?: string
+  defaultFeatures?: Record<string, boolean>
+  header?: ClientHeader | null
+  footer?: ClientFooter | null
+}
+
+/**
+ * Loads and returns the parsed `template.json` for a given template name.
+ * Returns `null` if the file does not exist.
+ */
+function loadTemplateMeta(templateName: string): TemplateMeta | null {
+  const templateJsonPath = path.join(
+    process.cwd(), 'config', 'templates', templateName, 'template.json'
+  )
+  if (!fs.existsSync(templateJsonPath)) {
+    console.warn(
+      `[client-config] Template "${templateName}" has no template.json at ${templateJsonPath}`
+    )
+    return null
+  }
+  const raw = fs.readFileSync(templateJsonPath, 'utf-8')
+  return JSON.parse(raw) as TemplateMeta
+}
+
+function loadTemplatePages(templateName: string): ClientPage[] {
+  const templatePagesDir = path.join(
+    process.cwd(), 'config', 'templates', templateName, 'pages'
+  )
+  if (!fs.existsSync(templatePagesDir)) {
+    console.warn(
+      `[client-config] Template "${templateName}" has no pages directory at ${templatePagesDir}`
+    )
+    return []
+  }
+  return loadPagesFromDirectory(templatePagesDir)
+}
+
 export function getClientConfig(clientId: string): ClientConfig {
   const clientDir = path.join(process.cwd(), 'config', 'clients', clientId)
   const clientJsonPath = path.join(clientDir, 'client.json')
@@ -133,10 +188,30 @@ export function getClientConfig(clientId: string): ClientConfig {
     const base = JSON.parse(rawText) as Omit<ClientConfig, 'pages'>
 
     const pagesDir = path.join(clientDir, 'pages')
-    const pages: ClientPage[] = fs.existsSync(pagesDir)
+    const clientPages: ClientPage[] = fs.existsSync(pagesDir)
       ? loadPagesFromDirectory(pagesDir)
       : []
 
+    let pages: ClientPage[]
+    let templateHeader: ClientHeader | null = null
+    let templateFooter: ClientFooter | null = null
+
+    if (base.template) {
+      const templateMeta = loadTemplateMeta(base.template)
+      if (templateMeta) {
+        templateHeader = templateMeta.header ?? null
+        templateFooter = templateMeta.footer ?? null
+      }
+      pages = mergeTemplatePages(loadTemplatePages(base.template), clientPages)
+    } else {
+      pages = clientPages
+    }
+
+    const resolvedHeader: ClientHeader | null | undefined =
+      base.header ?? templateHeader ?? null
+    const resolvedFooter: ClientFooter | null | undefined =
+      base.footer ?? templateFooter ?? null
+
     const resolvedTheme = resolveTheme(base.theme)
-    return { ...base, theme: resolvedTheme, pages }
+    return { ...base, theme: resolvedTheme, pages, header: resolvedHeader, footer: resolvedFooter }
 }

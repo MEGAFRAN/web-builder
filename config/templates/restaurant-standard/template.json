@@ -1,26 +1,16 @@
 {
-  "clientId": "restaurante-pepe",
-  "displayName": "Restaurante Pepe",
-  "customDomain": "restaurante-pepe.com",
-  "swaResourceName": "swa-restaurante-pepe",
-  "template": "restaurant-standard",
-  "features": {
+  "templateId": "restaurant-standard",
+  "displayName": "Restaurant Standard",
+  "description": "General-purpose restaurant site with homepage, menu, about, and contact.",
+  "defaultThemePreset": "bold-restaurant",
+  "defaultFeatures": {
     "blog": false,
     "booking": true,
     "gallery": true,
     "menu": true
   },
-  "theme": {
-    "preset": "bold-restaurant"
-  },
-  "siteMetadata": {
-    "siteName": "Restaurante Pepe",
-    "titleTemplate": "%s | Restaurante Pepe",
-    "defaultDescription": "Cocina tradicional española con más de 30 años de experiencia en el corazón de Madrid. Reserva tu mesa.",
-    "defaultOgImage": null
-  },
   "header": {
-    "logo": "Restaurante Pepe",
+    "logo": "Restaurant Standard",
     "ctaLabel": "Reservar mesa",
     "ctaAction": "/contacto",
     "links": [
@@ -30,7 +20,7 @@
     ]
   },
   "footer": {
-    "copyright": "© 2025 Restaurante Pepe. Todos los derechos reservados.",
+    "copyright": "© 2025 Restaurant Standard",
     "columns": [
       {
         "title": "Navegación",
@@ -51,9 +41,9 @@
       {
         "title": "Contacto",
         "links": [
-          { "label": "info@restaurante-pepe.com", "href": "mailto:info@restaurante-pepe.com" },
-          { "label": "+34 91 234 56 78", "href": "tel:+34912345678" },
-          { "label": "Calle Mayor 12, Madrid", "href": "#" }
+          { "label": "info@restaurant.com", "href": "mailto:info@restaurant.com" },
+          { "label": "+34 91 000 00 00", "href": "tel:+34910000000" },
+          { "label": "Calle Principal 1, Ciudad", "href": "#" }
         ]
       }
     ]

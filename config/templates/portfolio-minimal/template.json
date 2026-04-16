@@ -1,0 +1,32 @@
+{
+  "templateId": "portfolio-minimal",
+  "displayName": "Portfolio Minimal",
+  "description": "Minimal portfolio site with homepage, success cases, and contact.",
+  "defaultThemePreset": "minimal-portfolio",
+  "defaultFeatures": {
+    "blog": false,
+    "booking": false,
+    "gallery": false,
+    "menu": false
+  },
+  "header": {
+    "logo": "Portfolio",
+    "links": [
+      { "label": "Success Cases", "href": "/success-cases" },
+      { "label": "Contact", "href": "/contact" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2025 Portfolio",
+    "columns": [
+      {
+        "title": "Navigation",
+        "links": [
+          { "label": "Home", "href": "/" },
+          { "label": "Success Cases", "href": "/success-cases" },
+          { "label": "Contact", "href": "/contact" }
+        ]
+      }
+    ]
+  }
+}

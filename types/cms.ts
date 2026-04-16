@@ -496,6 +496,7 @@ export type ClientConfig = {
   displayName: string
   customDomain: string
   swaResourceName: string
+  template?: string | null   // e.g. "restaurant-standard"
   features: ClientFeatures
   theme: ClientTheme
   header?: ClientHeader | null

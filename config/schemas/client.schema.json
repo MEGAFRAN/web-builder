@@ -9,6 +9,10 @@
     "displayName": { "type": "string" },
     "customDomain": { "type": "string" },
     "swaResourceName": { "type": "string" },
+    "template": {
+      "type": "string",
+      "description": "Name of the template this client is based on (e.g. 'restaurant-standard'). Template pages are used as defaults; client page files override by slug."
+    },
     "contactEndpoint": { "type": "string" },
     "externalReviewUrl": { "type": "string" },
     "externalReviewPlatform": { "type": "string" },

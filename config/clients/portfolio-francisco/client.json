@@ -3,6 +3,7 @@
   "displayName": "Francisco Cruz — Analytics Engineer & Frontend Developer",
   "customDomain": "portfolio-francisco.com",
   "swaResourceName": "swa-portfolio-francisco",
+  "template": "portfolio-minimal",
   "features": {
     "blog": false,
     "booking": false,

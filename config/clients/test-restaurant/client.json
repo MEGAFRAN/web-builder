@@ -1,0 +1,9 @@
+{
+  "clientId": "test-restaurant",
+  "displayName": "Test Restaurant",
+  "customDomain": "test-restaurant.com",
+  "swaResourceName": "swa-test-restaurant",
+  "template": "restaurant-standard",
+  "features": { "blog": false, "booking": true, "gallery": true, "menu": true },
+  "theme": { "preset": "bold-restaurant" }
+}
