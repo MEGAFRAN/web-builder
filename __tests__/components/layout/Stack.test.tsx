@@ -1,46 +1,107 @@
 import { describe, it, expect } from 'vitest'
-import { render } from '@testing-library/react'
-import React from 'react'
+import { render, screen } from '@testing-library/react'
 import { Stack } from '@/components/layout/Stack'
 
+// ─── Fixtures ─────────────────────────────────────────────────────────────────
+
+// Expected gap values as serialised by jsdom:
+// - numeric 0  → jsdom renders it as "0px"
+// - CSS strings → passed through verbatim
+const GAP_CASES = [
+  ['none', '0px'],
+  ['sm',   'calc(var(--content-gap) * 0.5)'],
+  ['md',   'var(--content-gap)'],
+  ['lg',   'calc(var(--content-gap) * 2)'],
+  ['xl',   'calc(var(--content-gap) * 3)'],
+] as const
+
+const ALIGN_CASES = [
+  ['start',   'items-start'],
+  ['center',  'items-center'],
+  ['end',     'items-end'],
+  ['stretch', 'items-stretch'],
+] as const
+
+// ─── Helper ───────────────────────────────────────────────────────────────────
+
+function renderStack(props: React.ComponentProps<typeof Stack> = {}) {
+  const { container } = render(<Stack {...props} />)
+  return container
+}
+
+function getDiv(container: HTMLElement) {
+  return container.querySelector('div[data-component="stack"]') as HTMLDivElement
+}
+
+// ─── Tests ────────────────────────────────────────────────────────────────────
+
 describe('Stack', () => {
-  it('gap="md" → style.gap = var(--content-gap)', () => {
-    render(<Stack gap="md"><span /></Stack>)
-    const el = document.querySelector('[data-component="stack"]') as HTMLElement
-    expect(el.style.gap).toBe('var(--content-gap)')
+  describe('root element', () => {
+    it('renders a <div> with data-component="stack"', () => {
+      const container = renderStack()
+      expect(getDiv(container)).not.toBeNull()
+    })
+
+    it('always has class flex', () => {
+      const container = renderStack()
+      expect(getDiv(container).className).toContain('flex')
+    })
+
+    it('always has class flex-col', () => {
+      const container = renderStack()
+      expect(getDiv(container).className).toContain('flex-col')
+    })
   })
 
-  it('gap="none" → style.gap = 0', () => {
-    render(<Stack gap="none"><span /></Stack>)
-    const el = document.querySelector('[data-component="stack"]') as HTMLElement
-    // jsdom serialises numeric 0 as '0px'
-    expect(el.style.gap).toBe('0px')
-  })
-
-  it('gap="lg" → style.gap contains * 2', () => {
-    render(<Stack gap="lg"><span /></Stack>)
-    const el = document.querySelector('[data-component="stack"]') as HTMLElement
-    expect(el.style.gap).toContain('* 2')
-  })
-
-  it('gap="sm" → style.gap contains * 0.5', () => {
-    render(<Stack gap="sm"><span /></Stack>)
-    const el = document.querySelector('[data-component="stack"]') as HTMLElement
-    expect(el.style.gap).toContain('0.5')
-  })
-
-  it('gap="xl" → style.gap contains * 3', () => {
-    render(<Stack gap="xl"><span /></Stack>)
-    const el = document.querySelector('[data-component="stack"]') as HTMLElement
-    expect(el.style.gap).toContain('* 3')
-  })
-
-  it('renders children', () => {
-    const { getByTestId } = render(
-      <Stack>
-        <span data-testid="child">hello</span>
-      </Stack>
+  describe('gap prop', () => {
+    it.each(GAP_CASES)(
+      'gap="%s" sets style.gap to "%s"',
+      (value, expected) => {
+        const container = renderStack({ gap: value })
+        expect(getDiv(container).style.gap).toBe(expected)
+      },
     )
-    expect(getByTestId('child')).toBeTruthy()
+
+    it('defaults to var(--content-gap) when gap is omitted', () => {
+      const container = renderStack()
+      expect(getDiv(container).style.gap).toBe('var(--content-gap)')
+    })
+
+    it('falls back to var(--content-gap) when gap={null}', () => {
+      const container = renderStack({ gap: null })
+      expect(getDiv(container).style.gap).toBe('var(--content-gap)')
+    })
+  })
+
+  describe('align prop', () => {
+    it.each(ALIGN_CASES)(
+      'align="%s" applies class "%s"',
+      (value, expectedClass) => {
+        const container = renderStack({ align: value })
+        expect(getDiv(container).className).toContain(expectedClass)
+      },
+    )
+
+    it('defaults to items-stretch when align is omitted', () => {
+      const container = renderStack()
+      expect(getDiv(container).className).toContain('items-stretch')
+    })
+
+    it('falls back to items-stretch when align={null}', () => {
+      const container = renderStack({ align: null })
+      expect(getDiv(container).className).toContain('items-stretch')
+    })
+  })
+
+  describe('children', () => {
+    it('renders children when provided', () => {
+      renderStack({ children: <span>stack child</span> })
+      expect(screen.getByText('stack child')).toBeInTheDocument()
+    })
+
+    it('renders without error when children is omitted', () => {
+      const container = renderStack()
+      expect(getDiv(container)).not.toBeNull()
+    })
   })
 })
