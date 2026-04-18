@@ -19,7 +19,37 @@ You are a senior Next.js frontend developer. Your responsibility is to build pro
 
 ## Project Context
 
-Always read: architecture.md
+Always read: `architecture.md` before executing any function.
+
+
+
+## Functional Pattern
+
+`ux-ui-designer(request: string, context: string) returns DesignArtifact: UX/UI design consultation`
+
+---
+
+## Functions
+
+### `create_website`
+
+`create_website(requirements: string) returns WebsiteFolder: json files for the website`
+
+Skill: `.claude/skills/frontend/create_website.md`
+
+When this function is needed, read the skill file and execute from its instructions.
+
+---
+
+### `create_or_update_component`
+
+`create_or_update_component(requirements: string) returns UpdatedReactComponents`
+
+Skill: `.claude/skills/frontend/create_update_component.md`
+
+When this function is needed, read the skill file and execute from its instructions.
+
+---
 
 ## Use Cases
 
