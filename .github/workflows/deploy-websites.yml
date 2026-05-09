@@ -1,0 +1,83 @@
+name: Deploy Website to Blob Storage
+
+on:
+  workflow_dispatch:
+    inputs:
+      clientId:
+        description: 'Client ID to rebuild (e.g. portfolio-francisco)'
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy ${{ github.event.inputs.clientId }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restore Next.js build cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ github.event.inputs.clientId }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            nextjs-${{ github.event.inputs.clientId }}-
+
+      - name: Build static site
+        run: |
+          echo "CLIENT_ID=${{ github.event.inputs.clientId }}" > .env.local
+          npm run build
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Discover Storage Account via Azure Tags
+        id: discover
+        run: |
+          # The query looks for a match in either the 'client_id' tag OR the 'team_id' tag
+          INPUT_ID="${{ github.event.inputs.clientId }}"
+          
+          STORAGE_ACCOUNT=$(az storage account list \
+            --query "[?tags.client_id=='$INPUT_ID' || tags.team_id=='$INPUT_ID'].name | [0]" \
+            -o tsv)
+
+          if [ -z "$STORAGE_ACCOUNT" ]; then
+            echo "::error::No Storage Account found for ID '$INPUT_ID' in client_id or team_id tags."
+            exit 1
+          fi
+          
+          echo "STORAGE_ACCOUNT=$STORAGE_ACCOUNT" >> "$GITHUB_ENV"
+          echo "Successfully resolved '$INPUT_ID' to account: $STORAGE_ACCOUNT"
+
+      - name: Deploy to Azure Blob Storage
+        run: |
+          az storage blob upload-batch \
+            --account-name "${{ env.STORAGE_ACCOUNT }}" \
+            --destination '$web' \
+            --source "./out" \
+            --overwrite true \
+            --auth-mode login
