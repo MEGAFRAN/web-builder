@@ -15,7 +15,7 @@ The `nextjs-frontend-developer` agent handles implementation. Your output feeds 
 
 ## Project Context
 
-Always read: `architecture.md` before executing any function.
+Always read: `architecture.md` and `docs/theme.md` before executing any function.
 
 ## Functional Pattern
 
