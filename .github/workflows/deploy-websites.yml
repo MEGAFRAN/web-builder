@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       clientId:
-        description: 'Client ID to rebuild (e.g. portfolio-francisco)'
+        description: 'Client ID to rebuild (e.g. internal-portfolio-francisco)'
         required: true
         type: string
 
@@ -58,15 +58,22 @@ jobs:
       - name: Discover Storage Account via Azure Tags
         id: discover
         run: |
-          # The query looks for a match in either the 'client_id' tag OR the 'team_id' tag
+# 1. Check current identity
+          echo "Logged in as:"
+          az ad signed-in-user show --query userPrincipalName -o tsv || echo "Service Principal Used"
+
+          # 2. List ALL accounts this identity can see (for debugging)
+          echo "Accounts visible to this Service Principal:"
+          az storage account list --query "[].name" -o tsv
+
+          # 3. Run your actual query
           INPUT_ID="${{ github.event.inputs.clientId }}"
-          
           STORAGE_ACCOUNT=$(az storage account list \
             --query "[?tags.client_id=='$INPUT_ID' || tags.team_id=='$INPUT_ID'].name | [0]" \
             -o tsv)
 
           if [ -z "$STORAGE_ACCOUNT" ]; then
-            echo "::error::No Storage Account found for ID '$INPUT_ID' in client_id or team_id tags."
+            echo "::error::No Storage Account found for ID '$INPUT_ID'"
             exit 1
           fi
           
