@@ -89,5 +89,5 @@ jobs:
             --account-name "${{ env.STORAGE_ACCOUNT }}" \
             --destination '$web' \
             --source "./out" \
-            --delete-destination \
+            --delete-destination true \
             --auth-mode login
