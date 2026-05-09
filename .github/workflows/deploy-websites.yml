@@ -85,9 +85,9 @@ jobs:
 
       - name: Deploy to Azure Blob Storage
         run: |
-          az storage blob upload-batch \
+          az storage blob sync \
             --account-name "${{ env.STORAGE_ACCOUNT }}" \
             --destination '$web' \
             --source "./out" \
-            --overwrite true \
+            --delete-destination \
             --auth-mode login
