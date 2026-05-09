@@ -87,7 +87,7 @@ jobs:
         run: |
           az storage blob sync \
             --account-name "${{ env.STORAGE_ACCOUNT }}" \
-            --destination '$web' \
+            --container '$web' \
             --source "./out" \
             --delete-destination true \
             --auth-mode login
