@@ -46,7 +46,7 @@ jobs:
       - name: Build static site
         run: |
           echo "CLIENT_ID=${{ github.event.inputs.clientId }}" > .env.local
-          npm run build
+          npm run build:blob
 
       - name: Azure Login
         uses: azure/login@v2
