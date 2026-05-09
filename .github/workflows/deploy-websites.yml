@@ -58,7 +58,7 @@ jobs:
       - name: Discover Storage Account via Azure Tags
         id: discover
         run: |
-# 1. Check current identity
+          # 1. Check current identity
           echo "Logged in as:"
           az ad signed-in-user show --query userPrincipalName -o tsv || echo "Service Principal Used"
 
