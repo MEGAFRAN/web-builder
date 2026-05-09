@@ -58,15 +58,18 @@ jobs:
       - name: Discover Storage Account via Azure Tags
         id: discover
         run: |
-          # 1. Check current identity
+          # 1. Explicitly set the subscription context
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    
+          # 2. Check current identity
           echo "Logged in as:"
           az ad signed-in-user show --query userPrincipalName -o tsv || echo "Service Principal Used"
 
-          # 2. List ALL accounts this identity can see (for debugging)
+          # 3. List ALL accounts this identity can see (for debugging)
           echo "Accounts visible to this Service Principal:"
           az storage account list --query "[].name" -o tsv
 
-          # 3. Run your actual query
+          # 4. Run your actual query
           INPUT_ID="${{ github.event.inputs.clientId }}"
           STORAGE_ACCOUNT=$(az storage account list \
             --query "[?tags.client_id=='$INPUT_ID' || tags.team_id=='$INPUT_ID'].name | [0]" \
