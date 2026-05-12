@@ -29,6 +29,7 @@
     {
       "_type": "contact",
       "showMap": true,
+      "mapEmbedSrc": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2892.0756826796364!2d-5.679199624264863!3d43.54246425958653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd367c5c7ff245dd%3A0xf50227a590c950ac!2sBioparc%20Acuario%20de%20Gij%C3%B3n!5e0!3m2!1ses!2ses!4v1778609450387!5m2!1ses!2ses",
       "phone": "+34 91 234 56 78",
       "email": "info@restaurante-pepe.com",
       "address": "Calle Mayor 12, 28013 Madrid"

@@ -18,6 +18,7 @@ export type ServicesBlock = {
 export type ContactBlock = {
   _type: 'contact'
   showMap: boolean
+  mapEmbedSrc?: string | null
   phone?: string
   email?: string
   address?: string

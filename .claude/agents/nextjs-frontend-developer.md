@@ -25,7 +25,7 @@ Always read: `architecture.md` before executing any function.
 
 ## Functional Pattern
 
-`ux-ui-designer(request: string, context: string) returns DesignArtifact: UX/UI design consultation`
+`nextjs-frontend-developer(request: string, context: string) returns CodeArtifact: Code solution`
 
 ---
 

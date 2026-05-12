@@ -2,7 +2,16 @@ import type { ContactBlock as ContactBlockType } from '@/types/cms'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 
-export default function ContactBlock({ showMap, phone, email, address }: ContactBlockType) {
+export default function ContactBlock({
+  showMap,
+  mapEmbedSrc,
+  phone,
+  email,
+  address,
+}: ContactBlockType) {
+  const mapSrc = mapEmbedSrc?.trim() ?? ''
+  const showIframe = showMap && mapSrc.length > 0
+
   return (
     <Section paddingY="lg">
       <Container maxWidth="2xl" padding="theme">
@@ -28,12 +37,17 @@ export default function ContactBlock({ showMap, phone, email, address }: Contact
                 </p>
               )}
             </div>
-            {showMap && (
-              <div
-                data-testid="map-placeholder"
-                className="bg-surface rounded-lg h-64 flex items-center justify-center text-muted"
-              >
-                Mapa (integrar Google Maps / Leaflet)
+            {showIframe && (
+              <div className="min-h-0">
+                <iframe
+                  data-testid="contact-map-iframe"
+                  src={mapSrc}
+                  title="Ubicación en Google Maps"
+                  className="w-full max-w-[600px] h-[450px] border-0 rounded-lg"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             )}
           </div>
