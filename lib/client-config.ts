@@ -1,6 +1,16 @@
 import fs from 'fs'
 import path from 'path'
-import type { ClientConfig, ClientPage, Block, ClientTheme, ClientHeader, ClientFooter, PageMetadata, PageInset } from '@/types/cms'
+import type {
+  ClientConfig,
+  ClientPage,
+  Block,
+  ClientTheme,
+  ClientHeader,
+  ClientFooter,
+  ClientBottomActionBar,
+  PageMetadata,
+  PageInset,
+} from '@/types/cms'
 import { THEME_PRESETS, getPreset } from '@/lib/theme-presets'
 import type { ThemePreset } from '@/lib/theme-presets'
 
@@ -147,6 +157,7 @@ type TemplateMeta = {
   defaultFeatures?: Record<string, boolean>
   header?: ClientHeader | null
   footer?: ClientFooter | null
+  bottomActionBar?: ClientBottomActionBar | null
 }
 
 /**
@@ -195,12 +206,14 @@ export function getClientConfig(clientId: string): ClientConfig {
     let pages: ClientPage[]
     let templateHeader: ClientHeader | null = null
     let templateFooter: ClientFooter | null = null
+    let templateBottomActionBar: ClientBottomActionBar | null = null
 
     if (base.template) {
       const templateMeta = loadTemplateMeta(base.template)
       if (templateMeta) {
         templateHeader = templateMeta.header ?? null
         templateFooter = templateMeta.footer ?? null
+        templateBottomActionBar = templateMeta.bottomActionBar ?? null
       }
       pages = mergeTemplatePages(loadTemplatePages(base.template), clientPages)
     } else {
@@ -211,7 +224,18 @@ export function getClientConfig(clientId: string): ClientConfig {
       base.header ?? templateHeader ?? null
     const resolvedFooter: ClientFooter | null | undefined =
       base.footer ?? templateFooter ?? null
+    const resolvedBottomActionBar: ClientBottomActionBar | null =
+      'bottomActionBar' in base
+        ? base.bottomActionBar ?? null
+        : templateBottomActionBar ?? null
 
     const resolvedTheme = resolveTheme(base.theme)
-    return { ...base, theme: resolvedTheme, pages, header: resolvedHeader, footer: resolvedFooter }
+    return {
+      ...base,
+      theme: resolvedTheme,
+      pages,
+      header: resolvedHeader,
+      footer: resolvedFooter,
+      bottomActionBar: resolvedBottomActionBar,
+    }
 }

@@ -51,5 +51,12 @@
         ]
       }
     ]
+  },
+  "bottomActionBar": {
+    "items": [
+      { "label": "Llamar", "href": "tel:+34616802394", "icon": "📞" },
+      { "label": "WhatsApp", "href": "https://wa.me/34616802394" },
+      { "label": "Reservar", "href": "/", "icon": "📅" }
+    ]
   }
 }

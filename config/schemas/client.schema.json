@@ -191,6 +191,31 @@
         },
         { "type": "null" }
       ]
+    },
+    "bottomActionBar": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["items"],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "href"],
+                "properties": {
+                  "label": { "type": "string" },
+                  "href": { "type": "string" },
+                  "icon": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+                }
+              }
+            }
+          }
+        },
+        { "type": "null" }
+      ]
     }
   }
 }

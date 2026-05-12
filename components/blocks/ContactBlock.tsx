@@ -3,6 +3,7 @@ import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 
 export default function ContactBlock({
+  title,
   showMap,
   mapEmbedSrc,
   phone,
@@ -16,6 +17,9 @@ export default function ContactBlock({
     <Section paddingY="lg">
       <Container maxWidth="2xl" padding="theme">
         <section data-component="contact-block">
+          {title && (
+            <h2 className="mb-8 text-3xl font-bold text-foreground">{title}</h2>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-4">
               {phone && (

@@ -6,6 +6,7 @@
   "required": ["_type", "showMap"],
   "properties": {
     "_type": { "type": "string", "const": "contact" },
+    "title": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
     "showMap": { "type": "boolean" },
     "mapEmbedSrc": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
     "phone": { "oneOf": [{ "type": "string" }, { "type": "null" }] },

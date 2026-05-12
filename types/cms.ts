@@ -17,6 +17,7 @@ export type ServicesBlock = {
 
 export type ContactBlock = {
   _type: 'contact'
+  title?: string | null
   showMap: boolean
   mapEmbedSrc?: string | null
   phone?: string
@@ -494,6 +495,17 @@ export type ClientFooter = {
   copyright?: string | null
 }
 
+/** Fixed bottom bar (app-style) — use `href` for any action: paths, tel:, mailto:, https://wa.me/… */
+export type BottomActionBarItem = {
+  label: string
+  href: string
+  icon?: string | null
+}
+
+export type ClientBottomActionBar = {
+  items: BottomActionBarItem[]
+}
+
 export type ClientConfig = {
   clientId: string
   displayName: string
@@ -504,6 +516,7 @@ export type ClientConfig = {
   theme: ClientTheme
   header?: ClientHeader | null
   footer?: ClientFooter | null
+  bottomActionBar?: ClientBottomActionBar | null
   pages: ClientPage[]
   siteMetadata?: SiteMetadata | null
   contactEndpoint?: string

@@ -82,6 +82,15 @@
       ]
     },
     {
+      "_type": "contact",
+      "title": "Ubicacion",
+      "showMap": true,
+      "mapEmbedSrc": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2937.3501038736613!2d-5.573144524315885!3d42.59031492052411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd379be9b9fa4b05%3A0x1ad5a98d43f59220!2sMasajes%20Laura%20Anaya!5e0!3m2!1ses!2ses!4v1778613886107!5m2!1ses!2ses",
+      "phone": null,
+      "email": null,
+      "address": "C. Velázquez, 1, 1C, 24005 León"
+    },
+    {
       "_type": "faqBlock",
       "title": "Questions before you book",
       "context": null,
@@ -103,14 +112,6 @@
           "answer": "Many clients use HSA/FSA when massage is prescribed for a diagnosed condition. Check with your plan administrator; I can provide a detailed receipt."
         }
       ]
-    },
-    {
-      "_type": "contact",
-      "showMap": true,
-      "mapEmbedSrc": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2937.3501038736613!2d-5.573144524315885!3d42.59031492052411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd379be9b9fa4b05%3A0x1ad5a98d43f59220!2sMasajes%20Laura%20Anaya!5e0!3m2!1ses!2ses!4v1778613886107!5m2!1ses!2ses",
-      "phone": "616802394",
-      "email": "lauraanaya.masajes@gmail.com",
-      "address": "C. Velázquez, 1, 1C, 24005 León"
     }
   ]
 }
