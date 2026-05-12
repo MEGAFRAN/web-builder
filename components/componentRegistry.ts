@@ -9,6 +9,7 @@ const componentRegistry: Record<string, React.ComponentType<any>> = {
   hero: dynamic(() => import('@/components/blocks/HeroBlock')),
   services: dynamic(() => import('@/components/blocks/ServicesBlock')),
   contact: dynamic(() => import('@/components/blocks/ContactBlock')),
+  location: dynamic(() => import('@/components/blocks/LocationBlock')),
   contactInfoBlock: dynamic(() => import('@/components/blocks/ContactInfoBlock')),
   blog_list: dynamic(() => import('@/components/blocks/BlogListBlock')),
   missionBlock: dynamic(() => import('@/components/blocks/MissionBlock')),

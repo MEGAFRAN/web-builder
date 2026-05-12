@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "contact",
+  "title": "location",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type"],
+  "required": ["_type", "showMap"],
   "properties": {
-    "_type": { "type": "string", "const": "contact" },
+    "_type": { "type": "string", "const": "location" },
     "title": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "phone": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "email": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "showMap": { "type": "boolean" },
+    "mapEmbedSrc": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
     "address": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
   }
 }

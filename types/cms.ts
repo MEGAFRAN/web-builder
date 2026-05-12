@@ -18,11 +18,17 @@ export type ServicesBlock = {
 export type ContactBlock = {
   _type: 'contact'
   title?: string | null
-  showMap: boolean
-  mapEmbedSrc?: string | null
   phone?: string
   email?: string
   address?: string
+}
+
+export type LocationBlock = {
+  _type: 'location'
+  title?: string | null
+  showMap: boolean
+  mapEmbedSrc?: string | null
+  address?: string | null
 }
 
 export type BlogListBlock = {
@@ -300,6 +306,7 @@ export type Block =
   | HeroBlock
   | ServicesBlock
   | ContactBlock
+  | LocationBlock
   | BlogListBlock
   | MissionBlock
   | ValuesBlock

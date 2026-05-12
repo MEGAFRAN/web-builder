@@ -84,8 +84,6 @@
     },
     {
       "_type": "contact",
-      "showMap": false,
-      "mapEmbedSrc": null,
       "phone": "+1 (555) 010-0200",
       "email": "hello@example.com",
       "address": "100 Market Street, San Francisco, CA"
