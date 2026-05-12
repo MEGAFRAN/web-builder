@@ -82,6 +82,36 @@
       ]
     },
     {
+      "_type": "carouselBlock",
+      "title": "Galería",
+      "mode": "image",
+      "items": [
+        {
+          "imageUrl": "/images/1.png",
+          "imageAlt": "Imagen 1 del estudio"
+        },
+        {
+          "imageUrl": "/images/2.png",
+          "imageAlt": "Imagen 2 del estudio"
+        },
+        {
+          "imageUrl": "/images/3.png",
+          "imageAlt": "Imagen 3 del estudio"
+        }
+      ],
+      "slidesVisible": 1,
+      "aspectRatio": "16/9",
+      "imageFit": "cover",
+      "autoPlay": false,
+      "autoPlayInterval": null,
+      "loop": true,
+      "showArrows": true,
+      "showIndicators": true,
+      "background": "gray",
+      "paddingY": "lg",
+      "transition": "slide"
+    },
+    {
       "_type": "location",
       "title": "Ubicacion",
       "address": "Calle Velázquez, 1, 1C, 24005 León",

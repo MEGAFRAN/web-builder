@@ -327,7 +327,7 @@ export function Carousel({
           className="m-0"
         >
           <div
-            className="relative w-full overflow-hidden bg-surface"
+            className="relative w-full overflow-hidden rounded-[var(--radius)] bg-surface"
             style={{
               aspectRatio: aspectRatio ?? '16/9',
             }}
@@ -429,8 +429,12 @@ export function Carousel({
   // but since we're SSG we use a reasonable default that CSS can expand.
   // ---------------------------------------------------------------------------
 
+  // Image slides are position:absolute, so they do not give the track in-flow height.
+  // Match the slide frame aspect ratio so the track (and images) are visible.
   const trackHeightStyle: React.CSSProperties =
-    carouselMode === 'image' ? {} : { minHeight: '300px' }
+    carouselMode === 'image'
+      ? { aspectRatio: aspectRatio ?? '16/9' }
+      : { minHeight: '300px' }
 
   // ---------------------------------------------------------------------------
   // Render

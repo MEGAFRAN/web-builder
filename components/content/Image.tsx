@@ -38,18 +38,13 @@ export type ImageProps = ImageFixedProps | ImageFillProps;
 export function Image(props: ImageProps) {
   if (props.fill) {
     const { src, alt, rounded, objectFit, fetchPriority, loading } = props;
-    // fetchpriority is a valid HTML attribute but @types/react may spell it differently.
-    // We spread it via a plain object to avoid the type mismatch.
-    const extraAttrs: Record<string, string> = {
-      fetchpriority: fetchPriority ?? 'auto',
-    };
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         data-component="image"
         src={src}
         alt={alt}
-        {...extraAttrs}
+        fetchPriority={fetchPriority ?? 'auto'}
         loading={loading ?? 'lazy'}
         className={`absolute inset-0 h-full w-full ${
           rounded ? 'rounded-full' : ''
