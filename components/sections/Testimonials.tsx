@@ -7,6 +7,7 @@ interface Testimonial {
   role?: string | null
   company?: string | null
   avatar?: string | null
+  stars?: number | null
 }
 
 interface TestimonialsProps {
@@ -21,6 +22,7 @@ export function Testimonials({ title, testimonials }: TestimonialsProps) {
     role: t.role ?? null,
     company: t.company ?? null,
     avatarUrl: t.avatar ?? null,
+    stars: t.stars ?? null,
   }))
 
   return (

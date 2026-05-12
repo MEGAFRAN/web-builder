@@ -29,6 +29,12 @@
           "role":        { "oneOf": [{ "type": "string" }, { "type": "null" }] },
           "company":     { "oneOf": [{ "type": "string" }, { "type": "null" }] },
           "avatarUrl":   { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "stars": {
+            "oneOf": [
+              { "type": "integer", "minimum": 1, "maximum": 5 },
+              { "type": "null" }
+            ]
+          },
           "title":       { "oneOf": [{ "type": "string" }, { "type": "null" }] },
           "description": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
         }

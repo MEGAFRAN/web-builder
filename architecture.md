@@ -74,6 +74,10 @@ config/
         index.json
         success-cases.json
         contact.json
+    landing-page/
+      template.json
+      pages/
+        index.json
   schemas/
     client.schema.json     ← JSON Schema for client.json
     blocks/

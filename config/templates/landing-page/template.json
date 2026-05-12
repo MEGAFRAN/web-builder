@@ -1,0 +1,44 @@
+{
+  "templateId": "landing-page",
+  "displayName": "Landing Page",
+  "description": "Single-page marketing site with hero, services, testimonials, FAQ, and contact.",
+  "defaultThemePreset": "modern-minimal",
+  "defaultFeatures": {
+    "blog": false,
+    "booking": false,
+    "gallery": false,
+    "menu": false
+  },
+  "header": {
+    "logo": "Your Brand",
+    "ctaLabel": "Get in touch",
+    "ctaAction": "/",
+    "links": [
+      { "label": "Services", "href": "/" },
+      { "label": "Testimonials", "href": "/" },
+      { "label": "FAQ", "href": "/" },
+      { "label": "Contact", "href": "/" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026 Your Brand",
+    "columns": [
+      {
+        "title": "Navigate",
+        "links": [
+          { "label": "Home", "href": "/" },
+          { "label": "Services", "href": "/" },
+          { "label": "FAQ", "href": "/" },
+          { "label": "Contact", "href": "/" }
+        ]
+      },
+      {
+        "title": "Contact",
+        "links": [
+          { "label": "hello@example.com", "href": "mailto:hello@example.com" },
+          { "label": "+1 (555) 010-0200", "href": "tel:+15550100200" }
+        ]
+      }
+    ]
+  }
+}

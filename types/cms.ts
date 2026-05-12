@@ -189,6 +189,7 @@ export type TestimonialItem = {
   role?: string | null
   quote: string
   avatarUrl?: string | null
+  stars?: number | null
 }
 
 export type TestimonialsBlock = {
@@ -403,6 +404,7 @@ export type CarouselItem = {
   role?: string | null
   company?: string | null
   avatarUrl?: string | null
+  stars?: number | null
   title?: string | null
   description?: string | null
 }

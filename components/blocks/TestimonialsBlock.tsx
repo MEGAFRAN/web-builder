@@ -11,6 +11,7 @@ export default function TestimonialsBlock({
     role: item.role ?? null,
     company: item.company ?? null,
     avatar: item.avatarUrl ?? null,
+    stars: item.stars ?? null,
   }))
 
   return (

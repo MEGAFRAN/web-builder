@@ -1,0 +1,94 @@
+{
+  "metadata": {
+    "title": "Home",
+    "description": "Product landing page with services, social proof, answers to common questions, and contact details.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "heroBlock",
+      "heading": "Ship a polished site without starting from zero",
+      "subtext": "This template stacks hero, services, testimonials, FAQ, and contact in one scroll — swap copy and theme, then publish.",
+      "primaryButtonLabel": "View services",
+      "primaryButtonHref": "/",
+      "secondaryButtonLabel": "Contact us",
+      "secondaryButtonHref": "/",
+      "backgroundImageUrl": "https://picsum.photos/seed/landing-hero/1600/900"
+    },
+    {
+      "_type": "services",
+      "items": [
+        {
+          "title": "Strategy",
+          "description": "Clarify positioning, messaging hierarchy, and conversion goals before design or build work begins.",
+          "icon": "◆"
+        },
+        {
+          "title": "Design systems",
+          "description": "Reusable sections and tokens so every page stays consistent as you add tenants and variants.",
+          "icon": "◇"
+        },
+        {
+          "title": "Static delivery",
+          "description": "Fast, cache-friendly pages generated at build time — ideal for multi-tenant static hosting.",
+          "icon": "▣"
+        }
+      ]
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "What teams say",
+      "items": [
+        {
+          "name": "Jordan Lee",
+          "company": "Northwind Labs",
+          "role": "Head of Marketing",
+          "quote": "We replaced a patchwork of one-off landings with this structure. Updates are JSON-driven and reviewable.",
+          "avatarUrl": "https://picsum.photos/seed/landing-t1/100/100"
+        },
+        {
+          "name": "Sam Rivera",
+          "company": null,
+          "role": "Founder",
+          "quote": "The block order matches how we already pitch: hook, proof, objections, then contact. Less rewriting for us.",
+          "avatarUrl": "https://picsum.photos/seed/landing-t2/100/100"
+        },
+        {
+          "name": "Priya Shah",
+          "company": "Atlas Commerce",
+          "role": "VP Product",
+          "quote": "FAQ before contact cut repetitive tickets. We just tuned the copy per brand and shipped.",
+          "avatarUrl": "https://picsum.photos/seed/landing-t3/100/100"
+        }
+      ]
+    },
+    {
+      "_type": "faqBlock",
+      "title": "Frequently asked questions",
+      "context": null,
+      "items": [
+        {
+          "question": "Can I override this page per client?",
+          "answer": "Yes. Template pages are defaults; files under config/clients/{clientId}/pages/ with the same slug replace or extend what you see here."
+        },
+        {
+          "question": "Do I need a separate contact route?",
+          "answer": "No. This template keeps contact on the homepage. You can still add a dedicated contact slug in the client if you prefer."
+        },
+        {
+          "question": "How do I change colors and fonts?",
+          "answer": "Point the client theme at a preset in theme-presets or override individual theme fields in client.json."
+        }
+      ]
+    },
+    {
+      "_type": "contact",
+      "showMap": false,
+      "mapEmbedSrc": null,
+      "phone": "+1 (555) 010-0200",
+      "email": "hello@example.com",
+      "address": "100 Market Street, San Francisco, CA"
+    }
+  ]
+}

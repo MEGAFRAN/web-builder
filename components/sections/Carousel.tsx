@@ -90,6 +90,28 @@ function ArrowButton({
   )
 }
 
+function StarIcon() {
+  return (
+    <svg
+      width={25}
+      height={25}
+      viewBox="0 0 25 25"
+      fill="gold"
+      aria-hidden="true"
+      className="shrink-0"
+    >
+      <path d="M12.5 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12.5 2 10.69 8.63 3.5 9.24l5.46 4.73L7.32 21z" />
+    </svg>
+  )
+}
+
+function testimonialStarCount(stars: number | null | undefined): number {
+  if (typeof stars !== 'number' || !Number.isFinite(stars)) return 0
+  const n = Math.floor(stars)
+  if (n < 1) return 0
+  return Math.min(5, n)
+}
+
 // ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
@@ -329,6 +351,7 @@ export function Carousel({
     }
 
     if (carouselMode === 'testimonial') {
+      const starCount = testimonialStarCount(item.stars)
       return (
         <div
           role="group"
@@ -341,9 +364,21 @@ export function Carousel({
         >
           <blockquote className="w-full rounded-xl border border-border bg-background p-8">
             <Stack gap="lg">
+
               <p className="text-lg leading-relaxed text-foreground">
                 {item.quote}
               </p>
+              {starCount > 0 && (
+                <div
+                  className="flex flex-wrap gap-0.5"
+                  role="img"
+                  aria-label={`${starCount} star${starCount === 1 ? '' : 's'}`}
+                >
+                  {Array.from({ length: starCount }, (_, starIndex) => (
+                    <StarIcon key={starIndex} />
+                  ))}
+                </div>
+              )}
               <footer className="flex items-center gap-3">
                 <Avatar
                   src={item.avatarUrl ?? null}

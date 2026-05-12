@@ -1,0 +1,55 @@
+{
+  "clientId": "laura-massages",
+  "displayName": "Laura Anaya - Massage Theraphy",
+  "customDomain": "laura-massages.com",
+  "swaResourceName": "swa-laura-massages",
+  "template": "landing-page",
+  "features": {
+    "blog": false,
+    "booking": true,
+    "gallery": false,
+    "menu": false
+  },
+  "theme": {
+    "primaryColor": "#0d9488",
+    "accentColor": "#14b8a6",
+    "backgroundColor": "#f0fdfa",
+    "textColor": "#134e4a",
+    "surfaceColor": "#ffffff",
+    "surfaceDark": "#115e59",
+    "fontHeading": "Lato",
+    "fontBody": "Lato",
+    "borderRadius": 8,
+    "pageInset": "clamp(1rem, 5vw, 2rem)",
+    "sectionSpacing": "5rem",
+    "contentGap": "1rem"
+  },
+  "siteMetadata": {
+    "siteName": "Laura Anaya - Massage Theraphy",
+    "titleTemplate": "%s | Laura Massages",
+    "defaultDescription": "Licensed therapeutic massage in a calm studio. Swedish, deep tissue, sports recovery, and pregnancy-safe sessions by appointment.",
+    "defaultOgImage": null
+  },
+  "header": {
+    "logo": "Laura Anaya - Massage Theraphy"
+  },
+  "footer": {
+    "copyright": "© 2026 Laura Anaya - Massage Theraphy",
+    "columns": [
+      {
+        "title": "Horario",
+        "links": [
+          { "label": "Lunes a Viernes 10:00 a 20:00. Sábados: Solo citas seleccionadas.", "href": "#" }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "links": [
+          { "label": "lauraanaya.masajes@gmail.com", "href": "lauraanaya.masajes@gmail.com" },
+          { "label": "616802394", "href": "tel:+34616802394" },
+          { "label": "Instagram", "href": "https://www.instagram.com/lauraanayamassagetherapy/" }
+        ]
+      }
+    ]
+  }
+}

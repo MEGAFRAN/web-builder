@@ -26,6 +26,7 @@ const items: TestimonialItem[] = [
     role: 'COO',
     company: 'TechCorp',
     avatarUrl: null,
+    stars: 5,
   },
   {
     name: 'Marcus Lee',
@@ -70,6 +71,11 @@ describe('TestimonialsBlock', () => {
     expect(
       screen.getByRole('heading', { name: 'What Our Clients Say' })
     ).toBeInTheDocument()
+  })
+
+  it('renders star rating when stars is set on an item', () => {
+    render(<TestimonialsBlock _type="testimonialsBlock" items={items} />)
+    expect(screen.getByRole('img', { name: '5 stars' })).toBeInTheDocument()
   })
 
   it('wraps content in a data-component="testimonials-block" element', () => {
