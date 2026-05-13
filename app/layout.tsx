@@ -83,7 +83,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             copyright={config.footer.copyright}
           />
         )}
-        {showBottomCta && <BottomCtaBar items={bottomBarItems} />}
+        {showBottomCta && (
+          <BottomCtaBar
+            items={bottomBarItems}
+            vendorScriptWidget={config.bottomActionBar?.vendorScriptWidget ?? null}
+          />
+        )}
       </body>
     </html>
   )

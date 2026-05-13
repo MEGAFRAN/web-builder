@@ -199,6 +199,21 @@
           "additionalProperties": false,
           "required": ["items"],
           "properties": {
+            "vendorScriptWidget": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["src"],
+                  "properties": {
+                    "src": { "type": "string" },
+                    "clickTargetClass": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                    "isVisible": { "oneOf": [{ "type": "boolean" }, { "type": "null" }] }
+                  }
+                },
+                { "type": "null" }
+              ]
+            },
             "items": {
               "type": "array",
               "items": {
@@ -208,7 +223,13 @@
                 "properties": {
                   "label": { "type": "string" },
                   "href": { "type": "string" },
-                  "icon": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+                  "icon": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                  "action": {
+                    "oneOf": [
+                      { "type": "null" },
+                      { "enum": ["navigate", "activateVendorScript"] }
+                    ]
+                  }
                 }
               }
             }

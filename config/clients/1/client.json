@@ -53,10 +53,15 @@
     ]
   },
   "bottomActionBar": {
+    "vendorScriptWidget": {
+      "src": "https://booksy.com/widget/code.js?id=132870&country=es&lang=es",
+      "clickTargetClass": "booksy-widget-button",
+      "isVisible": false
+    },
     "items": [
-      { "label": "Llamar", "href": "tel:+34616802394", "icon": "📞" },
+      { "label": "Llamar", "href": "tel:+34616802394" },
       { "label": "WhatsApp", "href": "https://wa.me/34616802394" },
-      { "label": "Reservar", "href": "/", "icon": "📅" }
+      { "label": "Reservar", "href": "#reservar", "action": "activateVendorScript" }
     ]
   }
 }

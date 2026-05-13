@@ -40,4 +40,34 @@ describe('BottomCtaBar', () => {
     const link = screen.getByRole('link', { name: 'Phone' })
     expect(link).not.toHaveAttribute('target')
   })
+
+  it('renders a button for activateVendorScript when vendorScriptWidget.src is set', () => {
+    render(
+      <BottomCtaBar
+        vendorScriptWidget={{ src: 'https://example.com/embed.js', isVisible: false }}
+        items={[
+          { label: 'Reserve', href: '#fallback', action: 'activateVendorScript' },
+        ]}
+      />,
+    )
+    expect(screen.getByRole('button', { name: 'Reserve' })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Reserve' })).not.toBeInTheDocument()
+  })
+
+  it('falls back to a link when action is activateVendorScript but vendor widget is missing', () => {
+    render(
+      <BottomCtaBar
+        items={[
+          {
+            label: 'Reserve',
+            href: '/book',
+            action: 'activateVendorScript',
+          },
+        ]}
+      />,
+    )
+    const link = screen.getByRole('link', { name: 'Reserve' })
+    expect(link).toHaveAttribute('href', '/book')
+    expect(screen.queryByRole('button', { name: 'Reserve' })).not.toBeInTheDocument()
+  })
 })

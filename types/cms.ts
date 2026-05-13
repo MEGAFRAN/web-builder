@@ -507,10 +507,18 @@ export type BottomActionBarItem = {
   label: string
   href: string
   icon?: string | null
+  action?: 'navigate' | 'activateVendorScript' | null
+}
+
+export type BottomActionBarVendorScriptWidget = {
+  src: string
+  clickTargetClass?: string | null
+  isVisible?: boolean | null
 }
 
 export type ClientBottomActionBar = {
   items: BottomActionBarItem[]
+  vendorScriptWidget?: BottomActionBarVendorScriptWidget | null
 }
 
 export type ClientConfig = {
