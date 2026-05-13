@@ -110,15 +110,15 @@
       "mode": "image",
       "items": [
         {
-          "imageUrl": "/images/1.png",
+          "imageUrl": "/images/1.webp",
           "imageAlt": "Imagen 1 del estudio"
         },
         {
-          "imageUrl": "/images/2.png",
+          "imageUrl": "/images/2.webp",
           "imageAlt": "Imagen 2 del estudio"
         },
         {
-          "imageUrl": "/images/3.png",
+          "imageUrl": "/images/3.webp",
           "imageAlt": "Imagen 3 del estudio"
         }
       ],
