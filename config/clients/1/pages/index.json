@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Therapeutic massage in Portland",
+    "title": "Masaje terapéutico en León",
     "description": "Licensed massage therapist offering Swedish, deep tissue, sports, and pregnancy massage. Private studio, easy online booking, same-week availability.",
     "ogImage": null,
     "noIndex": false
@@ -10,11 +10,11 @@
       "_type": "heroBlock",
       "heading": "Masaje terapéutico en León",
       "subtext": "Un espacio dedicado al bienestar y al cuidado del cuerpo. Masajes personalizados para relajar, liberar tensiones y recuperar el equilibrio.",
-      "primaryButtonLabel": "See services",
-      "primaryButtonHref": "/",
-      "secondaryButtonLabel": "Book a session",
-      "secondaryButtonHref": "/",
-      "backgroundImageUrl": "https://picsum.photos/seed/laura-massage-hero/1600/900"
+      "primaryButtonLabel": null,
+      "primaryButtonHref": null,
+      "secondaryButtonLabel": null,
+      "secondaryButtonHref": null,
+      "backgroundImageUrl": null
     },
     {
       "_type": "testimonialsBlock",
