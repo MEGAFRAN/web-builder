@@ -85,9 +85,12 @@ jobs:
 
       - name: Deploy to Azure Blob Storage
         run: |
+          # Exclude root images/ from sync so blob-managed assets there are not overwritten
+          # or deleted when ./out omits or differs from storage (--exclude-path is prefix match).
           az storage blob sync \
             --account-name "${{ env.STORAGE_ACCOUNT }}" \
             --container '$web' \
             --source "./out" \
             --delete-destination true \
+            --exclude-path images \
             --auth-mode login

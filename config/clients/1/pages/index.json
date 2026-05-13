@@ -58,7 +58,7 @@
             "Holistic Harmony"
           ],
           "price": "desde 75 €",
-          "imageUrl": "https://picsum.photos/seed/services-rituales/800/450",
+          "imageUrl": "/images/milenario.webp",
           "imageAlt": "Rituales de bienestar"
         },
         {
@@ -70,7 +70,7 @@
             "Remodelacion corporal pre y post liposuccion"
           ],
           "price": "desde 60 €",
-          "imageUrl": "https://picsum.photos/seed/services-estetica/800/450",
+          "imageUrl": "/images/esteticos.webp",
           "imageAlt": "Tratamientos estéticos"
         },
         {
@@ -86,7 +86,7 @@
             "Ritual piernas ligeras"
           ],
           "price": "desde 45 €",
-          "imageUrl": "https://picsum.photos/seed/services-masaje/800/450",
+          "imageUrl": "/images/masajes.webp",
           "imageAlt": "Masaje terapéutico"
         },
         {
@@ -99,7 +99,7 @@
             "Silueta reafirmante de tejidos"
           ],
           "price": "desde 85 €",
-          "imageUrl": "https://picsum.photos/seed/services-silueta/800/450",
+          "imageUrl": "/images/silueta.webp",
           "imageAlt": "Programa silueta remodelante"
         }
       ]
