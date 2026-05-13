@@ -25,22 +25,26 @@
         {
           "title": "Entrantes",
           "description": "Croquetas caseras de jamón ibérico, Jamón de bellota D.O. Jabugo, Patatas bravas con alioli de ajo negro, Pulpo a la gallega con pimentón de La Vera.",
-          "icon": null
+          "imageUrl": "https://picsum.photos/seed/menu-entrantes/800/450",
+          "imageAlt": "Selección de entrantes"
         },
         {
           "title": "Pescados",
           "description": "Merluza a la vasca con almejas, Bacalao al pil-pil, Rodaballo al horno con verduras de temporada, Paella de mariscos (para 2 personas).",
-          "icon": null
+          "imageUrl": "https://picsum.photos/seed/menu-pescados/800/450",
+          "imageAlt": "Platos de pescado"
         },
         {
           "title": "Carnes",
           "description": "Cocido madrileño (jueves), Cordero asado al horno de leña, Solomillo de ternera con salsa de boletus, Carrilleras de cerdo ibérico estofadas.",
-          "icon": null
+          "imageUrl": "https://picsum.photos/seed/menu-carnes/800/450",
+          "imageAlt": "Carnes y guisos"
         },
         {
           "title": "Postres",
           "description": "Tarta de queso de La Viña, Tocino de cielo casero, Natillas de vainilla con galleta María, Fresones de temporada con nata.",
-          "icon": null
+          "imageUrl": "https://picsum.photos/seed/menu-postres/800/450",
+          "imageAlt": "Postres caseros"
         }
       ]
     },

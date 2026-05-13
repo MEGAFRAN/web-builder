@@ -6,6 +6,7 @@
   "required": ["_type", "items"],
   "properties": {
     "_type": { "type": "string", "const": "services" },
+    "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
     "items": {
       "type": "array",
       "items": {
@@ -15,7 +16,18 @@
         "properties": {
           "title": { "type": "string" },
           "description": { "type": "string" },
-          "icon": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+          "price": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "imageUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "imageAlt": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "subItems": {
+            "oneOf": [
+              {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              { "type": "null" }
+            ]
+          }
         }
       }
     }

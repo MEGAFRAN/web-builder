@@ -8,48 +8,13 @@
   "blocks": [
     {
       "_type": "heroBlock",
-      "heading": "Reset your body with calm, skilled hands",
-      "subtext": "Laura is a licensed massage therapist focused on pain relief, stress recovery, and safe, nurturing care. Same studio every visit — clear plans, no rush.",
+      "heading": "Masaje terapéutico en León",
+      "subtext": "Un espacio dedicado al bienestar y al cuidado del cuerpo. Masajes personalizados para relajar, liberar tensiones y recuperar el equilibrio.",
       "primaryButtonLabel": "See services",
       "primaryButtonHref": "/",
       "secondaryButtonLabel": "Book a session",
       "secondaryButtonHref": "/",
       "backgroundImageUrl": "https://picsum.photos/seed/laura-massage-hero/1600/900"
-    },
-    {
-      "_type": "services",
-      "items": [
-        {
-          "title": "Swedish & relaxation",
-          "description": "Flowing strokes, gentle pressure, and breath-led pacing to lower stress hormones and improve sleep quality the same week.",
-          "icon": "◇"
-        },
-        {
-          "title": "Deep tissue & sports",
-          "description": "Targeted work on neck, shoulders, low back, and legs — ideal after desk work, training blocks, or long travel days.",
-          "icon": "◆"
-        },
-        {
-          "title": "Pregnancy-safe massage",
-          "description": "Side-lying positioning with bolsters, modified pressure, and focus on hips, ribs, and feet as your body changes.",
-          "icon": "○"
-        },
-        {
-          "title": "Focused recovery sessions",
-          "description": "45- or 60-minute appointments built around one problem area plus quick full-body check-in so you leave moving easier.",
-          "icon": "▣"
-        },
-        {
-          "title": "Hot stone add-on",
-          "description": "Warm basalt stones layered into the back and legs to soften tissue before deeper work — optional on 75+ minute bookings.",
-          "icon": "●"
-        },
-        {
-          "title": "First-visit intake",
-          "description": "Health history, goals, and pressure preferences captured up front so every session matches how you feel that day.",
-          "icon": "◎"
-        }
-      ]
     },
     {
       "_type": "testimonialsBlock",
@@ -78,6 +43,64 @@
           "quote": "Fui recomendada, me habían hablado maravillas de Laura. Aparte del trato, que es fantástico, es una excelente profesional. Sin duda, volveré.",
           "avatarUrl": null,
           "stars": 5
+        }
+      ]
+    },
+    {
+      "_type": "services",
+      "heading": "Servicios",
+      "items": [
+        {
+          "title": "Rituales inspirados en tradiciones milenarias (by Alqvimia)",
+          "description": "Experiencias que purifican tu cuerpo y restauran tu armonia",
+          "subItems": [
+            "Reina de Egipto",
+            "Holistic Harmony"
+          ],
+          "price": "desde 75 €",
+          "imageUrl": "https://picsum.photos/seed/services-rituales/800/450",
+          "imageAlt": "Rituales de bienestar"
+        },
+        {
+          "title": "Tratamientos esteticos de alto impacto",
+          "description": "Estetica avanzada para cuidar tu belleza y salud",
+          "subItems": [
+            "Anticeluliticos con ondas de choque",
+            "Facial eterna glow con ondas de choque",
+            "Remodelacion corporal pre y post liposuccion"
+          ],
+          "price": "desde 60 €",
+          "imageUrl": "https://picsum.photos/seed/services-estetica/800/450",
+          "imageAlt": "Tratamientos estéticos"
+        },
+        {
+          "title": "Masajes terapeuticos",
+          "description": "Alivio de tensiones, recuperacion y liberacion",
+          "subItems": [
+            "Descontracturante",
+            "Peregrino",
+            "Drenaje linfatico",
+            "Relajante antiestres",
+            "Reflexologia podal",
+            "Liberacion emocional",
+            "Ritual piernas ligeras"
+          ],
+          "price": "desde 45 €",
+          "imageUrl": "https://picsum.photos/seed/services-masaje/800/450",
+          "imageAlt": "Masaje terapéutico"
+        },
+        {
+          "title": "PROGRAMA SILUETA REMODELANTE (by Alqvimia)",
+          "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesion",
+          "subItems": [
+            "Silueta body sculptor",
+            "Silueta drenante y reductor",
+            "Silueta Anticelulitico",
+            "Silueta reafirmante de tejidos"
+          ],
+          "price": "desde 85 €",
+          "imageUrl": "https://picsum.photos/seed/services-silueta/800/450",
+          "imageAlt": "Programa silueta remodelante"
         }
       ]
     },

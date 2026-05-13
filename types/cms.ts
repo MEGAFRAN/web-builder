@@ -1,6 +1,14 @@
 // Primitive building blocks
 export type CTA = { label: string; href: string }
-export type Service = { title: string; description: string; icon?: string }
+export type Service = {
+  title: string
+  description: string
+  /** Optional bullet-style lines shown stacked under the description. */
+  subItems?: string[] | null
+  price?: string | null
+  imageUrl?: string | null
+  imageAlt?: string | null
+}
 
 // Block types — each has a unique `_type` literal for exhaustive narrowing
 export type HeroBlock = {
@@ -12,6 +20,7 @@ export type HeroBlock = {
 
 export type ServicesBlock = {
   _type: 'services'
+  heading?: string | null
   items: Service[]
 }
 

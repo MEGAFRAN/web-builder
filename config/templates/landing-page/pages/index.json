@@ -18,21 +18,26 @@
     },
     {
       "_type": "services",
+      "heading": "What we ship",
       "items": [
         {
           "title": "Strategy",
           "description": "Clarify positioning, messaging hierarchy, and conversion goals before design or build work begins.",
-          "icon": "◆"
+          "price": "From project",
+          "imageUrl": "https://picsum.photos/seed/landing-services-strategy/800/450",
+          "imageAlt": "Strategy workshop"
         },
         {
           "title": "Design systems",
           "description": "Reusable sections and tokens so every page stays consistent as you add tenants and variants.",
-          "icon": "◇"
+          "imageUrl": "https://picsum.photos/seed/landing-services-design/800/450",
+          "imageAlt": "Design system components"
         },
         {
           "title": "Static delivery",
           "description": "Fast, cache-friendly pages generated at build time — ideal for multi-tenant static hosting.",
-          "icon": "▣"
+          "imageUrl": "https://picsum.photos/seed/landing-services-static/800/450",
+          "imageAlt": "Static site deployment"
         }
       ]
     },
