@@ -24,6 +24,7 @@ vi.mock('@/components/navigation/Footer', () => ({
 import { buildThemeStyles } from '@/app/layout'
 import RootLayout from '@/app/layout'
 import { getClientConfig } from '@/lib/client-config'
+import type { ThemePreset } from '@/lib/theme-presets'
 
 // ---------------------------------------------------------------------------
 // Shared resolved theme
@@ -74,6 +75,42 @@ describe('buildThemeStyles', () => {
     expect(css).toContain('--page-inset: clamp(1rem, 5vw, 2rem)')
     expect(css).toContain('--section-spacing: 6rem')
     expect(css).toContain('--content-gap: 1rem')
+  })
+
+  it.each([
+    [
+      'explicit carouselTransitionDuration',
+      { ...resolvedTheme, carouselTransitionDuration: '800ms' } satisfies ThemePreset,
+      '800ms',
+    ],
+    [
+      'high-formality law palette',
+      { ...resolvedTheme, primaryColor: '#1a2e4a' } satisfies ThemePreset,
+      '600ms',
+    ],
+    [
+      'high-formality realestate palette',
+      { ...resolvedTheme, primaryColor: '#334155' } satisfies ThemePreset,
+      '600ms',
+    ],
+    [
+      'high-energy fitness palette',
+      {
+        ...resolvedTheme,
+        primaryColor: '#1c1c1e',
+        accentColor: '#ef4444',
+      } satisfies ThemePreset,
+      '250ms',
+    ],
+    [
+      'high-energy retail palette',
+      { ...resolvedTheme, primaryColor: '#7c3aed' } satisfies ThemePreset,
+      '250ms',
+    ],
+    ['default mood', { ...resolvedTheme, primaryColor: '#112233', accentColor: '#445566' } satisfies ThemePreset, '400ms'],
+  ] as const)('sets --carousel-transition-duration for %s', (_label, theme, expected) => {
+    const css = buildThemeStyles(theme)
+    expect(css).toContain(`--carousel-transition-duration: ${expected}`)
   })
 })
 
@@ -168,5 +205,53 @@ describe('RootLayout', () => {
     const styleEl = document.head.querySelector('style')
     expect(styleEl).not.toBeNull()
     expect(styleEl!.innerHTML).toContain('--color-primary: #c0392b')
+  })
+
+  it('adds bottom padding and renders BottomCtaBar when filtered action items exist', () => {
+    process.env.CLIENT_ID = 'restaurante-pepe'
+    mockGetClientConfig.mockReturnValue({
+      ...baseConfig,
+      header: null,
+      footer: null,
+      bottomActionBar: {
+        items: [
+          { label: 'Call', href: 'tel:+1' },
+          { label: '   ', href: '/empty-label' },
+          { label: 'Chat', href: '' },
+        ],
+      },
+    })
+
+    render(
+      <RootLayout>
+        <span />
+      </RootLayout>
+    )
+
+    expect(document.body.className).toMatch(/pb-\[calc/)
+    expect(
+      document.querySelector('[aria-label="Quick actions"]'),
+    ).toBeInTheDocument()
+  })
+
+  it('omits BottomCtaBar when no valid bottomActionBar items remain after filtering', () => {
+    process.env.CLIENT_ID = 'restaurante-pepe'
+    mockGetClientConfig.mockReturnValue({
+      ...baseConfig,
+      header: null,
+      footer: null,
+      bottomActionBar: {
+        items: [{ label: '', href: '/x' }],
+      },
+    })
+
+    render(
+      <RootLayout>
+        <span />
+      </RootLayout>
+    )
+
+    expect(document.body.className).not.toMatch(/pb-\[calc/)
+    expect(document.querySelector('[aria-label="Quick actions"]')).toBeNull()
   })
 })

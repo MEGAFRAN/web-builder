@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { Carousel } from '@/components/sections/Carousel'
 import type { CarouselBlock } from '@/types/cms'
 
@@ -171,6 +171,24 @@ describe('Carousel', () => {
       renderCarousel(makeProps())
       expect(screen.getByText('Great product!')).toBeInTheDocument()
     })
+
+    it('uses singular aria-label for a one-star rating', () => {
+      renderCarousel(
+        makeProps({
+          items: [{ quote: 'Nice', author: 'Sam', stars: 1 }],
+        }),
+      )
+      expect(screen.getByRole('img', { name: '1 star' })).toBeInTheDocument()
+    })
+
+    it('passes Author fallback to Avatar when author is null', () => {
+      const container = renderCarousel(
+        makeProps({
+          items: [{ quote: 'No name attached', author: null }],
+        }),
+      )
+      expect(container.querySelector('[data-component="avatar"]')).toHaveTextContent('A')
+    })
   })
 
   describe('card mode', () => {
@@ -178,6 +196,31 @@ describe('Carousel', () => {
       renderCarousel(makeProps({ items: CARD_ITEMS, mode: 'card' }))
       expect(screen.getByText('Card One')).toBeInTheDocument()
       expect(screen.getByText('First card description')).toBeInTheDocument()
+    })
+
+    it('renders a card slide when title and description are null', () => {
+      renderCarousel(
+        makeProps({
+          mode: 'card',
+          items: [{ title: null, description: null }],
+        }),
+      )
+      expect(
+        document.querySelector('[aria-roledescription="slide"][aria-label="Slide 1 of 1"]'),
+      ).not.toBeNull()
+    })
+  })
+
+  describe('nullable Section props', () => {
+    it('falls back Section background and padding when props are null', () => {
+      const container = renderCarousel(makeProps({ background: null, paddingY: null }))
+      const outerSection = container.querySelector('[data-component="section"]')
+      expect(outerSection?.className).toContain('bg-background')
+    })
+
+    it('does not enable autoplay UI when autoPlay is null', () => {
+      renderCarousel(makeProps({ autoPlay: null, items: TESTIMONIAL_ITEMS }))
+      expect(screen.queryByRole('button', { name: /play slideshow|pause slideshow/i })).not.toBeInTheDocument()
     })
   })
 
@@ -199,6 +242,18 @@ describe('Carousel', () => {
         mode: 'image',
       }))
       expect(container.querySelector('figcaption')).toBeNull()
+    })
+
+    it('passes empty strings to Image when url and alt are null', () => {
+      renderCarousel(
+        makeProps({
+          mode: 'image',
+          items: [{ imageUrl: null, imageAlt: null, caption: null }],
+        }),
+      )
+      const imgs = document.querySelectorAll('img')
+      expect(imgs.length).toBeGreaterThan(0)
+      expect(imgs[0]).toHaveAttribute('alt', '')
     })
   })
 
@@ -416,6 +471,205 @@ describe('Carousel', () => {
       const tablist = container.querySelector('[role="tablist"]')
       expect(tablist).not.toBeNull()
       expect(tablist?.getAttribute('aria-label')).toBe('Slides')
+    })
+  })
+
+  describe('swipe gestures on track', () => {
+    it('advances to the next slide after a swipe-left gesture', () => {
+      const container = renderCarousel(makeProps())
+      const track = getTrack(container)
+      fireEvent.pointerDown(track, { clientX: 260, clientY: 80 })
+      fireEvent.pointerUp(track, { clientX: 140, clientY: 82 })
+      const secondSlide = container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement
+      expect(secondSlide.style.visibility).toBe('visible')
+    })
+
+    it('returns to the previous slide after a swipe-right gesture', () => {
+      const container = renderCarousel(makeProps())
+      const track = getTrack(container)
+      fireEvent.click(getNextBtn(container))
+      fireEvent.pointerDown(track, { clientX: 140, clientY: 80 })
+      fireEvent.pointerUp(track, { clientX: 260, clientY: 82 })
+      const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
+      expect(firstSlide.style.visibility).toBe('visible')
+    })
+  })
+
+  describe('prefers-reduced-motion', () => {
+    afterEach(() => {
+      vi.stubGlobal(
+        'matchMedia',
+        (query: string) => ({
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        }),
+      )
+    })
+
+    it('shows play control when autoplay begins under reduced-motion preference', () => {
+      vi.stubGlobal(
+        'matchMedia',
+        (query: string) => ({
+          matches: query.includes('prefers-reduced-motion'),
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        }),
+      )
+      renderCarousel(makeProps({ autoPlay: true }))
+      expect(screen.getByRole('button', { name: /play slideshow/i })).toBeInTheDocument()
+    })
+
+    it('halts autoplay when reduced-motion query starts matching', () => {
+      let onChange: ((event: MediaQueryListEvent) => void) | undefined
+      vi.stubGlobal(
+        'matchMedia',
+        (query: string) => ({
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: (type: string, listener: EventListener) => {
+            if (type === 'change' && query.includes('prefers-reduced-motion')) {
+              onChange = listener as (event: MediaQueryListEvent) => void
+            }
+          },
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        }),
+      )
+      renderCarousel(makeProps({ autoPlay: true }))
+      expect(screen.getByRole('button', { name: /pause slideshow/i })).toBeInTheDocument()
+      act(() => {
+        onChange?.({ matches: true } as MediaQueryListEvent)
+      })
+      expect(screen.getByRole('button', { name: /play slideshow/i })).toBeInTheDocument()
+    })
+  })
+
+  describe('autoplay with document visibility and hover', () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ shouldAdvanceTime: true })
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('pauses autoplay while the document is hidden and resumes when visible again', () => {
+      const hiddenSpy = vi.spyOn(document, 'hidden', 'get')
+      hiddenSpy.mockReturnValue(false)
+
+      const container = renderCarousel(makeProps({ autoPlay: true, autoPlayInterval: 2000 }))
+
+      act(() => {
+        hiddenSpy.mockReturnValue(true)
+        document.dispatchEvent(new Event('visibilitychange'))
+      })
+      act(() => {
+        vi.advanceTimersByTime(20_000)
+      })
+      expect((container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement).style.visibility).toBe(
+        'visible',
+      )
+
+      act(() => {
+        hiddenSpy.mockReturnValue(false)
+        document.dispatchEvent(new Event('visibilitychange'))
+      })
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+
+      expect((container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement).style.visibility).toBe(
+        'visible',
+      )
+
+      hiddenSpy.mockRestore()
+    })
+
+    it('pauses autoplay while the track is hovered and restarts after leave', () => {
+      const container = renderCarousel(makeProps({ autoPlay: true, autoPlayInterval: 2000 }))
+      const track = getTrack(container)
+
+      act(() => {
+        fireEvent.mouseEnter(track)
+      })
+      act(() => {
+        vi.advanceTimersByTime(4000)
+      })
+
+      act(() => {
+        fireEvent.mouseLeave(track)
+      })
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+
+      expect((container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement).style.visibility).toBe(
+        'visible',
+      )
+    })
+
+    it('clears autoplay while the track is focused and restarts after blur', () => {
+      const container = renderCarousel(makeProps({ autoPlay: true, autoPlayInterval: 2000 }))
+      const track = getTrack(container)
+
+      act(() => {
+        fireEvent.focus(track)
+      })
+      act(() => {
+        vi.advanceTimersByTime(6000)
+      })
+
+      act(() => {
+        fireEvent.blur(track)
+      })
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+
+      expect((container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement).style.visibility).toBe(
+        'visible',
+      )
+    })
+
+    it('stops autoplay at the last slide when loop is false', () => {
+      const container = renderCarousel(
+        makeProps({
+          autoPlay: true,
+          loop: false,
+          autoPlayInterval: 2000,
+          items: [TESTIMONIAL_ITEMS[0], TESTIMONIAL_ITEMS[1]],
+        }),
+      )
+
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+      expect((container.querySelector('[aria-label="Slide 2 of 2"]') as HTMLElement).style.visibility).toBe(
+        'visible',
+      )
+
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+
+      expect(screen.getByRole('button', { name: /play slideshow/i })).toBeInTheDocument()
+      expect((container.querySelector('[aria-label="Slide 2 of 2"]') as HTMLElement).style.visibility).toBe(
+        'visible',
+      )
     })
   })
 })

@@ -110,4 +110,18 @@ describe('StatsBar', () => {
       expect(dt.className).toContain('text-foreground')
     })
   })
+
+  describe('empty stats', () => {
+    it('uses grid-cols-4 fallback when stats is empty so layout stays valid', () => {
+      const container = renderStatsBar({ stats: [] })
+      expect(getDl(container).className).toContain('grid-cols-4')
+    })
+
+    it('uses grid-cols-4 fallback when stats is undefined', () => {
+      const container = renderStatsBar({
+        stats: undefined as unknown as typeof STATS_2,
+      })
+      expect(getDl(container).className).toContain('grid-cols-4')
+    })
+  })
 })

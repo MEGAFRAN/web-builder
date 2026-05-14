@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react'
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { Footer } from '@/components/navigation/Footer'
@@ -218,6 +219,17 @@ describe('Footer', () => {
       const para = container.querySelector('p.border-t')
       expect(para).not.toBeNull()
       expect(para?.textContent).toBe('© 2026 Acme Corp.')
+    })
+  })
+
+  describe('column with undefined links', () => {
+    it('renders the column title and no anchor tags when links is undefined', () => {
+      const columns = [{ title: 'Bare', links: undefined }] as unknown as ComponentProps<
+        typeof Footer
+      >['columns']
+      const container = renderFooter({ columns })
+      expect(screen.getByText('Bare')).toBeInTheDocument()
+      expect(container.querySelectorAll('a')).toHaveLength(0)
     })
   })
 
