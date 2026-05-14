@@ -4,11 +4,18 @@ export type ServiceSubItemDescription = {
   title: string
   items?: string[]
 }
+export type ServiceSubItemPricingRow = {
+  duration?: string | null
+  price?: string | null
+  bookingUrl?: string | null
+}
 export type ServiceSubItem = {
   label: string
   price?: string | null
   duration?: string | null
+  pricingRows?: ServiceSubItemPricingRow[] | null
   description?: ServiceSubItemDescription | null
+  bookingUrl?: string | null
 }
 export type Service = {
   title: string
@@ -30,6 +37,13 @@ export type HeroBlock = {
 export type ServicesBlock = {
   _type: 'services'
   heading?: string | null
+  showModal?: boolean | null
+  moreInfoLabel?: string | null
+  /**
+   * Default booking URL for sub-items and `pricingRows` entries that omit `bookingUrl`.
+   * Resolution order per tier: row `bookingUrl` → sub-item `bookingUrl` → this field.
+   */
+  bookingUrl?: string | null
   items: Service[]
 }
 

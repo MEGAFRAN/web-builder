@@ -34,6 +34,24 @@
                         "label": { "type": "string" },
                         "price": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
                         "duration": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                        "bookingUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                        "pricingRows": {
+                          "oneOf": [
+                            { "type": "null" },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                  "price": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                                  "duration": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                                  "bookingUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+                                }
+                              }
+                            }
+                          ]
+                        },
                         "description": {
                           "oneOf": [
                             { "type": "null" },

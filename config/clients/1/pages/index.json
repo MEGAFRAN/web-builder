@@ -19,15 +19,18 @@
     {
       "_type": "services",
       "heading": "Servicios",
+      "showModal": true,
+      "bookingUrl": "https://booksy.com/es-es/132870_laura-anaya-masajes_masajes_42471_leon?rwg_token=AFd1xnFQdacRi3QS3LfihZ0oIKdtZRtgWshdb_bsISNHzVnWbZq_3jVQqg2YOSdw4Q8cKrDxfFxmCC0D5xnWpjkq_olIyUY-WA%3D%3D#ba_s=seo",
       "items": [
         {
-          "title": "Rituales inspirados en tradiciones milenarias (by Alqvimia)",
-          "description": "Experiencias que purifican tu cuerpo y restauran tu armonía",
+          "title": "PROTOCOLOS REDUCTORES Y ANTICELULITICOS",
           "subItems": [
             {
-              "label": "Reina de Egipto",
-              "price": "75 €",
-              "duration": "90 min",
+              "label": "ONDAS DE CHOQUE DE STORZ MEDICAL",
+              "pricingRows": [
+                { "duration": "30 min", "price": "80 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "30 min", "price": "50 €", "bookingUrl": "https://example.com/largo" }
+              ],
               "description": {
                 "title": "Un ritual ancestral que purifica tu cuerpo en una experiencia de lujo absoluto",
                 "items": [
@@ -41,9 +44,9 @@
               }
             },
             {
-              "label": "Holistic harmony",
-              "price": "75 €",
-              "duration": "90 min",
+              "label": "Remodelación Corporal Pre y Post liposucción",
+              "price": "50 €",
+              "duration": "100 min",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -56,13 +59,10 @@
               }
             }
           ],
-          "price": "Desde 75 €",
           "imageUrl": "/images/milenario.webp",
           "imageAlt": "Rituales de bienestar"
         },
         {
-          "title": "Tratamientos estéticos de alto impacto",
-          "description": "Estética avanzada para cuidar tu belleza y salud",
           "subItems": [
             {
               "label": "Anticelulíticos con ondas de choque",
@@ -103,7 +103,6 @@
               }
             }
           ],
-          "price": "Desde 60 €",
           "imageUrl": "/images/esteticos.webp",
           "imageAlt": "Tratamientos estéticos"
         },
@@ -174,7 +173,6 @@
               }
             }
           ],
-          "price": "Desde 45 €",
           "imageUrl": "/images/masajes.webp",
           "imageAlt": "Masaje terapéutico"
         },
