@@ -98,6 +98,33 @@ describe('ServicesBlock', () => {
     expect(firstBtn).toHaveAttribute('aria-expanded', 'false')
   })
 
+  it('expands subItem with description title only (no items array)', () => {
+    render(
+      <ServicesBlock
+        _type="services"
+        items={[
+          {
+            title: 'Masajes',
+            description: 'Varias modalidades.',
+            subItems: [
+              {
+                label: 'Relajante antiestrés',
+                price: '45 €',
+                duration: '60 min',
+                description: {
+                  title: 'Solo párrafo introductorio, sin lista.',
+                },
+              },
+            ],
+          },
+        ]}
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /relajante antiestrés/i }))
+    expect(screen.getByText('Solo párrafo introductorio, sin lista.')).toBeInTheDocument()
+  })
+
   it('supports legacy string subItems as accordion labels', () => {
     render(
       <ServicesBlock

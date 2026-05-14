@@ -22,7 +22,8 @@ function normalizeSubItem(entry: string | ServiceSubItem): ServiceSubItem {
 function descriptionHasContent(desc: ServiceSubItemDescription | null | undefined): boolean {
   if (desc == null) return false
   if (desc.title.trim() !== '') return true
-  return desc.items.some((line) => line.trim() !== '')
+  const lines = desc.items ?? []
+  return lines.some((line) => line.trim() !== '')
 }
 
 function ServiceSubItemsAccordion({
@@ -87,9 +88,9 @@ function ServiceSubItemsAccordion({
                         {description.title}
                       </p>
                     ) : null}
-                    {description.items.some((l) => l.trim() !== '') ? (
+                    {(description.items ?? []).some((l) => l.trim() !== '') ? (
                       <ul className="list-disc space-y-1 pl-5" role="list">
-                        {description.items
+                        {(description.items ?? [])
                           .filter((l) => l.trim() !== '')
                           .map((line, k) => (
                             <li key={k}>{line}</li>
