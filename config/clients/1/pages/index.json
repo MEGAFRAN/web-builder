@@ -17,36 +17,6 @@
       "backgroundImageUrl": null
     },
     {
-      "_type": "testimonialsBlock",
-      "heading": "Testimonios",
-      "items": [
-        {
-          "name": "Kauta El Omari",
-          "company": null,
-          "role": null,
-          "quote": "Increíble la experiencia, llevaba dos días con un dolor terrible de brazo y en una sola sesión me ha quitado el dolor. Una chica súper agradable y encantadora.",
-          "avatarUrl": null,
-          "stars": 5
-        },
-        {
-          "name": "Daniel Anaya",
-          "company": null,
-          "role": null,
-          "quote": "Resultados visibles desde la primera sesión y trato inmejorable. Laura es una gran profesional y te hace sentir como en casa.",
-          "avatarUrl": null,
-          "stars": 5
-        },
-        {
-          "name": "Raquel Campillo",
-          "company": null,
-          "role": null,
-          "quote": "Fui recomendada, me habían hablado maravillas de Laura. Aparte del trato, que es fantástico, es una excelente profesional. Sin duda, volveré.",
-          "avatarUrl": null,
-          "stars": 5
-        }
-      ]
-    },
-    {
       "_type": "services",
       "heading": "Servicios",
       "items": [
@@ -244,6 +214,36 @@
           "price": "85 € por sesión",
           "imageUrl": "/images/silueta.webp",
           "imageAlt": "Programa silueta remodelante"
+        }
+      ]
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "Testimonios",
+      "items": [
+        {
+          "name": "Kauta El Omari",
+          "company": null,
+          "role": null,
+          "quote": "Increíble la experiencia, llevaba dos días con un dolor terrible de brazo y en una sola sesión me ha quitado el dolor. Una chica súper agradable y encantadora.",
+          "avatarUrl": null,
+          "stars": 5
+        },
+        {
+          "name": "Daniel Anaya",
+          "company": null,
+          "role": null,
+          "quote": "Resultados visibles desde la primera sesión y trato inmejorable. Laura es una gran profesional y te hace sentir como en casa.",
+          "avatarUrl": null,
+          "stars": 5
+        },
+        {
+          "name": "Raquel Campillo",
+          "company": null,
+          "role": null,
+          "quote": "Fui recomendada, me habían hablado maravillas de Laura. Aparte del trato, que es fantástico, es una excelente profesional. Sin duda, volveré.",
+          "avatarUrl": null,
+          "stars": 5
         }
       ]
     },
