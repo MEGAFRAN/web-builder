@@ -29,7 +29,7 @@
               "label": "ONDAS DE CHOQUE DE STORZ MEDICAL",
               "pricingRows": [
                 { "duration": "30 min", "price": "80 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "30 min", "price": "50 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "50 min", "price": "100 €", "bookingUrl": "https://example.com/largo" }
               ],
               "description": {
                 "title": "Un ritual ancestral que purifica tu cuerpo en una experiencia de lujo absoluto",
@@ -45,8 +45,105 @@
             },
             {
               "label": "Remodelación Corporal Pre y Post liposucción",
-              "price": "50 €",
-              "duration": "100 min",
+              "pricingRows": [
+                { "duration": "50 min", "price": "199 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Programa silueta remodelante",
+              "pricingRows": [
+                { "duration": "90 min", "price": "340 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Ritual Criodrenante sculpt",
+              "pricingRows": [
+                { "duration": "60 min", "price": "55 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Silueta body sculptor by Alqvimia",
+              "pricingRows": [
+                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Silueta drenante y reductor by Alqvimia",
+              "pricingRows": [
+                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Silueta anticelulitico by Alqvimia",
+              "pricingRows": [
+                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Silueta reafirmante de tejidos by Alqvimia",
+              "pricingRows": [
+                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+              ],
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -63,42 +160,107 @@
           "imageAlt": "Rituales de bienestar"
         },
         {
+          "title": "MASAJES TERAPEUTICOS",
           "subItems": [
             {
-              "label": "Anticelulíticos con ondas de choque",
-              "price": "80 €",
-              "duration": "30 min",
+              "label": "Masajes para peregrinos del camino de santiago",
+              "pricingRows": [
+                { "duration": "30 min", "price": "35 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "60 min", "price": "45 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "90 min", "price": "65 €", "bookingUrl": "https://example.com/largo" }
+              ],
               "description": {
-                "title": "Tecnología estética avanzada para remodelar y reafirmar la piel",
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
-                  "Reduce la celulitis",
-                  "Reafirma intensamente",
-                  "Redefine la silueta"
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
                 ]
               }
             },
             {
-              "label": "Facial eterna glow con ondas de choque",
-              "price": "60 €",
-              "duration": "30 min",
+              "label": "Masajes descontracturante",
+              "pricingRows": [
+                { "duration": "30 min", "price": "35 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "50 min", "price": "45 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "90 min", "price": "65 €", "bookingUrl": "https://example.com/largo" }
+              ],
               "description": {
-                "title": "Tratamiento rejuvenecedor que ilumina y redefine el rostro",
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
-                  "Atenúa arrugas de expresión",
-                  "Mejora la firmeza",
-                  "Redefine el ovalo facial"
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
                 ]
               }
             },
             {
-              "label": "Remodelación corporal pre y post liposucción",
-              "price": "Precio según valoración",
+              "label": "Drenaje linfatico manual",
+              "pricingRows": [
+                { "duration": "1 sesion de 1 hora", "price": "35 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "5 sesiones de 1 hora", "price": "200 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "10 sesiones de 1 hora", "price": "380 €", "bookingUrl": "https://example.com/largo" }
+              ],
               "description": {
-                "title": "Tratamiento regenerador que mejora la recuperación y optimiza resultados",
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
-                  "Activa la regeneración de la piel",
-                  "Mejora la circulación",
-                  "Unifica y reafirma la piel"
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Masaje liberacion emocional",
+              "pricingRows": [
+                { "duration": "75 min", "price": "55 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Masaje relajante antiestrés",
+              "pricingRows": [
+                { "duration": "60 min", "price": "45 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Reflexología podal",
+              "pricingRows": [
+                { "duration": "45 min", "price": "40 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
                 ]
               }
             }
@@ -107,68 +269,54 @@
           "imageAlt": "Tratamientos estéticos"
         },
         {
-          "title": "Masajes terapéuticos",
+          "title": "EXPERIENCIAS SENSORIALES DE ALQVIMIA",
           "description": "Alivio de tensiones, recuperación y liberación",
           "subItems": [
             {
-              "label": "Descontracturante",
-              "price": "45 €",
-              "duration": "50 min",
+              "label": "Ritual reina de egipto Alqvimia",
+              "pricingRows": [
+                { "duration": "90 min", "price": "75 €", "bookingUrl": "https://example.com/largo" }
+              ],
               "description": {
-                "title": "Alivio profundo de tensiones musculares mediante técnicas especializadas que restauran movilidad y bienestar"
-              }
-            },
-            {
-              "label": "Peregrino",
-              "price": "45 €",
-              "duration": "50 min",
-              "description": {
-                "title": "Recuperación intensiva para piernas y pies cansados, aportando ligereza y descanso inmediato"
-              }
-            },
-            {
-              "label": "Drenaje linfático",
-              "price": "45 €",
-              "duration": "60 min",
-              "description": {
-                "title": "Estimulación suave del sistema linfático que depura, desinflama y revitaliza el organismo"
-              }
-            },
-            {
-              "label": "Relajante antiestrés",
-              "price": "45 €",
-              "duration": "60 min",
-              "description": {
-                "title": "Ritual envolvente que calma la mente, libera tensiones y conduce a un estado de profunda relajación"
-              }
-            },
-            {
-              "label": "Reflexología podal",
-              "price": "45 €",
-              "duration": "45 min",
-              "description": {
-                "title": "Estimulación de puntos reflejos que activa la energía vital y favorece el equilibrio"
-              }
-            },
-            {
-              "label": "Liberación emocional",
-              "price": "55 €",
-              "duration": "75 min",
-              "description": {
-                "title": "Experiencia holística que armoniza cuerpo y emociones, liberando bloqueos y restaurando el equilibrio interior"
-              }
-            },
-            {
-              "label": "Ritual piernas ligeras",
-              "price": "60 €",
-              "duration": "50 min",
-              "description": {
-                "title": "Tratamiento ideal para aliviar la pesadez y mejorar la circulación",
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
-                  "Activación con sales del mar Muerto",
-                  "Envoltura drenante con barros minerales",
-                  "Masaje nutritivo con aceite de sésamo",
-                  "Final calmante y relajante"
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Ritual oasis de serenidad by Alqvimia",
+              "pricingRows": [
+                { "duration": "90 min", "price": "75 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            },
+            {
+              "label": "Ritual holistic harmony by Alqvimia",
+              "pricingRows": [
+                { "duration": "90 min", "price": "75 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
                 ]
               }
             }
@@ -177,39 +325,100 @@
           "imageAlt": "Masaje terapéutico"
         },
         {
-          "title": "PROGRAMA SILUETA REMODELANTE (by Alqvimia)",
+          "title": "BIENESTAR PRENATAL ",
           "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesión",
           "subItems": [
             {
-              "label": "Silueta body sculptor",
-              "duration": "90 min",
+              "label": "Healthy legs para embarazadas",
+              "pricingRows": [
+                { "duration": "50 min", "price": "60 €", "bookingUrl": "https://example.com/largo" }
+              ],
               "description": {
-                "title": "Tratamiento remodelante que redefine la silueta y mejora la firmeza de la piel. Activa el metabolismo y favorece la reducción de grasa localizada, dejando la piel más lisa y tonificada"
-              }
-            },
-            {
-              "label": "Silueta drenante y reductor",
-              "duration": "90 min",
-              "description": {
-                "title": "Tratamiento corporal que ayuda a eliminar líquidos y toxinas, reduciendo volumen y aportando ligereza. Estimula la microcirculación y mejora visiblemente la textura de la piel"
-              }
-            },
-            {
-              "label": "Silueta anticelulítico",
-              "duration": "90 min",
-              "description": {
-                "title": "Tratamiento intensivo que combate celulitis, activa la circulación y alisa la piel. Mejora la firmeza y uniformidad, logrando una silueta más definida"
-              }
-            },
-            {
-              "label": "Silueta reafirmante de tejidos",
-              "duration": "90 min",
-              "description": {
-                "title": "Tratamiento reafirmante que mejora la elasticidad y tonicidad de la piel. Estimula la regeneración cutánea, aportando firmeza y un aspecto más terso y rejuvenecido"
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
               }
             }
           ],
-          "price": "85 € por sesión",
+          "imageUrl": "/images/silueta.webp",
+          "imageAlt": "Programa silueta remodelante"
+        },
+        {
+          "title": "LIFTING FACIAL",
+          "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesión",
+          "subItems": [
+            {
+              "label": "Facial eterna glow con ondas de choque",
+              "pricingRows": [
+                { "duration": "1 sesion de 30 min", "price": "60 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "5 sesiones de 30 min", "price": "250 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            }
+          ],
+          "imageUrl": "/images/silueta.webp",
+          "imageAlt": "Programa silueta remodelante"
+        },
+        {
+          "title": "LIPEDEMA",
+          "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesión",
+          "subItems": [
+            {
+              "label": "Tratamiento de lipedema con ondas de choque",
+              "pricingRows": [
+                { "duration": "50 min", "price": "100 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            }
+          ],
+          "imageUrl": "/images/silueta.webp",
+          "imageAlt": "Programa silueta remodelante"
+        },
+        {
+          "title": "LIFTING GLUTEOS",
+          "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesión",
+          "subItems": [
+            {
+              "label": "Linfting gluteos",
+              "pricingRows": [
+                { "duration": "1 sesion de 30 min", "price": "80 €", "bookingUrl": "https://example.com/largo" },
+                { "duration": "5 sesiones de 30 min", "price": "350 €", "bookingUrl": "https://example.com/largo" }
+              ],
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            }
+          ],
           "imageUrl": "/images/silueta.webp",
           "imageAlt": "Programa silueta remodelante"
         }
