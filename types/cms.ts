@@ -2,7 +2,7 @@
 export type CTA = { label: string; href: string }
 export type ServiceSubItemDescription = {
   title: string
-  items: string[]
+  items?: string[]
 }
 export type ServiceSubItem = {
   label: string

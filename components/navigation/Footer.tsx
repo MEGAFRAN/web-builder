@@ -6,9 +6,9 @@ const colsMap: Record<number, string> = {
 };
 
 interface FooterProps {
-  columns?: Array<{
+  columns?: ReadonlyArray<{
     title: string;
-    links: Array<{ label: string; href: string }>;
+    links: ReadonlyArray<{ label: string; href: string }>;
   }> | null;
   copyright?: string | null;
 }
