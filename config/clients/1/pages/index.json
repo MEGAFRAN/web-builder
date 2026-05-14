@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Masaje terapéutico en León",
+    "title": "Masaje Terapéutico en León",
     "description": "Licensed massage therapist offering Swedish, deep tissue, sports, and pregnancy massage. Private studio, easy online booking, same-week availability.",
     "ogImage": null,
     "noIndex": false
@@ -8,7 +8,7 @@
   "blocks": [
     {
       "_type": "heroBlock",
-      "heading": "Masaje terapéutico en León",
+      "heading": "Masaje Terapéutico en León",
       "subtext": "Un espacio dedicado al bienestar y al cuidado del cuerpo. Masajes personalizados para relajar, liberar tensiones y recuperar el equilibrio.",
       "primaryButtonLabel": null,
       "primaryButtonHref": null,
@@ -24,7 +24,7 @@
           "name": "Kauta El Omari",
           "company": null,
           "role": null,
-          "quote": "Increíble la experiencia , llevaba dos días con un dolor terrible de brazo y en una sola sesión me ha quitado el dolor. Una chica super agradable y encantadora.",
+          "quote": "Increíble la experiencia, llevaba dos días con un dolor terrible de brazo y en una sola sesión me ha quitado el dolor. Una chica súper agradable y encantadora.",
           "avatarUrl": null,
           "stars": 5
         },
@@ -52,53 +52,53 @@
       "items": [
         {
           "title": "Rituales inspirados en tradiciones milenarias (by Alqvimia)",
-          "description": "Experiencias que purifican tu cuerpo y restauran tu armonia",
+          "description": "Experiencias que purifican tu cuerpo y restauran tu armonía",
           "subItems": [
-            "Reina de Egipto",
-            "Holistic Harmony"
+            "Reina de egipto",
+            "Holistic harmony"
           ],
-          "price": "desde 75 €",
+          "price": "Desde 75 €",
           "imageUrl": "/images/milenario.webp",
           "imageAlt": "Rituales de bienestar"
         },
         {
-          "title": "Tratamientos esteticos de alto impacto",
-          "description": "Estetica avanzada para cuidar tu belleza y salud",
+          "title": "Tratamientos estéticos de alto impacto",
+          "description": "Estética avanzada para cuidar tu belleza y salud",
           "subItems": [
-            "Anticeluliticos con ondas de choque",
+            "Anticelulíticos con ondas de choque",
             "Facial eterna glow con ondas de choque",
-            "Remodelacion corporal pre y post liposuccion"
+            "Remodelación corporal pre y post liposucción"
           ],
-          "price": "desde 60 €",
+          "price": "Desde 60 €",
           "imageUrl": "/images/esteticos.webp",
           "imageAlt": "Tratamientos estéticos"
         },
         {
-          "title": "Masajes terapeuticos",
-          "description": "Alivio de tensiones, recuperacion y liberacion",
+          "title": "Masajes terapéuticos",
+          "description": "Alivio de tensiones, recuperación y liberación",
           "subItems": [
             "Descontracturante",
             "Peregrino",
-            "Drenaje linfatico",
-            "Relajante antiestres",
-            "Reflexologia podal",
-            "Liberacion emocional",
+            "Drenaje linfático",
+            "Relajante antiestrés",
+            "Reflexología podal",
+            "Liberación emocional",
             "Ritual piernas ligeras"
           ],
-          "price": "desde 45 €",
+          "price": "Desde 45 €",
           "imageUrl": "/images/masajes.webp",
           "imageAlt": "Masaje terapéutico"
         },
         {
           "title": "PROGRAMA SILUETA REMODELANTE (by Alqvimia)",
-          "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesion",
+          "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesión",
           "subItems": [
             "Silueta body sculptor",
             "Silueta drenante y reductor",
-            "Silueta Anticelulitico",
+            "Silueta anticelulítico",
             "Silueta reafirmante de tejidos"
           ],
-          "price": "desde 85 €",
+          "price": "Desde 85 €",
           "imageUrl": "/images/silueta.webp",
           "imageAlt": "Programa silueta remodelante"
         }
@@ -136,7 +136,7 @@
     },
     {
       "_type": "location",
-      "title": "Ubicacion",
+      "title": "Ubicación",
       "address": "Calle Velázquez, 1, 1C, 24005 León",
       "showMap": true,
       "mapEmbedSrc": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2937.3501038736613!2d-5.573144524315885!3d42.59031492052411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd379be9b9fa4b05%3A0x1ad5a98d43f59220!2sMasajes%20Laura%20Anaya!5e0!3m2!1ses!2ses!4v1778613886107!5m2!1ses!2ses"
@@ -147,19 +147,19 @@
       "context": null,
       "items": [
         {
-          "question": "¿Como debo ir vestido?",
-          "answer": "Como gustes, estaras cubierto toda la sesion, solo estara descubierta la zona ha trabajar"
+          "question": "¿Cómo debo ir vestido?",
+          "answer": "Como gustes, estarás cubierto toda la sesión; solo estará descubierta la zona a trabajar"
         },
         {
-          "question": "¿Tienes algun bono?",
-          "answer": "Si, tenemos bonos para multiples sesiones, asi ahorras tiempo y dinero"
+          "question": "¿Tienes algún bono?",
+          "answer": "Sí, tenemos bonos para múltiples sesiones, así ahorras tiempo y dinero"
         },
         {
-          "question": "¿Cual es tu politica de cancelacion?",
-          "answer": "Puedes cancelar hasta 24 horas antes de la cita. Las cancelaciones tardias tienen una tienen un valor del 50% de la reserva."
+          "question": "¿Cuál es tu política de cancelación?",
+          "answer": "Puedes cancelar hasta 24 horas antes de la cita. Las cancelaciones tardías tienen un valor del 50% de la reserva."
         },
         {
-          "question": "¿Que medios de pago recibes?",
+          "question": "¿Qué medios de pago recibes?",
           "answer": "Tarjetas, efectivo, lo que quieras"
         }
       ]

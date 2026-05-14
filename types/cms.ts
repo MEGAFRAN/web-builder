@@ -3,7 +3,6 @@ export type CTA = { label: string; href: string }
 export type Service = {
   title: string
   description: string
-  /** Optional bullet-style lines shown stacked under the description. */
   subItems?: string[] | null
   price?: string | null
   imageUrl?: string | null

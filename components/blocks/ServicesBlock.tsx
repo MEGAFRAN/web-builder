@@ -30,10 +30,10 @@ export default function ServicesBlock({ heading, items }: ServicesBlockType) {
                 <div className="p-6">
                   <Stack gap="sm">
                     <h3 className="text-xl font-semibold text-brand">{service.title}</h3>
+                    <p className="text-muted">{service.description}</p>
                     {service.price != null && service.price !== '' && (
                       <p className="text-base font-medium text-foreground">{service.price}</p>
                     )}
-                    <p className="text-muted">{service.description}</p>
                     {service.subItems != null &&
                       service.subItems.length > 0 && (
                         <ul
