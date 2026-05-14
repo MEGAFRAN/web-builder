@@ -1,9 +1,19 @@
 // Primitive building blocks
 export type CTA = { label: string; href: string }
+export type ServiceSubItemDescription = {
+  title: string
+  items: string[]
+}
+export type ServiceSubItem = {
+  label: string
+  price?: string | null
+  duration?: string | null
+  description?: ServiceSubItemDescription | null
+}
 export type Service = {
   title: string
   description: string
-  subItems?: string[] | null
+  subItems?: Array<string | ServiceSubItem> | null
   price?: string | null
   imageUrl?: string | null
   imageAlt?: string | null

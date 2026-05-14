@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Masaje Terapéutico en León",
-    "description": "Licensed massage therapist offering Swedish, deep tissue, sports, and pregnancy massage. Private studio, easy online booking, same-week availability.",
+    "description": "Masajista titulada: masaje sueco, de tejidos profundos, deportivo y para embarazadas. Estudio privado, reserva online sencilla y disponibilidad en la misma semana.",
     "ogImage": null,
     "noIndex": false
   },
@@ -54,8 +54,37 @@
           "title": "Rituales inspirados en tradiciones milenarias (by Alqvimia)",
           "description": "Experiencias que purifican tu cuerpo y restauran tu armonía",
           "subItems": [
-            "Reina de egipto",
-            "Holistic harmony"
+            {
+              "label": "Reina de Egipto",
+              "price": "75 €",
+              "duration": "90 min",
+              "description": {
+                "title": "Un ritual ancestral que purifica tu cuerpo en una experiencia de lujo absoluto",
+                "items": [
+                  "Despertar de los sentidos",
+                  "Exfoliación de sales del mar Muerto",
+                  "Envoltura de arcilla roja con aceites esenciales",
+                  "Masaje imperial con aceite Reina de Egipto",
+                  "Ritual facial de algas",
+                  "Armonía final"
+                ]
+              }
+            },
+            {
+              "label": "Holistic harmony",
+              "price": "75 €",
+              "duration": "90 min",
+              "description": {
+                "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
+                "items": [
+                  "Despertar sensorial con brochas",
+                  "Rocío de agua de Hungría",
+                  "Masaje corporal con aceite revitalizador caliente",
+                  "Masaje con cuarzos calientes",
+                  "Armonización con cuenco tibetano"
+                ]
+              }
+            }
           ],
           "price": "Desde 75 €",
           "imageUrl": "/images/milenario.webp",
@@ -65,9 +94,44 @@
           "title": "Tratamientos estéticos de alto impacto",
           "description": "Estética avanzada para cuidar tu belleza y salud",
           "subItems": [
-            "Anticelulíticos con ondas de choque",
-            "Facial eterna glow con ondas de choque",
-            "Remodelación corporal pre y post liposucción"
+            {
+              "label": "Anticelulíticos con ondas de choque",
+              "price": "80 €",
+              "duration": "30 min",
+              "description": {
+                "title": "Tecnología estética avanzada para remodelar y reafirmar la piel",
+                "items": [
+                  "Reduce la celulitis",
+                  "Reafirma intensamente",
+                  "Redefine la silueta"
+                ]
+              }
+            },
+            {
+              "label": "Facial eterna glow con ondas de choque",
+              "price": "60 €",
+              "duration": "30 min",
+              "description": {
+                "title": "Tratamiento rejuvenecedor que ilumina y redefine el rostro",
+                "items": [
+                  "Atenúa arrugas de expresión",
+                  "Mejora la firmeza",
+                  "Redefine el ovalo facial"
+                ]
+              }
+            },
+            {
+              "label": "Remodelación corporal pre y post liposucción",
+              "price": "Precio según valoración",
+              "description": {
+                "title": "Tratamiento regenerador que mejora la recuperación y optimiza resultados",
+                "items": [
+                  "Activa la regeneración de la piel",
+                  "Mejora la circulación",
+                  "Unifica y reafirma la piel"
+                ]
+              }
+            }
           ],
           "price": "Desde 60 €",
           "imageUrl": "/images/esteticos.webp",
@@ -77,13 +141,68 @@
           "title": "Masajes terapéuticos",
           "description": "Alivio de tensiones, recuperación y liberación",
           "subItems": [
-            "Descontracturante",
-            "Peregrino",
-            "Drenaje linfático",
-            "Relajante antiestrés",
-            "Reflexología podal",
-            "Liberación emocional",
-            "Ritual piernas ligeras"
+            {
+              "label": "Descontracturante",
+              "price": "45 €",
+              "duration": "50 min",
+              "description": {
+                "title": "Alivio profundo de tensiones musculares mediante técnicas especializadas que restauran movilidad y bienestar"
+              }
+            },
+            {
+              "label": "Peregrino",
+              "price": "45 €",
+              "duration": "50 min",
+              "description": {
+                "title": "Recuperación intensiva para piernas y pies cansados, aportando ligereza y descanso inmediato"
+              }
+            },
+            {
+              "label": "Drenaje linfático",
+              "price": "45 €",
+              "duration": "60 min",
+              "description": {
+                "title": "Estimulación suave del sistema linfático que depura, desinflama y revitaliza el organismo"
+              }
+            },
+            {
+              "label": "Relajante antiestrés",
+              "price": "45 €",
+              "duration": "60 min",
+              "description": {
+                "title": "Ritual envolvente que calma la mente, libera tensiones y conduce a un estado de profunda relajación"
+              }
+            },
+            {
+              "label": "Reflexología podal",
+              "price": "45 €",
+              "duration": "45 min",
+              "description": {
+                "title": "Estimulación de puntos reflejos que activa la energía vital y favorece el equilibrio"
+              }
+            },
+            {
+              "label": "Liberación emocional",
+              "price": "55 €",
+              "duration": "75 min",
+              "description": {
+                "title": "Experiencia holística que armoniza cuerpo y emociones, liberando bloqueos y restaurando el equilibrio interior"
+              }
+            },
+            {
+              "label": "Ritual piernas ligeras",
+              "price": "60 €",
+              "duration": "50 min",
+              "description": {
+                "title": "Tratamiento ideal para aliviar la pesadez y mejorar la circulación",
+                "items": [
+                  "Activación con sales del mar Muerto",
+                  "Envoltura drenante con barros minerales",
+                  "Masaje nutritivo con aceite de sésamo",
+                  "Final calmante y relajante"
+                ]
+              }
+            }
           ],
           "price": "Desde 45 €",
           "imageUrl": "/images/masajes.webp",
@@ -93,12 +212,36 @@
           "title": "PROGRAMA SILUETA REMODELANTE (by Alqvimia)",
           "description": "Reduce el volumen, reafirma y redefine tu cuerpo desde la primera sesión",
           "subItems": [
-            "Silueta body sculptor",
-            "Silueta drenante y reductor",
-            "Silueta anticelulítico",
-            "Silueta reafirmante de tejidos"
+            {
+              "label": "Silueta body sculptor",
+              "duration": "90 min",
+              "description": {
+                "title": "Tratamiento remodelante que redefine la silueta y mejora la firmeza de la piel. Activa el metabolismo y favorece la reducción de grasa localizada, dejando la piel más lisa y tonificada"
+              }
+            },
+            {
+              "label": "Silueta drenante y reductor",
+              "duration": "90 min",
+              "description": {
+                "title": "Tratamiento corporal que ayuda a eliminar líquidos y toxinas, reduciendo volumen y aportando ligereza. Estimula la microcirculación y mejora visiblemente la textura de la piel"
+              }
+            },
+            {
+              "label": "Silueta anticelulítico",
+              "duration": "90 min",
+              "description": {
+                "title": "Tratamiento intensivo que combate celulitis, activa la circulación y alisa la piel. Mejora la firmeza y uniformidad, logrando una silueta más definida"
+              }
+            },
+            {
+              "label": "Silueta reafirmante de tejidos",
+              "duration": "90 min",
+              "description": {
+                "title": "Tratamiento reafirmante que mejora la elasticidad y tonicidad de la piel. Estimula la regeneración cutánea, aportando firmeza y un aspecto más terso y rejuvenecido"
+              }
+            }
           ],
-          "price": "Desde 85 €",
+          "price": "85 € por sesión",
           "imageUrl": "/images/silueta.webp",
           "imageAlt": "Programa silueta remodelante"
         }
@@ -148,11 +291,11 @@
       "items": [
         {
           "question": "¿Cómo debo ir vestido?",
-          "answer": "Como gustes, estarás cubierto toda la sesión; solo estará descubierta la zona a trabajar"
+          "answer": "Como gustes, estarás cubierto toda la sesión; solo estará descubierta la zona a trabajar."
         },
         {
           "question": "¿Tienes algún bono?",
-          "answer": "Sí, tenemos bonos para múltiples sesiones, así ahorras tiempo y dinero"
+          "answer": "Sí, tenemos bonos para múltiples sesiones, así ahorras tiempo y dinero."
         },
         {
           "question": "¿Cuál es tu política de cancelación?",
@@ -160,7 +303,7 @@
         },
         {
           "question": "¿Qué medios de pago recibes?",
-          "answer": "Tarjetas, efectivo, lo que quieras"
+          "answer": "Tarjetas, efectivo, lo que quieras."
         }
       ]
     }

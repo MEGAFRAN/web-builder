@@ -102,7 +102,7 @@ export function BottomCtaBar({ items, vendorScriptWidget }: BottomCtaBarProps) {
       <nav
         data-component="bottom-cta-bar"
         aria-label="Quick actions"
-        className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] backdrop-blur-sm supports-[backdrop-filter]:bg-background/80"
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white shadow-[0_-4px_24px_rgba(0,0,0,0.06)]"
       >
         <div
           className="mx-auto flex max-w-6xl items-stretch gap-2 overflow-x-auto overscroll-x-contain py-2 [-webkit-overflow-scrolling:touch]"

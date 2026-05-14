@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import ServicesBlock from '@/components/blocks/ServicesBlock'
 
 describe('ServicesBlock', () => {
@@ -50,7 +50,55 @@ describe('ServicesBlock', () => {
     expect(screen.getByText('desde 50 euros')).toBeInTheDocument()
   })
 
-  it('renders subItems as a stacked bullet list', () => {
+  it('renders subItems as an accordion with expandable details', () => {
+    render(
+      <ServicesBlock
+        _type="services"
+        items={[
+          {
+            title: 'Masajes',
+            description: 'Varias modalidades.',
+            subItems: [
+              {
+                label: 'Descontracturante',
+                price: '50 €',
+                duration: '50 min',
+                description: {
+                  title: 'Enfoque en tensiones profundas.',
+                  items: ['Trabajo localizado en espalda y cuello', 'Ideal tras esfuerzo físico'],
+                },
+              },
+              {
+                label: 'Relajante',
+                price: '45 €',
+                duration: '45 min',
+                description: {
+                  title: 'Masaje suave antiestrés.',
+                  items: ['Ritmo lento', 'Prioriza calma y descanso'],
+                },
+              },
+            ],
+          },
+        ]}
+      />,
+    )
+
+    const firstBtn = screen.getByRole('button', { name: /descontracturante/i })
+    expect(screen.queryByText('Enfoque en tensiones profundas.')).not.toBeInTheDocument()
+
+    fireEvent.click(firstBtn)
+    expect(screen.getByText('Enfoque en tensiones profundas.')).toBeInTheDocument()
+    expect(screen.getByText('Trabajo localizado en espalda y cuello')).toBeInTheDocument()
+    expect(screen.getByText('50 €')).toBeInTheDocument()
+    expect(screen.getByText('50 min')).toBeInTheDocument()
+    expect(firstBtn).toHaveAttribute('aria-expanded', 'true')
+
+    fireEvent.click(firstBtn)
+    expect(screen.queryByText('Enfoque en tensiones profundas.')).not.toBeInTheDocument()
+    expect(firstBtn).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('supports legacy string subItems as accordion labels', () => {
     render(
       <ServicesBlock
         _type="services"
@@ -63,9 +111,10 @@ describe('ServicesBlock', () => {
         ]}
       />,
     )
-    expect(screen.getByRole('list')).toBeInTheDocument()
-    expect(screen.getByText('Descontracturante')).toBeInTheDocument()
-    expect(screen.getByText('Relajante')).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /descontracturante/i }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /relajante/i })).toBeInTheDocument()
   })
 
   it('renders service image with alt text', () => {
