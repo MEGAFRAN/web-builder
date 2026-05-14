@@ -15,14 +15,63 @@ function isInternalAppPath(href: string): boolean {
   return href.startsWith('/') && !href.startsWith('//')
 }
 
+function resolveIconSrc(icon: string): string | null {
+  if (icon.startsWith('public/')) return '/' + icon.slice('public/'.length)
+  if (icon.startsWith('/') || icon.startsWith('http://') || icon.startsWith('https://')) return icon
+  return null
+}
+
+function isSafeHexIconColor(value: string): boolean {
+  return /^#[0-9A-Fa-f]{3}$/.test(value) || /^#[0-9A-Fa-f]{6}$/.test(value)
+}
+
+function CtaFileIcon({
+  src,
+  iconColor,
+}: {
+  src: string
+  iconColor?: string | null
+}) {
+  const tint = typeof iconColor === 'string' ? iconColor.trim() : ''
+  const useTint = tint !== '' && isSafeHexIconColor(tint)
+
+  if (useTint) {
+    const maskUrl = `url("${encodeURI(src)}")`
+    return (
+      <span
+        aria-hidden
+        className="inline-block h-[22px] w-[22px] shrink-0"
+        style={{
+          backgroundColor: tint,
+          maskImage: maskUrl,
+          maskSize: 'contain',
+          maskRepeat: 'no-repeat',
+          maskPosition: 'center',
+          WebkitMaskImage: maskUrl,
+          WebkitMaskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'center',
+        }}
+      />
+    )
+  }
+
+  return <img src={src} alt="" aria-hidden width={22} height={22} className="shrink-0" />
+}
+
 function CtaItemContent({ item }: { item: BottomActionBarItem }) {
-  const { label, icon } = item
+  const { label, icon, iconColor } = item
+  const iconSrc = icon ? resolveIconSrc(icon) : null
   return (
     <span className="flex min-w-0 flex-col items-center justify-center gap-0.5 px-1 py-1">
       {icon ? (
-        <span className="text-lg leading-none" aria-hidden>
-          {icon}
-        </span>
+        iconSrc ? (
+          <CtaFileIcon src={iconSrc} iconColor={iconColor} />
+        ) : (
+          <span className="text-lg leading-none" aria-hidden>
+            {icon}
+          </span>
+        )
       ) : null}
       <span className="max-w-full truncate text-center text-xs font-semibold leading-tight sm:text-sm">
         {label}

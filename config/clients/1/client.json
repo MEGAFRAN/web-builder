@@ -54,9 +54,24 @@
   },
   "bottomActionBar": {
     "items": [
-      { "label": "Llamar", "href": "tel:+34616802394" },
-      { "label": "WhatsApp", "href": "https://wa.me/34616802394" },
-      { "label": "Reservar", "href": "https://booksy.com/es-es/132870_laura-anaya-masajes_masajes_42471_leon?rwg_token=AFd1xnFQdacRi3QS3LfihZ0oIKdtZRtgWshdb_bsISNHzVnWbZq_3jVQqg2YOSdw4Q8cKrDxfFxmCC0D5xnWpjkq_olIyUY-WA%3D%3D#ba_s=seo" }
+      {
+        "label": "Llamar",
+        "href": "tel:+34616802394",
+        "icon": "public/call.svg",
+        "iconColor": "#ffffff"
+      },
+      {
+        "label": "WhatsApp",
+        "href": "https://wa.me/34616802394",
+        "icon": "public/whatsapp.svg",
+        "iconColor": "#25D366"
+      },
+      {
+        "label": "Reservar",
+        "href": "https://booksy.com/es-es/132870_laura-anaya-masajes_masajes_42471_leon?rwg_token=AFd1xnFQdacRi3QS3LfihZ0oIKdtZRtgWshdb_bsISNHzVnWbZq_3jVQqg2YOSdw4Q8cKrDxfFxmCC0D5xnWpjkq_olIyUY-WA%3D%3D#ba_s=seo",
+        "icon": "public/calendar.svg",
+        "iconColor": "#ffffff"
+      }
     ]
   }
 }

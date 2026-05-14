@@ -525,6 +525,7 @@ export type BottomActionBarItem = {
   label: string
   href: string
   icon?: string | null
+  iconColor?: string | null
   action?: 'navigate' | 'activateVendorScript' | null
 }
 

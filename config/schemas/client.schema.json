@@ -224,6 +224,15 @@
                   "label": { "type": "string" },
                   "href": { "type": "string" },
                   "icon": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                  "iconColor": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$"
+                      },
+                      { "type": "null" }
+                    ]
+                  },
                   "action": {
                     "oneOf": [
                       { "type": "null" },
