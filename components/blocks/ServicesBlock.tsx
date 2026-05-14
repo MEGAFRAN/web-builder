@@ -76,79 +76,142 @@ function descriptionHasContent(desc: ServiceSubItemDescription | null | undefine
   return lines.some((line) => line.trim() !== '')
 }
 
+function subItemImageHasContent(item: ServiceSubItem): boolean {
+  const u = item.imageUrl
+  return u != null && u.trim() !== ''
+}
+
 function subItemHasExpandableDetails(item: ServiceSubItem): boolean {
-  const { description } = item
   return Boolean(
-    getSubItemPricingRows(item).length > 0 || descriptionHasContent(description),
+    getSubItemPricingRows(item).length > 0 ||
+      descriptionHasContent(item.description) ||
+      subItemImageHasContent(item),
   )
 }
 
 function SubItemDetailsBody({
   item,
   servicesBlockBookingUrl,
+  pinPricingToModalBottom,
 }: {
   item: ServiceSubItem
   servicesBlockBookingUrl?: string | null
+  /** Push duration/price/CTA toward the modal footer on short viewport (mobile full-screen modal). */
+  pinPricingToModalBottom?: boolean
 }) {
   const rows = getSubItemPricingRows(item)
   const { description } = item
   if (!subItemHasExpandableDetails(item)) return null
 
-  return (
-    <div className="space-y-2 text-sm text-muted">
-      {rows.map((row, idx) => (
-        <div
-          key={idx}
-          className="space-y-2 rounded-md px-2 py-1.5 outline outline-1 outline-offset-0 [outline-color:color-mix(in_srgb,var(--color-text)_15%,transparent)]"
-        >
-          {row.duration != null && row.duration !== '' ? (
-            <p>
-              <span className="sr-only">Duration </span>
-              {row.duration}
-            </p>
-          ) : null}
-          {row.price != null && row.price !== '' ? (
-            <p>
-              <span className="sr-only">Price </span>
-              <span className="font-medium text-foreground">{row.price}</span>
-            </p>
-          ) : null}
-          {(() => {
-            const url = resolveSubItemBookingUrl(row, item, servicesBlockBookingUrl)
-            return url != null ? (
-              <p>
+  const imageSection =
+    subItemImageHasContent(item) && item.imageUrl != null ? (
+      <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+        <Image
+          src={item.imageUrl.trim()}
+          alt={(item.imageAlt != null && item.imageAlt.trim() !== '' ? item.imageAlt : item.label).trim()}
+          fill
+          objectFit="cover"
+          loading="lazy"
+        />
+      </div>
+    ) : null
+
+  const descriptionSection =
+    description != null && descriptionHasContent(description) ? (
+      <div className="space-y-2">
+        {description.title.trim() !== '' ? (
+          <p>
+            <span className="sr-only">Description </span>
+            {description.title}
+          </p>
+        ) : null}
+        {(description.items ?? []).some((l) => l.trim() !== '') ? (
+          <ul className="list-disc space-y-1 pl-5" role="list">
+            {(description.items ?? [])
+              .filter((l) => l.trim() !== '')
+              .map((line, k) => (
+                <li key={k}>{line}</li>
+              ))}
+          </ul>
+        ) : null}
+      </div>
+    ) : null
+
+  const pricingSection =
+    rows.length > 0 ? (
+      <div className="space-y-2">
+        {rows.map((row, idx) => (
+          <div
+            key={idx}
+            className="flex w-full flex-wrap items-center justify-end gap-x-3 gap-y-1 rounded-md px-2 py-1.5 outline outline-1 outline-offset-0 [outline-color:color-mix(in_srgb,var(--color-text)_15%,transparent)]"
+          >
+            {row.duration != null && row.duration !== '' ? (
+              <span className="shrink-0">
+                <span className="sr-only">Duration </span>
+                {row.duration}
+              </span>
+            ) : null}
+            {row.price != null && row.price !== '' ? (
+              <span className="shrink-0 font-medium text-foreground">
+                <span className="sr-only">Price </span>
+                {row.price}
+              </span>
+            ) : null}
+            {(() => {
+              const url = resolveSubItemBookingUrl(row, item, servicesBlockBookingUrl)
+              return url != null ? (
                 <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  className="inline-flex shrink-0 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 >
                   Reservar
                 </a>
-              </p>
-            ) : null
-          })()}
+              ) : null
+            })()}
+          </div>
+        ))}
+      </div>
+    ) : null
+
+  const detailsBlock =
+    descriptionSection != null || pricingSection != null ? (
+      <div className="space-y-2 text-sm text-muted">
+        {descriptionSection}
+        {pricingSection}
+      </div>
+    ) : null
+
+  const usePinnedFooterLayout =
+    pinPricingToModalBottom &&
+    pricingSection != null &&
+    (descriptionSection != null || imageSection != null)
+
+  if (usePinnedFooterLayout) {
+    return (
+      <div className="flex flex-col gap-4 md:gap-6">
+        {imageSection}
+        <div className="text-sm text-muted">
+          <div className="flex min-h-[min(calc(100dvh-7rem),34rem)] flex-col gap-6 pb-[calc(100px+5.5rem)] md:min-h-0 md:pb-[calc(100px+4.5rem)]">
+            {descriptionSection != null ? (
+              <div className="min-h-0 flex-1">{descriptionSection}</div>
+            ) : imageSection != null ? (
+              <div className="min-h-0 flex-1" aria-hidden />
+            ) : null}
+            <div className="sticky bottom-[100px] z-[11] shrink-0 border-t border-border bg-background/95 pt-3 supports-[backdrop-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur-sm">
+              {pricingSection}
+            </div>
+          </div>
         </div>
-      ))}
-      {description != null && descriptionHasContent(description) ? (
-        <div className="space-y-2">
-          {description.title.trim() !== '' ? (
-            <p>
-              <span className="sr-only">Description </span>
-              {description.title}
-            </p>
-          ) : null}
-          {(description.items ?? []).some((l) => l.trim() !== '') ? (
-            <ul className="list-disc space-y-1 pl-5" role="list">
-              {(description.items ?? [])
-                .filter((l) => l.trim() !== '')
-                .map((line, k) => (
-                  <li key={k}>{line}</li>
-                ))}
-            </ul>
-          ) : null}
-        </div>
-      ) : null}
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      {imageSection}
+      {detailsBlock}
     </div>
   )
 }
@@ -217,7 +280,8 @@ function ServiceSubItemsModalList({
           const item = normalizeSubItem(raw)
           const { label } = item
           const rows = getSubItemPricingRows(item)
-          const hasModalContent = descriptionHasContent(item.description)
+          const hasModalContent =
+            descriptionHasContent(item.description) || subItemImageHasContent(item)
 
           return (
             <div key={j} className="py-3 first:pt-0 last:pb-0" role="listitem">
@@ -284,6 +348,7 @@ function ServiceSubItemsModalList({
           <SubItemDetailsBody
             item={activeItem}
             servicesBlockBookingUrl={fallbackBookingUrl}
+            pinPricingToModalBottom
           />
         ) : null}
       </Modal>

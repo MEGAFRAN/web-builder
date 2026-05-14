@@ -52,6 +52,8 @@
                             }
                           ]
                         },
+                        "imageUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                        "imageAlt": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
                         "description": {
                           "oneOf": [
                             { "type": "null" },

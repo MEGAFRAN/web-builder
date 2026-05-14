@@ -358,6 +358,8 @@
                 { "duration": "1 sesion de 30 min", "price": "60 €", "bookingUrl": "https://example.com/largo" },
                 { "duration": "5 sesiones de 30 min", "price": "250 €", "bookingUrl": "https://example.com/largo" }
               ],
+              "imageUrl": "/images/silueta.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [

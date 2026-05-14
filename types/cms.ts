@@ -14,6 +14,8 @@ export type ServiceSubItem = {
   price?: string | null
   duration?: string | null
   pricingRows?: ServiceSubItemPricingRow[] | null
+  imageUrl?: string | null
+  imageAlt?: string | null
   description?: ServiceSubItemDescription | null
   bookingUrl?: string | null
 }

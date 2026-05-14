@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, within } from '@testing-library/react'
 import ServicesBlock from '@/components/blocks/ServicesBlock'
 
 describe('ServicesBlock', () => {
@@ -135,6 +135,43 @@ describe('ServicesBlock', () => {
     expect(screen.getByText('Enfoque en tensiones profundas.')).toBeInTheDocument()
     expect(screen.getByText('Trabajo localizado en espalda y cuello')).toBeInTheDocument()
     expect(detailsBtn).not.toHaveAttribute('aria-expanded')
+  })
+
+  it('renders subItem imageUrl inside the modal body above details', () => {
+    render(
+      <ServicesBlock
+        _type="services"
+        showModal
+        items={[
+          {
+            title: 'Masajes',
+            description: 'Varias modalidades.',
+            subItems: [
+              {
+                label: 'Descontracturante',
+                pricingRows: [{ duration: '50 min', price: '50 €' }],
+                imageUrl: 'https://example.com/sub-item.jpg',
+                imageAlt: 'Vista del masaje',
+                description: {
+                  title: 'Enfoque en tensiones profundas.',
+                  items: [],
+                },
+              },
+            ],
+          },
+        ]}
+      />,
+    )
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /más información sobre descontracturante/i }),
+    )
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('dialog')).getByRole('img', { name: 'Vista del masaje' }),
+    ).toHaveAttribute('src', 'https://example.com/sub-item.jpg')
+    expect(screen.getByText('Enfoque en tensiones profundas.')).toBeInTheDocument()
   })
 
   it('shows "Más información" cta below label when item has description', () => {
