@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "dev:host": "next dev -H 0.0.0.0",
+    "dev": "node ./scripts/run-next-dev.mjs",
+    "dev:host": "node ./scripts/run-next-dev.mjs --host",
     "build": "next build",
     "build:blob": "DEPLOY_TARGET=blob next build",
     "start": "next start",

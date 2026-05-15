@@ -10,7 +10,7 @@
 The build is gated by a `CLIENT_ID` environment variable. Set it to the client's folder name under `config/clients/`.
 
 ```bash
-CLIENT_ID=internal-portfolio-francisco npm run dev
+npm run dev ${clientId}
 ```
 
 Then open `http://localhost:3000`.
@@ -28,13 +28,6 @@ Each page corresponds to a `slug` defined in the client's JSON config. An empty 
 
 > Slugs are defined in `config/clients/{clientId}.json` under the `pages` array.
 
-## Switching clients
-
-Stop the dev server and restart with a different `CLIENT_ID`:
-
-```bash
-CLIENT_ID=peluqueria-ana npm run dev
-```
 
 ## Running tests
 
