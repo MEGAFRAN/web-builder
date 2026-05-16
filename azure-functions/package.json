@@ -1,0 +1,19 @@
+{
+  "name": "web-builder-reservation-api",
+  "version": "1.0.0",
+  "description": "Azure Function App — reservation backend for web-builder clients",
+  "main": "dist/src/functions/*.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "func start",
+    "dev": "npm run build && func start"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^4.1.1",
+    "@azure/functions": "^4.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

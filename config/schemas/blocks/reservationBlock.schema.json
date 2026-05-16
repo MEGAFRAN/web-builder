@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "reservationBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_type"],
+  "properties": {
+    "_type": { "type": "string", "const": "reservationBlock" },
+    "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "subtext": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "availableTimeSlots": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "description": "Time in HH:MM 24-hour format, e.g. '09:00', '18:30'"
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "minPartySize": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+    "maxPartySize": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+    "confirmationMessage": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+  }
+}

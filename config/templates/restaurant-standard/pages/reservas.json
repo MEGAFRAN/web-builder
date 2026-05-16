@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "title": "Reservar mesa",
+    "description": "Reserva tu mesa online en pocos pasos. Elige fecha, hora y número de comensales y confirmamos en menos de 2 horas.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "breadcrumb",
+      "items": [
+        { "label": "Inicio", "href": "/" },
+        { "label": "Reservas", "href": null }
+      ]
+    },
+    {
+      "_type": "reservationBlock",
+      "heading": "Reserva tu mesa",
+      "subtext": "Selecciona fecha, hora y número de comensales. Confirmamos tu reserva en menos de 2 horas.",
+      "availableTimeSlots": [
+        "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+        "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"
+      ],
+      "minPartySize": 1,
+      "maxPartySize": 10,
+      "confirmationMessage": "¡Reserva recibida! Te enviaremos una confirmación por correo electrónico en menos de 2 horas."
+    },
+    {
+      "_type": "faqBlock",
+      "title": "Preguntas frecuentes",
+      "context": null,
+      "items": [
+        {
+          "question": "¿Cuánto tiempo con antelación debo reservar?",
+          "answer": "Para fines de semana y festivos recomendamos reservar con al menos 48 horas de antelación. Entre semana solemos tener disponibilidad el mismo día."
+        },
+        {
+          "question": "¿Admitís grupos de más de 10 personas?",
+          "answer": "Para grupos de más de 10 personas, por favor contactadnos directamente por teléfono para asegurarnos de prepararlo todo correctamente."
+        },
+        {
+          "question": "¿Tenéis opciones vegetarianas o sin gluten?",
+          "answer": "Contamos con varios platos vegetarianos y adaptamos el menú para alergias e intolerancias. Indicadlo en el campo de peticiones especiales al reservar."
+        },
+        {
+          "question": "¿Puedo cancelar o modificar mi reserva?",
+          "answer": "Sí, puedes cancelar o modificar llamándonos al teléfono del restaurante con al menos 24 horas de antelación."
+        }
+      ]
+    }
+  ]
+}

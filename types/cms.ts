@@ -363,6 +363,7 @@ export type Block =
   | TestimonialsPageBlock
   | CaseStudyDetailBlock
   | CarouselBlock
+  | ReservationBlock
 
 // Services page block types
 
@@ -434,6 +435,18 @@ export type TestimonialsPageBlock = {
   navbarLinks?: Array<{ label: string; href: string }> | null
   footerColumns?: Array<{ title: string; links: Array<{ label: string; href: string }> }> | null
   footerCopyright?: string | null
+}
+
+// Reservation block
+export type ReservationBlock = {
+  _type: 'reservationBlock'
+  heading?: string | null
+  subtext?: string | null
+  /** Available time slots shown as selectable options, e.g. ["09:00", "10:30", "12:00"] */
+  availableTimeSlots?: string[] | null
+  minPartySize?: number | null
+  maxPartySize?: number | null
+  confirmationMessage?: string | null
 }
 
 // Carousel block
@@ -570,6 +583,7 @@ export type ClientConfig = {
   pages: ClientPage[]
   siteMetadata?: SiteMetadata | null
   contactEndpoint?: string
+  reservationEndpoint?: string
   externalReviewUrl?: string
   externalReviewPlatform?: string
 }

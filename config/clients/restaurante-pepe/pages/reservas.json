@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "title": "Reservar mesa",
+    "description": "Reserva tu mesa online en Restaurante Pepe. Elige fecha, hora y comensales; confirmamos cuanto antes.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "breadcrumb",
+      "items": [
+        { "label": "Inicio", "href": "/" },
+        { "label": "Reservas", "href": null }
+      ]
+    },
+    {
+      "_type": "reservationBlock",
+      "heading": "Reserva tu mesa en Restaurante Pepe",
+      "subtext": "Selecciona fecha, hora y número de comensales. Cocina tradicional madrileña desde hace décadas.",
+      "availableTimeSlots": [
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "20:00",
+        "20:30",
+        "21:00",
+        "21:30",
+        "22:00",
+        "22:30"
+      ],
+      "minPartySize": 1,
+      "maxPartySize": 10,
+      "confirmationMessage": "¡Reserva enviada! Te contactamos por correo o teléfono en menos de 2 horas."
+    },
+    {
+      "_type": "faqBlock",
+      "title": "Preguntas frecuentes",
+      "context": null,
+      "items": [
+        {
+          "question": "¿Con cuánta antelación puedo reservar?",
+          "answer": "Entre semana solemos poder el mismo día. Para viernes y sábado recomendamos 24–48 h de antelación."
+        },
+        {
+          "question": "¿Atendéis grupos grandes?",
+          "answer": "Más de 10 comensales: lládanos por teléfono y coordinamos menú y mesa cómodamente."
+        },
+        {
+          "question": "¿Adaptáis el menú a alergias o dietas?",
+          "answer": "Sí; indica en observaciones tus necesidades o consulta cuando os confirmemos."
+        },
+        {
+          "question": "¿Cómo cancelo o cambio mi reserva?",
+          "answer": "Con al menos 24 h de margen llamando al número del restaurante o respondiendo el correo de confirmación."
+        }
+      ]
+    }
+  ]
+}

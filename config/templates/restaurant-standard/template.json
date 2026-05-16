@@ -12,10 +12,11 @@
   "header": {
     "logo": "Restaurant Standard",
     "ctaLabel": "Reservar mesa",
-    "ctaAction": "/contacto",
+    "ctaAction": "/reservas",
     "links": [
       { "label": "Menú", "href": "/menu" },
       { "label": "Nosotros", "href": "/nosotros" },
+      { "label": "Reservas", "href": "/reservas" },
       { "label": "Contacto", "href": "/contacto" }
     ]
   },
@@ -28,6 +29,7 @@
           { "label": "Inicio", "href": "/" },
           { "label": "Menú", "href": "/menu" },
           { "label": "Nosotros", "href": "/nosotros" },
+          { "label": "Reservas", "href": "/reservas" },
           { "label": "Contacto", "href": "/contacto" }
         ]
       },
