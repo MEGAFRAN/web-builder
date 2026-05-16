@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build -o storybook-static"
+    "storybook:build": "storybook build -o storybook-static",
+    "rebase": "git fetch origin main && git rebase origin/main"
   },
   "dependencies": {
     "next": "16.2.2",
