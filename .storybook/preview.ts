@@ -29,7 +29,6 @@ const preview: Preview = {
           value: name,
           title: name,
         })),
-        showName: true,
         dynamicTitle: true,
       },
     },
