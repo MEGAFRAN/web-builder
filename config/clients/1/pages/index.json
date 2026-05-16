@@ -28,9 +28,11 @@
             {
               "label": "ONDAS DE CHOQUE DE STORZ MEDICAL",
               "pricingRows": [
-                { "duration": "30 min", "price": "80 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "50 min", "price": "100 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "30 min", "price": "80 €" },
+                { "duration": "50 min", "price": "100 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Un ritual ancestral que purifica tu cuerpo en una experiencia de lujo absoluto",
                 "items": [
@@ -46,8 +48,10 @@
             {
               "label": "Remodelación Corporal Pre y Post liposucción",
               "pricingRows": [
-                { "duration": "50 min", "price": "199 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "50 min", "price": "199 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -62,8 +66,10 @@
             {
               "label": "Programa silueta remodelante",
               "pricingRows": [
-                { "duration": "90 min", "price": "340 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "340 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -78,8 +84,10 @@
             {
               "label": "Ritual Criodrenante sculpt",
               "pricingRows": [
-                { "duration": "60 min", "price": "55 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "60 min", "price": "55 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -94,8 +102,10 @@
             {
               "label": "Silueta body sculptor by Alqvimia",
               "pricingRows": [
-                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "85 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -110,8 +120,10 @@
             {
               "label": "Silueta drenante y reductor by Alqvimia",
               "pricingRows": [
-                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "85 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -126,8 +138,10 @@
             {
               "label": "Silueta anticelulitico by Alqvimia",
               "pricingRows": [
-                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "85 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -142,8 +156,10 @@
             {
               "label": "Silueta reafirmante de tejidos by Alqvimia",
               "pricingRows": [
-                { "duration": "90 min", "price": "85 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "85 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -165,10 +181,12 @@
             {
               "label": "Masajes para peregrinos del camino de santiago",
               "pricingRows": [
-                { "duration": "30 min", "price": "35 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "60 min", "price": "45 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "90 min", "price": "65 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "30 min", "price": "35 €" },
+                { "duration": "60 min", "price": "45 €" },
+                { "duration": "90 min", "price": "65 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -183,10 +201,12 @@
             {
               "label": "Masajes descontracturante",
               "pricingRows": [
-                { "duration": "30 min", "price": "35 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "50 min", "price": "45 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "90 min", "price": "65 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "30 min", "price": "35 €" },
+                { "duration": "50 min", "price": "45 €" },
+                { "duration": "90 min", "price": "65 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -201,10 +221,12 @@
             {
               "label": "Drenaje linfatico manual",
               "pricingRows": [
-                { "duration": "1 sesion de 1 hora", "price": "35 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "5 sesiones de 1 hora", "price": "200 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "10 sesiones de 1 hora", "price": "380 €", "bookingUrl": "https://example.com/largo" }
-              ],
+                { "duration": "1 sesion de 1 hora", "price": "35 €" },
+                { "duration": "5 sesiones de 1 hora", "price": "200 €" },
+                { "duration": "10 sesiones de 1 hora", "price": "380 €" }
+              ],  
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -219,8 +241,10 @@
             {
               "label": "Masaje liberacion emocional",
               "pricingRows": [
-                { "duration": "75 min", "price": "55 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "75 min", "price": "55 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -235,8 +259,10 @@
             {
               "label": "Masaje relajante antiestrés",
               "pricingRows": [
-                { "duration": "60 min", "price": "45 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "60 min", "price": "45 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -251,8 +277,10 @@
             {
               "label": "Reflexología podal",
               "pricingRows": [
-                { "duration": "45 min", "price": "40 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "45 min", "price": "40 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -275,8 +303,10 @@
             {
               "label": "Ritual reina de egipto Alqvimia",
               "pricingRows": [
-                { "duration": "90 min", "price": "75 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "75 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -291,8 +321,10 @@
             {
               "label": "Ritual oasis de serenidad by Alqvimia",
               "pricingRows": [
-                { "duration": "90 min", "price": "75 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "75 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -307,8 +339,10 @@
             {
               "label": "Ritual holistic harmony by Alqvimia",
               "pricingRows": [
-                { "duration": "90 min", "price": "75 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "90 min", "price": "75 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -331,8 +365,10 @@
             {
               "label": "Healthy legs para embarazadas",
               "pricingRows": [
-                { "duration": "50 min", "price": "60 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "50 min", "price": "60 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -355,10 +391,10 @@
             {
               "label": "Facial eterna glow con ondas de choque",
               "pricingRows": [
-                { "duration": "1 sesion de 30 min", "price": "60 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "5 sesiones de 30 min", "price": "250 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "1 sesion de 30 min", "price": "60 €" },
+                { "duration": "5 sesiones de 30 min", "price": "250 €" }
               ],
-              "imageUrl": "/images/silueta.webp",
+              "imageUrl": "/images/esteticos.webp",
               "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
@@ -382,8 +418,10 @@
             {
               "label": "Tratamiento de lipedema con ondas de choque",
               "pricingRows": [
-                { "duration": "50 min", "price": "100 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "50 min", "price": "100 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
@@ -406,9 +444,11 @@
             {
               "label": "Linfting gluteos",
               "pricingRows": [
-                { "duration": "1 sesion de 30 min", "price": "80 €", "bookingUrl": "https://example.com/largo" },
-                { "duration": "5 sesiones de 30 min", "price": "350 €", "bookingUrl": "https://example.com/largo" }
+                { "duration": "1 sesion de 30 min", "price": "80 €" },
+                { "duration": "5 sesiones de 30 min", "price": "350 €" }
               ],
+              "imageUrl": "/images/esteticos.webp",
+              "imageAlt": "Lifting facial con ondas de choque",
               "description": {
                 "title": "Una experiencia exclusiva que fusiona tradición, energía y sensorialidad para restaurar la armonía profunda del cuerpo y la mente",
                 "items": [
