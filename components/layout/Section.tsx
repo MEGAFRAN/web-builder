@@ -34,18 +34,21 @@ export function Section({
   background = "white",
   paddingY = "lg",
   fullBleed = false,
+  dataComponent = "section",
 }: {
   children?: ReactNode;
   background?: keyof typeof bgMap | null;
   paddingY?: keyof typeof pyScale | null;
   fullBleed?: boolean;
+  /** Overrides the root `data-component` attribute (e.g. block-level integration tests). */
+  dataComponent?: string;
 }) {
   const py = pyScale[paddingY ?? "lg"]
   const sectionStyle: CSSProperties = { paddingBlock: py === 0 ? 0 : py }
 
   return (
     <section
-      data-component="section"
+      data-component={dataComponent}
       data-full-bleed={fullBleed ? "true" : undefined}
       className={`w-full ${bgMap[background ?? "white"]}`}
       style={sectionStyle}

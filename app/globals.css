@@ -31,9 +31,12 @@
 /* Borders */
 .border-border   { border-color: color-mix(in srgb, var(--color-text) 15%, transparent); }
 
-/* Destructive (not theme-driven, but used in Button.tsx) */
-.bg-destructive      { background-color: #dc2626; }
-.text-destructive-fg { color: #ffffff; }
+/* Destructive (not theme-driven, but used in Button.tsx and form validation) */
+.bg-destructive        { background-color: #dc2626; }
+.text-destructive      { color: #dc2626; }
+.text-destructive-fg   { color: #ffffff; }
+.border-destructive    { border-color: #dc2626; }
+.ring-destructive      { --tw-ring-color: #dc2626; box-shadow: 0 0 0 2px #dc2626; }
 
 /* Focus ring — used by Input, Textarea, Select, Checkbox, ContactForm */
 .ring-primary {

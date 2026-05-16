@@ -15,6 +15,7 @@
     },
     {
       "_type": "reservationBlock",
+      "clientId": "restaurante-pepe",
       "heading": "Reserva tu mesa en Restaurante Pepe",
       "subtext": "Selecciona fecha, hora y número de comensales. Cocina tradicional madrileña desde hace décadas.",
       "availableTimeSlots": [

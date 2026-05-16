@@ -19,6 +19,7 @@ Read before executing:
 1. Determine the correct directory by category: `components/inputs/`, `components/content/`, `components/data/`, `components/layout/`, `components/navigation/`, `components/sections/`, `components/blocks/`
 2. Write or update the `.tsx` file. Follow all agent constraints (Tailwind only, no `any`, no `"use client"` unless required).
 3. Export the component as a named export for primitives, or default export for blocks/sections.
+4. If the component has inputs, just allow the expected data to be added: if the input is email expect @ if the input is phone number just expect numbers, etc
 
 ### Step 2 — Write or update the Storybook story
 

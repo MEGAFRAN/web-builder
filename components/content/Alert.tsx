@@ -17,9 +17,13 @@ interface AlertProps {
 export function Alert({ title, message, variant, children }: AlertProps) {
   const styles = variantMap[variant ?? "info"] ?? "bg-blue-50 border-blue-200 text-blue-800";
   return (
-    <div data-component="alert" className={`rounded-lg border p-4 ${styles}`}>
+    <div
+      data-component="alert"
+      role={variant === 'error' || variant === 'success' ? 'alert' : undefined}
+      className={`rounded-lg border p-4 ${styles}`}
+    >
       {title && <p className="mb-1 font-semibold">{title}</p>}
       <p>{children ?? message}</p>
     </div>
-  );
+  )
 }

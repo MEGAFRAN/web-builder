@@ -1,5 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { promises as fs } from 'fs'
+import path from 'path'
 import { getClientConfig } from '@/lib/client-config'
+
+const LOCAL_DB_PATH = path.join(process.cwd(), 'data', 'reservations-local.json')
+
+async function appendLocalReservation(record: Record<string, unknown>): Promise<void> {
+  let records: unknown[] = []
+  try {
+    const raw = await fs.readFile(LOCAL_DB_PATH, 'utf-8')
+    records = JSON.parse(raw)
+  } catch { /* file doesn't exist yet — start fresh */ }
+  records.push(record)
+  await fs.writeFile(LOCAL_DB_PATH, JSON.stringify(records, null, 2))
+}
 
 interface ReservationPayload {
   name: string
@@ -80,16 +94,29 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // No external endpoint configured: log and acknowledge.
-  // In production, configure reservationEndpoint in client.json to point to your Azure Function.
-  console.log('[reservation] Submission received:', {
+  // No external endpoint configured — persist to local JSON store.
+  // In production, set reservationEndpoint in client.json to point to your Azure Function.
+  const record = {
+    id: `${clientId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     clientId,
-    name: body.name,
-    email: body.email,
+    name: body.name.trim(),
+    email: body.email.trim(),
+    phone: body.phone.trim(),
     date: body.date,
     time: body.time,
     partySize: body.partySize,
-  })
+    notes: body.notes?.trim() ?? null,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+  }
+
+  try {
+    await appendLocalReservation(record)
+    console.log('[reservation] Saved locally:', record.id)
+  } catch (err) {
+    console.error('[reservation] Local write failed:', err)
+    return NextResponse.json({ error: 'Failed to save reservation locally.' }, { status: 500 })
+  }
 
   return NextResponse.json({ ok: true })
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import ReservationBlock from '@/components/blocks/ReservationBlock'
 import type { ReservationBlock as ReservationBlockProps } from '@/types/cms'
 
@@ -356,7 +356,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+      expect(screen.getByText(/couldn't reach our reservations system/i)).toBeInTheDocument()
     })
   })
 
@@ -389,6 +389,325 @@ describe('ReservationBlock — form submission', () => {
     // Do NOT fill the guest fields — form is incomplete
     submitForm()
     expect(fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it('renders success without block heading when heading and subtext are omitted', async () => {
+    fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
+    render(<ReservationBlock _type="reservationBlock" />)
+    completeForm()
+    submitForm()
+
+    await waitFor(() => {
+      expect(screen.getByText(/reservation confirmed/i)).toBeInTheDocument()
+    })
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument()
+  })
+
+  it('shows slot-taken message when reservation API returns 409', async () => {
+    fetchSpy.mockImplementation((input: RequestInfo) => {
+      const url = typeof input === 'string' ? input : (input as Request).url
+      if (url.includes('/api/availability')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ bookedSlots: [] }),
+        } as Response)
+      }
+      if (url.includes('/api/reservation')) {
+        return Promise.resolve({
+          ok: false,
+          status: 409,
+          json: async () => ({}),
+        } as Response)
+      }
+      return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
+    })
+
+    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    completeForm()
+    submitForm()
+
+    await waitFor(() => {
+      expect(screen.getByText(/time slot was just taken/i)).toBeInTheDocument()
+    })
+  })
+
+  it('shows slot-taken message when error JSON contains SLOT_TAKEN', async () => {
+    fetchSpy.mockImplementation((input: RequestInfo) => {
+      const url = typeof input === 'string' ? input : (input as Request).url
+      if (url.includes('/api/availability')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ bookedSlots: [] }),
+        } as Response)
+      }
+      if (url.includes('/api/reservation')) {
+        return Promise.resolve({
+          ok: false,
+          status: 400,
+          json: async () => ({ error: 'SLOT_TAKEN' }),
+        } as Response)
+      }
+      return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
+    })
+
+    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    completeForm()
+    submitForm()
+
+    await waitFor(() => {
+      expect(screen.getByText(/time slot was just taken/i)).toBeInTheDocument()
+    })
+  })
+
+  it('shows generic error when non-OK reservation response JSON cannot be parsed', async () => {
+    fetchSpy.mockImplementation((input: RequestInfo) => {
+      const url = typeof input === 'string' ? input : (input as Request).url
+      if (url.includes('/api/availability')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ bookedSlots: [] }),
+        } as Response)
+      }
+      if (url.includes('/api/reservation')) {
+        return Promise.resolve({
+          ok: false,
+          status: 400,
+          json: async () => {
+            throw new SyntaxError('invalid json')
+          },
+        } as unknown as Response)
+      }
+      return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
+    })
+
+    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    completeForm()
+    submitForm()
+
+    await waitFor(() => {
+      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+    })
+  })
+
+  it('shows generic error when API JSON parses but error is not SLOT_TAKEN', async () => {
+    fetchSpy.mockImplementation((input: RequestInfo) => {
+      const url = typeof input === 'string' ? input : (input as Request).url
+      if (url.includes('/api/availability')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ bookedSlots: [] }),
+        } as Response)
+      }
+      if (url.includes('/api/reservation')) {
+        return Promise.resolve({
+          ok: false,
+          status: 422,
+          json: async () => ({ error: 'VALIDATION_FAILED' }),
+        } as Response)
+      }
+      return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
+    })
+
+    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    completeForm()
+    submitForm()
+
+    await waitFor(() => {
+      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+    })
+  })
+})
+
+describe('ReservationBlock — availability integration', () => {
+  let fetchSpy: ReturnType<typeof vi.spyOn>
+
+  beforeEach(() => {
+    fetchSpy = vi.spyOn(globalThis, 'fetch')
+  })
+
+  afterEach(() => {
+    fetchSpy.mockRestore()
+  })
+
+  it('fetches availability when clientId and date are set', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: true,
+      json: async () => ({ bookedSlots: [] }),
+    } as Response)
+
+    render(<ReservationBlock {...baseProps} clientId="rest-pepe" />)
+    pickDate('2026-06-01')
+
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          '/api/availability?clientId=rest-pepe&date=2026-06-01',
+        ),
+      )
+    })
+  })
+
+  it('treats missing bookedSlots in availability JSON as an empty list', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: true,
+      json: async () => ({}),
+    } as Response)
+
+    render(<ReservationBlock {...baseProps} clientId="scoped" />)
+    pickDate()
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
+    })
+    expect(screen.queryByRole('button', { name: /fully booked/i })).not.toBeInTheDocument()
+  })
+
+  it('uses availabilityEndpoint when provided', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: true,
+      json: async () => ({ bookedSlots: [] }),
+    } as Response)
+
+    render(
+      <ReservationBlock
+        {...baseProps}
+        clientId="c1"
+        availabilityEndpoint="https://api.example.com/v1/booked"
+      />,
+    )
+    pickDate('2026-12-25')
+
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalledWith(
+        'https://api.example.com/v1/booked?clientId=c1&date=2026-12-25',
+      )
+    })
+  })
+
+  it('shows a loading status while availability is loading', async () => {
+    let finish!: (r: Response) => void
+    const availability = new Promise<Response>(resolve => {
+      finish = resolve
+    })
+    fetchSpy.mockImplementation(() => availability)
+
+    render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickDate()
+
+    await waitFor(() => {
+      expect(screen.getByText(/checking availability/i)).toBeInTheDocument()
+    })
+
+    finish({
+      ok: true,
+      json: async () => ({ bookedSlots: [] }),
+    } as Response)
+
+    await waitFor(() => {
+      expect(screen.queryByText(/checking availability/i)).not.toBeInTheDocument()
+    })
+  })
+
+  it('reflects booked slots returned by the availability API', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: true,
+      json: async () => ({ bookedSlots: ['13:00'] }),
+    } as Response)
+
+    render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickDate()
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /13:00.*fully booked/i }),
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('does not change selection when clicking a booked slot', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: true,
+      json: async () => ({ bookedSlots: ['13:00'] }),
+    } as Response)
+
+    render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickDate()
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: /13:00.*fully booked/i })).toBeInTheDocument(),
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: '14:00' }))
+    expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
+
+    fireEvent.click(screen.getByRole('button', { name: /13:00.*fully booked/i }))
+    expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('treats a non-OK availability response as no booked slots', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: false,
+      status: 500,
+    } as Response)
+
+    render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickDate()
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
+    })
+    expect(screen.queryByRole('button', { name: /fully booked/i })).not.toBeInTheDocument()
+  })
+
+  it('recovers with empty booked slots when availability fetch rejects', async () => {
+    fetchSpy.mockRejectedValue(new Error('network'))
+
+    render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickDate()
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
+    })
+  })
+})
+
+describe('ReservationBlock — inline field validation', () => {
+  beforeEach(() => {
+    render(<ReservationBlock {...baseProps} />)
+    pickDate()
+    pickSlot()
+  })
+
+  it('shows the name validation message after blur', async () => {
+    const input = document.getElementById('res-name') as HTMLInputElement
+    fireEvent.change(input, { target: { value: 'x' } })
+    fireEvent.blur(input)
+
+    expect(await screen.findByText(/please enter a full name/i)).toBeInTheDocument()
+  })
+
+  it('shows the email validation message after blur', async () => {
+    const input = document.getElementById('res-email') as HTMLInputElement
+    fireEvent.change(input, { target: { value: 'not-an-email' } })
+    fireEvent.blur(input)
+
+    expect(await screen.findByText(/please enter a valid email/i)).toBeInTheDocument()
+  })
+
+  it('shows the phone validation message after blur', async () => {
+    const input = document.getElementById('res-phone') as HTMLInputElement
+    fireEvent.change(input, { target: { value: '123' } })
+    fireEvent.blur(input)
+
+    expect(await screen.findByText(/please enter a valid phone number/i)).toBeInTheDocument()
+  })
+
+  it('shows the party size validation message after blur when out of range', async () => {
+    const input = document.getElementById('res-party') as HTMLInputElement
+    fireEvent.change(input, { target: { value: '99' } })
+    fireEvent.blur(input)
+
+    expect(await screen.findByText(/please enter a number between 1 and 8/i)).toBeInTheDocument()
   })
 })
 

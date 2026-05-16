@@ -180,19 +180,12 @@ describe('POST /api/reservation — local fallback (no reservationEndpoint)', ()
     logSpy.mockRestore()
   })
 
-  it('logs key reservation fields to the console', async () => {
+  it('logs after saving locally with the new record id', async () => {
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     await POST(postRequest(VALID_BODY))
     expect(logSpy).toHaveBeenCalledWith(
-      '[reservation] Submission received:',
-      expect.objectContaining({
-        clientId: 'test',
-        name: VALID_BODY.name,
-        email: VALID_BODY.email,
-        date: VALID_BODY.date,
-        time: VALID_BODY.time,
-        partySize: VALID_BODY.partySize,
-      }),
+      '[reservation] Saved locally:',
+      expect.stringMatching(/^test-\d+-[a-z0-9]+$/),
     )
     logSpy.mockRestore()
   })

@@ -447,6 +447,14 @@ export type ReservationBlock = {
   minPartySize?: number | null
   maxPartySize?: number | null
   confirmationMessage?: string | null
+  /** Client identifier used to scope availability queries and reservation records */
+  clientId?: string | null
+  /**
+   * URL of the availability endpoint to query for booked slots.
+   * When set (production), called directly from the browser (e.g. Azure Function URL).
+   * When absent (local dev), falls back to the Next.js /api/availability route.
+   */
+  availabilityEndpoint?: string | null
 }
 
 // Carousel block
