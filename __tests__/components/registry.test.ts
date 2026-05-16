@@ -12,7 +12,7 @@ describe('component documentation registry', () => {
   ] as const)('exposes %s.%s with path and useCases', (category, component) => {
     const group = registry[category] as Record<
       string,
-      { path: string; useCases: string[] }
+      { path: string; useCases: readonly string[] }
     >
     const entry = group[component]
     expect(entry.path).toMatch(/\.tsx$/)

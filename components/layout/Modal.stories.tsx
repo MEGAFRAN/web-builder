@@ -30,8 +30,17 @@ function ModalDemo({ title }: { title?: string }) {
 }
 
 export const WithTitle: Story = {
+  args: {
+    isOpen: false,
+    onClose: () => {},
+    title: 'Confirm action',
+  },
   render: () => <ModalDemo title="Confirm action" />,
 }
 export const NoTitle: Story = {
+  args: {
+    isOpen: false,
+    onClose: () => {},
+  },
   render: () => <ModalDemo />,
 }
