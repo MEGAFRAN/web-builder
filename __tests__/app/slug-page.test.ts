@@ -38,7 +38,7 @@ vi.mock('@/lib/json-cms', () => ({
 
 describe('generateStaticParams', () => {
   it('maps page slugs to param arrays', async () => {
-    const { generateStaticParams } = await import('@/app/[[...slug]]/page')
+    const { generateStaticParams } = await import('@/app/(site)/[[...slug]]/page')
     const params = await generateStaticParams()
 
     expect(params).toContainEqual({ slug: [] })

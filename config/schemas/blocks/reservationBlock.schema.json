@@ -8,21 +8,29 @@
     "_type": { "type": "string", "const": "reservationBlock" },
     "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
     "subtext": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "availableTimeSlots": {
+    "services": {
       "oneOf": [
         {
           "type": "array",
           "items": {
-            "type": "string",
-            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
-            "description": "Time in HH:MM 24-hour format, e.g. '09:00', '18:30'"
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "name", "durationMinutes", "price"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "name": { "type": "string", "minLength": 1 },
+              "description": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+              "durationMinutes": { "type": "integer", "minimum": 1, "maximum": 1440 },
+              "price": { "type": "number", "minimum": 0 },
+              "currency": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] }
+            }
           }
         },
         { "type": "null" }
       ]
     },
-    "minPartySize": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
-    "maxPartySize": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
-    "confirmationMessage": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+    "confirmationMessage": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "clientId": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
+    "availabilityEndpoint": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] }
   }
 }

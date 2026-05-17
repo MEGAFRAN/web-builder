@@ -21,8 +21,13 @@ vi.mock('@/components/navigation/Footer', () => ({
   ),
 }))
 
+vi.mock('@/components/navigation/BottomCtaBar', () => ({
+  BottomCtaBar: () => <nav aria-label="Quick actions">bottom-cta</nav>,
+}))
+
 import { buildThemeStyles } from '@/app/layout'
 import RootLayout from '@/app/layout'
+import SiteLayout from '@/app/(site)/layout'
 import { getClientConfig } from '@/lib/client-config'
 import type { ThemePreset } from '@/lib/theme-presets'
 
@@ -131,7 +136,7 @@ describe('RootLayout', () => {
     expect(getByTestId('child')).toBeTruthy()
   })
 
-  it('renders Navbar when config.header is present', () => {
+  it('does not render Navbar (site chrome lives in app/(site)/layout)', () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({
       ...baseConfig,
@@ -139,13 +144,13 @@ describe('RootLayout', () => {
       footer: null,
     })
 
-    const { getByTestId } = render(
+    const { queryByTestId } = render(
       <RootLayout>
         <span />
       </RootLayout>
     )
 
-    expect(getByTestId('navbar')).toBeTruthy()
+    expect(queryByTestId('navbar')).toBeNull()
   })
 
   it('does not render Navbar when config.header is absent', () => {
@@ -161,7 +166,7 @@ describe('RootLayout', () => {
     expect(queryByTestId('navbar')).toBeNull()
   })
 
-  it('renders Footer when config.footer is present', () => {
+  it('does not render Footer (site chrome lives in app/(site)/layout)', () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({
       ...baseConfig,
@@ -169,13 +174,13 @@ describe('RootLayout', () => {
       footer: { columns: [], copyright: '© 2024 Pepe' },
     })
 
-    const { getByTestId } = render(
+    const { queryByTestId } = render(
       <RootLayout>
         <span />
       </RootLayout>
     )
 
-    expect(getByTestId('footer')).toBeTruthy()
+    expect(queryByTestId('footer')).toBeNull()
   })
 
   it('does not render Footer when config.footer is absent', () => {
@@ -207,7 +212,7 @@ describe('RootLayout', () => {
     expect(styleEl!.innerHTML).toContain('--color-primary: #c0392b')
   })
 
-  it('adds bottom padding and renders BottomCtaBar when filtered action items exist', () => {
+  it('does not add BottomCtaBar padding on its own', () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({
       ...baseConfig,
@@ -228,10 +233,86 @@ describe('RootLayout', () => {
       </RootLayout>
     )
 
-    expect(document.body.className).toMatch(/pb-\[calc/)
-    expect(
-      document.querySelector('[aria-label="Quick actions"]'),
-    ).toBeInTheDocument()
+    expect(document.body.className).not.toMatch(/pb-\[calc/)
+    expect(document.querySelector('[aria-label="Quick actions"]')).toBeNull()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Site layout — public marketing chrome (Navbar / Footer / BottomCtaBar)
+// ---------------------------------------------------------------------------
+describe('SiteLayout (app/(site)/layout)', () => {
+  it('renders Navbar when config.header is present', () => {
+    process.env.CLIENT_ID = 'restaurante-pepe'
+    mockGetClientConfig.mockReturnValue({
+      ...baseConfig,
+      header: { logo: 'Pepe', links: [], ctaLabel: 'Book', ctaAction: '/book' },
+      footer: null,
+    })
+
+    const { getByTestId } = render(
+      <SiteLayout>
+        <span data-testid="child" />
+      </SiteLayout>
+    )
+
+    expect(getByTestId('navbar')).toBeTruthy()
+  })
+
+  it('does not render Navbar when config.header is absent', () => {
+    process.env.CLIENT_ID = 'restaurante-pepe'
+    mockGetClientConfig.mockReturnValue({ ...baseConfig, header: null, footer: null })
+
+    const { queryByTestId } = render(
+      <SiteLayout>
+        <span />
+      </SiteLayout>
+    )
+
+    expect(queryByTestId('navbar')).toBeNull()
+  })
+
+  it('renders Footer when config.footer is present', () => {
+    process.env.CLIENT_ID = 'restaurante-pepe'
+    mockGetClientConfig.mockReturnValue({
+      ...baseConfig,
+      header: null,
+      footer: { columns: [], copyright: '© 2024 Pepe' },
+    })
+
+    const { getByTestId } = render(
+      <SiteLayout>
+        <span />
+      </SiteLayout>
+    )
+
+    expect(getByTestId('footer')).toBeTruthy()
+  })
+
+  it('adds inner padding and renders BottomCtaBar when filtered action items exist', () => {
+    process.env.CLIENT_ID = 'restaurante-pepe'
+    mockGetClientConfig.mockReturnValue({
+      ...baseConfig,
+      header: null,
+      footer: null,
+      bottomActionBar: {
+        items: [
+          { label: 'Call', href: 'tel:+1' },
+          { label: '   ', href: '/empty-label' },
+          { label: 'Chat', href: '' },
+        ],
+      },
+    })
+
+    const { getByTestId } = render(
+      <SiteLayout>
+        <main data-testid="main">content</main>
+      </SiteLayout>
+    )
+
+    const main = getByTestId('main')
+    expect(main.parentElement?.className ?? '').toMatch(/pb-\[calc/)
+    expect(document.querySelector('[aria-label="Quick actions"]')).toBeInTheDocument()
   })
 
   it('omits BottomCtaBar when no valid bottomActionBar items remain after filtering', () => {
@@ -245,13 +326,14 @@ describe('RootLayout', () => {
       },
     })
 
-    render(
-      <RootLayout>
-        <span />
-      </RootLayout>
+    const { getByTestId } = render(
+      <SiteLayout>
+        <main data-testid="main">content</main>
+      </SiteLayout>
     )
 
-    expect(document.body.className).not.toMatch(/pb-\[calc/)
+    const main = getByTestId('main')
+    expect(main.parentElement?.className ?? '').not.toMatch(/pb-\[calc/)
     expect(document.querySelector('[aria-label="Quick actions"]')).toBeNull()
   })
 })

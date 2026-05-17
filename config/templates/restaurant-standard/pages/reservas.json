@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Reservar mesa",
-    "description": "Reserva tu mesa online en pocos pasos. Elige fecha, hora y número de comensales y confirmamos en menos de 2 horas.",
+    "description": "Reserva tu mesa online en pocos pasos. Elige servicio, fecha y hora; confirmamos en menos de 2 horas.",
     "ogImage": null,
     "noIndex": false
   },
@@ -16,13 +16,33 @@
     {
       "_type": "reservationBlock",
       "heading": "Reserva tu mesa",
-      "subtext": "Selecciona fecha, hora y número de comensales. Confirmamos tu reserva en menos de 2 horas.",
-      "availableTimeSlots": [
-        "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
-        "20:00", "20:30", "21:00", "21:30", "22:00", "22:30"
+      "subtext": "Selecciona el tipo de experiencia, fecha y hora. Confirmamos tu reserva en menos de 2 horas.",
+      "services": [
+        {
+          "id": "comida-mediodia",
+          "name": "Comida mediodía",
+          "description": "Menú del día o carta; tiempo medio en mesa.",
+          "durationMinutes": 90,
+          "price": 0,
+          "currency": "€"
+        },
+        {
+          "id": "cena-fin-de-semana",
+          "name": "Cena fin de semana",
+          "description": "Cena viernes o sábado; mesa garantizada en franja amplia.",
+          "durationMinutes": 120,
+          "price": 0,
+          "currency": "€"
+        },
+        {
+          "id": "menu-degustacion",
+          "name": "Menú degustación",
+          "description": "Menú cerrado en varios tiempos con maridaje opcional.",
+          "durationMinutes": 180,
+          "price": 85,
+          "currency": "€"
+        }
       ],
-      "minPartySize": 1,
-      "maxPartySize": 10,
       "confirmationMessage": "¡Reserva recibida! Te enviaremos una confirmación por correo electrónico en menos de 2 horas."
     },
     {

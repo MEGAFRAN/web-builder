@@ -26,12 +26,13 @@ function makeConfig(overrides: Partial<ClientConfig> = {}): ClientConfig {
 }
 
 const VALID_BODY = {
+  serviceId: 'standard-meal',
+  durationMinutes: 60,
   name: 'Jane Smith',
   email: 'jane@example.com',
   phone: '+34 600 000 000',
   date: '2026-12-25',
   time: '13:00',
-  partySize: 2,
 }
 
 function postRequest(body: unknown) {
@@ -108,19 +109,25 @@ describe('POST /api/reservation — input validation', () => {
     expect(res.status).toBe(422)
   })
 
-  it('returns 422 when partySize is missing', async () => {
-    const { partySize: _, ...rest } = VALID_BODY
+  it('returns 422 when serviceId is missing', async () => {
+    const { serviceId: _, ...rest } = VALID_BODY
     const res = await POST(postRequest(rest))
     expect(res.status).toBe(422)
   })
 
-  it('returns 422 when partySize is a string instead of a number', async () => {
-    const res = await POST(postRequest({ ...VALID_BODY, partySize: '2' }))
+  it('returns 422 when durationMinutes is missing', async () => {
+    const { durationMinutes: _, ...rest } = VALID_BODY
+    const res = await POST(postRequest(rest))
     expect(res.status).toBe(422)
   })
 
-  it('returns 422 when partySize is less than 1', async () => {
-    const res = await POST(postRequest({ ...VALID_BODY, partySize: 0 }))
+  it('returns 422 when durationMinutes is a string instead of a number', async () => {
+    const res = await POST(postRequest({ ...VALID_BODY, durationMinutes: '60' }))
+    expect(res.status).toBe(422)
+  })
+
+  it('returns 422 when durationMinutes is less than 1', async () => {
+    const res = await POST(postRequest({ ...VALID_BODY, durationMinutes: 0 }))
     expect(res.status).toBe(422)
   })
 

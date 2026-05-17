@@ -16,12 +16,13 @@ async function appendLocalReservation(record: Record<string, unknown>): Promise<
 }
 
 interface ReservationPayload {
+  serviceId: string
+  durationMinutes: number
   name: string
   email: string
   phone: string
   date: string
   time: string
-  partySize: number
   notes?: string
 }
 
@@ -29,18 +30,21 @@ function isValidPayload(body: unknown): body is ReservationPayload {
   if (typeof body !== 'object' || body === null) return false
   const b = body as Record<string, unknown>
   return (
+    typeof b.serviceId === 'string' &&
+    typeof b.durationMinutes === 'number' &&
     typeof b.name === 'string' &&
     typeof b.email === 'string' &&
     typeof b.phone === 'string' &&
     typeof b.date === 'string' &&
     typeof b.time === 'string' &&
-    typeof b.partySize === 'number' &&
+    b.serviceId.trim().length > 0 &&
     b.name.trim().length > 0 &&
     b.email.trim().length > 0 &&
     b.phone.trim().length > 0 &&
     b.date.trim().length > 0 &&
     b.time.trim().length > 0 &&
-    b.partySize >= 1
+    b.durationMinutes >= 1 &&
+    b.durationMinutes <= 24 * 60
   )
 }
 
@@ -54,7 +58,10 @@ export async function POST(req: NextRequest) {
 
   if (!isValidPayload(body)) {
     return NextResponse.json(
-      { error: 'Missing or invalid fields: name, email, phone, date, time, and partySize are required.' },
+      {
+        error:
+          'Missing or invalid fields: serviceId, durationMinutes, name, email, phone, date, and time are required.',
+      },
       { status: 422 }
     )
   }
@@ -99,14 +106,15 @@ export async function POST(req: NextRequest) {
   const record = {
     id: `${clientId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     clientId,
+    serviceId: body.serviceId.trim(),
+    durationMinutes: body.durationMinutes,
     name: body.name.trim(),
     email: body.email.trim(),
     phone: body.phone.trim(),
     date: body.date,
     time: body.time,
-    partySize: body.partySize,
     notes: body.notes?.trim() ?? null,
-    status: 'pending',
+    status: 'confirmed',
     createdAt: new Date().toISOString(),
   }
 

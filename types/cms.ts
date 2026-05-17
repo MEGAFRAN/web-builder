@@ -438,14 +438,22 @@ export type TestimonialsPageBlock = {
 }
 
 // Reservation block
+export type ReservationServiceItem = {
+  id: string
+  name: string
+  description?: string | null
+  durationMinutes: number
+  price: number
+  /** Display symbol, e.g. "€" or "$". Defaults to "€" when omitted. */
+  currency?: string | null
+}
+
 export type ReservationBlock = {
   _type: 'reservationBlock'
   heading?: string | null
   subtext?: string | null
-  /** Available time slots shown as selectable options, e.g. ["09:00", "10:30", "12:00"] */
-  availableTimeSlots?: string[] | null
-  minPartySize?: number | null
-  maxPartySize?: number | null
+  /** Bookable services; duration drives availability and slot spacing. */
+  services?: ReservationServiceItem[] | null
   confirmationMessage?: string | null
   /** Client identifier used to scope availability queries and reservation records */
   clientId?: string | null

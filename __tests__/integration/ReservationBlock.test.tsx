@@ -5,19 +5,38 @@ import type { ReservationBlock as ReservationBlockProps } from '@/types/cms'
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
-const CUSTOM_SLOTS = ['13:00', '14:00', '20:00', '21:00']
+const SERVICES = [
+  {
+    id: 'standard-meal',
+    name: 'Standard meal',
+    description: 'Two courses with seasonal sides.',
+    durationMinutes: 60,
+    price: 45,
+    currency: '€',
+  },
+  {
+    id: 'tasting-menu',
+    name: 'Tasting menu',
+    description: 'Chef selection across several courses.',
+    durationMinutes: 120,
+    price: 95,
+    currency: '€',
+  },
+] satisfies NonNullable<ReservationBlockProps['services']>
 
 const baseProps: ReservationBlockProps = {
   _type: 'reservationBlock',
   heading: 'Make a Reservation',
-  subtext: 'Book your table online.',
-  availableTimeSlots: CUSTOM_SLOTS,
-  minPartySize: 1,
-  maxPartySize: 8,
+  subtext: 'Book your visit online.',
+  services: SERVICES,
   confirmationMessage: null,
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function pickService(serviceName = SERVICES[0].name) {
+  fireEvent.click(screen.getByRole('button', { name: new RegExp(serviceName, 'i') }))
+}
 
 function pickDate(date = '2026-12-25') {
   fireEvent.change(document.getElementById('res-date')!, { target: { value: date } })
@@ -31,20 +50,30 @@ function fillGuestDetails({
   name = 'Jane Smith',
   email = 'jane@example.com',
   phone = '+34 600 000 000',
-  partySize = '2',
 } = {}) {
   fireEvent.change(document.getElementById('res-name')!, { target: { value: name } })
   fireEvent.change(document.getElementById('res-email')!, { target: { value: email } })
   fireEvent.change(document.getElementById('res-phone')!, { target: { value: phone } })
-  fireEvent.change(document.getElementById('res-party')!, { target: { value: partySize } })
 }
 
 function submitForm() {
   fireEvent.submit(document.querySelector('form')!)
 }
 
+function reservationPostCalls(fetchSpy: { mock: { calls: unknown[][] } }): [string, RequestInit][] {
+  return fetchSpy.mock.calls.filter(
+    (c): c is [string, RequestInit] =>
+      Array.isArray(c) &&
+      typeof c[0] === 'string' &&
+      c[0] === '/api/reservation' &&
+      typeof c[1] === 'object' &&
+      c[1] !== null,
+  )
+}
+
 /** Walk through the full happy path up to (but not including) submission. */
 function completeForm(overrides?: Parameters<typeof fillGuestDetails>[0]) {
+  pickService()
   pickDate()
   pickSlot()
   fillGuestDetails(overrides)
@@ -61,87 +90,82 @@ describe('ReservationBlock — initial render', () => {
   it('displays heading and subtext when provided', () => {
     render(<ReservationBlock {...baseProps} />)
     expect(screen.getByRole('heading', { name: 'Make a Reservation' })).toBeInTheDocument()
-    expect(screen.getByText('Book your table online.')).toBeInTheDocument()
+    expect(screen.getByText('Book your visit online.')).toBeInTheDocument()
   })
 
   it('does not render a heading or subtext section when both are omitted', () => {
-    render(<ReservationBlock _type="reservationBlock" />)
+    render(<ReservationBlock _type="reservationBlock" services={SERVICES} />)
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
 
   it('renders only heading when subtext is omitted', () => {
-    render(<ReservationBlock _type="reservationBlock" heading="Reserve" />)
+    render(<ReservationBlock _type="reservationBlock" heading="Reserve" services={SERVICES} />)
     expect(screen.getByRole('heading', { name: 'Reserve' })).toBeInTheDocument()
   })
 
-  it('renders the date input', () => {
+  it('shows booking unavailable when services list is empty', () => {
+    render(<ReservationBlock _type="reservationBlock" services={[]} heading="Book" />)
+    expect(screen.getByText(/no services are configured/i)).toBeInTheDocument()
+    expect(document.querySelector('form')).not.toBeInTheDocument()
+  })
+
+  it('shows service choices before date input', () => {
     render(<ReservationBlock {...baseProps} />)
-    expect(document.getElementById('res-date')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /standard meal/i })).toBeInTheDocument()
+    expect(document.getElementById('res-date')).not.toBeInTheDocument()
   })
 
   it('does not show time slots before a date is chosen', () => {
     render(<ReservationBlock {...baseProps} />)
-    expect(screen.queryByRole('button', { name: CUSTOM_SLOTS[0] })).not.toBeInTheDocument()
+    pickService()
+    expect(screen.queryByRole('button', { name: '09:00' })).not.toBeInTheDocument()
   })
 
   it('does not show guest detail fields before a date is chosen', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     expect(document.getElementById('res-name')).not.toBeInTheDocument()
   })
 })
 
-describe('ReservationBlock — step 1 → step 2: date selection reveals time slots', () => {
+describe('ReservationBlock — step flow: service → date reveals time slots', () => {
+  it('shows the date field after picking a service', () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    expect(document.getElementById('res-date')).toBeInTheDocument()
+  })
+
   it('shows the time slot grid after picking a date', () => {
     render(<ReservationBlock {...baseProps} />)
-    pickDate()
-    CUSTOM_SLOTS.forEach(slot => {
-      expect(screen.getByRole('button', { name: slot })).toBeInTheDocument()
-    })
-  })
-
-  it('renders custom availableTimeSlots when provided', () => {
-    render(<ReservationBlock {...baseProps} availableTimeSlots={['09:00', '10:00']} />)
+    pickService()
     pickDate()
     expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '10:00' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: '13:00' })).not.toBeInTheDocument()
-  })
-
-  it('falls back to default slots when availableTimeSlots is null', () => {
-    render(<ReservationBlock _type="reservationBlock" availableTimeSlots={null} />)
-    pickDate()
-    // Spot-check a few default slots
-    expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '18:00' })).toBeInTheDocument()
-  })
-
-  it('falls back to default slots when availableTimeSlots is an empty array', () => {
-    render(<ReservationBlock _type="reservationBlock" availableTimeSlots={[]} />)
-    pickDate()
-    expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
   })
 
   it('does not show guest form fields until a time slot is selected', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     expect(document.getElementById('res-name')).not.toBeInTheDocument()
   })
 })
 
-describe('ReservationBlock — step 2 → step 3: time selection reveals guest form', () => {
+describe('ReservationBlock — time selection reveals guest form', () => {
   it('shows the guest detail fields after picking a time slot', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     pickSlot()
     expect(document.getElementById('res-name')).toBeInTheDocument()
     expect(document.getElementById('res-email')).toBeInTheDocument()
     expect(document.getElementById('res-phone')).toBeInTheDocument()
-    expect(document.getElementById('res-party')).toBeInTheDocument()
     expect(document.getElementById('res-notes')).toBeInTheDocument()
   })
 
   it('shows the submit button once the guest form is visible', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     pickSlot()
     expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeInTheDocument()
@@ -149,6 +173,7 @@ describe('ReservationBlock — step 2 → step 3: time selection reveals guest f
 
   it('applies selected styling to the chosen time slot button', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     const slotBtn = screen.getByRole('button', { name: '13:00' })
     fireEvent.click(slotBtn)
@@ -157,42 +182,34 @@ describe('ReservationBlock — step 2 → step 3: time selection reveals guest f
 
   it('changing the date resets time selection and hides guest form', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate('2026-12-25')
     pickSlot()
     expect(document.getElementById('res-name')).toBeInTheDocument()
 
-    // Change date to a different day
     pickDate('2026-12-26')
     expect(document.getElementById('res-name')).not.toBeInTheDocument()
   })
-})
 
-describe('ReservationBlock — guest form constraints', () => {
-  beforeEach(() => {
-    render(<ReservationBlock {...baseProps} minPartySize={2} maxPartySize={6} />)
+  it('changing the service clears date and time and hides guest form', () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService(SERVICES[0].name)
     pickDate()
     pickSlot()
-  })
+    expect(document.getElementById('res-name')).toBeInTheDocument()
 
-  it('shows the correct party size hint text', () => {
-    expect(screen.getByText(/between 2 and 6 guests/i)).toBeInTheDocument()
-  })
-
-  it('defaults partySize input to minPartySize', () => {
-    const input = document.getElementById('res-party') as HTMLInputElement
-    expect(input.value).toBe('2')
-  })
-
-  it('has the correct min/max attributes on the partySize input', () => {
-    const input = document.getElementById('res-party') as HTMLInputElement
-    expect(input.min).toBe('2')
-    expect(input.max).toBe('6')
+    pickService(SERVICES[1].name)
+    const dateInput = document.getElementById('res-date') as HTMLInputElement
+    expect(dateInput).toBeInTheDocument()
+    expect(dateInput.value).toBe('')
+    expect(document.getElementById('res-name')).not.toBeInTheDocument()
   })
 })
 
 describe('ReservationBlock — submit button state', () => {
   beforeEach(() => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     pickSlot()
   })
@@ -208,25 +225,6 @@ describe('ReservationBlock — submit button state', () => {
 
   it('disables submit button when name is whitespace-only', () => {
     fillGuestDetails({ name: '   ' })
-    expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeDisabled()
-  })
-
-})
-
-describe('ReservationBlock — party size boundary validation', () => {
-  it('disables submit button when partySize is below min', () => {
-    render(<ReservationBlock {...baseProps} minPartySize={2} maxPartySize={8} />)
-    pickDate()
-    pickSlot()
-    fillGuestDetails({ partySize: '1' })
-    expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeDisabled()
-  })
-
-  it('disables submit button when partySize exceeds max', () => {
-    render(<ReservationBlock {...baseProps} minPartySize={1} maxPartySize={4} />)
-    pickDate()
-    pickSlot()
-    fillGuestDetails({ partySize: '10' })
     expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeDisabled()
   })
 })
@@ -248,20 +246,23 @@ describe('ReservationBlock — form submission', () => {
     completeForm()
     submitForm()
 
-    await waitFor(() => expect(fetchSpy).toHaveBeenCalledOnce())
+    await waitFor(() => expect(fetchSpy).toHaveBeenCalled())
 
-    const [url, init] = fetchSpy.mock.calls[0] as [string, RequestInit]
-    expect(url).toBe('/api/reservation')
+    const reservationCalls = reservationPostCalls(fetchSpy)
+    expect(reservationCalls).toHaveLength(1)
+
+    const [, init] = reservationCalls[0]
     expect(init.method).toBe('POST')
 
     const body = JSON.parse(init.body as string)
     expect(body).toMatchObject({
+      serviceId: 'standard-meal',
+      durationMinutes: 60,
       name: 'Jane Smith',
       email: 'jane@example.com',
       phone: '+34 600 000 000',
       date: '2026-12-25',
       time: '13:00',
-      partySize: 2,
     })
   })
 
@@ -271,8 +272,9 @@ describe('ReservationBlock — form submission', () => {
     completeForm({ name: '  Jane Smith  ', email: ' jane@example.com ', phone: ' +34 600 000 000 ' })
     submitForm()
 
-    await waitFor(() => expect(fetchSpy).toHaveBeenCalledOnce())
-    const body = JSON.parse((fetchSpy.mock.calls[0] as [string, RequestInit])[1].body as string)
+    await waitFor(() => expect(fetchSpy).toHaveBeenCalled())
+    const reservationCalls = reservationPostCalls(fetchSpy)
+    const body = JSON.parse(reservationCalls[0][1].body as string)
     expect(body.name).toBe('Jane Smith')
     expect(body.email).toBe('jane@example.com')
     expect(body.phone).toBe('+34 600 000 000')
@@ -284,22 +286,25 @@ describe('ReservationBlock — form submission', () => {
     completeForm()
     submitForm()
 
-    await waitFor(() => expect(fetchSpy).toHaveBeenCalledOnce())
-    const body = JSON.parse((fetchSpy.mock.calls[0] as [string, RequestInit])[1].body as string)
+    await waitFor(() => expect(fetchSpy).toHaveBeenCalled())
+    const reservationCalls = reservationPostCalls(fetchSpy)
+    const body = JSON.parse(reservationCalls[0][1].body as string)
     expect(body.notes).toBeUndefined()
   })
 
   it('includes notes in payload when filled in', async () => {
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     pickSlot()
     fillGuestDetails()
     fireEvent.change(document.getElementById('res-notes')!, { target: { value: 'Window seat please' } })
     submitForm()
 
-    await waitFor(() => expect(fetchSpy).toHaveBeenCalledOnce())
-    const body = JSON.parse((fetchSpy.mock.calls[0] as [string, RequestInit])[1].body as string)
+    await waitFor(() => expect(fetchSpy).toHaveBeenCalled())
+    const reservationCalls = reservationPostCalls(fetchSpy)
+    const body = JSON.parse(reservationCalls[0][1].body as string)
     expect(body.notes).toBe('Window seat please')
   })
 
@@ -384,16 +389,16 @@ describe('ReservationBlock — form submission', () => {
 
   it('does not submit when canSubmit is false (guard against programmatic calls)', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     pickSlot()
-    // Do NOT fill the guest fields — form is incomplete
     submitForm()
     expect(fetchSpy).not.toHaveBeenCalled()
   })
 
   it('renders success without block heading when heading and subtext are omitted', async () => {
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock _type="reservationBlock" />)
+    render(<ReservationBlock _type="reservationBlock" services={SERVICES} />)
     completeForm()
     submitForm()
 
@@ -529,19 +534,20 @@ describe('ReservationBlock — availability integration', () => {
     fetchSpy.mockRestore()
   })
 
-  it('fetches availability when clientId and date are set', async () => {
+  it('fetches availability when clientId, service, and date are set', async () => {
     fetchSpy.mockResolvedValue({
       ok: true,
       json: async () => ({ bookedSlots: [] }),
     } as Response)
 
     render(<ReservationBlock {...baseProps} clientId="rest-pepe" />)
+    pickService()
     pickDate('2026-06-01')
 
     await waitFor(() => {
       expect(fetchSpy).toHaveBeenCalledWith(
         expect.stringContaining(
-          '/api/availability?clientId=rest-pepe&date=2026-06-01',
+          '/api/availability?clientId=rest-pepe&date=2026-06-01&duration=60',
         ),
       )
     })
@@ -554,6 +560,7 @@ describe('ReservationBlock — availability integration', () => {
     } as Response)
 
     render(<ReservationBlock {...baseProps} clientId="scoped" />)
+    pickService()
     pickDate()
 
     await waitFor(() => {
@@ -575,11 +582,29 @@ describe('ReservationBlock — availability integration', () => {
         availabilityEndpoint="https://api.example.com/v1/booked"
       />,
     )
+    pickService()
     pickDate('2026-12-25')
 
     await waitFor(() => {
       expect(fetchSpy).toHaveBeenCalledWith(
-        'https://api.example.com/v1/booked?clientId=c1&date=2026-12-25',
+        'https://api.example.com/v1/booked?clientId=c1&date=2026-12-25&duration=60',
+      )
+    })
+  })
+
+  it('passes selected service duration to availability when not the first service', async () => {
+    fetchSpy.mockResolvedValue({
+      ok: true,
+      json: async () => ({ bookedSlots: [] }),
+    } as Response)
+
+    render(<ReservationBlock {...baseProps} clientId="dur-test" />)
+    pickService(SERVICES[1].name)
+    pickDate()
+
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalledWith(
+        expect.stringContaining('duration=120'),
       )
     })
   })
@@ -592,6 +617,7 @@ describe('ReservationBlock — availability integration', () => {
     fetchSpy.mockImplementation(() => availability)
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickService()
     pickDate()
 
     await waitFor(() => {
@@ -615,6 +641,7 @@ describe('ReservationBlock — availability integration', () => {
     } as Response)
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickService()
     pickDate()
 
     await waitFor(() => {
@@ -631,6 +658,7 @@ describe('ReservationBlock — availability integration', () => {
     } as Response)
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickService()
     pickDate()
 
     await waitFor(() =>
@@ -651,6 +679,7 @@ describe('ReservationBlock — availability integration', () => {
     } as Response)
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickService()
     pickDate()
 
     await waitFor(() => {
@@ -663,6 +692,7 @@ describe('ReservationBlock — availability integration', () => {
     fetchSpy.mockRejectedValue(new Error('network'))
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickService()
     pickDate()
 
     await waitFor(() => {
@@ -674,6 +704,7 @@ describe('ReservationBlock — availability integration', () => {
 describe('ReservationBlock — inline field validation', () => {
   beforeEach(() => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     pickSlot()
   })
@@ -701,23 +732,16 @@ describe('ReservationBlock — inline field validation', () => {
 
     expect(await screen.findByText(/please enter a valid phone number/i)).toBeInTheDocument()
   })
-
-  it('shows the party size validation message after blur when out of range', async () => {
-    const input = document.getElementById('res-party') as HTMLInputElement
-    fireEvent.change(input, { target: { value: '99' } })
-    fireEvent.blur(input)
-
-    expect(await screen.findByText(/please enter a number between 1 and 8/i)).toBeInTheDocument()
-  })
 })
 
 describe('ReservationBlock — accessibility', () => {
   it('associates each label with its input via matching htmlFor and id', () => {
     render(<ReservationBlock {...baseProps} />)
+    pickService()
     pickDate()
     pickSlot()
 
-    const labeledIds = ['res-name', 'res-email', 'res-phone', 'res-party', 'res-notes']
+    const labeledIds = ['res-name', 'res-email', 'res-phone', 'res-notes']
     labeledIds.forEach(id => {
       const el = document.getElementById(id)
       expect(el, `#${id} should exist`).toBeInTheDocument()
@@ -733,7 +757,7 @@ describe('ReservationBlock — accessibility', () => {
   })
 
   it('does not render a heading element when heading prop is not provided', () => {
-    render(<ReservationBlock _type="reservationBlock" subtext="A subtitle" />)
+    render(<ReservationBlock _type="reservationBlock" subtext="A subtitle" services={SERVICES} />)
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
 })

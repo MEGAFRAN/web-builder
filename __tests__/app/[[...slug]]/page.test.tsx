@@ -37,7 +37,7 @@ vi.mock('next/navigation', () => ({
 // ---------------------------------------------------------------------------
 // Subject under test (imported after vi.mock declarations)
 // ---------------------------------------------------------------------------
-import { generateStaticParams, generateMetadata, default as Page } from '@/app/[[...slug]]/page'
+import { generateStaticParams, generateMetadata, default as Page } from '@/app/(site)/[[...slug]]/page'
 import { createJSONCMSClient } from '@/lib/json-cms'
 import { getClientConfig } from '@/lib/client-config'
 import { notFound } from 'next/navigation'

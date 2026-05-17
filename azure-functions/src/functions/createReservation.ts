@@ -3,12 +3,13 @@ import { getContainer } from '../cosmosClient'
 
 interface ReservationPayload {
   clientId: string
+  serviceId: string
+  durationMinutes: number
   name: string
   email: string
   phone: string
   date: string
   time: string
-  partySize: number
   notes?: string
 }
 
@@ -17,19 +18,22 @@ function isValidPayload(body: unknown): body is ReservationPayload {
   const b = body as Record<string, unknown>
   return (
     typeof b.clientId === 'string' &&
+    typeof b.serviceId === 'string' &&
+    typeof b.durationMinutes === 'number' &&
     typeof b.name === 'string' &&
     typeof b.email === 'string' &&
     typeof b.phone === 'string' &&
     typeof b.date === 'string' &&
     typeof b.time === 'string' &&
-    typeof b.partySize === 'number' &&
     b.clientId.trim().length > 0 &&
+    b.serviceId.trim().length > 0 &&
     b.name.trim().length > 0 &&
     b.email.trim().length > 0 &&
     b.phone.trim().length > 0 &&
     b.date.trim().length > 0 &&
     b.time.trim().length > 0 &&
-    b.partySize >= 1
+    b.durationMinutes >= 1 &&
+    b.durationMinutes <= 24 * 60
   )
 }
 
@@ -76,12 +80,13 @@ async function handler(
   const record = {
     id: reservationId,
     clientId: body.clientId,
+    serviceId: body.serviceId.trim(),
+    durationMinutes: body.durationMinutes,
     name: body.name.trim(),
     email: body.email.trim(),
     phone: body.phone.trim(),
     date: body.date,
     time: body.time,
-    partySize: body.partySize,
     notes: body.notes?.trim() ?? null,
     status: 'pending',
     createdAt: new Date().toISOString(),
@@ -122,9 +127,9 @@ async function handler(
                 `Hi ${record.name},`,
                 '',
                 `Your reservation has been received:`,
+                `  Service: ${record.serviceId} (${record.durationMinutes} min)`,
                 `  Date: ${record.date}`,
                 `  Time: ${record.time}`,
-                `  Guests: ${record.partySize}`,
                 record.notes ? `  Notes: ${record.notes}` : '',
                 '',
                 `We'll confirm within 2 hours.`,

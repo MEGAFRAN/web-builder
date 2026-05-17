@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Reservar mesa",
-    "description": "Reserva tu mesa online en Restaurante Pepe. Elige fecha, hora y comensales; confirmamos cuanto antes.",
+    "description": "Reserva tu mesa online en Restaurante Pepe. Elige servicio, fecha y hora; confirmamos cuanto antes.",
     "ogImage": null,
     "noIndex": false
   },
@@ -17,23 +17,33 @@
       "_type": "reservationBlock",
       "clientId": "restaurante-pepe",
       "heading": "Reserva tu mesa en Restaurante Pepe",
-      "subtext": "Selecciona fecha, hora y número de comensales. Cocina tradicional madrileña desde hace décadas.",
-      "availableTimeSlots": [
-        "13:00",
-        "13:30",
-        "14:00",
-        "14:30",
-        "15:00",
-        "15:30",
-        "20:00",
-        "20:30",
-        "21:00",
-        "21:30",
-        "22:00",
-        "22:30"
+      "subtext": "Selecciona la experiencia, fecha y hora. Cocina tradicional madrileña desde hace décadas.",
+      "services": [
+        {
+          "id": "comida-mediodia",
+          "name": "Comida mediodía",
+          "description": "Mesón tranquilo entre semana o carta corta.",
+          "durationMinutes": 90,
+          "price": 0,
+          "currency": "€"
+        },
+        {
+          "id": "cena",
+          "name": "Cena",
+          "description": "Carta completa y especialidades de casa.",
+          "durationMinutes": 120,
+          "price": 0,
+          "currency": "€"
+        },
+        {
+          "id": "menu-especial",
+          "name": "Menú especial chef",
+          "description": "Menú cerrado previo aviso.",
+          "durationMinutes": 150,
+          "price": 62,
+          "currency": "€"
+        }
       ],
-      "minPartySize": 1,
-      "maxPartySize": 10,
       "confirmationMessage": "¡Reserva enviada! Te contactamos por correo o teléfono en menos de 2 horas."
     },
     {

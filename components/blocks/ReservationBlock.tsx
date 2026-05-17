@@ -6,7 +6,10 @@ import { Button } from '@/components/inputs/Button'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Stack } from '@/components/layout/Stack'
-import type { ReservationBlock as ReservationBlockProps } from '@/types/cms'
+import type {
+  ReservationBlock as ReservationBlockProps,
+  ReservationServiceItem,
+} from '@/types/cms'
 
 type SubmissionState = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -14,7 +17,6 @@ interface FormFields {
   name: string
   email: string
   phone: string
-  partySize: string
   notes: string
 }
 
@@ -28,34 +30,37 @@ function todayISODate(): string {
   return new Date().toISOString().split('T')[0]
 }
 
+function formatListedPrice(price: number, currencySymbol: string): string {
+  const text = Number.isInteger(price)
+    ? String(price)
+    : price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  return `${currencySymbol}${text}`
+}
+
 const STEPS = [
-  { label: '1 · Date & time', step: 1 },
-  { label: '2 · Guest details', step: 2 },
-  { label: '3 · Confirmed', step: 3 },
+  { label: '1 · Service', step: 1 },
+  { label: '2 · Date & time', step: 2 },
+  { label: '3 · Your details', step: 3 },
+  { label: '4 · Confirmed', step: 4 },
 ]
 
 export default function ReservationBlock({
   heading,
   subtext,
-  availableTimeSlots,
-  minPartySize,
-  maxPartySize,
+  services: servicesProp,
   confirmationMessage,
   clientId,
   availabilityEndpoint,
 }: ReservationBlockProps) {
-  const slots =
-    availableTimeSlots && availableTimeSlots.length > 0
-      ? availableTimeSlots
-      : DEFAULT_TIME_SLOTS
+  const services: ReservationServiceItem[] = servicesProp ?? []
 
+  const [selectedServiceId, setSelectedServiceId] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTime, setSelectedTime] = useState<string>('')
   const [fields, setFields] = useState<FormFields>({
     name: '',
     email: '',
     phone: '',
-    partySize: String(minPartySize ?? 2),
     notes: '',
   })
   const [touched, setTouched] = useState<Partial<Record<keyof FormFields, boolean>>>({})
@@ -66,16 +71,25 @@ export default function ReservationBlock({
   const [confirmedBooking, setConfirmedBooking] = useState<{
     date: string
     time: string
-    partySize: string
     email: string
+    serviceSummary: string
   } | null>(null)
 
+  const selectedService =
+    selectedServiceId.length > 0
+      ? services.find(s => s.id === selectedServiceId)
+      : undefined
+
   useEffect(() => {
-    if (!selectedDate || !clientId) {
+    if (!selectedDate || !clientId || !selectedService) {
       return
     }
+    const duration = selectedService.durationMinutes
     const base = availabilityEndpoint ?? '/api/availability'
-    const url = `${base}?clientId=${encodeURIComponent(clientId)}&date=${encodeURIComponent(selectedDate)}`
+    const url =
+      `${base}?clientId=${encodeURIComponent(clientId)}` +
+      `&date=${encodeURIComponent(selectedDate)}` +
+      `&duration=${encodeURIComponent(String(duration))}`
     Promise.resolve()
       .then(() => {
         setLoadingSlots(true)
@@ -85,16 +99,20 @@ export default function ReservationBlock({
       .then((data: { bookedSlots?: string[] }) => setBookedSlots(data.bookedSlots ?? []))
       .catch(() => setBookedSlots([]))
       .finally(() => setLoadingSlots(false))
-  }, [selectedDate, clientId, availabilityEndpoint])
+  }, [selectedDate, clientId, availabilityEndpoint, selectedService])
 
   useEffect(() => {
     if (selectedTime) {
-      document.getElementById('res-party')?.focus()
+      document.getElementById('res-name')?.focus()
     }
   }, [selectedTime])
 
-  const min = minPartySize ?? 1
-  const max = maxPartySize ?? 20
+  function selectService(serviceId: string) {
+    setSelectedServiceId(serviceId)
+    setSelectedDate('')
+    setSelectedTime('')
+    setBookedSlots([])
+  }
 
   function updateField(key: keyof FormFields, value: string) {
     setFields(prev => ({ ...prev, [key]: value }))
@@ -107,38 +125,37 @@ export default function ReservationBlock({
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.trim())
   const phoneValid = /^[\+\d\s\-\(\)]{7,20}$/.test(fields.phone.trim())
   const nameValid = /^[a-zA-ZÀ-ÖØ-öø-ÿ\s'\-]{2,}$/.test(fields.name.trim())
-  const partySizeValid = Number(fields.partySize) >= min && Number(fields.partySize) <= max
 
   const fieldErrors: Partial<Record<keyof FormFields, string>> = {
     name: !nameValid ? 'Please enter a full name (at least 2 characters).' : undefined,
     email: !emailValid ? 'Please enter a valid email address.' : undefined,
     phone: !phoneValid ? 'Please enter a valid phone number (digits, spaces, +, -, parentheses).' : undefined,
-    partySize: !partySizeValid ? `Please enter a number between ${min} and ${max}.` : undefined,
   }
 
   const canSubmit =
+    !!selectedService &&
     selectedDate.length > 0 &&
     selectedTime.length > 0 &&
     nameValid &&
     emailValid &&
-    phoneValid &&
-    partySizeValid
+    phoneValid
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!canSubmit) return
+    if (!canSubmit || !selectedService) return
     setState('submitting')
     try {
       const res = await fetch('/api/reservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          serviceId: selectedService.id,
+          durationMinutes: selectedService.durationMinutes,
           name: fields.name.trim(),
           email: fields.email.trim(),
           phone: fields.phone.trim(),
           date: selectedDate,
           time: selectedTime,
-          partySize: Number(fields.partySize),
           notes: fields.notes.trim() || undefined,
         }),
       })
@@ -160,11 +177,12 @@ export default function ReservationBlock({
         setState('error')
         return
       }
+      const serviceSummary = `${selectedService.name} (${selectedService.durationMinutes} min)`
       setConfirmedBooking({
         date: selectedDate,
         time: selectedTime,
-        partySize: fields.partySize,
         email: fields.email,
+        serviceSummary,
       })
       setState('success')
     } catch {
@@ -175,37 +193,51 @@ export default function ReservationBlock({
     }
   }
 
-  const currentStep = state === 'success' ? 3 : selectedDate && selectedTime ? 2 : 1
+  const currentStep =
+    state === 'success'
+      ? 4
+      : selectedDate && selectedTime
+        ? 3
+        : selectedServiceId
+          ? 2
+          : 1
+
+  const progressSection = (
+    <ol aria-label="Booking progress" className="flex list-none gap-4 pl-0">
+      {STEPS.map(({ label, step }) => (
+        <li
+          key={step}
+          aria-current={currentStep === step ? 'step' : undefined}
+          className={
+            currentStep === step
+              ? 'text-sm font-medium text-foreground'
+              : 'text-sm text-muted'
+          }
+        >
+          {label}
+        </li>
+      ))}
+    </ol>
+  )
+
+  const headingSection =
+    (heading || subtext) ? (
+      <Stack gap="sm">
+        {heading && (
+          <h2 className="text-center text-3xl font-bold text-foreground">{heading}</h2>
+        )}
+        {subtext && <p className="text-center text-muted">{subtext}</p>}
+      </Stack>
+    ) : null
 
   if (state === 'success') {
     return (
       <Section paddingY="lg" dataComponent="reservation-block">
         <Container maxWidth="xl" padding="theme">
           <Stack gap="md">
-            {(heading || subtext) && (
-              <Stack gap="sm">
-                {heading && (
-                  <h2 className="text-center text-3xl font-bold text-foreground">{heading}</h2>
-                )}
-                {subtext && <p className="text-center text-muted">{subtext}</p>}
-              </Stack>
-            )}
+            {headingSection}
 
-            <ol aria-label="Booking progress" className="flex list-none gap-4 pl-0">
-              {STEPS.map(({ label, step }) => (
-                <li
-                  key={step}
-                  aria-current={currentStep === step ? 'step' : undefined}
-                  className={
-                    currentStep === step
-                      ? 'text-sm font-medium text-foreground'
-                      : 'text-sm text-muted'
-                  }
-                >
-                  {label}
-                </li>
-              ))}
-            </ol>
+            {progressSection}
 
             <Alert
               variant="success"
@@ -218,7 +250,11 @@ export default function ReservationBlock({
             {confirmedBooking && (
               <dl className="rounded-md border border-border bg-background p-4 text-sm">
                 <div className="flex gap-2 py-1">
-                  <dt className="w-24 font-medium text-foreground">Date</dt>
+                  <dt className="w-24 shrink-0 font-medium text-foreground">Service</dt>
+                  <dd className="text-muted">{confirmedBooking.serviceSummary}</dd>
+                </div>
+                <div className="flex gap-2 py-1">
+                  <dt className="w-24 shrink-0 font-medium text-foreground">Date</dt>
                   <dd className="text-muted">
                     {new Date(confirmedBooking.date + 'T12:00:00').toLocaleDateString('en-GB', {
                       weekday: 'long',
@@ -229,15 +265,11 @@ export default function ReservationBlock({
                   </dd>
                 </div>
                 <div className="flex gap-2 py-1">
-                  <dt className="w-24 font-medium text-foreground">Time</dt>
+                  <dt className="w-24 shrink-0 font-medium text-foreground">Time</dt>
                   <dd className="text-muted">{confirmedBooking.time}</dd>
                 </div>
                 <div className="flex gap-2 py-1">
-                  <dt className="w-24 font-medium text-foreground">Guests</dt>
-                  <dd className="text-muted">{confirmedBooking.partySize}</dd>
-                </div>
-                <div className="flex gap-2 py-1">
-                  <dt className="w-24 font-medium text-foreground">Confirmation</dt>
+                  <dt className="w-24 shrink-0 font-medium text-foreground">Confirmation</dt>
                   <dd className="text-muted">Sent to {confirmedBooking.email}</dd>
                 </div>
               </dl>
@@ -248,60 +280,100 @@ export default function ReservationBlock({
     )
   }
 
+  if (services.length === 0) {
+    return (
+      <Section paddingY="lg" dataComponent="reservation-block">
+        <Container maxWidth="xl" padding="theme">
+          <Stack gap="md">
+            {headingSection}
+            <Alert
+              variant="error"
+              title="Booking unavailable"
+              message="No services are configured for online booking yet. Please contact us directly."
+            />
+          </Stack>
+        </Container>
+      </Section>
+    )
+  }
+
   return (
     <Section paddingY="lg" dataComponent="reservation-block">
       <Container maxWidth="xl" padding="theme">
         <Stack gap="md">
-          {(heading || subtext) && (
-            <Stack gap="sm">
-              {heading && (
-                <h2 className="text-center text-3xl font-bold text-foreground">{heading}</h2>
-              )}
-              {subtext && <p className="text-center text-muted">{subtext}</p>}
-            </Stack>
-          )}
+          {headingSection}
 
-          {/* Step progress indicator — always visible */}
-          <ol aria-label="Booking progress" className="flex list-none gap-4 pl-0">
-            {STEPS.map(({ label, step }) => (
-              <li
-                key={step}
-                aria-current={currentStep === step ? 'step' : undefined}
-                className={
-                  currentStep === step
-                    ? 'text-sm font-medium text-foreground'
-                    : 'text-sm text-muted'
-                }
-              >
-                {label}
-              </li>
-            ))}
-          </ol>
+          {progressSection}
 
           <form onSubmit={handleSubmit} noValidate>
             <Stack gap="md">
-              {/* Date */}
-              <div className="flex flex-col gap-1.5">
-                <label htmlFor="res-date" className="text-sm font-medium text-foreground">
-                  Date <span className="text-destructive">*</span>
-                </label>
-                <input
-                  id="res-date"
-                  type="date"
-                  required
-                  min={todayISODate()}
-                  value={selectedDate}
-                  onChange={e => {
-                    setSelectedDate(e.target.value)
-                    setSelectedTime('')
-                    setBookedSlots([])
-                  }}
-                  className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                />
+              {/* Step 0 — Service */}
+              <div className="flex flex-col gap-2">
+                <span id="res-service-label" className="text-sm font-medium text-foreground">
+                  Service <span className="text-destructive">*</span>
+                </span>
+                <div
+                  role="group"
+                  aria-labelledby="res-service-label"
+                  className="grid gap-3 sm:grid-cols-2"
+                >
+                  {services.map(service => {
+                    const currency = service.currency ?? '€'
+                    const pressed = selectedServiceId === service.id
+                    const priceLabel = formatListedPrice(service.price, currency)
+                    return (
+                      <button
+                        key={service.id}
+                        type="button"
+                        aria-pressed={pressed}
+                        aria-label={`${service.name}, ${service.durationMinutes} minutes, ${priceLabel}`}
+                        onClick={() => selectService(service.id)}
+                        className={[
+                          'flex flex-col gap-1 rounded-md border px-3 py-3 text-left transition-colors',
+                          pressed
+                            ? 'border-primary bg-background shadow-sm'
+                            : 'border-border bg-background hover:border-primary hover:text-primary',
+                        ].join(' ')}
+                      >
+                        <span className="text-base font-semibold text-foreground">{service.name}</span>
+                        <span className="text-xs text-muted">
+                          {service.durationMinutes} min · {priceLabel}
+                        </span>
+                        {service.description ? (
+                          <span className="line-clamp-2 overflow-hidden text-sm text-muted">
+                            {service.description}
+                          </span>
+                        ) : null}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
 
-              {/* Time slot grid — only when date is selected */}
-              {selectedDate && (
+              {/* Date — after service */}
+              {selectedServiceId && (
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="res-date" className="text-sm font-medium text-foreground">
+                    Date <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    id="res-date"
+                    type="date"
+                    required
+                    min={todayISODate()}
+                    value={selectedDate}
+                    onChange={e => {
+                      setSelectedDate(e.target.value)
+                      setSelectedTime('')
+                      setBookedSlots([])
+                    }}
+                    className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  />
+                </div>
+              )}
+
+              {/* Time slot grid */}
+              {selectedServiceId && selectedDate && (
                 <div className="flex flex-col gap-2">
                   <span id="res-time-label" className="text-sm font-medium text-foreground">
                     Time <span className="text-destructive">*</span>
@@ -321,7 +393,7 @@ export default function ReservationBlock({
                     aria-labelledby="res-time-label"
                     className={`grid grid-cols-4 gap-2 sm:grid-cols-5 ${loadingSlots ? 'pointer-events-none opacity-50' : ''}`}
                   >
-                    {slots.map(slot => {
+                    {DEFAULT_TIME_SLOTS.map(slot => {
                       const isBooked = bookedSlots.includes(slot)
                       return (
                         <button
@@ -352,48 +424,10 @@ export default function ReservationBlock({
                 </div>
               )}
 
-              {/* Step 1 + Step 2 fields — only shown once date + time are picked */}
-              {selectedDate && selectedTime && (
+              {selectedServiceId && selectedDate && selectedTime && (
                 <>
-                  {/* Party size — Step 1 field, revealed with date+time */}
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="res-party" className="text-sm font-medium text-foreground">
-                      Number of guests <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      id="res-party"
-                      type="number"
-                      required
-                      min={min}
-                      max={max}
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      value={fields.partySize}
-                      aria-describedby={touched.partySize && fieldErrors.partySize ? 'res-party-error' : 'res-party-hint'}
-                      aria-invalid={touched.partySize && !!fieldErrors.partySize}
-                      onChange={e => updateField('partySize', e.target.value)}
-                      onBlur={() => touchField('partySize')}
-                      className={[
-                        'rounded-md border bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-                        touched.partySize && fieldErrors.partySize
-                          ? 'border-destructive focus-visible:border-destructive focus-visible:ring-destructive'
-                          : 'border-border focus-visible:border-primary focus-visible:ring-primary',
-                      ].join(' ')}
-                    />
-                    {touched.partySize && fieldErrors.partySize ? (
-                      <p id="res-party-error" role="alert" className="text-xs text-destructive">
-                        {fieldErrors.partySize}
-                      </p>
-                    ) : (
-                      <p id="res-party-hint" className="text-xs text-muted">
-                        Between {min} and {max} guests.
-                      </p>
-                    )}
-                  </div>
-
                   <hr className="border-border" />
 
-                  {/* Contact details — Step 2 */}
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="res-name" className="text-sm font-medium text-foreground">
                       Full name <span className="text-destructive">*</span>
