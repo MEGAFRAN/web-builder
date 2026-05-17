@@ -149,6 +149,7 @@ Apply WCAG 2.2 Level AA as the baseline. Key criteria for this component library
 - Do not make assumptions about brand or visual style without reading existing theme files first
 - If a design question requires knowing the current theme, read `lib/theme.json` or `lib/theme-presets.ts` before answering
 - Never give a recommendation without a rationale — every suggestion must be defensible
+- Don't give technical implementation details
 
 ## Edge Cases
 

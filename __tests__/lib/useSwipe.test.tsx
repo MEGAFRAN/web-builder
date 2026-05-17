@@ -48,6 +48,39 @@ describe('useSwipe', () => {
 
     expect(getByTestId('direction').textContent).toBe('')
   })
+
+  it('does nothing on pointer-up without pointer-down', () => {
+    const { getByTestId } = render(<SwipeHarness />)
+    const zone = getByTestId('zone')
+    fireEvent.pointerUp(zone, { clientX: 50, clientY: 50 })
+    expect(getByTestId('direction').textContent).toBe('')
+  })
+
+  it('uses zero velocity when dt is 0', () => {
+    const { getByTestId } = render(<SwipeHarness />)
+    const zone = getByTestId('zone')
+    const t = 5000
+    vi.spyOn(performance, 'now').mockReturnValue(t)
+
+    fireEvent.pointerDown(zone, { clientX: 100, clientY: 50 })
+    fireEvent.pointerUp(zone, { clientX: 130, clientY: 52 })
+
+    expect(getByTestId('direction').textContent).toBe('')
+    vi.mocked(performance.now).mockRestore()
+  })
+
+  it('does not trigger swipe when distance and velocity are both low', () => {
+    const { getByTestId } = render(<SwipeHarness />)
+    const zone = getByTestId('zone')
+    const start = 10_000
+    vi.spyOn(performance, 'now').mockReturnValueOnce(start).mockReturnValueOnce(start + 1000)
+
+    fireEvent.pointerDown(zone, { clientX: 100, clientY: 50 })
+    fireEvent.pointerUp(zone, { clientX: 110, clientY: 52 })
+
+    expect(getByTestId('direction').textContent).toBe('')
+    vi.mocked(performance.now).mockRestore()
+  })
   it('honors swipe based on velocity when distance < threshold but movement is fast', () => {
     const { getByTestId } = render(<SwipeHarness />)
     const zone = getByTestId('zone')

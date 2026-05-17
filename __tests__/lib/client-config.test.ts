@@ -121,6 +121,27 @@ describe('getClientConfig template filesystem edge cases', () => {
     expect(config.pages.some((p) => p.slug === 'a/b/deep')).toBe(true)
   })
 
+  it('ignores non-JSON files when collecting pages', () => {
+    const pagesDir = path.join(tmpRoot, 'config', 'clients', 'tmp-client', 'pages')
+    fs.mkdirSync(pagesDir, { recursive: true })
+    fs.writeFileSync(path.join(pagesDir, 'ignored.txt'), 'nope', 'utf-8')
+    fs.writeFileSync(
+      path.join(pagesDir, 'keep.json'),
+      JSON.stringify({ metadata: null, blocks: [] }),
+      'utf-8',
+    )
+
+    fs.writeFileSync(
+      path.join(tmpRoot, 'config', 'clients', 'tmp-client', 'client.json'),
+      JSON.stringify({ ...minimalClient('meta-without-pages'), template: undefined }),
+      'utf-8',
+    )
+
+    const config = getClientConfig('tmp-client')
+    expect(config.pages.some((p) => p.slug === 'keep')).toBe(true)
+    expect(config.pages.some((p) => p.slug === 'ignored')).toBe(false)
+  })
+
   it('uses template bottomActionBar when client omits the key', () => {
     const templateName = 'tpl-with-bottom-bar'
     fs.mkdirSync(path.join(tmpRoot, 'config', 'templates', templateName), { recursive: true })
