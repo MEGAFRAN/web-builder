@@ -71,18 +71,20 @@ describe('Container', () => {
   })
 
   describe('padding prop', () => {
-    it('sets paddingInline to var(--page-inset) and no px-* class when padding is omitted (defaults to "theme")', () => {
+    it('uses 8px horizontal padding on small screens and --page-inset from md when padding is omitted (defaults to "theme")', () => {
       const container = renderContainer()
       const div = getDiv(container)
-      expect(div.style.paddingInline).toBe('var(--page-inset)')
-      expect(div.className).not.toMatch(/\bpx-/)
+      expect(div.className).toMatch(/px-\[8px\]/)
+      expect(div.className).toContain('md:[padding-inline:var(--page-inset)]')
+      expect(div.style.paddingInline).toBe('')
     })
 
-    it('sets paddingInline to var(--page-inset) and no px-* class when padding="theme" explicitly', () => {
+    it('uses 8px horizontal padding on small screens and --page-inset from md when padding="theme" explicitly', () => {
       const container = renderContainer({ padding: 'theme' })
       const div = getDiv(container)
-      expect(div.style.paddingInline).toBe('var(--page-inset)')
-      expect(div.className).not.toMatch(/\bpx-/)
+      expect(div.className).toMatch(/px-\[8px\]/)
+      expect(div.className).toContain('md:[padding-inline:var(--page-inset)]')
+      expect(div.style.paddingInline).toBe('')
     })
 
     it('has no px-* class and no paddingInline style when padding="none"', () => {

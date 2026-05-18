@@ -1,0 +1,20 @@
+{
+  "services": [
+    {
+      "id": "svc-1779102974818-jzi3",
+      "name": "degustacion total",
+      "description": "",
+      "durationMinutes": 60,
+      "price": 100,
+      "currency": "€"
+    },
+    {
+      "id": "svc-1779102990687-xnbu",
+      "name": "buffet de perros calientes",
+      "description": "",
+      "durationMinutes": 30,
+      "price": 20,
+      "currency": "€"
+    }
+  ]
+}

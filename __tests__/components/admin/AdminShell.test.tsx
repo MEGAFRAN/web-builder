@@ -54,8 +54,7 @@ describe('AdminShell', () => {
     ['/admin/services/extra', 'Services'],
     ['/admin/availability', 'Availability'],
     ['/admin/settings', 'Settings'],
-    ['/admin/unknown', 'Admin'],
-  ] as const)('uses pathname "%s" to derive mobile header title "%s"', (pathname, title) => {
+  ] as const)('uses pathname "%s" to show section "%s" in mobile bottom bar', (pathname, title) => {
     mockPathname.mockReturnValue(pathname)
     render(
       <AdminShell businessName="Acme Spa">
@@ -65,6 +64,19 @@ describe('AdminShell', () => {
 
     const headers = screen.getAllByText(title)
     expect(headers.length).toBeGreaterThan(0)
+    expect(screen.getByText('Page body')).toBeInTheDocument()
+  })
+
+  it('does not mark a mobile tab as current on unknown admin paths', () => {
+    mockPathname.mockReturnValue('/admin/unknown')
+    render(
+      <AdminShell businessName="Acme Spa">
+        <p>Page body</p>
+      </AdminShell>,
+    )
+
+    const sectionNav = screen.getByRole('navigation', { name: 'Admin sections' })
+    expect(sectionNav.querySelector('[aria-current="page"]')).toBeNull()
     expect(screen.getByText('Page body')).toBeInTheDocument()
   })
 
@@ -105,13 +117,30 @@ describe('AdminShell', () => {
     })
   })
 
-  it('exposes sidebar navigation links for all admin routes', () => {
+  it('uses full-width main container on Availability so wide layouts can use the sidebar-to-edge space', () => {
+    mockPathname.mockReturnValue('/admin/availability')
+    render(
+      <AdminShell businessName="Wide Co">
+        <span>availability body</span>
+      </AdminShell>,
+    )
+
+    const container = document.querySelector('[data-component="container"]')
+    expect(container).not.toBeNull()
+    expect(container?.className).toContain('max-w-full')
+    expect(screen.getByText('availability body')).toBeInTheDocument()
+  })
+
+  it('uses xl container on non-availability routes and exposes sidebar navigation links for all admin routes', () => {
     mockPathname.mockReturnValue('/admin/bookings')
     render(
       <AdminShell businessName="Delta">
         <span>x</span>
       </AdminShell>,
     )
+
+    const container = document.querySelector('[data-component="container"]')
+    expect(container?.className).toContain('max-w-xl')
 
     const nav = screen.getByRole('navigation', { name: 'Admin' })
     expect(nav.querySelector('a[href="/admin/bookings"]')).toBeTruthy()

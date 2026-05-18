@@ -16,17 +16,21 @@ export function Container({
   maxWidth?: keyof typeof maxWidthMap | null;
   padding?: keyof typeof paddingMap | "theme" | null;
 }) {
-  const paddingStyle =
-    padding === "theme" ? { paddingInline: "var(--page-inset)" } : undefined;
   const paddingClass =
     padding && padding !== "theme" ? paddingMap[padding] : "";
 
+  const className = [
+    "mx-auto",
+    "w-full",
+    maxWidthMap[maxWidth ?? "xl"],
+    padding === "theme" ? "px-[8px] md:[padding-inline:var(--page-inset)]" : "",
+    paddingClass,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div
-      data-component="container"
-      className={`mx-auto w-full ${maxWidthMap[maxWidth ?? "xl"]} ${paddingClass}`}
-      style={paddingStyle}
-    >
+    <div data-component="container" className={className}>
       {children}
     </div>
   );

@@ -94,10 +94,6 @@ export default function AdminShell({
   const pathname = usePathname()
   const router = useRouter()
 
-  const title =
-    nav.find((n) => pathname === n.href || pathname.startsWith(`${n.href}/`))?.label ??
-    'Admin'
-
   async function signOut() {
     await fetch('/api/admin/auth/logout', { method: 'POST' })
     router.push('/admin/login')
@@ -165,7 +161,7 @@ export default function AdminShell({
         </div>
       </aside>
 
-      <MobileChrome pathname={pathname} title={title} businessName={businessName}>
+      <MobileChrome pathname={pathname} businessName={businessName}>
         <NavLinks />
         <button
           type="button"
@@ -177,7 +173,9 @@ export default function AdminShell({
       </MobileChrome>
 
       <main className="min-h-screen flex-1 pb-20 md:pb-0">
-        <Container>{children}</Container>
+        <Container maxWidth={pathname.startsWith('/admin/availability') ? 'full' : 'xl'}>
+          {children}
+        </Container>
       </main>
     </div>
   )
@@ -185,12 +183,10 @@ export default function AdminShell({
 
 function MobileChrome({
   pathname,
-  title,
   businessName,
   children,
 }: {
   pathname: string
-  title: string
   businessName: string
   children: ReactNode
 }) {
@@ -198,20 +194,6 @@ function MobileChrome({
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex items-center justify-between border-border bg-background/95 px-4 py-3 backdrop-blur md:hidden">
-        <span className="font-semibold text-foreground">{title}</span>
-        <button
-          type="button"
-          className="rounded-md p-2 text-foreground hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-          aria-expanded={open}
-          aria-controls="admin-mobile-drawer"
-          onClick={() => setOpen(true)}
-        >
-          <span className="sr-only">Open menu</span>
-          <IconMenu />
-        </button>
-      </header>
-
       {open && (
         <div className="fixed inset-0 z-40 md:hidden">
           <button
@@ -264,6 +246,18 @@ function MobileChrome({
             </Link>
           )
         })}
+        <button
+          type="button"
+          className={`flex flex-1 flex-col items-center gap-1 py-2 text-[11px] font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+            open ? 'text-primary' : 'text-muted'
+          }`}
+          aria-expanded={open}
+          aria-controls="admin-mobile-drawer"
+          onClick={() => setOpen(true)}
+        >
+          <IconMenu className="shrink-0" />
+          Menu
+        </button>
       </nav>
     </>
   )

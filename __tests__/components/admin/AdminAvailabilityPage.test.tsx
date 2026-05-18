@@ -5,6 +5,31 @@ import type { BookingScheduleFile } from '@/types/admin'
 
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
 
+function fetchJsonSuccess(body: unknown) {
+  return Promise.resolve({
+    ok: true,
+    json: async () => body,
+  })
+}
+
+function stubFetchWithSchedule(
+  schedule: BookingScheduleFile,
+  extra?: (input: string, init?: RequestInit) => ReturnType<typeof fetch> | undefined,
+) {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input.toString()
+      const override = extra?.(url, init)
+      if (override) return override
+      if (url.includes('/api/admin/services')) {
+        return fetchJsonSuccess({ services: [] })
+      }
+      return fetchJsonSuccess(schedule)
+    }),
+  )
+}
+
 function makeSchedule(overrides: Partial<BookingScheduleFile> = {}): BookingScheduleFile {
   const weekly = DAYS.map((day) => ({
     day,
@@ -26,15 +51,7 @@ describe('AdminAvailabilityPage', () => {
 
   it('loads the schedule from the API and renders the weekly editor', async () => {
     const schedule = makeSchedule()
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          json: async () => schedule,
-        }),
-      ),
-    )
+    stubFetchWithSchedule(schedule)
 
     render(<AdminAvailabilityPage />)
 
@@ -43,6 +60,7 @@ describe('AdminAvailabilityPage', () => {
     })
 
     expect(fetch).toHaveBeenCalledWith('/api/admin/schedule')
+    expect(fetch).toHaveBeenCalledWith('/api/admin/services')
     expect(screen.getByText('Monday')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Save schedule' })).toBeInTheDocument()
   })
@@ -77,6 +95,9 @@ describe('AdminAvailabilityPage', () => {
           json: async () => ({ schedule: { ...schedule, weekly: body.weekly } }),
         })
       }
+      if (url.includes('/api/admin/services')) {
+        return fetchJsonSuccess({ services: [] })
+      }
       return Promise.resolve({
         ok: true,
         json: async () => schedule,
@@ -90,10 +111,7 @@ describe('AdminAvailabilityPage', () => {
       expect(screen.getByRole('heading', { name: 'Weekly hours' })).toBeInTheDocument()
     })
 
-    const monRow = screen.getByText('Monday').closest('tr')
-    expect(monRow).not.toBeNull()
-    const monCheckbox = within(monRow as HTMLElement).getByRole('checkbox')
-    fireEvent.click(monCheckbox)
+    fireEvent.click(screen.getByRole('button', { name: /remove hours for monday/i }))
 
     fireEvent.click(screen.getByRole('button', { name: 'Save schedule' }))
 
@@ -109,30 +127,24 @@ describe('AdminAvailabilityPage', () => {
 
     const putCall = fetchMock.mock.calls.find((c) => c[1]?.method === 'PUT')
     expect(putCall).toBeDefined()
-    const weekly = JSON.parse(String(putCall![1].body)).weekly as { day: string; open: boolean }[]
+    const init = putCall?.[1]
+    if (!init?.body) throw new Error('expected PUT body')
+    const weekly = JSON.parse(String(init.body)).weekly as { day: string; open: boolean }[]
     const mon = weekly.find((r) => r.day === 'mon')
     expect(mon?.open).toBe(false)
   })
 
   it('opens the add-exception modal from the toolbar control', async () => {
     const schedule = makeSchedule()
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(() =>
-        Promise.resolve({
-          ok: true,
-          json: async () => schedule,
-        }),
-      ),
-    )
+    stubFetchWithSchedule(schedule)
 
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '+ Add exception' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '+ Hours' })).toBeEnabled()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: '+ Add exception' }))
+    fireEvent.click(screen.getByRole('button', { name: '+ Hours' }))
 
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: 'Add exception' })).toBeInTheDocument()
@@ -155,6 +167,9 @@ describe('AdminAvailabilityPage', () => {
           json: async () => ({ schedule: afterDelete }),
         })
       }
+      if (url.includes('/api/admin/services')) {
+        return fetchJsonSuccess({ services: [] })
+      }
       return Promise.resolve({
         ok: true,
         json: async () => schedule,
@@ -164,7 +179,7 @@ describe('AdminAvailabilityPage', () => {
 
     render(<AdminAvailabilityPage />)
 
-    const exHeading = await screen.findByRole('heading', { name: 'Exceptions' })
+    const exHeading = await screen.findByRole('heading', { name: 'Date-specific hours' })
     const exSection = exHeading.closest('section')
     expect(exSection).not.toBeNull()
 
@@ -198,6 +213,9 @@ describe('AdminAvailabilityPage', () => {
           json: async () => ({ error: 'blocked delete' }),
         })
       }
+      if (url.includes('/api/admin/services')) {
+        return fetchJsonSuccess({ services: [] })
+      }
       return Promise.resolve({ ok: true, json: async () => schedule })
     })
     vi.stubGlobal('fetch', fetchMock)
@@ -224,6 +242,9 @@ describe('AdminAvailabilityPage', () => {
           ok: false,
           json: async () => ({ error: 'cannot save' }),
         })
+      }
+      if (url.includes('/api/admin/services')) {
+        return fetchJsonSuccess({ services: [] })
       }
       return Promise.resolve({ ok: true, json: async () => schedule })
     })
@@ -263,6 +284,9 @@ describe('AdminAvailabilityPage', () => {
           json: async () => ({ schedule: nextSchedule }),
         })
       }
+      if (url.includes('/api/admin/services')) {
+        return fetchJsonSuccess({ services: [] })
+      }
       return Promise.resolve({ ok: true, json: async () => schedule })
     })
     vi.stubGlobal('fetch', fetchMock)
@@ -270,10 +294,10 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '+ Add exception' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '+ Hours' })).toBeEnabled()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: '+ Add exception' }))
+    fireEvent.click(screen.getByRole('button', { name: '+ Hours' }))
 
     const dlg = await screen.findByRole('dialog')
     fireEvent.change(within(dlg).getByLabelText(/^date$/i), {
@@ -312,6 +336,9 @@ describe('AdminAvailabilityPage', () => {
           json: async () => ({ schedule: nextSchedule }),
         })
       }
+      if (url.includes('/api/admin/services')) {
+        return fetchJsonSuccess({ services: [] })
+      }
       return Promise.resolve({ ok: true, json: async () => schedule })
     })
     vi.stubGlobal('fetch', fetchMock)
@@ -319,10 +346,10 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '+ Add exception' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: '+ Hours' })).toBeEnabled()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: '+ Add exception' }))
+    fireEvent.click(screen.getByRole('button', { name: '+ Hours' }))
 
     const dlg = await screen.findByRole('dialog')
     fireEvent.change(within(dlg).getByLabelText(/^date$/i), {

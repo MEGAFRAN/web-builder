@@ -18,7 +18,7 @@ const pyScale: Record<string, string | 0> = {
 /**
  * Layout contract:
  *   Section  → full-width background color + vertical padding (paddingY prop)
- *   Container → horizontal inset via var(--page-inset) + max-width centering
+ *   Container → horizontal inset (8px below md, var(--page-inset) from md) + max-width centering
  *   Stack/Grid → internal layout only (gaps, columns)
  *   Content  → Heading, Text, Card, etc.
  *

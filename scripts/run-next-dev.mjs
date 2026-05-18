@@ -21,7 +21,10 @@ for (const arg of rawArgs) {
 const clientId =
   clientTokens[0] ?? process.env.npm_config_site ?? '';
 
-const nextArgs = ['dev'];
+// Turbopack (Next 16 default) can panic while processing Tailwind v4 in this repo — the
+// error shows a broken content glob (e.g. "...ts,ts }\n ,tsx,..."). Use webpack unless opted in.
+const useTurbopack = process.env.NEXT_DEV_TURBOPACK === '1';
+const nextArgs = ['dev', ...(useTurbopack ? ['--turbopack'] : ['--webpack'])];
 if (listenHost) {
   nextArgs.push('-H', '0.0.0.0');
 }
