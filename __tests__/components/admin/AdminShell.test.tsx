@@ -117,22 +117,28 @@ describe('AdminShell', () => {
     })
   })
 
-  it('uses full-width main container on Availability so wide layouts can use the sidebar-to-edge space', () => {
-    mockPathname.mockReturnValue('/admin/availability')
-    render(
-      <AdminShell businessName="Wide Co">
-        <span>availability body</span>
-      </AdminShell>,
-    )
+  it.each([
+    ['/admin/availability', 'availability body'],
+    ['/admin/bookings', 'bookings body'],
+  ] as const)(
+    'uses full-width main container on %s so wide layouts can use the sidebar-to-edge space',
+    (route, bodyText) => {
+      mockPathname.mockReturnValue(route)
+      render(
+        <AdminShell businessName="Wide Co">
+          <span>{bodyText}</span>
+        </AdminShell>,
+      )
 
-    const container = document.querySelector('[data-component="container"]')
-    expect(container).not.toBeNull()
-    expect(container?.className).toContain('max-w-full')
-    expect(screen.getByText('availability body')).toBeInTheDocument()
-  })
+      const container = document.querySelector('[data-component="container"]')
+      expect(container).not.toBeNull()
+      expect(container?.className).toContain('max-w-full')
+      expect(screen.getByText(bodyText)).toBeInTheDocument()
+    },
+  )
 
-  it('uses xl container on non-availability routes and exposes sidebar navigation links for all admin routes', () => {
-    mockPathname.mockReturnValue('/admin/bookings')
+  it('uses xl container on services/settings routes and exposes sidebar navigation links for all admin routes', () => {
+    mockPathname.mockReturnValue('/admin/services')
     render(
       <AdminShell businessName="Delta">
         <span>x</span>

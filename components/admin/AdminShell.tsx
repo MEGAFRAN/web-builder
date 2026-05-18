@@ -94,6 +94,9 @@ export default function AdminShell({
   const pathname = usePathname()
   const router = useRouter()
 
+  const mainFullWidth =
+    pathname.startsWith('/admin/availability') || pathname.startsWith('/admin/bookings')
+
   async function signOut() {
     await fetch('/api/admin/auth/logout', { method: 'POST' })
     router.push('/admin/login')
@@ -173,7 +176,7 @@ export default function AdminShell({
       </MobileChrome>
 
       <main className="min-h-screen flex-1 pb-20 md:pb-0">
-        <Container maxWidth={pathname.startsWith('/admin/availability') ? 'full' : 'xl'}>
+        <Container maxWidth={mainFullWidth ? 'full' : 'xl'}>
           {children}
         </Container>
       </main>

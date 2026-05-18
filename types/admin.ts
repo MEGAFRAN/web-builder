@@ -13,7 +13,7 @@ export type StoredReservation = {
   date: string
   time: string
   notes?: string | null
-  /** Widget submissions used `pending`; admin treats pending as operational “confirmed”. */
+  /** Widget submissions may use `pending`; admin calendar uses a yellow card border until confirmed. */
   status: string
   createdAt: string
   partySize?: number

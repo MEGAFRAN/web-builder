@@ -81,7 +81,26 @@ function formatPrettyDate(ymd: string): string {
 function statusBadge(status: string): { label: string; variant: string } {
   if (status === 'cancelled') return { label: 'Cancelled', variant: 'error' }
   if (status === 'no-show') return { label: 'No-show', variant: 'warning' }
+  if (status === 'pending') return { label: 'To be confirmed', variant: 'warning' }
   return { label: 'Confirmed', variant: 'success' }
+}
+
+/** Day/week/simple-list cards: border colour encodes status (detail sheet still uses text Badge). */
+function bookingCardBorderClasses(status: string): string {
+  if (status === 'cancelled' || status === 'no-show') {
+    return 'border border-border hover:border-primary'
+  }
+  if (status === 'pending') {
+    return 'border-2 border-yellow-500 hover:border-yellow-600'
+  }
+  return 'border-2 border-green-600 hover:border-green-700'
+}
+
+function bookingStatusAriaLabel(status: string): string {
+  if (status === 'cancelled') return 'Cancelled'
+  if (status === 'no-show') return 'No-show'
+  if (status === 'pending') return 'To be confirmed'
+  return 'Confirmed'
 }
 
 export default function AdminBookingsPage({ clientId }: { clientId: string }) {
@@ -391,19 +410,19 @@ function SimpleDayList({
       </p>
       <ul className="space-y-2">
         {rows.map((r) => {
-          const { label: stLabel, variant } = statusBadge(r.status)
+          const border = bookingCardBorderClasses(r.status)
           return (
             <li key={r.id}>
               <button
                 type="button"
                 onClick={() => onSelect(r)}
-                className="flex w-full flex-col rounded-lg border border-border bg-surface px-3 py-2 text-left hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                aria-label={`${r.name}, ${r.time}, ${r.serviceName ?? 'Service'}, ${bookingStatusAriaLabel(r.status)}`}
+                className={`flex w-full flex-col rounded-lg bg-surface px-3 py-2 text-left shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${border}`}
               >
                 <span className="font-semibold text-foreground">{r.name}</span>
                 <span className="text-xs text-muted">
                   {r.time} · {r.serviceName ?? 'Service'}
                 </span>
-                <Badge label={stLabel} variant={variant} />
               </button>
             </li>
           )
@@ -477,8 +496,13 @@ function DayTimeline({
             const dur = bookingDurationMinutes(r)
             const top = (start - openMin) * ppm
             const height = Math.max(dur * ppm, 36)
-            const { label: stLabel, variant } = statusBadge(r.status)
+            const border = bookingCardBorderClasses(r.status)
             const dimmed = r.status === 'cancelled' || r.status === 'no-show'
+            const endMin = start + dur
+            const endHH = Math.floor(endMin / 60)
+            const endMM = endMin % 60
+            const endLabel = `${String(endHH).padStart(2, '0')}:${String(endMM).padStart(2, '0')}`
+            const aria = `${r.name}, ${r.serviceName ?? 'Service'}, ${r.time}–${endLabel}, ${bookingStatusAriaLabel(r.status)}`
             return (
               <li
                 key={r.id}
@@ -488,23 +512,14 @@ function DayTimeline({
                 <button
                   type="button"
                   onClick={() => onSelect(r)}
-                  className={`flex h-full w-full flex-col rounded-lg border border-border bg-surface px-3 py-2 text-left shadow-sm transition hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${
+                  aria-label={aria}
+                  className={`flex h-full w-full min-h-0 flex-col rounded-lg bg-surface px-3 py-2 text-left shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${border} ${
                     dimmed ? 'opacity-60' : ''
                   }`}
                 >
-                  <span className="truncate font-semibold text-foreground">{r.name}</span>
                   <span className="truncate text-xs text-muted">
                     {r.serviceName ?? 'Service'}{' · '}
-                    {r.time} –{' '}
-                    {(() => {
-                      const endMin = start + dur
-                      const hh = Math.floor(endMin / 60)
-                      const mm = endMin % 60
-                      return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`
-                    })()}
-                  </span>
-                  <span className="mt-1">
-                    <Badge label={stLabel} variant={variant} />
+                    {r.time} – {endLabel}
                   </span>
                 </button>
               </li>
@@ -545,17 +560,17 @@ function WeekGrid({
             </button>
             <ul className="flex flex-1 flex-col gap-1 p-2">
               {dayRows.map((r) => {
-                const { label: stLabel, variant } = statusBadge(r.status)
+                const border = bookingCardBorderClasses(r.status)
                 return (
                   <li key={r.id}>
                     <button
                       type="button"
                       onClick={() => onSelect(r)}
-                      className="w-full rounded-md border border-border bg-surface px-2 py-1.5 text-left text-xs hover:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                      aria-label={`${r.time}, ${r.name}, ${bookingStatusAriaLabel(r.status)}`}
+                      className={`w-full rounded-md bg-surface px-2 py-1.5 text-left text-xs transition focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${border}`}
                     >
                       <div className="font-medium text-foreground">{r.time}</div>
                       <div className="truncate text-muted">{r.name}</div>
-                      <Badge label={stLabel} variant={variant} />
                     </button>
                   </li>
                 )
