@@ -13,7 +13,7 @@ The `CLIENT_ID` environment variable is the single gate for every build. It sele
 - Theme tokens (CSS variables)
 - Feature flags (which blocks are enabled)
 
-No runtime switching. No external API calls. Each deployment is a completely isolated static site baked entirely from local files.
+No runtime tenant switching: each deployment targets exactly one `CLIENT_ID`. Page content, theme, and navigation are baked from JSON at build time. Interactive features (**booking widget**, **contact forms**, **admin portal**) use Route Handlers under `app/api/` and browser `fetch`, always scoped to that deployment’s client — see [Runtime APIs, booking & admin](#runtime-apis-booking--admin).
 
 ---
 
@@ -126,6 +126,8 @@ type ClientConfig = {
     slug: string            // "" for home, "menu", "contacto", etc.
     blocks: Block[]         // typed block objects (see Block Rendering System)
   }>
+  reservationEndpoint?: string  // optional POST target for /api/reservation (e.g. Azure Function)
+  contactEndpoint?: string      // optional POST target for /api/contact
 }
 ```
 
@@ -196,6 +198,53 @@ Pages are arrays of typed blocks dispatched through a component registry (`compo
 
 ---
 
+## Runtime APIs, booking & admin
+
+Production builds use `output: 'export'` in `next.config.ts` (static HTML/CSS/JS under `/out`). That artifact is ideal for Azure Static Web Apps. **Route Handlers** in `app/api/` run when the app is executed as a Next.js server (for example local `npm run dev` or a Node-hosted preview). For fully static hosting, point dynamic behavior at backends via config:
+
+| Mechanism | Purpose |
+|-----------|---------|
+| `client.json` → `reservationEndpoint` | Optional URL for `POST` reservation payloads (e.g. Azure Function). If unset, submissions append to `data/reservations-local.json` via `/api/reservation`. |
+| `reservationBlock` → `availabilityEndpoint` | Optional URL for booked-slot queries. If unset, the widget calls `/api/availability`. |
+| `reservationBlock` → `clientId` | Scopes availability and reservation records to this tenant (must align with `CLIENT_ID` for built-in APIs). |
+
+Reference implementation for hosted reservations + Cosmos: [`azure-functions/README.md`](azure-functions/README.md).
+
+### Public-facing APIs (unauthenticated)
+
+Used by site blocks and forms; all assume `CLIENT_ID` is set server-side for this deployment.
+
+| Route | Role |
+|-------|------|
+| `GET /api/booking-services` | Read-only service catalog for the booking widget. Same persistence as admin services (`data/booking-services-local.json`). Optional query `?clientId=` must match `CLIENT_ID` when both are set. |
+| `POST /api/reservation` | Accepts widget submissions; forwards to `reservationEndpoint` when configured, otherwise local JSON append. |
+| `GET /api/availability` | Returns booked time slots for a date + duration (local/dev companion to the widget). |
+| `POST /api/contact` | Contact form; forwards to `client.json` → `contactEndpoint` when set, otherwise logs server-side and returns `{ ok: true }`. |
+
+### `reservationBlock` & admin-managed services
+
+- **Admin** (`/admin/services`) reads/writes the catalog via `GET`/`PUT /api/admin/services` (session-protected).
+- **`ReservationBlock`** loads `GET /api/booking-services` on mount. If the admin catalog has one or more services, **those are shown**. Optional `services` on the page JSON are **CMS fallback** only when the live catalog is empty.
+- While the catalog request is in flight and there is no CMS fallback, the block shows a short loading state instead of stale placeholders.
+
+### Admin portal
+
+Routes under `/admin` (bookings, services, availability schedule, settings). Dashboard APIs live under `/api/admin/*` and require a signed session cookie derived from `ADMIN_SESSION_SECRET`; the session payload is bound to `CLIENT_ID` so operators cannot cross tenants.
+
+### Local persistence (`data/`)
+
+For development and installs without upstream Functions, JSON files hold operational state (examples):
+
+| File | Managed by |
+|------|------------|
+| `booking-services-local.json` | Admin services UI + `/api/booking-services` |
+| `reservations-local.json` | `/api/reservation` when no `reservationEndpoint` |
+| `booking-schedule-local.json` | Admin availability / schedule APIs |
+
+These files are **per deployment / per clone**, not shared across clients in Git — treat them like environment-specific data.
+
+---
+
 ## Deployment & Secrets
 
 GitHub Actions workflow (`.github/workflows/deploy-client.yml`) is manual dispatch:
@@ -209,8 +258,11 @@ Secret naming convention (hyphens → underscores):
 | Secret | Purpose |
 |--------|---------|
 | `SWA_TOKEN_{CLIENT_KEY}` | Azure SWA deployment token |
+| `ADMIN_SESSION_SECRET` | HMAC secret for admin login sessions (required for `/admin` and `/api/admin/*` outside auth routes). |
 
-No CMS tokens. No external API credentials. The only secret per client is the Azure deploy token.
+Optional when using Azure Functions for reservations (see `azure-functions/`): Cosmos and SendGrid variables are configured on the Function App, not in the static site repo.
+
+No CMS tokens for page content. The only secret **per client** in the static deploy workflow is typically the Azure deploy token; admin bookings need `ADMIN_SESSION_SECRET` wherever Route Handlers run.
 
 Build cache is keyed by `{clientId}-{package-lock-hash}` so each client gets its own cache entry.
 

@@ -9,6 +9,7 @@
     "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
     "subtext": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
     "services": {
+      "description": "Optional CMS fallback; live admin catalog from /api/booking-services takes precedence when non-empty.",
       "oneOf": [
         {
           "type": "array",

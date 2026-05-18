@@ -60,6 +60,17 @@ function submitForm() {
   fireEvent.submit(document.querySelector('form')!)
 }
 
+function jsonResponse(data: unknown): Response {
+  return {
+    ok: true,
+    json: async () => data,
+  } as Response
+}
+
+function fetchInputUrl(input: Parameters<typeof fetch>[0]): string {
+  return typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+}
+
 function reservationPostCalls(fetchSpy: { mock: { calls: unknown[][] } }): [string, RequestInit][] {
   return fetchSpy.mock.calls.filter(
     (c): c is [string, RequestInit] =>
@@ -80,6 +91,23 @@ function completeForm(overrides?: Parameters<typeof fillGuestDetails>[0]) {
 }
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
+
+describe('ReservationBlock', () => {
+  let fetchSpy: ReturnType<typeof vi.spyOn>
+
+  beforeEach(() => {
+    fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+  })
+
+  afterEach(() => {
+    fetchSpy.mockRestore()
+  })
 
 describe('ReservationBlock — initial render', () => {
   it('renders the section wrapper with data-component attribute', () => {
@@ -103,9 +131,11 @@ describe('ReservationBlock — initial render', () => {
     expect(screen.getByRole('heading', { name: 'Reserve' })).toBeInTheDocument()
   })
 
-  it('shows booking unavailable when services list is empty', () => {
+  it('shows booking unavailable when services list is empty', async () => {
     render(<ReservationBlock _type="reservationBlock" services={[]} heading="Book" />)
-    expect(screen.getByText(/no services are configured/i)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText(/no services are configured/i)).toBeInTheDocument()
+    })
     expect(document.querySelector('form')).not.toBeInTheDocument()
   })
 
@@ -113,6 +143,35 @@ describe('ReservationBlock — initial render', () => {
     render(<ReservationBlock {...baseProps} />)
     expect(screen.getByRole('button', { name: /standard meal/i })).toBeInTheDocument()
     expect(document.getElementById('res-date')).not.toBeInTheDocument()
+  })
+
+  it('prefers non-empty admin catalog over CMS services prop', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'admin-only',
+                name: 'From admin',
+                description: 'Managed in portal',
+                durationMinutes: 45,
+                price: 12,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    render(<ReservationBlock {...baseProps} />)
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /from admin/i })).toBeInTheDocument()
+    })
+    expect(screen.queryByRole('button', { name: /standard meal/i })).not.toBeInTheDocument()
   })
 
   it('does not show time slots before a date is chosen', () => {
@@ -230,17 +289,8 @@ describe('ReservationBlock — submit button state', () => {
 })
 
 describe('ReservationBlock — form submission', () => {
-  let fetchSpy: ReturnType<typeof vi.spyOn>
-
-  beforeEach(() => {
-    fetchSpy = vi.spyOn(globalThis, 'fetch')
-  })
-
-  afterEach(() => {
-    fetchSpy.mockRestore()
-  })
-
   it('POSTs to /api/reservation with the correct payload', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} />)
     completeForm()
@@ -267,6 +317,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('trims whitespace from name, email and phone before sending', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} />)
     completeForm({ name: '  Jane Smith  ', email: ' jane@example.com ', phone: ' +34 600 000 000 ' })
@@ -281,6 +332,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('omits notes from payload when notes field is empty', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} />)
     completeForm()
@@ -293,6 +345,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('includes notes in payload when filled in', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} />)
     pickService()
@@ -309,6 +362,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows the success screen after a successful submission', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} />)
     completeForm()
@@ -321,6 +375,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows the default confirmation message on success when confirmationMessage is null', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} confirmationMessage={null} />)
     completeForm()
@@ -332,6 +387,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows a custom confirmationMessage on success', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock {...baseProps} confirmationMessage="See you soon!" />)
     completeForm()
@@ -343,6 +399,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows an error alert when the API returns a non-OK response', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: false } as Response)
     render(<ReservationBlock {...baseProps} />)
     completeForm()
@@ -355,6 +412,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows an error alert when fetch rejects (network error)', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockRejectedValueOnce(new Error('Network failure'))
     render(<ReservationBlock {...baseProps} />)
     completeForm()
@@ -366,6 +424,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('changes button label to "Confirming…" while submitting', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockImplementationOnce(() => new Promise(() => {}))
     render(<ReservationBlock {...baseProps} />)
     completeForm()
@@ -377,6 +436,7 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('disables the submit button while submitting', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockImplementationOnce(() => new Promise(() => {}))
     render(<ReservationBlock {...baseProps} />)
     completeForm()
@@ -393,10 +453,11 @@ describe('ReservationBlock — form submission', () => {
     pickDate()
     pickSlot()
     submitForm()
-    expect(fetchSpy).not.toHaveBeenCalled()
+    expect(reservationPostCalls(fetchSpy)).toHaveLength(0)
   })
 
   it('renders success without block heading when heading and subtext are omitted', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
     render(<ReservationBlock _type="reservationBlock" services={SERVICES} />)
     completeForm()
@@ -409,8 +470,11 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows slot-taken message when reservation API returns 409', async () => {
-    fetchSpy.mockImplementation((input: RequestInfo) => {
-      const url = typeof input === 'string' ? input : (input as Request).url
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
       if (url.includes('/api/availability')) {
         return Promise.resolve({
           ok: true,
@@ -437,8 +501,11 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows slot-taken message when error JSON contains SLOT_TAKEN', async () => {
-    fetchSpy.mockImplementation((input: RequestInfo) => {
-      const url = typeof input === 'string' ? input : (input as Request).url
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
       if (url.includes('/api/availability')) {
         return Promise.resolve({
           ok: true,
@@ -465,8 +532,11 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows generic error when non-OK reservation response JSON cannot be parsed', async () => {
-    fetchSpy.mockImplementation((input: RequestInfo) => {
-      const url = typeof input === 'string' ? input : (input as Request).url
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
       if (url.includes('/api/availability')) {
         return Promise.resolve({
           ok: true,
@@ -495,8 +565,11 @@ describe('ReservationBlock — form submission', () => {
   })
 
   it('shows generic error when API JSON parses but error is not SLOT_TAKEN', async () => {
-    fetchSpy.mockImplementation((input: RequestInfo) => {
-      const url = typeof input === 'string' ? input : (input as Request).url
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
       if (url.includes('/api/availability')) {
         return Promise.resolve({
           ok: true,
@@ -524,21 +597,30 @@ describe('ReservationBlock — form submission', () => {
 })
 
 describe('ReservationBlock — availability integration', () => {
-  let fetchSpy: ReturnType<typeof vi.spyOn>
-
   beforeEach(() => {
-    fetchSpy = vi.spyOn(globalThis, 'fetch')
-  })
-
-  afterEach(() => {
-    fetchSpy.mockRestore()
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ bookedSlots: [] }),
+      } as Response)
+    })
   })
 
   it('fetches availability when clientId, service, and date are set', async () => {
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: async () => ({ bookedSlots: [] }),
-    } as Response)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ bookedSlots: [] }),
+      } as Response)
+    })
 
     render(<ReservationBlock {...baseProps} clientId="rest-pepe" />)
     pickService()
@@ -554,10 +636,16 @@ describe('ReservationBlock — availability integration', () => {
   })
 
   it('treats missing bookedSlots in availability JSON as an empty list', async () => {
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: async () => ({}),
-    } as Response)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({}),
+      } as Response)
+    })
 
     render(<ReservationBlock {...baseProps} clientId="scoped" />)
     pickService()
@@ -570,10 +658,16 @@ describe('ReservationBlock — availability integration', () => {
   })
 
   it('uses availabilityEndpoint when provided', async () => {
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: async () => ({ bookedSlots: [] }),
-    } as Response)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ bookedSlots: [] }),
+      } as Response)
+    })
 
     render(
       <ReservationBlock
@@ -593,10 +687,16 @@ describe('ReservationBlock — availability integration', () => {
   })
 
   it('passes selected service duration to availability when not the first service', async () => {
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: async () => ({ bookedSlots: [] }),
-    } as Response)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ bookedSlots: [] }),
+      } as Response)
+    })
 
     render(<ReservationBlock {...baseProps} clientId="dur-test" />)
     pickService(SERVICES[1].name)
@@ -614,7 +714,13 @@ describe('ReservationBlock — availability integration', () => {
     const availability = new Promise<Response>(resolve => {
       finish = resolve
     })
-    fetchSpy.mockImplementation(() => availability)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return availability
+    })
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
@@ -635,10 +741,16 @@ describe('ReservationBlock — availability integration', () => {
   })
 
   it('reflects booked slots returned by the availability API', async () => {
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: async () => ({ bookedSlots: ['13:00'] }),
-    } as Response)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ bookedSlots: ['13:00'] }),
+      } as Response)
+    })
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
@@ -652,10 +764,16 @@ describe('ReservationBlock — availability integration', () => {
   })
 
   it('does not change selection when clicking a booked slot', async () => {
-    fetchSpy.mockResolvedValue({
-      ok: true,
-      json: async () => ({ bookedSlots: ['13:00'] }),
-    } as Response)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ bookedSlots: ['13:00'] }),
+      } as Response)
+    })
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
@@ -673,10 +791,16 @@ describe('ReservationBlock — availability integration', () => {
   })
 
   it('treats a non-OK availability response as no booked slots', async () => {
-    fetchSpy.mockResolvedValue({
-      ok: false,
-      status: 500,
-    } as Response)
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: false,
+        status: 500,
+      } as Response)
+    })
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
@@ -689,7 +813,13 @@ describe('ReservationBlock — availability integration', () => {
   })
 
   it('recovers with empty booked slots when availability fetch rejects', async () => {
-    fetchSpy.mockRejectedValue(new Error('network'))
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.reject(new Error('network'))
+    })
 
     render(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
@@ -760,4 +890,5 @@ describe('ReservationBlock — accessibility', () => {
     render(<ReservationBlock _type="reservationBlock" subtext="A subtitle" services={SERVICES} />)
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
+})
 })

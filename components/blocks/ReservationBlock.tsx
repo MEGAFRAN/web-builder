@@ -37,6 +37,49 @@ function formatListedPrice(price: number, currencySymbol: string): string {
   return `${currencySymbol}${text}`
 }
 
+/** Accepts rows persisted by `/api/admin/services` (same file as the public catalog). */
+function parseBookingCatalogRows(raw: unknown): ReservationServiceItem[] {
+  if (!Array.isArray(raw)) return []
+  const out: ReservationServiceItem[] = []
+  for (const item of raw) {
+    if (typeof item !== 'object' || item === null) continue
+    const o = item as Record<string, unknown>
+    const id = o.id
+    const name = o.name
+    const durationMinutes = o.durationMinutes
+    const price = o.price
+    if (
+      typeof id !== 'string' ||
+      id.trim().length === 0 ||
+      typeof name !== 'string' ||
+      name.trim().length === 0 ||
+      typeof durationMinutes !== 'number' ||
+      durationMinutes < 1 ||
+      durationMinutes > 24 * 60 ||
+      typeof price !== 'number' ||
+      !Number.isFinite(price) ||
+      price < 0
+    ) {
+      continue
+    }
+    let description: string | null | undefined
+    if (typeof o.description === 'string') description = o.description
+    else if (o.description === null || o.description === undefined) description = undefined
+    const currencyRaw = o.currency
+    const currency =
+      typeof currencyRaw === 'string' && currencyRaw.trim().length > 0 ? currencyRaw.trim() : null
+    out.push({
+      id: id.trim(),
+      name: name.trim(),
+      description,
+      durationMinutes,
+      price,
+      currency,
+    })
+  }
+  return out
+}
+
 const STEPS = [
   { label: '1 · Service', step: 1 },
   { label: '2 · Date & time', step: 2 },
@@ -52,7 +95,8 @@ export default function ReservationBlock({
   clientId,
   availabilityEndpoint,
 }: ReservationBlockProps) {
-  const services: ReservationServiceItem[] = servicesProp ?? []
+  const cmsServices: ReservationServiceItem[] = servicesProp ?? []
+  const [liveCatalog, setLiveCatalog] = useState<ReservationServiceItem[] | null>(null)
 
   const [selectedServiceId, setSelectedServiceId] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
@@ -74,6 +118,29 @@ export default function ReservationBlock({
     email: string
     serviceSummary: string
   } | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    const qs = clientId ? `?clientId=${encodeURIComponent(clientId)}` : ''
+    fetch(`/api/booking-services${qs}`)
+      .then(r => (r.ok ? r.json() : null))
+      .then((data: { services?: unknown } | null) => {
+        if (cancelled) return
+        const parsed = parseBookingCatalogRows(data?.services)
+        setLiveCatalog(parsed)
+      })
+      .catch(() => {
+        if (!cancelled) setLiveCatalog([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [clientId])
+
+  const catalogLoaded = liveCatalog !== null
+  const adminPreferred =
+    catalogLoaded && liveCatalog.length > 0 ? liveCatalog : null
+  const services: ReservationServiceItem[] = adminPreferred ?? cmsServices
 
   const selectedService =
     selectedServiceId.length > 0
@@ -274,6 +341,21 @@ export default function ReservationBlock({
                 </div>
               </dl>
             )}
+          </Stack>
+        </Container>
+      </Section>
+    )
+  }
+
+  if (!catalogLoaded && cmsServices.length === 0) {
+    return (
+      <Section paddingY="lg" dataComponent="reservation-block">
+        <Container maxWidth="xl" padding="theme">
+          <Stack gap="md">
+            {headingSection}
+            <p className="text-center text-sm text-muted" role="status" aria-live="polite">
+              Loading services…
+            </p>
           </Stack>
         </Container>
       </Section>

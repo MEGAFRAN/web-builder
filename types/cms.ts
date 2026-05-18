@@ -452,7 +452,10 @@ export type ReservationBlock = {
   _type: 'reservationBlock'
   heading?: string | null
   subtext?: string | null
-  /** Bookable services; duration drives availability and slot spacing. */
+  /**
+   * Optional CMS fallback when the admin-managed catalog (`/api/booking-services`) is empty.
+   * When the admin catalog has entries, those are shown instead.
+   */
   services?: ReservationServiceItem[] | null
   confirmationMessage?: string | null
   /** Client identifier used to scope availability queries and reservation records */

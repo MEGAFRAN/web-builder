@@ -17,32 +17,6 @@
       "_type": "reservationBlock",
       "heading": "Reserva tu mesa",
       "subtext": "Selecciona el tipo de experiencia, fecha y hora. Confirmamos tu reserva en menos de 2 horas.",
-      "services": [
-        {
-          "id": "comida-mediodia",
-          "name": "Comida mediodía",
-          "description": "Menú del día o carta; tiempo medio en mesa.",
-          "durationMinutes": 90,
-          "price": 0,
-          "currency": "€"
-        },
-        {
-          "id": "cena-fin-de-semana",
-          "name": "Cena fin de semana",
-          "description": "Cena viernes o sábado; mesa garantizada en franja amplia.",
-          "durationMinutes": 120,
-          "price": 0,
-          "currency": "€"
-        },
-        {
-          "id": "menu-degustacion",
-          "name": "Menú degustación",
-          "description": "Menú cerrado en varios tiempos con maridaje opcional.",
-          "durationMinutes": 180,
-          "price": 85,
-          "currency": "€"
-        }
-      ],
       "confirmationMessage": "¡Reserva recibida! Te enviaremos una confirmación por correo electrónico en menos de 2 horas."
     },
     {
