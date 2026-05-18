@@ -113,16 +113,19 @@ export async function GET(req: NextRequest) {
   const records = await readRecords()
   const schedule = await readBookingSchedule()
 
+  const outOfWindowSlots = SLOT_GRID.filter(slot => {
+    const slotMin = timeToMinutes(slot)
+    return !slotFitsScheduleWindow(schedule, date, slotMin, requestedDuration)
+  })
+
   const bookedSlots = SLOT_GRID.filter(slot => {
     const slotMin = timeToMinutes(slot)
-    if (!slotFitsScheduleWindow(schedule, date, slotMin, requestedDuration)) {
-      return true
-    }
+    if (!slotFitsScheduleWindow(schedule, date, slotMin, requestedDuration)) return false
     return slotConflictsWithBookings(slot, requestedDuration, records, clientId, date)
   })
 
   return NextResponse.json(
-    { bookedSlots },
+    { bookedSlots, outOfWindowSlots },
     { headers: { 'Cache-Control': 'no-store' } }
   )
 }

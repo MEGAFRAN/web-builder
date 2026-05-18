@@ -712,8 +712,12 @@ function NewAppointmentModal({
     const dur = selected.durationMinutes
     const url = `/api/availability?clientId=${encodeURIComponent(clientId)}&date=${encodeURIComponent(date)}&duration=${encodeURIComponent(String(dur))}`
     void fetch(url)
-      .then((r) => (r.ok ? r.json() : { bookedSlots: [] }))
-      .then((d: { bookedSlots?: string[] }) => setBookedSlots(d.bookedSlots ?? []))
+      .then((r) => (r.ok ? r.json() : { bookedSlots: [], outOfWindowSlots: [] }))
+      .then((d: { bookedSlots?: string[]; outOfWindowSlots?: string[] }) => {
+        const booked = d.bookedSlots ?? []
+        const oow = d.outOfWindowSlots ?? []
+        setBookedSlots([...new Set([...booked, ...oow])])
+      })
       .catch(() => setBookedSlots([]))
   }, [clientId, date, selected])
 

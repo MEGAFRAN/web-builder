@@ -763,6 +763,38 @@ describe('ReservationBlock — availability integration', () => {
     })
   })
 
+  it('reflects out-of-window slots from the availability API separately from booked slots', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          bookedSlots: [],
+          outOfWindowSlots: ['21:00'],
+        }),
+      } as Response)
+    })
+
+    render(<ReservationBlock {...baseProps} clientId="x" />)
+    pickService()
+    pickDate()
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /21:00.*outside opening hours/i }),
+      ).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: '14:00' }))
+    expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
+
+    fireEvent.click(screen.getByRole('button', { name: /21:00.*outside opening hours/i }))
+    expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
   it('does not change selection when clicking a booked slot', async () => {
     fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
       const url = fetchInputUrl(input)
@@ -828,6 +860,161 @@ describe('ReservationBlock — availability integration', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
     })
+  })
+})
+
+describe('end-time range label', () => {
+  it('is absent before a slot is selected', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument()
+    })
+    expect(screen.queryByText(/Selected:/)).toBeNull()
+  })
+
+  it('shows "HH:MM – HH:MM (N min)" after selecting a slot', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: '09:30' }))
+    expect(screen.getByText('09:30 – 10:30')).toBeInTheDocument()
+    expect(screen.getByText(/\(60 min\)/)).toBeInTheDocument()
+  })
+
+  it('updates when the user clicks a different slot', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: '09:30' }))
+    expect(screen.getByText('09:30 – 10:30')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: '11:00' }))
+    expect(screen.getByText('11:00 – 12:00')).toBeInTheDocument()
+    expect(screen.queryByText('09:30 – 10:30')).not.toBeInTheDocument()
+  })
+
+  it('disappears when the date is cleared', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: '09:30' }))
+    expect(screen.getByText(/Selected:/)).toBeInTheDocument()
+
+    fireEvent.change(document.getElementById('res-date')!, { target: { value: '' } })
+    expect(screen.queryByText(/Selected:/)).toBeNull()
+  })
+})
+
+describe('covered slots', () => {
+  it('slots inside the selected window have aria-disabled="true"', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: '09:30' }))
+    expect(screen.getByRole('button', { name: /10:00/ })).toHaveAttribute('aria-disabled', 'true')
+  })
+
+  it('clicking a covered slot does not change the selection', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: '09:30' }))
+    expect(screen.getByText('09:30 – 10:30')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /10:00.*within your selected booking/i }))
+    expect(screen.getByText('09:30 – 10:30')).toBeInTheDocument()
+  })
+
+  it('the slot at the exact end time is NOT covered', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: '09:30' }))
+    expect(screen.getByRole('button', { name: /^10:30$/ })).not.toHaveAttribute('aria-disabled', 'true')
+  })
+
+  it('covered slots are cleared when the selection changes', async () => {
+    render(<ReservationBlock {...baseProps} />)
+    pickService()
+    pickDate()
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
+    })
+    fireEvent.click(screen.getByRole('button', { name: '09:30' }))
+    expect(screen.getByRole('button', { name: /10:00/ })).toHaveAttribute('aria-disabled', 'true')
+
+    fireEvent.click(screen.getByRole('button', { name: '11:00' }))
+    expect(screen.getByRole('button', { name: /^10:00$/ })).not.toHaveAttribute('aria-disabled', 'true')
+  })
+})
+
+describe('slot unavailability reasons', () => {
+  beforeEach(() => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = fetchInputUrl(input)
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          bookedSlots: ['13:00'],
+          outOfWindowSlots: ['21:00'],
+        }),
+      } as Response)
+    })
+  })
+
+  it('booked slots have accessible label containing "fully booked"', async () => {
+    render(<ReservationBlock {...baseProps} clientId="reason-split" />)
+    pickService()
+    pickDate()
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /13:00.*fully booked/i })).toBeInTheDocument()
+    })
+  })
+
+  it('out-of-window slots have accessible label containing "outside opening hours"', async () => {
+    render(<ReservationBlock {...baseProps} clientId="reason-split" />)
+    pickService()
+    pickDate()
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /21:00.*outside opening hours/i })).toBeInTheDocument()
+    })
+  })
+
+  it('booked and out-of-window slots render with different visual classes', async () => {
+    render(<ReservationBlock {...baseProps} clientId="reason-split" />)
+    pickService()
+    pickDate()
+
+    const bookedBtn = await screen.findByRole('button', { name: /13:00.*fully booked/i })
+    const oowBtn = screen.getByRole('button', { name: /21:00.*outside opening hours/i })
+
+    expect(bookedBtn.className).toContain('line-through')
+    expect(oowBtn.className).not.toContain('line-through')
   })
 })
 

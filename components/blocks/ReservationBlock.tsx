@@ -6,6 +6,7 @@ import { Button } from '@/components/inputs/Button'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Stack } from '@/components/layout/Stack'
+import { BOOKING_SLOT_GRID } from '@/lib/booking-slot-grid'
 import type {
   ReservationBlock as ReservationBlockProps,
   ReservationServiceItem,
@@ -20,11 +21,18 @@ interface FormFields {
   notes: string
 }
 
-const DEFAULT_TIME_SLOTS = [
-  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-  '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
-  '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00',
-]
+function addMinutes(hhmm: string, minutes: number): string {
+  const [h, m] = hhmm.split(':').map(Number)
+  const total = h * 60 + m + minutes
+  const hh = String(Math.floor(total / 60) % 24).padStart(2, '0')
+  const mm = String(total % 60).padStart(2, '0')
+  return `${hh}:${mm}`
+}
+
+function timeToMinutes(hhmm: string): number {
+  const [h, m] = hhmm.split(':').map(Number)
+  return h * 60 + m
+}
 
 function todayISODate(): string {
   return new Date().toISOString().split('T')[0]
@@ -110,6 +118,7 @@ export default function ReservationBlock({
   const [touched, setTouched] = useState<Partial<Record<keyof FormFields, boolean>>>({})
   const [state, setState] = useState<SubmissionState>('idle')
   const [bookedSlots, setBookedSlots] = useState<string[]>([])
+  const [outOfWindowSlots, setOutOfWindowSlots] = useState<string[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [confirmedBooking, setConfirmedBooking] = useState<{
@@ -147,6 +156,18 @@ export default function ReservationBlock({
       ? services.find(s => s.id === selectedServiceId)
       : undefined
 
+  const endTime =
+    selectedTime && selectedService
+      ? addMinutes(selectedTime, selectedService.durationMinutes)
+      : null
+
+  const selectedStartMin =
+    selectedTime && selectedService ? timeToMinutes(selectedTime) : -1
+  const selectedEndMin =
+    selectedStartMin >= 0 && selectedService
+      ? selectedStartMin + selectedService.durationMinutes
+      : -1
+
   useEffect(() => {
     if (!selectedDate || !clientId || !selectedService) {
       return
@@ -162,9 +183,17 @@ export default function ReservationBlock({
         setLoadingSlots(true)
         return fetch(url)
       })
-      .then(r => (r.ok ? r.json() : { bookedSlots: [] }))
-      .then((data: { bookedSlots?: string[] }) => setBookedSlots(data.bookedSlots ?? []))
-      .catch(() => setBookedSlots([]))
+      .then(r =>
+        r.ok ? r.json() : { bookedSlots: [], outOfWindowSlots: [] },
+      )
+      .then((data: { bookedSlots?: string[]; outOfWindowSlots?: string[] }) => {
+        setBookedSlots(data.bookedSlots ?? [])
+        setOutOfWindowSlots(data.outOfWindowSlots ?? [])
+      })
+      .catch(() => {
+        setBookedSlots([])
+        setOutOfWindowSlots([])
+      })
       .finally(() => setLoadingSlots(false))
   }, [selectedDate, clientId, availabilityEndpoint, selectedService])
 
@@ -179,6 +208,7 @@ export default function ReservationBlock({
     setSelectedDate('')
     setSelectedTime('')
     setBookedSlots([])
+    setOutOfWindowSlots([])
   }
 
   function updateField(key: keyof FormFields, value: string) {
@@ -448,6 +478,7 @@ export default function ReservationBlock({
                       setSelectedDate(e.target.value)
                       setSelectedTime('')
                       setBookedSlots([])
+                      setOutOfWindowSlots([])
                     }}
                     className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   />
@@ -475,34 +506,68 @@ export default function ReservationBlock({
                     aria-labelledby="res-time-label"
                     className={`grid grid-cols-4 gap-2 sm:grid-cols-5 ${loadingSlots ? 'pointer-events-none opacity-50' : ''}`}
                   >
-                    {DEFAULT_TIME_SLOTS.map(slot => {
+                    {BOOKING_SLOT_GRID.map(slot => {
                       const isBooked = bookedSlots.includes(slot)
+                      const isOutOfWindow = outOfWindowSlots.includes(slot)
+                      const slotMin = timeToMinutes(slot)
+                      const isCovered =
+                        !isBooked &&
+                        !isOutOfWindow &&
+                        selectedEndMin > 0 &&
+                        slotMin > selectedStartMin &&
+                        slotMin < selectedEndMin
                       return (
                         <button
                           key={slot}
                           type="button"
-                          aria-disabled={isBooked ? 'true' : undefined}
-                          aria-pressed={selectedTime === slot}
-                          aria-label={isBooked ? `${slot} – fully booked` : slot}
+                          disabled={isCovered}
+                          aria-disabled={
+                            isBooked || isOutOfWindow || isCovered ? 'true' : undefined
+                          }
+                          aria-pressed={!isCovered && selectedTime === slot}
+                          aria-label={
+                            isOutOfWindow
+                              ? `${slot} – outside opening hours for this service`
+                              : isBooked
+                                ? `${slot} – fully booked`
+                                : isCovered
+                                  ? `${slot} – within your selected booking`
+                                  : slot
+                          }
                           onClick={() => {
-                            if (isBooked || loadingSlots) return
+                            if (isBooked || isOutOfWindow || isCovered || loadingSlots) return
                             setSelectedTime(slot)
                           }}
                           className={[
                             'rounded-md border px-2 py-1.5 text-sm font-medium transition-colors',
-                            isBooked
-                              ? 'cursor-not-allowed border-border bg-muted/40 text-muted line-through opacity-60'
-                              : selectedTime === slot
-                                ? 'border-primary bg-primary text-primary-fg'
-                                : 'border-border bg-background text-foreground hover:border-primary hover:text-primary',
+                            isOutOfWindow
+                              ? 'cursor-not-allowed border-border bg-background text-muted/50 opacity-40'
+                              : isBooked
+                                ? 'cursor-not-allowed border-destructive/30 bg-destructive/10 text-destructive line-through opacity-90'
+                                : isCovered
+                                  ? 'cursor-not-allowed border-dashed border-border bg-muted/20 text-muted/60 opacity-50'
+                                  : selectedTime === slot
+                                    ? 'border-primary bg-primary text-primary-fg'
+                                    : 'border-border bg-background text-foreground hover:border-primary hover:text-primary',
                           ].join(' ')}
                         >
                           {slot}
                           {isBooked && <span className="sr-only"> (full)</span>}
+                          {isOutOfWindow && <span className="sr-only"> (outside hours)</span>}
+                          {isCovered && <span className="sr-only"> (within your booking)</span>}
                         </button>
                       )
                     })}
                   </div>
+                  {endTime && selectedService && (
+                    <p className="text-xs text-muted">
+                      Selected:{' '}
+                      <span className="font-medium text-foreground">
+                        {selectedTime} – {endTime}
+                      </span>{' '}
+                      ({selectedService.durationMinutes} min)
+                    </p>
+                  )}
                 </div>
               )}
 

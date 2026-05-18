@@ -83,8 +83,12 @@ describe('GET /api/availability', () => {
     )
     expect(res.status).toBe(200)
     expect(res.headers.get('Cache-Control')).toBe('no-store')
-    const payload = await res.json() as { bookedSlots: string[] }
-    expect(payload.bookedSlots.sort()).toEqual([...ALL_SLOTS].sort())
+    const payload = await res.json() as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
+    expect(payload.bookedSlots).toEqual([])
+    expect(payload.outOfWindowSlots.sort()).toEqual([...ALL_SLOTS].sort())
   })
 
   it('retains trailing slots whenever they cannot fit closing hours', async () => {
@@ -92,8 +96,12 @@ describe('GET /api/availability', () => {
       request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=60`),
     )
     expect(res.status).toBe(200)
-    const { bookedSlots } = (await res.json()) as { bookedSlots: string[] }
-    expect(bookedSlots).toContain('21:00')
+    const { bookedSlots, outOfWindowSlots } = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
+    expect(outOfWindowSlots).toContain('21:00')
+    expect(bookedSlots).not.toContain('21:00')
   })
 
   it('suppresses overlaps with persisted reservations belonging to this tenant', async () => {
@@ -113,8 +121,12 @@ describe('GET /api/availability', () => {
       request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=90`),
     )
     expect(res.status).toBe(200)
-    const { bookedSlots } = (await res.json()) as { bookedSlots: string[] }
+    const { bookedSlots, outOfWindowSlots } = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
     expect(bookedSlots).toContain('09:00')
+    expect(outOfWindowSlots).not.toContain('09:00')
   })
 
   it('ignores cancellations when scanning conflicts', async () => {
@@ -134,7 +146,140 @@ describe('GET /api/availability', () => {
       request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=60`),
     )
     expect(res.status).toBe(200)
-    const { bookedSlots } = (await res.json()) as { bookedSlots: string[] }
+    const { bookedSlots } = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
     expect(bookedSlots).not.toContain('10:30')
+  })
+
+  it('never places the same slot in bookedSlots and outOfWindowSlots', async () => {
+    readFileMock.mockResolvedValueOnce(
+      JSON.stringify([
+        {
+          clientId: shopId,
+          date: mondayIso,
+          time: '14:00',
+          durationMinutes: 60,
+          status: 'confirmed',
+        },
+      ]),
+    )
+
+    const res = await GET(
+      request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=60`),
+    )
+    expect(res.status).toBe(200)
+    const { bookedSlots, outOfWindowSlots } = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
+    const bookedSet = new Set(bookedSlots)
+    for (const s of outOfWindowSlots) {
+      expect(bookedSet.has(s)).toBe(false)
+    }
+  })
+})
+
+describe('availability API — split response', () => {
+  const shopId = 'split-client'
+  const mondayIso = '2026-05-18'
+
+  function request(pathOnly: string) {
+    const url = pathOnly.startsWith('http')
+      ? pathOnly
+      : `http://localhost${pathOnly.startsWith('/') ? pathOnly : `/${pathOnly}`}`
+    return new NextRequest(url)
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    readBookingScheduleMock.mockResolvedValue({
+      weekly: WEEKLY,
+      exceptions: [],
+    })
+    readFileMock.mockResolvedValue(JSON.stringify([]))
+  })
+
+  it('returns bookedSlots and outOfWindowSlots as separate arrays', async () => {
+    const res = await GET(
+      request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=60`),
+    )
+    expect(res.status).toBe(200)
+    const body = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
+    expect(Array.isArray(body.bookedSlots)).toBe(true)
+    expect(Array.isArray(body.outOfWindowSlots)).toBe(true)
+    expect(body).not.toHaveProperty('error')
+  })
+
+  it('a slot cannot appear in both arrays', async () => {
+    readFileMock.mockResolvedValueOnce(
+      JSON.stringify([
+        {
+          clientId: shopId,
+          date: mondayIso,
+          time: '14:00',
+          durationMinutes: 60,
+          status: 'confirmed',
+        },
+      ]),
+    )
+
+    const res = await GET(
+      request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=60`),
+    )
+    expect(res.status).toBe(200)
+    const { bookedSlots, outOfWindowSlots } = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
+    const oow = new Set(outOfWindowSlots)
+    const both = bookedSlots.filter(s => oow.has(s))
+    expect(both).toEqual([])
+  })
+
+  it('out-of-window slots are those where start + duration exceeds close time', async () => {
+    const res = await GET(
+      request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=60`),
+    )
+    expect(res.status).toBe(200)
+    const { outOfWindowSlots } = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
+    // Monday 09:00–21:00: 21:00 + 60 min extends past close
+    expect(outOfWindowSlots).toContain('21:00')
+  })
+
+  it('booked slots are only in-window slots that conflict with a booking', async () => {
+    readFileMock.mockResolvedValueOnce(
+      JSON.stringify([
+        {
+          clientId: shopId,
+          date: mondayIso,
+          time: '14:00',
+          durationMinutes: 60,
+          status: 'confirmed',
+        },
+      ]),
+    )
+
+    const res = await GET(
+      request(`/api/availability?clientId=${shopId}&date=${mondayIso}&duration=60`),
+    )
+    expect(res.status).toBe(200)
+    const { bookedSlots, outOfWindowSlots } = (await res.json()) as {
+      bookedSlots: string[]
+      outOfWindowSlots: string[]
+    }
+
+    expect(bookedSlots).toContain('14:00')
+    expect(outOfWindowSlots).not.toContain('14:00')
+
+    expect(outOfWindowSlots).toContain('21:00')
+    expect(bookedSlots).not.toContain('21:00')
   })
 })
