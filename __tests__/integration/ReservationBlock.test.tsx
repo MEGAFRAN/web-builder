@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import ReservationBlock from '@/components/blocks/ReservationBlock'
 import type { ReservationBlock as ReservationBlockProps } from '@/types/cms'
 
@@ -82,6 +82,15 @@ function reservationPostCalls(fetchSpy: { mock: { calls: unknown[][] } }): [stri
   )
 }
 
+/** Mount resolves `/api/booking-services` in an effect; flush past the microtask chain so setState runs inside act. */
+async function renderReservation(ui: Parameters<typeof render>[0]) {
+  const utils = render(ui)
+  await act(async () => {
+    await new Promise<void>(resolve => setTimeout(resolve, 0))
+  })
+  return utils
+}
+
 /** Walk through the full happy path up to (but not including) submission. */
 function completeForm(overrides?: Parameters<typeof fillGuestDetails>[0]) {
   pickService()
@@ -110,37 +119,37 @@ describe('ReservationBlock', () => {
   })
 
 describe('ReservationBlock — initial render', () => {
-  it('renders the section wrapper with data-component attribute', () => {
-    const { container } = render(<ReservationBlock {...baseProps} />)
+  it('renders the section wrapper with data-component attribute', async () => {
+    const { container } = await renderReservation(<ReservationBlock {...baseProps} />)
     expect(container.querySelector('[data-component="reservation-block"]')).toBeInTheDocument()
   })
 
-  it('displays heading and subtext when provided', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('displays heading and subtext when provided', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     expect(screen.getByRole('heading', { name: 'Make a Reservation' })).toBeInTheDocument()
     expect(screen.getByText('Book your visit online.')).toBeInTheDocument()
   })
 
-  it('does not render a heading or subtext section when both are omitted', () => {
-    render(<ReservationBlock _type="reservationBlock" services={SERVICES} />)
+  it('does not render a heading or subtext section when both are omitted', async () => {
+    await renderReservation(<ReservationBlock _type="reservationBlock" services={SERVICES} />)
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
 
-  it('renders only heading when subtext is omitted', () => {
-    render(<ReservationBlock _type="reservationBlock" heading="Reserve" services={SERVICES} />)
+  it('renders only heading when subtext is omitted', async () => {
+    await renderReservation(<ReservationBlock _type="reservationBlock" heading="Reserve" services={SERVICES} />)
     expect(screen.getByRole('heading', { name: 'Reserve' })).toBeInTheDocument()
   })
 
   it('shows booking unavailable when services list is empty', async () => {
-    render(<ReservationBlock _type="reservationBlock" services={[]} heading="Book" />)
+    await renderReservation(<ReservationBlock _type="reservationBlock" services={[]} heading="Book" />)
     await waitFor(() => {
       expect(screen.getByText(/no services are configured/i)).toBeInTheDocument()
     })
     expect(document.querySelector('form')).not.toBeInTheDocument()
   })
 
-  it('shows service choices before date input', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('shows service choices before date input', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     expect(screen.getByRole('button', { name: /standard meal/i })).toBeInTheDocument()
     expect(document.getElementById('res-date')).not.toBeInTheDocument()
   })
@@ -167,43 +176,43 @@ describe('ReservationBlock — initial render', () => {
       return Promise.reject(new Error(`Unexpected fetch: ${url}`))
     })
 
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /from admin/i })).toBeInTheDocument()
     })
     expect(screen.queryByRole('button', { name: /standard meal/i })).not.toBeInTheDocument()
   })
 
-  it('does not show time slots before a date is chosen', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('does not show time slots before a date is chosen', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     expect(screen.queryByRole('button', { name: '09:00' })).not.toBeInTheDocument()
   })
 
-  it('does not show guest detail fields before a date is chosen', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('does not show guest detail fields before a date is chosen', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     expect(document.getElementById('res-name')).not.toBeInTheDocument()
   })
 })
 
 describe('ReservationBlock — step flow: service → date reveals time slots', () => {
-  it('shows the date field after picking a service', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('shows the date field after picking a service', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     expect(document.getElementById('res-date')).toBeInTheDocument()
   })
 
-  it('shows the time slot grid after picking a date', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('shows the time slot grid after picking a date', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
   })
 
-  it('does not show guest form fields until a time slot is selected', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('does not show guest form fields until a time slot is selected', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     expect(document.getElementById('res-name')).not.toBeInTheDocument()
@@ -211,8 +220,8 @@ describe('ReservationBlock — step flow: service → date reveals time slots', 
 })
 
 describe('ReservationBlock — time selection reveals guest form', () => {
-  it('shows the guest detail fields after picking a time slot', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('shows the guest detail fields after picking a time slot', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     pickSlot()
@@ -222,16 +231,16 @@ describe('ReservationBlock — time selection reveals guest form', () => {
     expect(document.getElementById('res-notes')).toBeInTheDocument()
   })
 
-  it('shows the submit button once the guest form is visible', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('shows the submit button once the guest form is visible', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     pickSlot()
     expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeInTheDocument()
   })
 
-  it('applies selected styling to the chosen time slot button', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('applies selected styling to the chosen time slot button', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     const slotBtn = screen.getByRole('button', { name: '13:00' })
@@ -239,8 +248,8 @@ describe('ReservationBlock — time selection reveals guest form', () => {
     expect(slotBtn.className).toContain('bg-primary')
   })
 
-  it('changing the date resets time selection and hides guest form', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('changing the date resets time selection and hides guest form', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate('2026-12-25')
     pickSlot()
@@ -250,8 +259,8 @@ describe('ReservationBlock — time selection reveals guest form', () => {
     expect(document.getElementById('res-name')).not.toBeInTheDocument()
   })
 
-  it('changing the service clears date and time and hides guest form', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('changing the service clears date and time and hides guest form', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService(SERVICES[0].name)
     pickDate()
     pickSlot()
@@ -266,8 +275,8 @@ describe('ReservationBlock — time selection reveals guest form', () => {
 })
 
 describe('ReservationBlock — submit button state', () => {
-  beforeEach(() => {
-    render(<ReservationBlock {...baseProps} />)
+  beforeEach(async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     pickSlot()
@@ -292,7 +301,7 @@ describe('ReservationBlock — form submission', () => {
   it('POSTs to /api/reservation with the correct payload', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm()
     submitForm()
 
@@ -319,7 +328,7 @@ describe('ReservationBlock — form submission', () => {
   it('trims whitespace from name, email and phone before sending', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm({ name: '  Jane Smith  ', email: ' jane@example.com ', phone: ' +34 600 000 000 ' })
     submitForm()
 
@@ -334,7 +343,7 @@ describe('ReservationBlock — form submission', () => {
   it('omits notes from payload when notes field is empty', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm()
     submitForm()
 
@@ -347,7 +356,7 @@ describe('ReservationBlock — form submission', () => {
   it('includes notes in payload when filled in', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     pickSlot()
@@ -364,7 +373,7 @@ describe('ReservationBlock — form submission', () => {
   it('shows the success screen after a successful submission', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm()
     submitForm()
 
@@ -377,7 +386,7 @@ describe('ReservationBlock — form submission', () => {
   it('shows the default confirmation message on success when confirmationMessage is null', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock {...baseProps} confirmationMessage={null} />)
+    await renderReservation(<ReservationBlock {...baseProps} confirmationMessage={null} />)
     completeForm()
     submitForm()
 
@@ -389,7 +398,7 @@ describe('ReservationBlock — form submission', () => {
   it('shows a custom confirmationMessage on success', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock {...baseProps} confirmationMessage="See you soon!" />)
+    await renderReservation(<ReservationBlock {...baseProps} confirmationMessage="See you soon!" />)
     completeForm()
     submitForm()
 
@@ -401,7 +410,7 @@ describe('ReservationBlock — form submission', () => {
   it('shows an error alert when the API returns a non-OK response', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: false } as Response)
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm()
     submitForm()
 
@@ -414,7 +423,7 @@ describe('ReservationBlock — form submission', () => {
   it('shows an error alert when fetch rejects (network error)', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockRejectedValueOnce(new Error('Network failure'))
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm()
     submitForm()
 
@@ -426,7 +435,7 @@ describe('ReservationBlock — form submission', () => {
   it('changes button label to "Confirming…" while submitting', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockImplementationOnce(() => new Promise(() => {}))
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm()
     submitForm()
 
@@ -438,7 +447,7 @@ describe('ReservationBlock — form submission', () => {
   it('disables the submit button while submitting', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockImplementationOnce(() => new Promise(() => {}))
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     completeForm()
     submitForm()
 
@@ -447,8 +456,8 @@ describe('ReservationBlock — form submission', () => {
     })
   })
 
-  it('does not submit when canSubmit is false (guard against programmatic calls)', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('does not submit when canSubmit is false (guard against programmatic calls)', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     pickSlot()
@@ -459,7 +468,7 @@ describe('ReservationBlock — form submission', () => {
   it('renders success without block heading when heading and subtext are omitted', async () => {
     fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
     fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
-    render(<ReservationBlock _type="reservationBlock" services={SERVICES} />)
+    await renderReservation(<ReservationBlock _type="reservationBlock" services={SERVICES} />)
     completeForm()
     submitForm()
 
@@ -491,7 +500,7 @@ describe('ReservationBlock — form submission', () => {
       return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
     })
 
-    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="client-a" />)
     completeForm()
     submitForm()
 
@@ -522,7 +531,7 @@ describe('ReservationBlock — form submission', () => {
       return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
     })
 
-    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="client-a" />)
     completeForm()
     submitForm()
 
@@ -555,7 +564,7 @@ describe('ReservationBlock — form submission', () => {
       return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
     })
 
-    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="client-a" />)
     completeForm()
     submitForm()
 
@@ -586,7 +595,7 @@ describe('ReservationBlock — form submission', () => {
       return Promise.reject(new Error(`Unexpected fetch in test: ${url}`))
     })
 
-    render(<ReservationBlock {...baseProps} clientId="client-a" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="client-a" />)
     completeForm()
     submitForm()
 
@@ -622,7 +631,7 @@ describe('ReservationBlock — availability integration', () => {
       } as Response)
     })
 
-    render(<ReservationBlock {...baseProps} clientId="rest-pepe" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="rest-pepe" />)
     pickService()
     pickDate('2026-06-01')
 
@@ -647,7 +656,7 @@ describe('ReservationBlock — availability integration', () => {
       } as Response)
     })
 
-    render(<ReservationBlock {...baseProps} clientId="scoped" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="scoped" />)
     pickService()
     pickDate()
 
@@ -698,7 +707,7 @@ describe('ReservationBlock — availability integration', () => {
       } as Response)
     })
 
-    render(<ReservationBlock {...baseProps} clientId="dur-test" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="dur-test" />)
     pickService(SERVICES[1].name)
     pickDate()
 
@@ -722,7 +731,7 @@ describe('ReservationBlock — availability integration', () => {
       return availability
     })
 
-    render(<ReservationBlock {...baseProps} clientId="x" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
     pickDate()
 
@@ -752,7 +761,7 @@ describe('ReservationBlock — availability integration', () => {
       } as Response)
     })
 
-    render(<ReservationBlock {...baseProps} clientId="x" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
     pickDate()
 
@@ -778,7 +787,7 @@ describe('ReservationBlock — availability integration', () => {
       } as Response)
     })
 
-    render(<ReservationBlock {...baseProps} clientId="x" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
     pickDate()
 
@@ -807,7 +816,7 @@ describe('ReservationBlock — availability integration', () => {
       } as Response)
     })
 
-    render(<ReservationBlock {...baseProps} clientId="x" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
     pickDate()
 
@@ -834,7 +843,7 @@ describe('ReservationBlock — availability integration', () => {
       } as Response)
     })
 
-    render(<ReservationBlock {...baseProps} clientId="x" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
     pickDate()
 
@@ -853,7 +862,7 @@ describe('ReservationBlock — availability integration', () => {
       return Promise.reject(new Error('network'))
     })
 
-    render(<ReservationBlock {...baseProps} clientId="x" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="x" />)
     pickService()
     pickDate()
 
@@ -865,7 +874,7 @@ describe('ReservationBlock — availability integration', () => {
 
 describe('end-time range label', () => {
   it('is absent before a slot is selected', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -875,7 +884,7 @@ describe('end-time range label', () => {
   })
 
   it('shows "HH:MM – HH:MM (N min)" after selecting a slot', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -887,7 +896,7 @@ describe('end-time range label', () => {
   })
 
   it('updates when the user clicks a different slot', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -902,7 +911,7 @@ describe('end-time range label', () => {
   })
 
   it('disappears when the date is cleared', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -918,7 +927,7 @@ describe('end-time range label', () => {
 
 describe('covered slots', () => {
   it('slots inside the selected window have aria-disabled="true"', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -929,7 +938,7 @@ describe('covered slots', () => {
   })
 
   it('clicking a covered slot does not change the selection', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -943,7 +952,7 @@ describe('covered slots', () => {
   })
 
   it('the slot at the exact end time is NOT covered', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -954,7 +963,7 @@ describe('covered slots', () => {
   })
 
   it('covered slots are cleared when the selection changes', async () => {
-    render(<ReservationBlock {...baseProps} />)
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     await waitFor(() => {
@@ -986,7 +995,7 @@ describe('slot unavailability reasons', () => {
   })
 
   it('booked slots have accessible label containing "fully booked"', async () => {
-    render(<ReservationBlock {...baseProps} clientId="reason-split" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="reason-split" />)
     pickService()
     pickDate()
 
@@ -996,7 +1005,7 @@ describe('slot unavailability reasons', () => {
   })
 
   it('out-of-window slots have accessible label containing "outside opening hours"', async () => {
-    render(<ReservationBlock {...baseProps} clientId="reason-split" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="reason-split" />)
     pickService()
     pickDate()
 
@@ -1006,7 +1015,7 @@ describe('slot unavailability reasons', () => {
   })
 
   it('booked and out-of-window slots render with different visual classes', async () => {
-    render(<ReservationBlock {...baseProps} clientId="reason-split" />)
+    await renderReservation(<ReservationBlock {...baseProps} clientId="reason-split" />)
     pickService()
     pickDate()
 
@@ -1019,8 +1028,8 @@ describe('slot unavailability reasons', () => {
 })
 
 describe('ReservationBlock — inline field validation', () => {
-  beforeEach(() => {
-    render(<ReservationBlock {...baseProps} />)
+  beforeEach(async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     pickSlot()
@@ -1052,8 +1061,8 @@ describe('ReservationBlock — inline field validation', () => {
 })
 
 describe('ReservationBlock — accessibility', () => {
-  it('associates each label with its input via matching htmlFor and id', () => {
-    render(<ReservationBlock {...baseProps} />)
+  it('associates each label with its input via matching htmlFor and id', async () => {
+    await renderReservation(<ReservationBlock {...baseProps} />)
     pickService()
     pickDate()
     pickSlot()
@@ -1067,14 +1076,14 @@ describe('ReservationBlock — accessibility', () => {
     })
   })
 
-  it('marks the section with the correct data-component attribute', () => {
-    const { container } = render(<ReservationBlock {...baseProps} />)
+  it('marks the section with the correct data-component attribute', async () => {
+    const { container } = await renderReservation(<ReservationBlock {...baseProps} />)
     const section = container.querySelector('[data-component="reservation-block"]')
     expect(section?.tagName).toBe('SECTION')
   })
 
-  it('does not render a heading element when heading prop is not provided', () => {
-    render(<ReservationBlock _type="reservationBlock" subtext="A subtitle" services={SERVICES} />)
+  it('does not render a heading element when heading prop is not provided', async () => {
+    await renderReservation(<ReservationBlock _type="reservationBlock" subtext="A subtitle" services={SERVICES} />)
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
 })

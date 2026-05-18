@@ -316,6 +316,10 @@ export function Carousel({
     const isActive = index === active
 
     if (carouselMode === 'image') {
+      const imageSrc =
+        typeof item.imageUrl === 'string' && item.imageUrl.trim().length > 0
+          ? item.imageUrl
+          : null
       return (
         <figure
           role="group"
@@ -332,14 +336,21 @@ export function Carousel({
               aspectRatio: aspectRatio ?? '16/9',
             }}
           >
-            <Image
-              fill
-              src={item.imageUrl ?? ''}
-              alt={item.imageAlt ?? ''}
-              objectFit={imageFit ?? 'cover'}
-              fetchPriority={index === 0 ? 'high' : 'auto'}
-              loading={index === 0 ? 'eager' : 'lazy'}
-            />
+            {imageSrc ? (
+              <Image
+                fill
+                src={imageSrc}
+                alt={item.imageAlt ?? ''}
+                objectFit={imageFit ?? 'cover'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+            ) : (
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full bg-muted"
+              />
+            )}
           </div>
           {item.caption && (
             <figcaption className="pt-2 text-center text-sm text-muted">

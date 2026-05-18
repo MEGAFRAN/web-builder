@@ -244,16 +244,14 @@ describe('Carousel', () => {
       expect(container.querySelector('figcaption')).toBeNull()
     })
 
-    it('passes empty strings to Image when url and alt are null', () => {
+    it('omits the img when url is null or empty', () => {
       renderCarousel(
         makeProps({
           mode: 'image',
           items: [{ imageUrl: null, imageAlt: null, caption: null }],
         }),
       )
-      const imgs = document.querySelectorAll('img')
-      expect(imgs.length).toBeGreaterThan(0)
-      expect(imgs[0]).toHaveAttribute('alt', '')
+      expect(document.querySelectorAll('[data-component="image"]')).toHaveLength(0)
     })
   })
 

@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { NextRequest, NextResponse } from 'next/server'
 import type { AdminBookingService, SessionPayload, StoredReservation } from '@/types/admin'
+import { suppressConsoleErrorDuring } from '../../../../suppressConsoleErrorDuring'
 
 const requireAdminSessionMock = vi.hoisted(() => vi.fn())
 
@@ -250,9 +251,11 @@ describe('/api/admin/reservations', () => {
     })
 
     it('returns 500 when persistence fails', async () => {
-      vi.mocked(appendReservation).mockRejectedValueOnce(new Error('disk full'))
-      const res = await POST(adminPost(validManual))
-      expect(res.status).toBe(500)
+      await suppressConsoleErrorDuring(async () => {
+        vi.mocked(appendReservation).mockRejectedValueOnce(new Error('disk full'))
+        const res = await POST(adminPost(validManual))
+        expect(res.status).toBe(500)
+      })
     })
 
     it('persists and returns ok with a generated id', async () => {

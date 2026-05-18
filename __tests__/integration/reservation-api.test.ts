@@ -1,12 +1,25 @@
+// @vitest-environment node
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { NextRequest } from 'next/server'
-import { POST } from '@/app/api/reservation/route'
 import { getClientConfig } from '@/lib/client-config'
 import type { ClientConfig } from '@/types/cms'
+
+const readFileMock = vi.hoisted(() => vi.fn())
+const writeFileMock = vi.hoisted(() => vi.fn())
+
+vi.mock('fs', () => ({
+  promises: {
+    readFile: readFileMock,
+    writeFile: writeFileMock,
+  },
+  default: {},
+}))
 
 vi.mock('@/lib/client-config', () => ({
   getClientConfig: vi.fn(),
 }))
+
+import { POST } from '@/app/api/reservation/route'
 
 const mockGetClientConfig = vi.mocked(getClientConfig)
 
@@ -172,6 +185,8 @@ describe('POST /api/reservation — local fallback (no reservationEndpoint)', ()
     vi.clearAllMocks()
     process.env.CLIENT_ID = 'test'
     mockGetClientConfig.mockReturnValue(makeConfig())
+    readFileMock.mockResolvedValue(JSON.stringify([]))
+    writeFileMock.mockResolvedValue(undefined)
   })
 
   afterEach(() => {

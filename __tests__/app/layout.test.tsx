@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render } from '@testing-library/react'
 import React from 'react'
 
@@ -123,6 +123,20 @@ describe('buildThemeStyles', () => {
 // RootLayout default export
 // ---------------------------------------------------------------------------
 describe('RootLayout', () => {
+  const consoleError = console.error
+
+  beforeEach(() => {
+    // RootLayout returns a full <html> tree; RTL's default wrapper is a <div> (invalid nesting).
+    vi.spyOn(console, 'error').mockImplementation((msg, ...args) => {
+      if (typeof msg === 'string' && msg.includes('<html> cannot be a child of')) return
+      consoleError.call(console, msg, ...args)
+    })
+  })
+
+  afterEach(() => {
+    vi.mocked(console.error).mockRestore()
+  })
+
   it('renders children inside the html/body shell', () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({ ...baseConfig, header: null, footer: null })
@@ -130,7 +144,7 @@ describe('RootLayout', () => {
     const { getByTestId } = render(
       <RootLayout>
         <main data-testid="child">content</main>
-      </RootLayout>
+      </RootLayout>,
     )
 
     expect(getByTestId('child')).toBeTruthy()
@@ -147,7 +161,7 @@ describe('RootLayout', () => {
     const { queryByTestId } = render(
       <RootLayout>
         <span />
-      </RootLayout>
+      </RootLayout>,
     )
 
     expect(queryByTestId('navbar')).toBeNull()
@@ -160,7 +174,7 @@ describe('RootLayout', () => {
     const { queryByTestId } = render(
       <RootLayout>
         <span />
-      </RootLayout>
+      </RootLayout>,
     )
 
     expect(queryByTestId('navbar')).toBeNull()
@@ -177,7 +191,7 @@ describe('RootLayout', () => {
     const { queryByTestId } = render(
       <RootLayout>
         <span />
-      </RootLayout>
+      </RootLayout>,
     )
 
     expect(queryByTestId('footer')).toBeNull()
@@ -190,7 +204,7 @@ describe('RootLayout', () => {
     const { queryByTestId } = render(
       <RootLayout>
         <span />
-      </RootLayout>
+      </RootLayout>,
     )
 
     expect(queryByTestId('footer')).toBeNull()
@@ -203,7 +217,7 @@ describe('RootLayout', () => {
     render(
       <RootLayout>
         <span />
-      </RootLayout>
+      </RootLayout>,
     )
 
     // jsdom hoists <head> content into document.head, not into container
@@ -230,7 +244,7 @@ describe('RootLayout', () => {
     render(
       <RootLayout>
         <span />
-      </RootLayout>
+      </RootLayout>,
     )
 
     expect(document.body.className).not.toMatch(/pb-\[calc/)

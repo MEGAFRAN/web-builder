@@ -6,6 +6,7 @@ import type {
   SessionPayload,
   WeeklyHoursRow,
 } from '@/types/admin'
+import { suppressConsoleErrorDuring } from '../../../../suppressConsoleErrorDuring'
 
 const hoisted = vi.hoisted(() => {
   const FULL_WEEK: WeeklyHoursRow[] = [
@@ -151,9 +152,11 @@ describe('/api/admin/schedule', () => {
     })
 
     it('returns 500 when persistence rejects', async () => {
-      hoisted.writeBookingSchedule.mockRejectedValueOnce(new Error('io'))
-      const res = await PUT(jsonReq('PUT', { weekly: hoisted.FULL_WEEK }))
-      expect(res.status).toBe(500)
+      await suppressConsoleErrorDuring(async () => {
+        hoisted.writeBookingSchedule.mockRejectedValueOnce(new Error('io'))
+        const res = await PUT(jsonReq('PUT', { weekly: hoisted.FULL_WEEK }))
+        expect(res.status).toBe(500)
+      })
     })
   })
 
@@ -217,9 +220,11 @@ describe('/api/admin/schedule', () => {
     })
 
     it('returns 500 when writes fail after validation', async () => {
-      hoisted.writeBookingSchedule.mockRejectedValueOnce(new Error('disk'))
-      const res = await POST(jsonReq('POST', { date: '2026-05-18', closed: true }))
-      expect(res.status).toBe(500)
+      await suppressConsoleErrorDuring(async () => {
+        hoisted.writeBookingSchedule.mockRejectedValueOnce(new Error('disk'))
+        const res = await POST(jsonReq('POST', { date: '2026-05-18', closed: true }))
+        expect(res.status).toBe(500)
+      })
     })
   })
 
@@ -256,13 +261,15 @@ describe('/api/admin/schedule', () => {
     })
 
     it('returns 500 when persistence fails mid-delete', async () => {
-      hoisted.readBookingSchedule.mockResolvedValueOnce({
-        weekly: hoisted.FULL_WEEK,
-        exceptions: [{ id: 'x', date: '2026-05-06', closed: true }],
+      await suppressConsoleErrorDuring(async () => {
+        hoisted.readBookingSchedule.mockResolvedValueOnce({
+          weekly: hoisted.FULL_WEEK,
+          exceptions: [{ id: 'x', date: '2026-05-06', closed: true }],
+        })
+        hoisted.writeBookingSchedule.mockRejectedValueOnce(new Error('boom'))
+        const res = await DELETE(jsonReq('DELETE', undefined, '?id=x'))
+        expect(res.status).toBe(500)
       })
-      hoisted.writeBookingSchedule.mockRejectedValueOnce(new Error('boom'))
-      const res = await DELETE(jsonReq('DELETE', undefined, '?id=x'))
-      expect(res.status).toBe(500)
     })
   })
 })

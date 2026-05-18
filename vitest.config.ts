@@ -14,6 +14,7 @@ export default defineConfig({
       reporter: ['text', 'text-summary'],
       include: ['**/*.{ts,tsx}'],
       exclude: [
+        'azure-functions/**',
         'node_modules/**',
         '.next/**',
         'out/**',

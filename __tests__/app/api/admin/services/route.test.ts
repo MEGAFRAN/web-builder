@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { NextRequest, NextResponse } from 'next/server'
 import type { AdminBookingService, SessionPayload } from '@/types/admin'
+import { suppressConsoleErrorDuring } from '../../../../suppressConsoleErrorDuring'
 
 const requireAdminSessionMock = vi.hoisted(() => vi.fn())
 
@@ -110,9 +111,11 @@ describe('/api/admin/services', () => {
     })
 
     it('returns 500 when persistence fails downstream', async () => {
-      vi.mocked(writeBookingServices).mockRejectedValueOnce(new Error('locked'))
-      const res = await PUT(put({ services: [haircut] }))
-      expect(res.status).toBe(500)
+      await suppressConsoleErrorDuring(async () => {
+        vi.mocked(writeBookingServices).mockRejectedValueOnce(new Error('locked'))
+        const res = await PUT(put({ services: [haircut] }))
+        expect(res.status).toBe(500)
+      })
     })
   })
 })
