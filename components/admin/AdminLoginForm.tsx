@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Alert } from '@/components/content/Alert'
 import { Stack } from '@/components/layout/Stack'
 import { Section } from '@/components/layout/Section'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 export default function AdminLoginForm({
   misconfigured,
@@ -32,7 +33,7 @@ export default function AdminLoginForm({
       })
       const data = (await res.json().catch(() => ({}))) as { error?: string }
       if (!res.ok) {
-        setError(data.error ?? 'Correo o contraseña incorrectos')
+        setError(data.error ?? adminCopy.login.defaultError)
         return
       }
       router.push(redirectTo.startsWith('/admin') ? redirectTo : '/admin/bookings')
@@ -45,7 +46,7 @@ export default function AdminLoginForm({
   return (
     <Section paddingY="xl" background="gray">
       <div className="mx-auto flex max-w-md flex-col px-4">
-        <h1 className="text-center text-2xl font-bold text-foreground">Iniciar sesión</h1>
+        <h1 className="text-center text-2xl font-bold text-foreground">{adminCopy.login.heading}</h1>
         <p className="mt-2 text-center text-sm text-muted">
           Acceso para el titular del negocio — contacte con soporte si necesita una cuenta.
         </p>
@@ -54,8 +55,8 @@ export default function AdminLoginForm({
           <div className="mt-6">
             <Alert
               variant="warning"
-              title="Inicio de sesión no disponible"
-              message="Faltan variables de entorno de autenticación de administración. Configure ADMIN_EMAIL, ADMIN_PASSWORD y ADMIN_SESSION_SECRET en el servidor."
+              title={adminCopy.login.misconfiguredTitle}
+              message={adminCopy.login.misconfiguredMessage}
             />
           </div>
         )}
@@ -72,7 +73,7 @@ export default function AdminLoginForm({
               </p>
             )}
             <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-              Correo electrónico
+              {adminCopy.login.emailLabel}
               <input
                 type="email"
                 autoComplete="username"
@@ -83,7 +84,7 @@ export default function AdminLoginForm({
               />
             </label>
             <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-              Contraseña
+              {adminCopy.login.passwordLabel}
               <input
                 type="password"
                 autoComplete="current-password"
@@ -98,7 +99,7 @@ export default function AdminLoginForm({
               disabled={busy || misconfigured}
               className="rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-fg hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              Iniciar sesión
+              {adminCopy.login.submit}
             </button>
           </Stack>
         </form>

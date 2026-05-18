@@ -14,7 +14,7 @@ import { BookingDetailDrawer } from '@/components/admin/bookings/BookingDetailDr
 import { NewAppointmentModal } from '@/components/admin/bookings/NewAppointmentModal'
 
 import { formatYmd, mondayOfWeek, addDaysYmd } from '@/lib/booking-utils'
-import { formatPrettyDateEs } from '@/components/admin/admin-locale'
+import { adminCopy, formatPrettyDateEs } from '@/components/admin/admin-copy'
 import { resolveDayMinutesWindow } from '@/lib/booking-schedule-window'
 import type { BookingScheduleFile, ReservationRow } from '@/types/admin'
 import { SimpleDayList } from '@/components/admin/bookings/SimpleDayList'
@@ -41,18 +41,18 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
     try {
       const [rs, sch] = await Promise.all([
         fetch(`/api/admin/reservations?startDate=${start}&endDate=${end}`).then(async (r) => {
-          if (!r.ok) throw new Error('No se pudieron cargar las reservas.')
+          if (!r.ok) throw new Error(adminCopy.bookings.errors.failedReservations)
           return r.json() as Promise<{ reservations: ReservationRow[] }>
         }),
         fetch(`/api/admin/schedule`).then(async (r) => {
-          if (!r.ok) throw new Error('No se pudo cargar el horario.')
+          if (!r.ok) throw new Error(adminCopy.bookings.errors.failedSchedule)
           return r.json() as Promise<BookingScheduleFile>
         }),
       ])
       setRows(rs.reservations)
       setSchedule(sch)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Algo salió mal.')
+      setError(e instanceof Error ? e.message : adminCopy.bookings.errors.generic)
     } finally {
       setLoading(false)
     }
@@ -86,7 +86,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      throw new Error(j.error ?? 'No se pudo actualizar.')
+      throw new Error(j.error ?? adminCopy.bookings.errors.updateFailed)
     }
     setDetail(null)
     void fetchRange(
@@ -107,7 +107,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
       <Stack gap="lg">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <Heading text="Reservas" level="h1" />
+            <Heading text={adminCopy.bookings.heading} level="h1" />
             <p className="mt-1 text-sm text-muted">
               Vistas diaria y semanal de las próximas citas.
             </p>
@@ -118,12 +118,12 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
               onClick={() => setCreateOpen(true)}
               className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              + Nueva cita
+              {adminCopy.bookings.newAppointmentButton}
             </button>
           </div>
         </div>
 
-        {error && <Alert variant="error" title="Error" message={error} />}
+        {error && <Alert variant="error" title={adminCopy.common.error} message={error} />}
 
         <CalendarNavBar
           selectedYmd={selectedYmd}
@@ -133,7 +133,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
         />
 
         {loading ? (
-          <p className="text-sm text-muted">Cargando…</p>
+          <p className="text-sm text-muted">{adminCopy.common.loading}</p>
         ) : view === 'day' ? (
           dayWindow === null && dayRows.length === 0 ? (
             <CalendarEmptyState
@@ -179,7 +179,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
 
       <AdminModal
         open={cancelOpen}
-        title="¿Cancelar esta cita?"
+        title={adminCopy.bookings.cancelModalTitle}
         labelledById="cancel-appt-title"
         descriptionId="cancel-appt-desc"
         onClose={() => {
@@ -196,7 +196,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
                 setCancelReason('')
               }}
             >
-              Volver
+              {adminCopy.common.back}
             </button>
             <button
               type="button"
@@ -211,7 +211,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
                 )
               }
             >
-              Confirmar cancelación
+              {adminCopy.bookings.confirmCancel}
             </button>
           </>
         }

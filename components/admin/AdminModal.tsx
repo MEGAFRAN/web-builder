@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 interface AdminModalProps {
   open: boolean
@@ -65,7 +66,7 @@ export function AdminModal({
         </h2>
         <button
           type="button"
-          aria-label="Cerrar"
+          aria-label={adminCopy.common.close}
           onClick={onClose}
           className="rounded-md p-1.5 text-muted hover:bg-muted-bg hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
         >

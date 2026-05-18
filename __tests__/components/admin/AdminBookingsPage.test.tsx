@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import AdminBookingsPage from '@/components/admin/AdminBookingsPage'
 import type { BookingScheduleFile } from '@/types/admin'
+import { adminCopy, WEEK_SHORT_LABELS, weekDayHeader } from '@/components/admin/admin-copy'
 
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
 
@@ -79,7 +80,7 @@ describe('AdminBookingsPage', () => {
 
     render(<AdminBookingsPage clientId="client-1" />)
 
-    expect(screen.getByText('Loading…')).toBeInTheDocument()
+    expect(screen.getByText(adminCopy.common.loading)).toBeInTheDocument()
   })
 
   it('requests the selected day range and renders the empty-day affordance when no bookings exist', async () => {
@@ -107,7 +108,7 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(screen.getByText('No appointments for this day')).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.bookings.emptyDay)).toBeInTheDocument()
     })
 
     expect(fetch).toHaveBeenCalledWith(
@@ -140,9 +141,9 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(screen.getByText('Error')).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.common.error)).toBeInTheDocument()
     })
-    expect(screen.getByText(/failed to load reservations/i)).toBeInTheDocument()
+    expect(screen.getByText(adminCopy.bookings.errors.failedReservations)).toBeInTheDocument()
   })
 
   it('loads week-wide data when switching to week mode', async () => {
@@ -170,12 +171,12 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading…')).not.toBeInTheDocument()
+      expect(screen.queryByText(adminCopy.common.loading)).not.toBeInTheDocument()
     })
 
     vi.mocked(fetch).mockClear()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Week' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.calendar.week }))
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
@@ -208,7 +209,7 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(screen.getByText(/failed to load schedule/i)).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.bookings.errors.failedSchedule)).toBeInTheDocument()
     })
   })
 
@@ -238,9 +239,9 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(screen.getByText(/closed ·/i)).toBeInTheDocument()
+      expect(screen.getByText(new RegExp(adminCopy.bookings.closedPrefix, 'i'))).toBeInTheDocument()
     })
-    expect(screen.getByText(/no bookings are accepted on this date/i)).toBeInTheDocument()
+    expect(screen.getByText(adminCopy.bookings.closedNoBookings)).toBeInTheDocument()
   })
 
   it('lists appointments without a timeline when the working-day window is unavailable but bookings exist', async () => {
@@ -268,9 +269,7 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/marked closed or uses special hours/i),
-      ).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.bookings.specialDayListNote)).toBeInTheDocument()
     })
     expect(screen.getByRole('button', { name: /pat guest/i })).toBeInTheDocument()
   })
@@ -311,21 +310,21 @@ describe('AdminBookingsPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /pat guest/i }))
 
-    const panel = await screen.findByRole('heading', { name: 'Appointment' })
+    const panel = await screen.findByRole('heading', { name: adminCopy.bookings.appointment })
     expect(panel).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Cancel appointment…' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.bookings.cancelAppointment }))
 
     await waitFor(() => {
       expect(
-        screen.getByRole('heading', { name: 'Cancel this appointment?' }),
+        screen.getByRole('heading', { name: adminCopy.bookings.cancelModalTitle }),
       ).toBeInTheDocument()
     })
 
-    fireEvent.change(screen.getByPlaceholderText(/customer requested/i), {
+    fireEvent.change(screen.getByPlaceholderText('p. ej., El cliente pidió cancelar'), {
       target: { value: 'Test reason' },
     })
-    fireEvent.click(screen.getByRole('button', { name: 'Confirm cancel' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.bookings.confirmCancel }))
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
@@ -373,9 +372,9 @@ describe('AdminBookingsPage', () => {
     })
 
     fireEvent.click(screen.getByRole('button', { name: /pat guest/i }))
-    await screen.findByRole('heading', { name: 'Appointment' })
+    await screen.findByRole('heading', { name: adminCopy.bookings.appointment })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Mark as no-show' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.bookings.markNoShow }))
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
@@ -413,21 +412,21 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading…')).not.toBeInTheDocument()
+      expect(screen.queryByText(adminCopy.common.loading)).not.toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Week' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.calendar.week }))
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Mon · 18/ })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: weekDayHeader(WEEK_SHORT_LABELS[0], '18') })).toBeInTheDocument()
     })
 
     vi.mocked(fetch).mockClear()
 
-    fireEvent.click(screen.getByRole('button', { name: /Thu · 21/ }))
+    fireEvent.click(screen.getByRole('button', { name: weekDayHeader(WEEK_SHORT_LABELS[3], '21') }))
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Day' })).toHaveAttribute(
+      expect(screen.getByRole('button', { name: adminCopy.calendar.day })).toHaveAttribute(
         'aria-pressed',
         'true',
       )
@@ -477,12 +476,12 @@ describe('AdminBookingsPage', () => {
     render(<AdminBookingsPage clientId="client-1" />)
 
     await waitFor(() => {
-      expect(screen.getByText('No appointments for this day')).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.bookings.emptyDay)).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getAllByRole('button', { name: '+ New appointment' })[0])
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.bookings.newAppointmentButton })[0])
 
-    const modal = await screen.findByRole('heading', { name: 'New appointment' })
+    const modal = await screen.findByRole('heading', { name: adminCopy.appointmentForm.title })
     expect(modal).toBeInTheDocument()
 
     const dlg = screen.getByRole('dialog')
@@ -493,20 +492,20 @@ describe('AdminBookingsPage', () => {
       ).toBeInTheDocument()
     })
 
-    fireEvent.change(within(dlg).getByLabelText(/customer name/i), {
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.appointmentForm.customerName), {
       target: { value: 'New Client' },
     })
-    fireEvent.change(within(dlg).getByLabelText(/^phone/i), {
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.appointmentForm.phone), {
       target: { value: '999' },
     })
-    fireEvent.change(within(dlg).getByLabelText(/^email/i), {
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.appointmentForm.email), {
       target: { value: 'n@e.co' },
     })
-    fireEvent.change(within(dlg).getByLabelText(/^time/i), {
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.appointmentForm.time), {
       target: { value: '09:00' },
     })
 
-    fireEvent.click(within(dlg).getByRole('button', { name: 'Save' }))
+    fireEvent.click(within(dlg).getByRole('button', { name: adminCopy.common.save }))
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(

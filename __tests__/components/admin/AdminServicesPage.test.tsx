@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import AdminServicesPage from '@/components/admin/AdminServicesPage'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 const serviceA = {
   id: 'svc-a',
@@ -71,7 +72,7 @@ describe('AdminServicesPage', () => {
     render(<AdminServicesPage />)
 
     await waitFor(() => {
-      expect(screen.getByText(/haven't added any services yet/i)).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.services.emptyOnboarding)).toBeInTheDocument()
     })
   })
 
@@ -89,9 +90,9 @@ describe('AdminServicesPage', () => {
     render(<AdminServicesPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Error')).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.common.error)).toBeInTheDocument()
     })
-    expect(screen.getByText(/failed to load services/i)).toBeInTheDocument()
+    expect(screen.getByText(adminCopy.services.errors.failedLoad)).toBeInTheDocument()
   })
 
   it('opens the add-service modal from the primary toolbar button', async () => {
@@ -122,10 +123,10 @@ describe('AdminServicesPage', () => {
       expect(screen.getByRole('heading', { name: 'Only service', level: 2 })).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getAllByRole('button', { name: '+ Add service' })[0])
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.services.addServiceButton })[0])
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Add service' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: adminCopy.services.addService })).toBeInTheDocument()
     })
   })
 
@@ -146,11 +147,11 @@ describe('AdminServicesPage', () => {
       expect(screen.getByText(/\$49\.99/)).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: /expand/i }))
-    expect(screen.getByText(/show less/i)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: new RegExp(adminCopy.common.expand) }))
+    expect(screen.getByRole('button', { name: new RegExp(adminCopy.common.showLess) })).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: /show less/i }))
-    expect(screen.getByRole('button', { name: /expand/i })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: new RegExp(adminCopy.common.showLess) }))
+    expect(screen.getByRole('button', { name: new RegExp(adminCopy.common.expand) })).toBeInTheDocument()
   })
 
   it('persists card order after drag-and-drop', async () => {
@@ -236,19 +237,19 @@ describe('AdminServicesPage', () => {
       expect(screen.getByRole('heading', { name: 'Alpha cut', level: 2 })).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: /edit alpha cut/i }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.services.editAria('Alpha cut') }))
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Edit service' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: adminCopy.services.editService })).toBeInTheDocument()
     })
 
     const dialog = screen.getByRole('dialog')
-    const nameInput = within(dialog).getByRole('textbox', { name: /name/i })
+    const nameInput = within(dialog).getByRole('textbox', { name: adminCopy.services.form.name })
     fireEvent.change(nameInput, { target: { value: 'Renamed' } })
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Save' }))
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.common.save }))
 
     await waitFor(() => {
-      expect(screen.queryByRole('heading', { name: 'Edit service' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('heading', { name: adminCopy.services.editService })).not.toBeInTheDocument()
     })
     expect(fetchMock).toHaveBeenCalledWith(
       '/api/admin/services',
@@ -270,30 +271,33 @@ describe('AdminServicesPage', () => {
     render(<AdminServicesPage />)
 
     await waitFor(() => {
-      expect(screen.getByText(/haven't added any services yet/i)).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.services.emptyOnboarding)).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getAllByRole('button', { name: '+ Add service' })[0])
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.services.addServiceButton })[0])
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Add service' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: adminCopy.services.addService })).toBeInTheDocument()
     })
 
     const dialog = screen.getByRole('dialog')
-    fireEvent.change(within(dialog).getByRole('textbox', { name: /name/i }), {
+    fireEvent.change(within(dialog).getByRole('textbox', { name: adminCopy.services.form.name }), {
       target: { value: '   ' },
     })
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Save' }))
-    expect(await screen.findByText('Name is required.')).toBeInTheDocument()
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.common.save }))
+    expect(await screen.findByText(adminCopy.services.form.nameRequired)).toBeInTheDocument()
 
-    fireEvent.change(within(dialog).getByRole('textbox', { name: /name/i }), {
+    fireEvent.change(within(dialog).getByRole('textbox', { name: adminCopy.services.form.name }), {
       target: { value: 'Ok' },
     })
-    fireEvent.change(within(dialog).getByRole('spinbutton', { name: /duration/i }), {
+    const durationPattern = new RegExp(
+      adminCopy.services.form.duration.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+    )
+    fireEvent.change(within(dialog).getByRole('spinbutton', { name: durationPattern }), {
       target: { value: '99999' },
     })
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Save' }))
-    expect(await screen.findByText(/duration must be between/i)).toBeInTheDocument()
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.common.save }))
+    expect(await screen.findByText(adminCopy.services.form.durationRange)).toBeInTheDocument()
   })
 
   it('removes a service after confirming delete, and surfaces delete PUT failures', async () => {
@@ -322,12 +326,12 @@ describe('AdminServicesPage', () => {
       expect(screen.getByRole('heading', { name: 'Alpha cut', level: 2 })).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: /delete alpha cut/i }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.services.deleteAria('Alpha cut') }))
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Delete this service?' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: adminCopy.services.deleteServiceTitle })).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.common.delete }))
 
     await waitFor(() => {
       expect(screen.getByText('cannot delete')).toBeInTheDocument()

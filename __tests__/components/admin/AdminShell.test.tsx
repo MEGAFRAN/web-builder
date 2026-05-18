@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, within } from '@testing-library/react'
 import AdminShell from '@/components/admin/AdminShell'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 const mockPush = vi.fn()
 const mockRefresh = vi.fn()
@@ -50,10 +51,10 @@ describe('AdminShell', () => {
   })
 
   it.each([
-    ['/admin/bookings', 'Bookings'],
-    ['/admin/services/extra', 'Services'],
-    ['/admin/availability', 'Availability'],
-    ['/admin/settings', 'Settings'],
+    ['/admin/bookings', adminCopy.nav.bookings],
+    ['/admin/services/extra', adminCopy.nav.services],
+    ['/admin/availability', adminCopy.nav.availability],
+    ['/admin/settings', adminCopy.nav.settings],
   ] as const)('uses pathname "%s" to show section "%s" in mobile bottom bar', (pathname, title) => {
     mockPathname.mockReturnValue(pathname)
     render(
@@ -75,7 +76,7 @@ describe('AdminShell', () => {
       </AdminShell>,
     )
 
-    const sectionNav = screen.getByRole('navigation', { name: 'Admin sections' })
+    const sectionNav = screen.getByRole('navigation', { name: adminCopy.nav.ariaSections })
     expect(sectionNav.querySelector('[aria-current="page"]')).toBeNull()
     expect(screen.getByText('Page body')).toBeInTheDocument()
   })
@@ -108,7 +109,7 @@ describe('AdminShell', () => {
       </AdminShell>,
     )
 
-    fireEvent.click(screen.getAllByRole('button', { name: /sign out/i })[0])
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.nav.signOut })[0])
 
     await vi.waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/admin/auth/logout', { method: 'POST' })
@@ -148,7 +149,7 @@ describe('AdminShell', () => {
     const container = document.querySelector('[data-component="container"]')
     expect(container?.className).toContain('max-w-xl')
 
-    const nav = screen.getByRole('navigation', { name: 'Admin' })
+    const nav = screen.getByRole('navigation', { name: adminCopy.nav.ariaAdmin })
     expect(nav.querySelector('a[href="/admin/bookings"]')).toBeTruthy()
     expect(nav.querySelector('a[href="/admin/services"]')).toBeTruthy()
     expect(nav.querySelector('a[href="/admin/availability"]')).toBeTruthy()

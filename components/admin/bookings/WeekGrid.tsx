@@ -3,8 +3,7 @@
 import type { ReservationRow } from '@/types/admin'
 import { addDaysYmd } from '@/lib/booking-utils'
 import { BookingCard } from './BookingCard'
-
-const WEEK_LABELS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
+import { WEEK_SHORT_LABELS, weekDayHeader } from '@/components/admin/admin-copy'
 
 interface WeekGridProps {
   weekStart: string
@@ -32,7 +31,7 @@ export function WeekGrid({ weekStart, rows, onPickDay, onSelect }: WeekGridProps
               onClick={() => onPickDay(ymd)}
               className="border-border border-b px-3 py-2 text-left text-sm font-semibold hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              {WEEK_LABELS[i]} · {ymd.slice(8)}
+              {weekDayHeader(WEEK_SHORT_LABELS[i], ymd.slice(8))}
             </button>
             <ul className="flex flex-1 flex-col gap-1 p-2">
               {dayRows.map((r) => (

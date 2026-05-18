@@ -2,7 +2,12 @@
 
 import type { ReservationRow } from '@/types/admin'
 import { bookingCardBorderClasses } from '@/lib/booking-utils'
-import { reservationStatusAriaEs } from '@/components/admin/admin-locale'
+import {
+  adminCopy,
+  bookingListAriaLabel,
+  bookingTimelineAriaLabel,
+  bookingWeekAriaLabel,
+} from '@/components/admin/admin-copy'
 
 export type BookingCardVariant = 'list' | 'timeline' | 'week'
 
@@ -29,7 +34,7 @@ export function BookingCard({ row, onClick, variant, endLabel, className = '' }:
       >
         <span className="font-semibold text-foreground">{row.name}</span>
         <span className="text-xs text-muted">
-          {row.time} · {row.serviceName ?? 'Servicio'}
+          {row.time} · {row.serviceName ?? adminCopy.common.serviceFallback}
         </span>
       </button>
     )
@@ -45,7 +50,7 @@ export function BookingCard({ row, onClick, variant, endLabel, className = '' }:
         className={`flex h-full w-full min-h-0 flex-col rounded-lg bg-surface px-3 py-2 text-left shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${border} ${dimmed ? 'opacity-60' : ''} ${className}`}
       >
         <span className="truncate text-xs text-muted">
-          {row.serviceName ?? 'Servicio'}{' · '}
+          {row.serviceName ?? adminCopy.common.serviceFallback}{' · '}
           {row.time} – {endLabel ?? ''}
         </span>
       </button>
@@ -66,12 +71,17 @@ export function BookingCard({ row, onClick, variant, endLabel, className = '' }:
 }
 
 function buildAriaLabel(row: ReservationRow, variant: BookingCardVariant, endLabel?: string): string {
-  const statusLabel = reservationStatusAriaEs(row.status)
   if (variant === 'list') {
-    return `${row.name}, ${row.time}, ${row.serviceName ?? 'Servicio'}, ${statusLabel}`
+    return bookingListAriaLabel(row.name, row.time, row.serviceName, row.status)
   }
   if (variant === 'timeline') {
-    return `${row.name}, ${row.serviceName ?? 'Servicio'}, ${row.time}–${endLabel ?? ''}, ${statusLabel}`
+    return bookingTimelineAriaLabel(
+      row.name,
+      row.serviceName,
+      row.time,
+      endLabel ?? '',
+      row.status,
+    )
   }
-  return `${row.time}, ${row.name}, ${statusLabel}`
+  return bookingWeekAriaLabel(row.time, row.name, row.status)
 }

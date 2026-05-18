@@ -1,6 +1,7 @@
 'use client'
 
 import { addDaysYmd, formatYmd } from '@/lib/booking-utils'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 export type CalendarViewMode = 'day' | 'week'
 
@@ -25,24 +26,24 @@ export function CalendarNavBar({
           className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           onClick={() => onSelectedYmdChange(addDaysYmd(selectedYmd, -1))}
         >
-          Anterior
+          {adminCopy.calendar.previous}
         </button>
         <button
           type="button"
           className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           onClick={() => onSelectedYmdChange(formatYmd(new Date()))}
         >
-          Hoy
+          {adminCopy.calendar.today}
         </button>
         <button
           type="button"
           className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           onClick={() => onSelectedYmdChange(addDaysYmd(selectedYmd, 1))}
         >
-          Siguiente
+          {adminCopy.calendar.next}
         </button>
         <label className="flex items-center gap-2 text-sm text-foreground">
-          <span className="sr-only">Ir a fecha</span>
+          <span className="sr-only">{adminCopy.calendar.jumpToDate}</span>
           <input
             type="date"
             value={selectedYmd}
@@ -54,7 +55,7 @@ export function CalendarNavBar({
 
       <div
         role="group"
-        aria-label="Modo de vista"
+        aria-label={adminCopy.calendar.viewModeAria}
         className="inline-flex rounded-md border border-border p-0.5"
       >
         <button
@@ -65,7 +66,7 @@ export function CalendarNavBar({
           onClick={() => onViewChange('day')}
           aria-pressed={view === 'day'}
         >
-          Día
+          {adminCopy.calendar.day}
         </button>
         <button
           type="button"
@@ -75,7 +76,7 @@ export function CalendarNavBar({
           onClick={() => onViewChange('week')}
           aria-pressed={view === 'week'}
         >
-          Semana
+          {adminCopy.calendar.week}
         </button>
       </div>
     </div>

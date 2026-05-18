@@ -2,10 +2,7 @@
 
 import { Badge } from '@/components/content/Badge'
 import { bookingDurationMinutes, timeToMinutes } from '@/lib/booking-utils'
-import {
-  formatPrettyDateEs,
-  reservationStatusDisplay,
-} from '@/components/admin/admin-locale'
+import { adminCopy, formatPrettyDateEs, reservationStatusDisplay } from '@/components/admin/admin-copy'
 import type { ReservationRow } from '@/types/admin'
 
 interface BookingDetailDrawerProps {
@@ -30,7 +27,7 @@ export function BookingDetailDrawer({ row, onClose, onCancel, onNoShow }: Bookin
       <button
         type="button"
         className="absolute inset-0 bg-black/30"
-        aria-label="Cerrar panel"
+        aria-label={adminCopy.common.closePanel}
         onClick={onClose}
       />
       <aside
@@ -38,49 +35,55 @@ export function BookingDetailDrawer({ row, onClose, onCancel, onNoShow }: Bookin
         tabIndex={-1}
       >
         <div className="flex items-center justify-between border-border border-b px-4 py-3">
-          <h2 className="text-lg font-semibold text-foreground">Cita</h2>
+          <h2 className="text-lg font-semibold text-foreground">{adminCopy.bookings.appointment}</h2>
           <button
             type="button"
             className="rounded-md p-2 hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             onClick={onClose}
           >
-            Cerrar
+            {adminCopy.common.close}
           </button>
         </div>
         <div className="flex-1 overflow-auto px-4 py-4">
           <dl className="space-y-3 text-sm">
             <div>
-              <dt className="font-medium text-muted">Cliente</dt>
+              <dt className="font-medium text-muted">{adminCopy.drawer.client}</dt>
               <dd className="text-foreground">{row.name}</dd>
             </div>
             <div>
-              <dt className="font-medium text-muted">Teléfono</dt>
+              <dt className="font-medium text-muted">{adminCopy.drawer.phone}</dt>
               <dd className="text-foreground">{row.phone}</dd>
             </div>
             <div>
-              <dt className="font-medium text-muted">Correo</dt>
+              <dt className="font-medium text-muted">{adminCopy.drawer.email}</dt>
               <dd className="text-foreground">{row.email}</dd>
             </div>
             <div>
-              <dt className="font-medium text-muted">Servicio</dt>
-              <dd className="text-foreground">{row.serviceName ?? row.serviceId ?? '—'}</dd>
+              <dt className="font-medium text-muted">{adminCopy.drawer.service}</dt>
+              <dd className="text-foreground">
+                {row.serviceName ?? row.serviceId ?? adminCopy.common.emDash}
+              </dd>
             </div>
             <div>
-              <dt className="font-medium text-muted">Duración</dt>
-              <dd className="text-foreground">{dur} minutos</dd>
+              <dt className="font-medium text-muted">{adminCopy.drawer.duration}</dt>
+              <dd className="text-foreground">
+                {dur} {adminCopy.common.minutes}
+              </dd>
             </div>
             <div>
-              <dt className="font-medium text-muted">Cuándo</dt>
+              <dt className="font-medium text-muted">{adminCopy.drawer.when}</dt>
               <dd className="text-foreground">
                 {formatPrettyDateEs(row.date)} · {fmt(start)} – {fmt(endMin)}
               </dd>
             </div>
             <div>
-              <dt className="font-medium text-muted">Notas</dt>
-              <dd className="text-foreground">{row.notes?.trim() ? row.notes : '—'}</dd>
+              <dt className="font-medium text-muted">{adminCopy.drawer.notes}</dt>
+              <dd className="text-foreground">
+                {row.notes?.trim() ? row.notes : adminCopy.common.emDash}
+              </dd>
             </div>
             <div>
-              <dt className="font-medium text-muted">Estado</dt>
+              <dt className="font-medium text-muted">{adminCopy.drawer.status}</dt>
               <dd>
                 <Badge label={stLabel} variant={variant} />
               </dd>
@@ -94,7 +97,7 @@ export function BookingDetailDrawer({ row, onClose, onCancel, onNoShow }: Bookin
               className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-muted-bg disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
               onClick={onCancel}
             >
-              Cancelar cita…
+              {adminCopy.bookings.cancelAppointment}
             </button>
             <button
               type="button"
@@ -102,7 +105,7 @@ export function BookingDetailDrawer({ row, onClose, onCancel, onNoShow }: Bookin
               className="rounded-md bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-900 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
               onClick={onNoShow}
             >
-              Marcar como ausencia
+              {adminCopy.bookings.markNoShow}
             </button>
           </div>
         </div>

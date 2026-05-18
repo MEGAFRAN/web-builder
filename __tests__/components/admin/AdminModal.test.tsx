@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { AdminModal } from '@/components/admin/AdminModal'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -41,7 +42,7 @@ describe('AdminModal', () => {
   })
 
   it.each([
-    ['close button', () => screen.getByRole('button', { name: 'Close' })],
+    ['close button', () => screen.getByRole('button', { name: adminCopy.common.close })],
     ['backdrop click on dialog surface', () => screen.getByRole('dialog')],
   ] as const)('calls onClose when activating %s', (_label, getTarget) => {
     const onClose = vi.fn()

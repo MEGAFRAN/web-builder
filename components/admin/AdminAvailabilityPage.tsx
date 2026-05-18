@@ -6,20 +6,11 @@ import { Alert } from '@/components/content/Alert'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { Button } from '@/components/inputs/Button'
 import type { BookingScheduleFile, DayCode, ScheduleException, WeeklyHoursRow } from '@/types/admin'
+import { adminCopy, DAY_LABEL } from '@/components/admin/admin-copy'
 
 /** Hides the native clock/calendar affordance on `<input type="time" />`; the control remains usable. */
 const TIME_INPUT_HIDE_NATIVE_ICON =
   '[&::-webkit-calendar-picker-indicator]:hidden [&::-moz-calendar-picker-indicator]:hidden'
-
-const DAY_LABEL: Record<WeeklyHoursRow['day'], string> = {
-  mon: 'Lunes',
-  tue: 'Martes',
-  wed: 'Miércoles',
-  thu: 'Jueves',
-  fri: 'Viernes',
-  sat: 'Sábado',
-  sun: 'Domingo',
-}
 
 /** Calendly-style week starting Sunday */
 const DISPLAY_ORDER: WeeklyHoursRow['day'][] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
@@ -39,9 +30,9 @@ function sortWeekly(rows: WeeklyHoursRow[]): WeeklyHoursRow[] {
 }
 
 function formatExceptionLabel(ex: ScheduleException): string {
-  if (ex.closed) return 'Cerrado'
+  if (ex.closed) return adminCopy.availability.closed
   if (ex.from && ex.to) return `${ex.from} – ${ex.to}`
-  return 'Personalizado'
+  return adminCopy.availability.custom
 }
 
 function formatBrowserTimeZoneLabel(): string {
@@ -155,7 +146,7 @@ export default function AdminAvailabilityPage() {
         fetch('/api/admin/schedule'),
         fetch('/api/admin/services'),
       ])
-      if (!scheduleRes.ok) throw new Error('No se pudo cargar el horario.')
+      if (!scheduleRes.ok) throw new Error(adminCopy.availability.errors.failedLoad)
       const data = (await scheduleRes.json()) as BookingScheduleFile
       setSchedule(data)
       setWeeklyDraft(sortWeekly(data.weekly))
@@ -167,7 +158,7 @@ export default function AdminAvailabilityPage() {
         setServiceCount(0)
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'No se pudo cargar.')
+      setError(e instanceof Error ? e.message : adminCopy.availability.errors.loadFailed)
     } finally {
       setLoading(false)
     }
@@ -211,14 +202,14 @@ export default function AdminAvailabilityPage() {
       })
       if (!res.ok) {
         const j = (await res.json().catch(() => ({}))) as { error?: string }
-        throw new Error(j.error ?? 'Error al guardar.')
+        throw new Error(j.error ?? adminCopy.availability.errors.saveFailed)
       }
       const data = (await res.json()) as { schedule: BookingScheduleFile }
       setSchedule(data.schedule)
       setWeeklyDraft(sortWeekly(data.schedule.weekly))
-      setWeeklyMsg('Horario guardado.')
+      setWeeklyMsg(adminCopy.availability.scheduleSaved)
     } catch (e) {
-      setWeeklyMsg(e instanceof Error ? e.message : 'Error al guardar.')
+      setWeeklyMsg(e instanceof Error ? e.message : adminCopy.availability.errors.saveFailed)
     } finally {
       setWeeklySaving(false)
     }
@@ -242,7 +233,7 @@ export default function AdminAvailabilityPage() {
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      setError(j.error ?? 'No se pudo eliminar.')
+      setError(j.error ?? adminCopy.availability.errors.deleteFailed)
       return
     }
     const data = (await res.json()) as { schedule: BookingScheduleFile }
@@ -252,16 +243,18 @@ export default function AdminAvailabilityPage() {
   return (
     <div className="min-h-full bg-surface">
       <div className="w-full py-8">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Disponibilidad</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          {adminCopy.availability.heading}
+        </h1>
 
         {error && (
           <div className="mt-6">
-            <Alert variant="error" title="Error" message={error} />
+            <Alert variant="error" title={adminCopy.common.error} message={error} />
           </div>
         )}
 
         {loading || !schedule ? (
-          <p className="mt-10 text-sm text-muted">Cargando…</p>
+          <p className="mt-10 text-sm text-muted">{adminCopy.common.loading}</p>
         ) : (
           <div className="mt-8 border-0 bg-transparent shadow-none md:rounded-xl md:border md:border-border md:bg-background md:shadow-sm">
             <div className="border-b border-border px-0 py-5 sm:px-6">
@@ -341,7 +334,7 @@ export default function AdminAvailabilityPage() {
                   <IconRefreshLoop className="mt-0.5 shrink-0 text-foreground" />
                   <div>
                     <h2 id="weekly-hours-heading" className="text-base font-semibold text-foreground">
-                      Horario semanal
+                      {adminCopy.availability.weeklyHours}
                     </h2>
                     <p className="mt-0.5 text-sm text-muted">
                       Configure cuándo suele estar disponible para citas
@@ -376,7 +369,7 @@ export default function AdminAvailabilityPage() {
                                   to: '17:00',
                                 })
                               }
-                              aria-label={`Añadir horario para ${DAY_LABEL[row.day]}`}
+                              aria-label={adminCopy.availability.addHoursAria(DAY_LABEL[row.day])}
                               className="inline-flex rounded-md p-1 text-muted hover:bg-surface hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                             >
                               <IconPlus />
@@ -410,7 +403,7 @@ export default function AdminAvailabilityPage() {
                             <div className="flex shrink-0 items-center gap-0.5 sm:ml-2 sm:gap-1">
                               <button
                                 type="button"
-                                aria-label={`Quitar horario de ${DAY_LABEL[row.day]}`}
+                                aria-label={adminCopy.availability.removeHoursAria(DAY_LABEL[row.day])}
                                 onClick={() => updateRow(row.day, { open: false })}
                                 className="rounded-md p-1.5 text-muted hover:bg-surface hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none sm:p-2"
                               >
@@ -456,7 +449,7 @@ export default function AdminAvailabilityPage() {
                     onClick={() => void saveWeekly()}
                     className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-fg shadow-sm hover:opacity-90 disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                   >
-                    Guardar horario
+                    {adminCopy.availability.saveSchedule}
                   </button>
                   {weeklyMsg ? (
                     <span className="text-sm text-muted" role="status">
@@ -475,7 +468,7 @@ export default function AdminAvailabilityPage() {
                     <IconCalendarOutline className="mt-0.5 shrink-0 text-foreground" />
                     <div>
                       <h2 id="date-specific-heading" className="text-base font-semibold text-foreground">
-                        Horarios por fecha
+                        {adminCopy.availability.dateSpecificHours}
                       </h2>
                       <p className="mt-0.5 text-sm text-muted">Ajuste el horario de días concretos</p>
                     </div>
@@ -485,7 +478,7 @@ export default function AdminAvailabilityPage() {
                     onClick={() => setExceptionOpen(true)}
                     className="shrink-0 rounded-lg border-2 border-primary bg-background px-4 py-2 text-sm font-semibold text-primary hover:bg-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                   >
-                    + Horario
+                    {adminCopy.availability.addHoursButton}
                   </button>
                 </div>
 
@@ -510,7 +503,7 @@ export default function AdminAvailabilityPage() {
                         </div>
                         <button
                           type="button"
-                          aria-label={`Eliminar excepción del ${ex.date}`}
+                          aria-label={adminCopy.availability.removeExceptionAria(ex.date)}
                           onClick={() => void deleteException(ex.id)}
                           className="rounded-md p-2 text-destructive hover:bg-background focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                         >
@@ -583,7 +576,7 @@ function CopyHoursModal({
       onClose={onClose}
       footer={
         <>
-          <Button label="Cancelar" variant="secondary" onClick={onClose} />
+          <Button label={adminCopy.common.cancel} variant="secondary" onClick={onClose} />
           <button
             type="button"
             onClick={() => onApply([...picked])}
@@ -641,7 +634,7 @@ function ExceptionModal({
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      setErr(j.error ?? 'No se pudo guardar.')
+      setErr(j.error ?? adminCopy.appointmentForm.saveFailed)
       return
     }
     const data = (await res.json()) as { schedule: BookingScheduleFile }
@@ -651,25 +644,25 @@ function ExceptionModal({
   return (
     <AdminModal
       open
-      title="Añadir excepción"
+      title={adminCopy.availability.addException}
       labelledById="ex-title"
       onClose={onClose}
       footer={
         <>
-          <Button label="Cancelar" variant="secondary" onClick={onClose} />
+          <Button label={adminCopy.common.cancel} variant="secondary" onClick={onClose} />
           <button
             type="button"
             onClick={() => void submit()}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
-            Guardar excepción
+            {adminCopy.availability.saveException}
           </button>
         </>
       }
     >
       {err && <p className="mb-3 text-sm text-destructive">{err}</p>}
       <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-        Fecha
+        {adminCopy.availability.date}
         <input
           type="date"
           value={date}
@@ -688,7 +681,7 @@ function ExceptionModal({
               onChange={() => setMode('closed')}
               className="text-primary focus-visible:ring-2 focus-visible:ring-primary"
             />
-            Cerrado
+            {adminCopy.availability.closed}
           </label>
           <label className="flex items-center gap-2 text-sm text-foreground">
             <input
@@ -698,14 +691,14 @@ function ExceptionModal({
               onChange={() => setMode('custom')}
               className="text-primary focus-visible:ring-2 focus-visible:ring-primary"
             />
-            Horario personalizado
+            {adminCopy.availability.customHours}
           </label>
         </div>
       </fieldset>
       {mode === 'custom' && (
         <div className="mt-4 grid grid-cols-2 gap-3">
           <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-            Desde
+            {adminCopy.availability.from}
             <input
               type="time"
               value={from}
@@ -714,7 +707,7 @@ function ExceptionModal({
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-            Hasta
+            {adminCopy.availability.to}
             <input
               type="time"
               value={to}

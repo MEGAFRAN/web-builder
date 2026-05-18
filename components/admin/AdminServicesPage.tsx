@@ -9,6 +9,7 @@ import { Stack } from '@/components/layout/Stack'
 import { Section } from '@/components/layout/Section'
 import { AdminModal } from '@/components/admin/AdminModal'
 import type { AdminBookingService } from '@/types/admin'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 function formatPrice(price: number, currency: string): string {
   const text = Number.isInteger(price)
@@ -33,11 +34,11 @@ export default function AdminServicesPage() {
     setError('')
     try {
       const res = await fetch('/api/admin/services')
-      if (!res.ok) throw new Error('No se pudieron cargar los servicios.')
+      if (!res.ok) throw new Error(adminCopy.services.errors.failedLoad)
       const data = (await res.json()) as { services: AdminBookingService[] }
       setServices(data.services)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'No se pudo cargar.')
+      setError(e instanceof Error ? e.message : adminCopy.services.errors.loadFailed)
     } finally {
       setLoading(false)
     }
@@ -56,7 +57,7 @@ export default function AdminServicesPage() {
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      throw new Error(j.error ?? 'Error al guardar.')
+      throw new Error(j.error ?? adminCopy.services.errors.saveFailed)
     }
     setServices(next)
   }
@@ -82,7 +83,7 @@ export default function AdminServicesPage() {
     try {
       await persist(next)
     } catch (e) {
-      setSaveError(e instanceof Error ? e.message : 'Error al reordenar.')
+      setSaveError(e instanceof Error ? e.message : adminCopy.services.errors.reorderFailed)
     }
   }
 
@@ -91,7 +92,7 @@ export default function AdminServicesPage() {
       <Stack gap="lg">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <Heading text="Servicios" level="h1" />
+            <Heading text={adminCopy.services.heading} level="h1" />
             <p className="mt-1 text-sm text-muted">
               Arrastre las tarjetas para cambiar el orden que ven los clientes en el widget de reservas.
             </p>
@@ -101,26 +102,24 @@ export default function AdminServicesPage() {
             onClick={openAdd}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
-            + Añadir servicio
+            {adminCopy.services.addServiceButton}
           </button>
         </div>
 
-        {error && <Alert variant="error" title="Error" message={error} />}
-        {saveError && <Alert variant="error" title="Error" message={saveError} />}
+        {error && <Alert variant="error" title={adminCopy.common.error} message={error} />}
+        {saveError && <Alert variant="error" title={adminCopy.common.error} message={saveError} />}
 
         {loading ? (
-          <p className="text-sm text-muted">Cargando…</p>
+          <p className="text-sm text-muted">{adminCopy.common.loading}</p>
         ) : services.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-muted-bg px-6 py-14 text-center">
-            <p className="text-foreground">
-              Aún no ha añadido ningún servicio. Añada el primero para empezar a aceptar reservas.
-            </p>
+            <p className="text-foreground">{adminCopy.services.emptyOnboarding}</p>
             <button
               type="button"
               onClick={openAdd}
               className="mt-4 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              + Añadir servicio
+              {adminCopy.services.addServiceButton}
             </button>
           </div>
         ) : (
@@ -156,17 +155,17 @@ export default function AdminServicesPage() {
                         aria-expanded={expandedId === s.id}
                       >
                         <span className={expandedId === s.id ? '' : 'line-clamp-2'}>
-                          {s.description.trim() ? s.description : 'Sin descripción'}
+                          {s.description.trim() ? s.description : adminCopy.common.noDescription}
                         </span>
                         <span className="ml-1 text-primary underline">
-                          {expandedId === s.id ? 'Mostrar menos' : 'Ampliar'}
+                          {expandedId === s.id ? adminCopy.common.showLess : adminCopy.common.expand}
                         </span>
                       </button>
                     </div>
                     <div className="flex shrink-0 gap-2">
                       <button
                         type="button"
-                        aria-label={`Editar ${s.name}`}
+                        aria-label={adminCopy.services.editAria(s.name)}
                         onClick={() => openEdit(s)}
                         className="rounded-md border border-border p-2 hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                       >
@@ -174,7 +173,7 @@ export default function AdminServicesPage() {
                       </button>
                       <button
                         type="button"
-                        aria-label={`Eliminar ${s.name}`}
+                        aria-label={adminCopy.services.deleteAria(s.name)}
                         onClick={() => setDeleteTarget(s)}
                         className="rounded-md border border-border p-2 text-destructive hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                       >
@@ -205,13 +204,13 @@ export default function AdminServicesPage() {
 
       <AdminModal
         open={deleteTarget !== null}
-        title="¿Eliminar este servicio?"
+        title={adminCopy.services.deleteServiceTitle}
         labelledById="del-svc-title"
         descriptionId="del-svc-desc"
         onClose={() => setDeleteTarget(null)}
         footer={
           <>
-            <Button label="Volver" variant="secondary" onClick={() => setDeleteTarget(null)} />
+            <Button label={adminCopy.common.back} variant="secondary" onClick={() => setDeleteTarget(null)} />
             <button
               type="button"
               className="rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
@@ -219,12 +218,12 @@ export default function AdminServicesPage() {
                 if (!deleteTarget) return
                 const next = services.filter((x) => x.id !== deleteTarget.id)
                 void persist(next).catch((e) =>
-                  setSaveError(e instanceof Error ? e.message : 'Error al eliminar.'),
+                  setSaveError(e instanceof Error ? e.message : adminCopy.services.errors.deleteFailed),
                 )
                 setDeleteTarget(null)
               }}
             >
-              Eliminar
+              {adminCopy.common.delete}
             </button>
           </>
         }
@@ -259,15 +258,15 @@ function ServiceFormModal({
     const dm = Number.parseInt(durationMinutes, 10)
     const pr = Number.parseFloat(price)
     if (!name.trim()) {
-      setFormError('El nombre es obligatorio.')
+      setFormError(adminCopy.services.form.nameRequired)
       return
     }
     if (!Number.isFinite(dm) || dm < 1 || dm > 24 * 60) {
-      setFormError('La duración debe estar entre 1 y 1440 minutos.')
+      setFormError(adminCopy.services.form.durationRange)
       return
     }
     if (!Number.isFinite(pr) || pr < 0) {
-      setFormError('El precio debe ser cero o mayor.')
+      setFormError(adminCopy.services.form.priceNonNegative)
       return
     }
     const row: AdminBookingService = {
@@ -282,7 +281,7 @@ function ServiceFormModal({
     try {
       await onSave(row)
     } catch (e) {
-      setFormError(e instanceof Error ? e.message : 'Error al guardar.')
+      setFormError(e instanceof Error ? e.message : adminCopy.services.errors.saveFailed)
     } finally {
       setBusy(false)
     }
@@ -291,19 +290,19 @@ function ServiceFormModal({
   return (
     <AdminModal
       open
-      title={initial ? 'Editar servicio' : 'Añadir servicio'}
+      title={initial ? adminCopy.services.editService : adminCopy.services.addService}
       labelledById="svc-form-title"
       onClose={onClose}
       footer={
         <>
-          <Button label="Cancelar" variant="secondary" onClick={onClose} />
+          <Button label={adminCopy.common.cancel} variant="secondary" onClick={onClose} />
           <button
             type="button"
             disabled={busy}
             onClick={() => void submit()}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 disabled:opacity-50"
           >
-            Guardar
+            {adminCopy.common.save}
           </button>
         </>
       }
@@ -311,7 +310,7 @@ function ServiceFormModal({
       {formError && <p className="mb-3 text-sm text-destructive">{formError}</p>}
       <Stack gap="md">
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Nombre
+          {adminCopy.services.form.name}
           <input
             required
             value={name}
@@ -320,7 +319,7 @@ function ServiceFormModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Descripción (opcional)
+          {adminCopy.services.form.description}
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -329,7 +328,7 @@ function ServiceFormModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Duración (minutos)
+          {adminCopy.services.form.duration}
           <input
             type="number"
             min={1}
@@ -343,7 +342,7 @@ function ServiceFormModal({
           </span>
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Precio
+          {adminCopy.services.form.price}
           <input
             type="number"
             min={0}
@@ -354,7 +353,7 @@ function ServiceFormModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Símbolo de moneda
+          {adminCopy.services.form.currency}
           <input
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}

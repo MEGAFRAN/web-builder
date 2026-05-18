@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { NewAppointmentModal } from '@/components/admin/bookings/NewAppointmentModal'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 function jsonResponse(body: unknown, init?: ResponseInit) {
   return Response.json(body, init)
@@ -66,9 +67,9 @@ describe('NewAppointmentModal', () => {
     )
 
     await waitUntilReady()
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.common.save }))
 
-    expect(await screen.findByText(/Choose a service, date, and time/i)).toBeInTheDocument()
+    expect(await screen.findByText(adminCopy.appointmentForm.selectServiceDateTime)).toBeInTheDocument()
     expect(onClose).not.toHaveBeenCalled()
   })
 
@@ -93,17 +94,17 @@ describe('NewAppointmentModal', () => {
     if (!slot) throw new Error('expected at least one open slot')
     fireEvent.change(timeSelect(), { target: { value: slot } })
 
-    fireEvent.change(screen.getByRole('textbox', { name: /Customer name/i }), {
+    fireEvent.change(screen.getByRole('textbox', { name: adminCopy.appointmentForm.customerName }), {
       target: { value: 'Casey' },
     })
-    fireEvent.change(screen.getByRole('textbox', { name: /^Phone$/i }), {
+    fireEvent.change(screen.getByRole('textbox', { name: adminCopy.appointmentForm.phone }), {
       target: { value: '555-1234' },
     })
-    fireEvent.change(screen.getByRole('textbox', { name: /^Email$/i }), {
+    fireEvent.change(screen.getByRole('textbox', { name: adminCopy.appointmentForm.email }), {
       target: { value: 'casey@example.com' },
     })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Save' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.common.save }))
 
     await waitFor(() => expect(onCreated).toHaveBeenCalledTimes(1))
     expect(onClose).not.toHaveBeenCalled()

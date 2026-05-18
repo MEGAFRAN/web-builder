@@ -2,6 +2,11 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BookingCard } from '@/components/admin/bookings/BookingCard'
 import { mockReservation } from '@/components/admin/bookings/admin-components.stories.fixtures'
+import {
+  bookingListAriaLabel,
+  bookingTimelineAriaLabel,
+  bookingWeekAriaLabel,
+} from '@/components/admin/admin-copy'
 
 describe('BookingCard', () => {
   const baseRow = mockReservation({
@@ -16,11 +21,21 @@ describe('BookingCard', () => {
     [
       'list' as const,
       undefined as string | undefined,
-      /Taylor Kim, 10:00, Cut, Confirmed/,
+      bookingListAriaLabel('Taylor Kim', '10:00', 'Cut', 'confirmed'),
       [/Taylor Kim/, /10:00/, /Cut/],
     ],
-    ['timeline' as const, '11:00', /Taylor Kim, Cut, 10:00–11:00, Confirmed/, [/Cut/, /10:00 – 11:00/]],
-    ['week' as const, undefined, /10:00, Taylor Kim, Confirmed/, [/10:00/, /Taylor Kim/]],
+    [
+      'timeline' as const,
+      '11:00',
+      bookingTimelineAriaLabel('Taylor Kim', 'Cut', '10:00', '11:00', 'confirmed'),
+      [/Cut/, /10:00 – 11:00/],
+    ],
+    [
+      'week' as const,
+      undefined,
+      bookingWeekAriaLabel('10:00', 'Taylor Kim', 'confirmed'),
+      [/10:00/, /Taylor Kim/],
+    ],
   ] as const)(
     '%s renders expected copy and activates on click',
     (variant, endLabel, namePattern, substrings) => {

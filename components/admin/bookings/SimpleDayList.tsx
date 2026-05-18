@@ -2,6 +2,7 @@
 
 import type { ReservationRow } from '@/types/admin'
 import { BookingCard } from './BookingCard'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 interface SimpleDayListProps {
   rows: ReservationRow[]
@@ -12,8 +13,7 @@ export function SimpleDayList({ rows, onSelect }: SimpleDayListProps) {
   return (
     <div className="rounded-xl border border-border bg-background p-4">
       <p className="mb-3 text-sm text-muted">
-        Este día está marcado como cerrado o tiene horario especial; las citas aparecen abajo sin
-        franja horaria.
+        {adminCopy.bookings.specialDayListNote}
       </p>
       <ul className="space-y-2">
         {rows.map((r) => (

@@ -5,6 +5,7 @@ import { AdminModal } from '@/components/admin/AdminModal'
 import { Button } from '@/components/inputs/Button'
 import { Stack } from '@/components/layout/Stack'
 import { BOOKING_SLOT_GRID } from '@/lib/booking-slot-grid'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 type Service = {
   id: string
@@ -46,7 +47,7 @@ export function NewAppointmentModal({
         setServices(d.services)
         if (d.services[0]) setServiceId(d.services[0].id)
       })
-      .catch(() => setFormError('No se pudieron cargar los servicios.'))
+      .catch(() => setFormError(adminCopy.appointmentForm.failedLoadServices))
   }, [])
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export function NewAppointmentModal({
   async function submit() {
     setFormError('')
     if (!selected || !time) {
-      setFormError('Seleccione un servicio, una fecha y una hora.')
+      setFormError(adminCopy.appointmentForm.selectServiceDateTime)
       return
     }
     setSubmitting(true)
@@ -91,11 +92,11 @@ export function NewAppointmentModal({
       })
       if (!res.ok) {
         const j = (await res.json().catch(() => ({}))) as { error?: string }
-        throw new Error(j.error ?? 'No se pudo guardar.')
+        throw new Error(j.error ?? adminCopy.appointmentForm.saveFailed)
       }
       onCreated()
     } catch (e) {
-      setFormError(e instanceof Error ? e.message : 'Error al guardar.')
+      setFormError(e instanceof Error ? e.message : adminCopy.appointmentForm.saveError)
     } finally {
       setSubmitting(false)
     }
@@ -104,19 +105,19 @@ export function NewAppointmentModal({
   return (
     <AdminModal
       open
-      title="Nueva cita"
+      title={adminCopy.appointmentForm.title}
       labelledById="new-appt-title"
       onClose={onClose}
       footer={
         <>
-          <Button label="Cancelar" variant="secondary" onClick={onClose} />
+          <Button label={adminCopy.common.cancel} variant="secondary" onClick={onClose} />
           <button
             type="button"
             disabled={submitting}
             onClick={() => void submit()}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 disabled:opacity-50"
           >
-            Guardar
+            {adminCopy.common.save}
           </button>
         </>
       }
@@ -124,7 +125,7 @@ export function NewAppointmentModal({
       {formError && <p className="mb-3 text-sm text-destructive">{formError}</p>}
       <Stack gap="md">
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Servicio
+          {adminCopy.appointmentForm.service}
           <select
             value={serviceId}
             onChange={(e) => setServiceId(e.target.value)}
@@ -138,7 +139,7 @@ export function NewAppointmentModal({
           </select>
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Fecha
+          {adminCopy.appointmentForm.date}
           <input
             type="date"
             value={date}
@@ -147,13 +148,13 @@ export function NewAppointmentModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Hora
+          {adminCopy.appointmentForm.time}
           <select
             value={time}
             onChange={(e) => setTime(e.target.value)}
             className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
-            <option value="">Elija una franja</option>
+            <option value="">{adminCopy.appointmentForm.chooseSlot}</option>
             {openSlots.map((s) => (
               <option key={s} value={s}>
                 {s}
@@ -162,7 +163,7 @@ export function NewAppointmentModal({
           </select>
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Nombre del cliente
+          {adminCopy.appointmentForm.customerName}
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -171,7 +172,7 @@ export function NewAppointmentModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Teléfono
+          {adminCopy.appointmentForm.phone}
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
@@ -180,7 +181,7 @@ export function NewAppointmentModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Correo electrónico
+          {adminCopy.appointmentForm.email}
           <input
             type="email"
             value={email}
@@ -190,7 +191,7 @@ export function NewAppointmentModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Notas
+          {adminCopy.appointmentForm.notes}
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}

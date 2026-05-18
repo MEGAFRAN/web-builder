@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import AdminAvailabilityPage from '@/components/admin/AdminAvailabilityPage'
 import type { BookingScheduleFile } from '@/types/admin'
+import { adminCopy, DAY_LABEL } from '@/components/admin/admin-copy'
 
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
 
@@ -56,13 +57,13 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Weekly hours' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: adminCopy.availability.weeklyHours })).toBeInTheDocument()
     })
 
     expect(fetch).toHaveBeenCalledWith('/api/admin/schedule')
     expect(fetch).toHaveBeenCalledWith('/api/admin/services')
-    expect(screen.getByText('Monday')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Save schedule' })).toBeInTheDocument()
+    expect(screen.getByText(DAY_LABEL.mon)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: adminCopy.availability.saveSchedule })).toBeInTheDocument()
   })
 
   it('shows an error alert when the schedule request fails', async () => {
@@ -79,9 +80,9 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByText('Error')).toBeInTheDocument()
+      expect(screen.getByText(adminCopy.common.error)).toBeInTheDocument()
     })
-    expect(screen.getByText(/failed to load schedule/i)).toBeInTheDocument()
+    expect(screen.getByText(adminCopy.availability.errors.failedLoad)).toBeInTheDocument()
   })
 
   it('persists weekly edits with PUT /api/admin/schedule', async () => {
@@ -108,12 +109,12 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Weekly hours' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: adminCopy.availability.weeklyHours })).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: /remove hours for monday/i }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.availability.removeHoursAria(DAY_LABEL.mon) }))
 
-    fireEvent.click(screen.getByRole('button', { name: 'Save schedule' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.availability.saveSchedule }))
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
@@ -141,13 +142,13 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '+ Hours' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: adminCopy.availability.addHoursButton })).toBeEnabled()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: '+ Hours' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.availability.addHoursButton }))
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Add exception' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: adminCopy.availability.addException })).toBeInTheDocument()
     })
   })
 
@@ -179,16 +180,18 @@ describe('AdminAvailabilityPage', () => {
 
     render(<AdminAvailabilityPage />)
 
-    const exHeading = await screen.findByRole('heading', { name: 'Date-specific hours' })
+    const exHeading = await screen.findByRole('heading', { name: adminCopy.availability.dateSpecificHours })
     const exSection = exHeading.closest('section')
     expect(exSection).not.toBeNull()
 
     await waitFor(() => {
-      expect(within(exSection as HTMLElement).getByText('Closed')).toBeInTheDocument()
+      expect(within(exSection as HTMLElement).getByText(adminCopy.availability.closed)).toBeInTheDocument()
       expect(screen.getByText(/11:00 – 15:00/)).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: /remove exception 2026-08-10/i }))
+    fireEvent.click(
+      screen.getByRole('button', { name: adminCopy.availability.removeExceptionAria('2026-08-10') }),
+    )
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
@@ -223,10 +226,14 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /remove exception/i })).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: adminCopy.availability.removeExceptionAria('2026-09-01') }),
+      ).toBeInTheDocument()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: /remove exception 2026-09-01/i }))
+    fireEvent.click(
+      screen.getByRole('button', { name: adminCopy.availability.removeExceptionAria('2026-09-01') }),
+    )
 
     await waitFor(() => {
       expect(screen.getByText('blocked delete')).toBeInTheDocument()
@@ -253,10 +260,10 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Save schedule' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: adminCopy.availability.saveSchedule })).toBeEnabled()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Save schedule' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.availability.saveSchedule }))
 
     await waitFor(() => {
       expect(screen.getByText('cannot save')).toBeInTheDocument()
@@ -294,25 +301,25 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '+ Hours' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: adminCopy.availability.addHoursButton })).toBeEnabled()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: '+ Hours' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.availability.addHoursButton }))
 
     const dlg = await screen.findByRole('dialog')
-    fireEvent.change(within(dlg).getByLabelText(/^date$/i), {
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.availability.date), {
       target: { value: '2026-10-01' },
     })
-    fireEvent.click(within(dlg).getByRole('button', { name: 'Save exception' }))
+    fireEvent.click(within(dlg).getByRole('button', { name: adminCopy.availability.saveException }))
 
     await waitFor(() => {
       expect(screen.getByText('bad date')).toBeInTheDocument()
     })
 
-    fireEvent.click(within(dlg).getByRole('button', { name: 'Save exception' }))
+    fireEvent.click(within(dlg).getByRole('button', { name: adminCopy.availability.saveException }))
 
     await waitFor(() => {
-      expect(screen.queryByRole('heading', { name: 'Add exception' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('heading', { name: adminCopy.availability.addException })).not.toBeInTheDocument()
     })
   })
 
@@ -346,26 +353,26 @@ describe('AdminAvailabilityPage', () => {
     render(<AdminAvailabilityPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '+ Hours' })).toBeEnabled()
+      expect(screen.getByRole('button', { name: adminCopy.availability.addHoursButton })).toBeEnabled()
     })
 
-    fireEvent.click(screen.getByRole('button', { name: '+ Hours' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.availability.addHoursButton }))
 
     const dlg = await screen.findByRole('dialog')
-    fireEvent.change(within(dlg).getByLabelText(/^date$/i), {
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.availability.date), {
       target: { value: '2026-11-02' },
     })
-    fireEvent.click(within(dlg).getByRole('radio', { name: /custom hours/i }))
-    fireEvent.change(within(dlg).getByLabelText(/^from$/i), {
+    fireEvent.click(within(dlg).getByRole('radio', { name: adminCopy.availability.customHours }))
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.availability.from), {
       target: { value: '12:00' },
     })
-    fireEvent.change(within(dlg).getByLabelText(/^to$/i), {
+    fireEvent.change(within(dlg).getByLabelText(adminCopy.availability.to), {
       target: { value: '16:00' },
     })
-    fireEvent.click(within(dlg).getByRole('button', { name: 'Save exception' }))
+    fireEvent.click(within(dlg).getByRole('button', { name: adminCopy.availability.saveException }))
 
     await waitFor(() => {
-      expect(screen.queryByRole('heading', { name: 'Add exception' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('heading', { name: adminCopy.availability.addException })).not.toBeInTheDocument()
     })
   })
 })

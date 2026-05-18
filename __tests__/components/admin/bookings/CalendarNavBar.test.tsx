@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { CalendarNavBar } from '@/components/admin/bookings/CalendarNavBar'
 import { addDaysYmd, formatYmd } from '@/lib/booking-utils'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 describe('CalendarNavBar', () => {
   afterEach(() => {
@@ -25,24 +26,24 @@ describe('CalendarNavBar', () => {
       />,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: 'Previous' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.calendar.previous }))
     expect(onSelectedYmdChange).toHaveBeenLastCalledWith(addDaysYmd('2026-05-18', -1))
 
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.calendar.next }))
     expect(onSelectedYmdChange).toHaveBeenLastCalledWith(addDaysYmd('2026-05-18', 1))
 
-    fireEvent.change(screen.getByLabelText(/Jump to date/), {
+    fireEvent.change(screen.getByLabelText(adminCopy.calendar.jumpToDate), {
       target: { value: '2026-12-31' },
     })
     expect(onSelectedYmdChange).toHaveBeenLastCalledWith('2026-12-31')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Week' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.calendar.week }))
     expect(onViewChange).toHaveBeenLastCalledWith('week')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Day' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.calendar.day }))
     expect(onViewChange).toHaveBeenLastCalledWith('day')
 
-    fireEvent.click(screen.getByRole('button', { name: 'Today' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.calendar.today }))
     expect(onSelectedYmdChange).toHaveBeenLastCalledWith(formatYmd(new Date()))
   })
 
@@ -55,7 +56,7 @@ describe('CalendarNavBar', () => {
         onViewChange={vi.fn()}
       />,
     )
-    expect(screen.getByRole('button', { name: 'Week' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('button', { name: 'Day' })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: adminCopy.calendar.week })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: adminCopy.calendar.day })).toHaveAttribute('aria-pressed', 'false')
   })
 })

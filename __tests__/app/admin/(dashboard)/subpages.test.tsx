@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import SettingsPage from '@/app/admin/(dashboard)/settings/page'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 vi.mock('@/components/admin/AdminServicesPage', () => ({
   default: () => <div data-testid="admin-services-route-stub" />,
@@ -18,9 +19,8 @@ describe('AdminSettingsRoutePage (app/admin/(dashboard)/settings/page.tsx)', () 
   it('renders settings introductory copy', () => {
     render(<SettingsPage />)
 
-    expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
-    expect(screen.getByText(/Business preferences and integrations/i)).toBeInTheDocument()
-    expect(screen.getByText(/Contact your platform operator/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: adminCopy.settings.heading })).toBeInTheDocument()
+    expect(screen.getByText(adminCopy.settings.intro)).toBeInTheDocument()
   })
 })
 

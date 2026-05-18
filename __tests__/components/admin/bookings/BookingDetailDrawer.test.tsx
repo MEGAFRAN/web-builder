@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BookingDetailDrawer } from '@/components/admin/bookings/BookingDetailDrawer'
 import { mockReservation } from '@/components/admin/bookings/admin-components.stories.fixtures'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -21,31 +22,31 @@ describe('BookingDetailDrawer', () => {
 
     render(<BookingDetailDrawer row={row} onClose={onClose} onCancel={onCancel} onNoShow={onNoShow} />)
 
-    expect(screen.getByRole('heading', { name: 'Appointment' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: adminCopy.bookings.appointment })).toBeInTheDocument()
     expect(screen.getByText(row.name)).toBeInTheDocument()
     expect(screen.getByText(row.phone)).toBeInTheDocument()
     expect(screen.getByText(row.email)).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Close panel' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.common.closePanel }))
     expect(onClose).toHaveBeenCalledTimes(1)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.common.close }))
     expect(onClose).toHaveBeenCalledTimes(2)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Cancel appointment…' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Mark as no-show' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.bookings.cancelAppointment }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.bookings.markNoShow }))
     expect(onCancel).toHaveBeenCalledTimes(1)
     expect(onNoShow).toHaveBeenCalledTimes(1)
   })
 
   it.each([
     ['cancelled' as const, [
-      ['Cancel appointment…', true],
-      ['Mark as no-show', true],
+      [adminCopy.bookings.cancelAppointment, true],
+      [adminCopy.bookings.markNoShow, true],
     ]],
     ['no-show' as const, [
-      ['Cancel appointment…', false],
-      ['Mark as no-show', true],
+      [adminCopy.bookings.cancelAppointment, false],
+      [adminCopy.bookings.markNoShow, true],
     ]],
   ] as const)('respects disable rules when status=%s', (status, buttons) => {
     const row = mockReservation({ status })

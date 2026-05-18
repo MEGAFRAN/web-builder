@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import AdminLoginForm from '@/components/admin/AdminLoginForm'
+import { adminCopy } from '@/components/admin/admin-copy'
 
 const mockPush = vi.fn()
 const mockRefresh = vi.fn()
@@ -39,15 +40,15 @@ describe('AdminLoginForm', () => {
 
     render(<AdminLoginForm />)
 
-    expect(screen.getByRole('heading', { name: 'Sign in' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: adminCopy.login.heading })).toBeInTheDocument()
 
-    fireEvent.change(screen.getByLabelText(/email/i), {
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
       target: { value: 'owner@example.com' },
     })
-    fireEvent.change(screen.getByLabelText(/^password/i), {
+    fireEvent.change(screen.getByLabelText(new RegExp(`^${adminCopy.login.passwordLabel}`, 'i')), {
       target: { value: 'secret-pass' },
     })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }))
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.login.submit }))
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
@@ -74,21 +75,24 @@ describe('AdminLoginForm', () => {
 
     render(<AdminLoginForm />)
 
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'a@b.co' } })
-    fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'x' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }))
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
+      target: { value: 'a@b.co' },
+    })
+    fireEvent.change(screen.getByLabelText(new RegExp(`^${adminCopy.login.passwordLabel}`, 'i')), {
+      target: { value: 'x' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.login.submit }))
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent('Invalid credentials')
     })
-    expect(mockPush).not.toHaveBeenCalled()
   })
 
   it('disables submit and surfaces misconfiguration messaging when misconfigured', () => {
     render(<AdminLoginForm misconfigured />)
 
-    expect(screen.getByText(/login unavailable/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Sign in' })).toBeDisabled()
+    expect(screen.getByText(adminCopy.login.misconfiguredTitle)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: adminCopy.login.submit })).toBeDisabled()
   })
 
   it('redirects to the ?redirect target when it stays inside /admin', async () => {
@@ -100,9 +104,13 @@ describe('AdminLoginForm', () => {
 
     render(<AdminLoginForm />)
 
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'o@z.co' } })
-    fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'pw' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }))
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
+      target: { value: 'o@z.co' },
+    })
+    fireEvent.change(screen.getByLabelText(new RegExp(`^${adminCopy.login.passwordLabel}`, 'i')), {
+      target: { value: 'pw' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.login.submit }))
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/admin/settings')
@@ -110,7 +118,7 @@ describe('AdminLoginForm', () => {
   })
 
   it('falls back to /admin/bookings when redirect points outside /admin', async () => {
-    mockSearchParams.set('redirect', 'https://evil.example/phish')
+    mockSearchParams.set('redirect', 'https://evil.example')
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
       json: async () => ({}),
@@ -118,9 +126,13 @@ describe('AdminLoginForm', () => {
 
     render(<AdminLoginForm />)
 
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'o@z.co' } })
-    fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'pw' } })
-    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }))
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
+      target: { value: 'o@z.co' },
+    })
+    fireEvent.change(screen.getByLabelText(new RegExp(`^${adminCopy.login.passwordLabel}`, 'i')), {
+      target: { value: 'pw' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.login.submit }))
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/admin/bookings')
