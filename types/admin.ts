@@ -20,6 +20,11 @@ export type StoredReservation = {
   cancelReason?: string | null
 }
 
+/** StoredReservation enriched with the resolved service display name from the API. */
+export type ReservationRow = StoredReservation & {
+  serviceName: string | null
+}
+
 export type AdminBookingService = {
   id: string
   name: string
