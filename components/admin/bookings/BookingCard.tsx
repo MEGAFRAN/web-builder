@@ -1,7 +1,8 @@
 'use client'
 
 import type { ReservationRow } from '@/types/admin'
-import { bookingCardBorderClasses, bookingStatusAriaLabel } from '@/lib/booking-utils'
+import { bookingCardBorderClasses } from '@/lib/booking-utils'
+import { reservationStatusAriaEs } from '@/components/admin/admin-locale'
 
 export type BookingCardVariant = 'list' | 'timeline' | 'week'
 
@@ -28,7 +29,7 @@ export function BookingCard({ row, onClick, variant, endLabel, className = '' }:
       >
         <span className="font-semibold text-foreground">{row.name}</span>
         <span className="text-xs text-muted">
-          {row.time} · {row.serviceName ?? 'Service'}
+          {row.time} · {row.serviceName ?? 'Servicio'}
         </span>
       </button>
     )
@@ -44,7 +45,7 @@ export function BookingCard({ row, onClick, variant, endLabel, className = '' }:
         className={`flex h-full w-full min-h-0 flex-col rounded-lg bg-surface px-3 py-2 text-left shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none ${border} ${dimmed ? 'opacity-60' : ''} ${className}`}
       >
         <span className="truncate text-xs text-muted">
-          {row.serviceName ?? 'Service'}{' · '}
+          {row.serviceName ?? 'Servicio'}{' · '}
           {row.time} – {endLabel ?? ''}
         </span>
       </button>
@@ -65,12 +66,12 @@ export function BookingCard({ row, onClick, variant, endLabel, className = '' }:
 }
 
 function buildAriaLabel(row: ReservationRow, variant: BookingCardVariant, endLabel?: string): string {
-  const statusLabel = bookingStatusAriaLabel(row.status)
+  const statusLabel = reservationStatusAriaEs(row.status)
   if (variant === 'list') {
-    return `${row.name}, ${row.time}, ${row.serviceName ?? 'Service'}, ${statusLabel}`
+    return `${row.name}, ${row.time}, ${row.serviceName ?? 'Servicio'}, ${statusLabel}`
   }
   if (variant === 'timeline') {
-    return `${row.name}, ${row.serviceName ?? 'Service'}, ${row.time}–${endLabel ?? ''}, ${statusLabel}`
+    return `${row.name}, ${row.serviceName ?? 'Servicio'}, ${row.time}–${endLabel ?? ''}, ${statusLabel}`
   }
   return `${row.time}, ${row.name}, ${statusLabel}`
 }

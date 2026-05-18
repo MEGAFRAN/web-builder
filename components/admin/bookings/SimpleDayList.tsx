@@ -12,8 +12,8 @@ export function SimpleDayList({ rows, onSelect }: SimpleDayListProps) {
   return (
     <div className="rounded-xl border border-border bg-background p-4">
       <p className="mb-3 text-sm text-muted">
-        This day is marked closed or uses special hours — appointments are listed below without a
-        timeline.
+        Este día está marcado como cerrado o tiene horario especial; las citas aparecen abajo sin
+        franja horaria.
       </p>
       <ul className="space-y-2">
         {rows.map((r) => (

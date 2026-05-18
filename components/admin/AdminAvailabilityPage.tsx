@@ -12,25 +12,25 @@ const TIME_INPUT_HIDE_NATIVE_ICON =
   '[&::-webkit-calendar-picker-indicator]:hidden [&::-moz-calendar-picker-indicator]:hidden'
 
 const DAY_LABEL: Record<WeeklyHoursRow['day'], string> = {
-  mon: 'Monday',
-  tue: 'Tuesday',
-  wed: 'Wednesday',
-  thu: 'Thursday',
-  fri: 'Friday',
-  sat: 'Saturday',
-  sun: 'Sunday',
+  mon: 'Lunes',
+  tue: 'Martes',
+  wed: 'Miércoles',
+  thu: 'Jueves',
+  fri: 'Viernes',
+  sat: 'Sábado',
+  sun: 'Domingo',
 }
 
 /** Calendly-style week starting Sunday */
 const DISPLAY_ORDER: WeeklyHoursRow['day'][] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
 
 const DAY_LETTER: Record<WeeklyHoursRow['day'], string> = {
-  sun: 'S',
-  mon: 'M',
-  tue: 'T',
-  wed: 'W',
-  thu: 'T',
-  fri: 'F',
+  sun: 'D',
+  mon: 'L',
+  tue: 'M',
+  wed: 'X',
+  thu: 'J',
+  fri: 'V',
   sat: 'S',
 }
 
@@ -39,15 +39,15 @@ function sortWeekly(rows: WeeklyHoursRow[]): WeeklyHoursRow[] {
 }
 
 function formatExceptionLabel(ex: ScheduleException): string {
-  if (ex.closed) return 'Closed'
+  if (ex.closed) return 'Cerrado'
   if (ex.from && ex.to) return `${ex.from} – ${ex.to}`
-  return 'Custom'
+  return 'Personalizado'
 }
 
 function formatBrowserTimeZoneLabel(): string {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
   const d = new Date()
-  const parts = new Intl.DateTimeFormat(undefined, { timeZone: tz, timeZoneName: 'long' }).formatToParts(d)
+  const parts = new Intl.DateTimeFormat('es', { timeZone: tz, timeZoneName: 'long' }).formatToParts(d)
   const longName = parts.find((p) => p.type === 'timeZoneName')?.value
   return longName ?? tz.replaceAll('_', ' ')
 }
@@ -155,7 +155,7 @@ export default function AdminAvailabilityPage() {
         fetch('/api/admin/schedule'),
         fetch('/api/admin/services'),
       ])
-      if (!scheduleRes.ok) throw new Error('Failed to load schedule.')
+      if (!scheduleRes.ok) throw new Error('No se pudo cargar el horario.')
       const data = (await scheduleRes.json()) as BookingScheduleFile
       setSchedule(data)
       setWeeklyDraft(sortWeekly(data.weekly))
@@ -167,7 +167,7 @@ export default function AdminAvailabilityPage() {
         setServiceCount(0)
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load.')
+      setError(e instanceof Error ? e.message : 'No se pudo cargar.')
     } finally {
       setLoading(false)
     }
@@ -211,14 +211,14 @@ export default function AdminAvailabilityPage() {
       })
       if (!res.ok) {
         const j = (await res.json().catch(() => ({}))) as { error?: string }
-        throw new Error(j.error ?? 'Save failed.')
+        throw new Error(j.error ?? 'Error al guardar.')
       }
       const data = (await res.json()) as { schedule: BookingScheduleFile }
       setSchedule(data.schedule)
       setWeeklyDraft(sortWeekly(data.schedule.weekly))
-      setWeeklyMsg('Schedule saved.')
+      setWeeklyMsg('Horario guardado.')
     } catch (e) {
-      setWeeklyMsg(e instanceof Error ? e.message : 'Save failed.')
+      setWeeklyMsg(e instanceof Error ? e.message : 'Error al guardar.')
     } finally {
       setWeeklySaving(false)
     }
@@ -242,7 +242,7 @@ export default function AdminAvailabilityPage() {
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      setError(j.error ?? 'Could not delete.')
+      setError(j.error ?? 'No se pudo eliminar.')
       return
     }
     const data = (await res.json()) as { schedule: BookingScheduleFile }
@@ -252,7 +252,7 @@ export default function AdminAvailabilityPage() {
   return (
     <div className="min-h-full bg-surface">
       <div className="w-full py-8">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Availability</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Disponibilidad</h1>
 
         {error && (
           <div className="mt-6">
@@ -261,25 +261,26 @@ export default function AdminAvailabilityPage() {
         )}
 
         {loading || !schedule ? (
-          <p className="mt-10 text-sm text-muted">Loading…</p>
+          <p className="mt-10 text-sm text-muted">Cargando…</p>
         ) : (
           <div className="mt-8 border-0 bg-transparent shadow-none md:rounded-xl md:border md:border-border md:bg-background md:shadow-sm">
             <div className="border-b border-border px-0 py-5 sm:px-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted">Schedule</p>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted">Horario</p>
                   <button
                     type="button"
                     className="mt-1 flex items-center gap-1 text-lg font-semibold text-primary hover:opacity-90"
                   >
-                    Working hours (default)
+                    Horario laboral (predeterminado)
                     <IconChevronDown className="text-primary" />
                   </button>
                   <Link
                     href="/admin/services"
                     className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                   >
-                    Active on: {serviceCount} {serviceCount === 1 ? 'service' : 'services'}
+                    Activo en: {serviceCount}{' '}
+                    {serviceCount === 1 ? 'servicio' : 'servicios'}
                     <IconChevronRight className="text-primary" />
                   </Link>
                 </div>
@@ -289,15 +290,15 @@ export default function AdminAvailabilityPage() {
                       type="button"
                       className="rounded-md bg-background px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm"
                     >
-                      List
+                      Lista
                     </button>
                     <button
                       type="button"
                       disabled
-                      title="Calendar view is not available yet"
+                      title="La vista de calendario aún no está disponible"
                       className="rounded-md px-3 py-1.5 text-xs font-semibold text-muted disabled:cursor-not-allowed"
                     >
-                      Calendar
+                      Calendario
                     </button>
                   </div>
                   <div className="relative" ref={kebabWrapRef}>
@@ -305,7 +306,7 @@ export default function AdminAvailabilityPage() {
                       type="button"
                       aria-expanded={kebabOpen}
                       aria-haspopup="menu"
-                      aria-label="Schedule options"
+                      aria-label="Opciones del horario"
                       onClick={() => setKebabOpen((o) => !o)}
                       className="rounded-md p-2 text-muted hover:bg-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                     >
@@ -325,7 +326,7 @@ export default function AdminAvailabilityPage() {
                             void reload()
                           }}
                         >
-                          Reload schedule
+                          Recargar horario
                         </button>
                       </div>
                     ) : null}
@@ -340,10 +341,10 @@ export default function AdminAvailabilityPage() {
                   <IconRefreshLoop className="mt-0.5 shrink-0 text-foreground" />
                   <div>
                     <h2 id="weekly-hours-heading" className="text-base font-semibold text-foreground">
-                      Weekly hours
+                      Horario semanal
                     </h2>
                     <p className="mt-0.5 text-sm text-muted">
-                      Set when you are typically available for meetings
+                      Configure cuándo suele estar disponible para citas
                     </p>
                   </div>
                 </div>
@@ -365,7 +366,7 @@ export default function AdminAvailabilityPage() {
                       <div className="min-w-0 flex-1">
                         {!row.open ? (
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-sm text-muted">Unavailable</span>
+                            <span className="text-sm text-muted">No disponible</span>
                             <button
                               type="button"
                               onClick={() =>
@@ -375,7 +376,7 @@ export default function AdminAvailabilityPage() {
                                   to: '17:00',
                                 })
                               }
-                              aria-label={`Add hours for ${DAY_LABEL[row.day]}`}
+                              aria-label={`Añadir horario para ${DAY_LABEL[row.day]}`}
                               className="inline-flex rounded-md p-1 text-muted hover:bg-surface hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                             >
                               <IconPlus />
@@ -385,7 +386,7 @@ export default function AdminAvailabilityPage() {
                           <div className="flex min-w-0 flex-row items-center justify-between gap-2">
                             <div className="flex min-w-0 flex-1 items-center gap-1 sm:gap-2">
                               <label className="sr-only" htmlFor={`from-${row.day}`}>
-                                From · {DAY_LABEL[row.day]}
+                                Desde · {DAY_LABEL[row.day]}
                               </label>
                               <input
                                 id={`from-${row.day}`}
@@ -396,7 +397,7 @@ export default function AdminAvailabilityPage() {
                               />
                               <span className="shrink-0 text-sm text-muted">–</span>
                               <label className="sr-only" htmlFor={`to-${row.day}`}>
-                                To · {DAY_LABEL[row.day]}
+                                Hasta · {DAY_LABEL[row.day]}
                               </label>
                               <input
                                 id={`to-${row.day}`}
@@ -409,7 +410,7 @@ export default function AdminAvailabilityPage() {
                             <div className="flex shrink-0 items-center gap-0.5 sm:ml-2 sm:gap-1">
                               <button
                                 type="button"
-                                aria-label={`Remove hours for ${DAY_LABEL[row.day]}`}
+                                aria-label={`Quitar horario de ${DAY_LABEL[row.day]}`}
                                 onClick={() => updateRow(row.day, { open: false })}
                                 className="rounded-md p-1.5 text-muted hover:bg-surface hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none sm:p-2"
                               >
@@ -418,15 +419,15 @@ export default function AdminAvailabilityPage() {
                               <button
                                 type="button"
                                 disabled
-                                title="One time window per day. Split ranges may be supported later."
-                                aria-label={`Add another time range for ${DAY_LABEL[row.day]} (not available)`}
+                                title="Un intervalo por día. Rangos partidos podrían añadirse más adelante."
+                                aria-label={`Añadir otro intervalo para ${DAY_LABEL[row.day]} (no disponible)`}
                                 className="rounded-md p-1.5 text-muted opacity-40 disabled:cursor-not-allowed sm:p-2"
                               >
                                 <IconPlus />
                               </button>
                               <button
                                 type="button"
-                                aria-label={`Copy ${DAY_LABEL[row.day]} hours to other days`}
+                                aria-label={`Copiar el horario de ${DAY_LABEL[row.day]} a otros días`}
                                 onClick={() => setCopyFromDay(row.day)}
                                 className="rounded-md p-1.5 text-muted hover:bg-surface hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none sm:p-2"
                               >
@@ -455,7 +456,7 @@ export default function AdminAvailabilityPage() {
                     onClick={() => void saveWeekly()}
                     className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-fg shadow-sm hover:opacity-90 disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                   >
-                    Save schedule
+                    Guardar horario
                   </button>
                   {weeklyMsg ? (
                     <span className="text-sm text-muted" role="status">
@@ -474,9 +475,9 @@ export default function AdminAvailabilityPage() {
                     <IconCalendarOutline className="mt-0.5 shrink-0 text-foreground" />
                     <div>
                       <h2 id="date-specific-heading" className="text-base font-semibold text-foreground">
-                        Date-specific hours
+                        Horarios por fecha
                       </h2>
-                      <p className="mt-0.5 text-sm text-muted">Adjust hours for specific days</p>
+                      <p className="mt-0.5 text-sm text-muted">Ajuste el horario de días concretos</p>
                     </div>
                   </div>
                   <button
@@ -484,13 +485,13 @@ export default function AdminAvailabilityPage() {
                     onClick={() => setExceptionOpen(true)}
                     className="shrink-0 rounded-lg border-2 border-primary bg-background px-4 py-2 text-sm font-semibold text-primary hover:bg-surface focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                   >
-                    + Hours
+                    + Horario
                   </button>
                 </div>
 
                 <ul className="mt-6 flex flex-col gap-2">
                   {exceptionsSorted.length === 0 ? (
-                    <li className="text-sm text-muted">No date-specific overrides yet.</li>
+                    <li className="text-sm text-muted">Aún no hay excepciones por fecha.</li>
                   ) : (
                     exceptionsSorted.map((ex) => (
                       <li
@@ -499,7 +500,7 @@ export default function AdminAvailabilityPage() {
                       >
                         <div>
                           <span className="font-medium text-foreground">
-                            {new Date(`${ex.date}T12:00:00`).toLocaleDateString(undefined, {
+                            {new Date(`${ex.date}T12:00:00`).toLocaleDateString('es', {
                               day: 'numeric',
                               month: 'short',
                               year: 'numeric',
@@ -509,7 +510,7 @@ export default function AdminAvailabilityPage() {
                         </div>
                         <button
                           type="button"
-                          aria-label={`Remove exception ${ex.date}`}
+                          aria-label={`Eliminar excepción del ${ex.date}`}
                           onClick={() => void deleteException(ex.id)}
                           className="rounded-md p-2 text-destructive hover:bg-background focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                         >
@@ -577,26 +578,26 @@ function CopyHoursModal({
   return (
     <AdminModal
       open
-      title={`Copy hours from ${DAY_LABEL[sourceDay]}`}
+      title={`Copiar horario desde ${DAY_LABEL[sourceDay]}`}
       labelledById="copy-hours-title"
       onClose={onClose}
       footer={
         <>
-          <Button label="Cancel" variant="secondary" onClick={onClose} />
+          <Button label="Cancelar" variant="secondary" onClick={onClose} />
           <button
             type="button"
             onClick={() => onApply([...picked])}
             disabled={picked.size === 0}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
-            Apply to {picked.size || '…'} {picked.size === 1 ? 'day' : 'days'}
+            Aplicar a {picked.size || '…'} {picked.size === 1 ? 'día' : 'días'}
           </button>
         </>
       }
     >
       <p className="mb-3 text-sm text-muted">
-        Copy {weeklyDraft.find((r) => r.day === sourceDay)?.open ? 'these hours' : '“unavailable”'}{' '}
-        to:
+        Copie {weeklyDraft.find((r) => r.day === sourceDay)?.open ? 'este horario' : '«no disponible»'}{' '}
+        a:
       </p>
       <ul className="flex flex-col gap-2">
         {others.map((day) => (
@@ -640,7 +641,7 @@ function ExceptionModal({
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      setErr(j.error ?? 'Could not save.')
+      setErr(j.error ?? 'No se pudo guardar.')
       return
     }
     const data = (await res.json()) as { schedule: BookingScheduleFile }
@@ -650,25 +651,25 @@ function ExceptionModal({
   return (
     <AdminModal
       open
-      title="Add exception"
+      title="Añadir excepción"
       labelledById="ex-title"
       onClose={onClose}
       footer={
         <>
-          <Button label="Cancel" variant="secondary" onClick={onClose} />
+          <Button label="Cancelar" variant="secondary" onClick={onClose} />
           <button
             type="button"
             onClick={() => void submit()}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
-            Save exception
+            Guardar excepción
           </button>
         </>
       }
     >
       {err && <p className="mb-3 text-sm text-destructive">{err}</p>}
       <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-        Date
+        Fecha
         <input
           type="date"
           value={date}
@@ -677,7 +678,7 @@ function ExceptionModal({
         />
       </label>
       <fieldset className="mt-4">
-        <legend className="text-sm font-medium text-foreground">Override type</legend>
+        <legend className="text-sm font-medium text-foreground">Tipo de sustitución</legend>
         <div className="mt-2 flex flex-col gap-2">
           <label className="flex items-center gap-2 text-sm text-foreground">
             <input
@@ -687,7 +688,7 @@ function ExceptionModal({
               onChange={() => setMode('closed')}
               className="text-primary focus-visible:ring-2 focus-visible:ring-primary"
             />
-            Closed
+            Cerrado
           </label>
           <label className="flex items-center gap-2 text-sm text-foreground">
             <input
@@ -697,14 +698,14 @@ function ExceptionModal({
               onChange={() => setMode('custom')}
               className="text-primary focus-visible:ring-2 focus-visible:ring-primary"
             />
-            Custom hours
+            Horario personalizado
           </label>
         </div>
       </fieldset>
       {mode === 'custom' && (
         <div className="mt-4 grid grid-cols-2 gap-3">
           <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-            From
+            Desde
             <input
               type="time"
               value={from}
@@ -713,7 +714,7 @@ function ExceptionModal({
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-            To
+            Hasta
             <input
               type="time"
               value={to}

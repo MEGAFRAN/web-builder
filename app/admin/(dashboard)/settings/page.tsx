@@ -7,9 +7,9 @@ export default function AdminSettingsRoutePage() {
   return (
     <Section paddingY="lg" background="white">
       <Stack gap="md">
-        <Heading text="Settings" level="h1" />
+        <Heading text="Ajustes" level="h1" />
         <Text
-          content="Business preferences and integrations will appear here. Contact your platform operator for structural changes."
+          content="Aquí aparecerán las preferencias del negocio y las integraciones. Para cambios estructurales, contacte con el operador de la plataforma."
           color="muted"
           size="sm"
         />

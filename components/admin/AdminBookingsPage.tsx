@@ -13,7 +13,8 @@ import { WeekGrid } from '@/components/admin/bookings/WeekGrid'
 import { BookingDetailDrawer } from '@/components/admin/bookings/BookingDetailDrawer'
 import { NewAppointmentModal } from '@/components/admin/bookings/NewAppointmentModal'
 
-import { formatYmd, formatPrettyDate, mondayOfWeek, addDaysYmd } from '@/lib/booking-utils'
+import { formatYmd, mondayOfWeek, addDaysYmd } from '@/lib/booking-utils'
+import { formatPrettyDateEs } from '@/components/admin/admin-locale'
 import { resolveDayMinutesWindow } from '@/lib/booking-schedule-window'
 import type { BookingScheduleFile, ReservationRow } from '@/types/admin'
 import { SimpleDayList } from '@/components/admin/bookings/SimpleDayList'
@@ -40,18 +41,18 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
     try {
       const [rs, sch] = await Promise.all([
         fetch(`/api/admin/reservations?startDate=${start}&endDate=${end}`).then(async (r) => {
-          if (!r.ok) throw new Error('Failed to load reservations.')
+          if (!r.ok) throw new Error('No se pudieron cargar las reservas.')
           return r.json() as Promise<{ reservations: ReservationRow[] }>
         }),
         fetch(`/api/admin/schedule`).then(async (r) => {
-          if (!r.ok) throw new Error('Failed to load schedule.')
+          if (!r.ok) throw new Error('No se pudo cargar el horario.')
           return r.json() as Promise<BookingScheduleFile>
         }),
       ])
       setRows(rs.reservations)
       setSchedule(sch)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong.')
+      setError(e instanceof Error ? e.message : 'Algo salió mal.')
     } finally {
       setLoading(false)
     }
@@ -85,7 +86,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      throw new Error(j.error ?? 'Update failed.')
+      throw new Error(j.error ?? 'No se pudo actualizar.')
     }
     setDetail(null)
     void fetchRange(
@@ -106,8 +107,10 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
       <Stack gap="lg">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <Heading text="Bookings" level="h1" />
-            <p className="mt-1 text-sm text-muted">Day and week views of upcoming appointments.</p>
+            <Heading text="Reservas" level="h1" />
+            <p className="mt-1 text-sm text-muted">
+              Vistas diaria y semanal de las próximas citas.
+            </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
@@ -115,7 +118,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
               onClick={() => setCreateOpen(true)}
               className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              + New appointment
+              + Nueva cita
             </button>
           </div>
         </div>
@@ -130,12 +133,12 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
         />
 
         {loading ? (
-          <p className="text-sm text-muted">Loading…</p>
+          <p className="text-sm text-muted">Cargando…</p>
         ) : view === 'day' ? (
           dayWindow === null && dayRows.length === 0 ? (
             <CalendarEmptyState
               variant="closed"
-              dateLabel={formatPrettyDate(selectedYmd)}
+              dateLabel={formatPrettyDateEs(selectedYmd)}
               onCreate={() => setCreateOpen(true)}
             />
           ) : dayWindow === null && dayRows.length > 0 ? (
@@ -176,7 +179,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
 
       <AdminModal
         open={cancelOpen}
-        title="Cancel this appointment?"
+        title="¿Cancelar esta cita?"
         labelledById="cancel-appt-title"
         descriptionId="cancel-appt-desc"
         onClose={() => {
@@ -193,7 +196,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
                 setCancelReason('')
               }}
             >
-              Back
+              Volver
             </button>
             <button
               type="button"
@@ -208,21 +211,21 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
                 )
               }
             >
-              Confirm cancel
+              Confirmar cancelación
             </button>
           </>
         }
       >
         <p id="cancel-appt-desc" className="text-sm text-muted">
-          Optionally add a note for your records (visible internally only).
+          Puede añadir una nota interna para sus registros (solo visible aquí).
         </p>
         <label className="mt-3 flex flex-col gap-1 text-sm font-medium text-foreground">
-          Reason (optional)
+          Motivo (opcional)
           <input
             value={cancelReason}
             onChange={(e) => setCancelReason(e.target.value)}
             className="rounded-md border border-border px-3 py-2 font-normal placeholder-muted focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-            placeholder="e.g. Customer requested cancellation"
+            placeholder="p. ej., El cliente pidió cancelar"
           />
         </label>
       </AdminModal>

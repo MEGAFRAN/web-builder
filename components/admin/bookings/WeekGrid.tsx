@@ -4,7 +4,7 @@ import type { ReservationRow } from '@/types/admin'
 import { addDaysYmd } from '@/lib/booking-utils'
 import { BookingCard } from './BookingCard'
 
-const WEEK_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const WEEK_LABELS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 
 interface WeekGridProps {
   weekStart: string

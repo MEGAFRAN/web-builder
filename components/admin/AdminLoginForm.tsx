@@ -32,7 +32,7 @@ export default function AdminLoginForm({
       })
       const data = (await res.json().catch(() => ({}))) as { error?: string }
       if (!res.ok) {
-        setError(data.error ?? 'Incorrect email or password')
+        setError(data.error ?? 'Correo o contraseña incorrectos')
         return
       }
       router.push(redirectTo.startsWith('/admin') ? redirectTo : '/admin/bookings')
@@ -45,17 +45,17 @@ export default function AdminLoginForm({
   return (
     <Section paddingY="xl" background="gray">
       <div className="mx-auto flex max-w-md flex-col px-4">
-        <h1 className="text-center text-2xl font-bold text-foreground">Sign in</h1>
+        <h1 className="text-center text-2xl font-bold text-foreground">Iniciar sesión</h1>
         <p className="mt-2 text-center text-sm text-muted">
-          Business owner access — contact support if you need an account.
+          Acceso para el titular del negocio — contacte con soporte si necesita una cuenta.
         </p>
 
         {misconfigured && (
           <div className="mt-6">
             <Alert
               variant="warning"
-              title="Login unavailable"
-              message="Admin authentication environment variables are missing. Set ADMIN_EMAIL, ADMIN_PASSWORD, and ADMIN_SESSION_SECRET on the server."
+              title="Inicio de sesión no disponible"
+              message="Faltan variables de entorno de autenticación de administración. Configure ADMIN_EMAIL, ADMIN_PASSWORD y ADMIN_SESSION_SECRET en el servidor."
             />
           </div>
         )}
@@ -72,7 +72,7 @@ export default function AdminLoginForm({
               </p>
             )}
             <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-              Email
+              Correo electrónico
               <input
                 type="email"
                 autoComplete="username"
@@ -83,7 +83,7 @@ export default function AdminLoginForm({
               />
             </label>
             <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-              Password
+              Contraseña
               <input
                 type="password"
                 autoComplete="current-password"
@@ -98,7 +98,7 @@ export default function AdminLoginForm({
               disabled={busy || misconfigured}
               className="rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-fg hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              Sign in
+              Iniciar sesión
             </button>
           </Stack>
         </form>

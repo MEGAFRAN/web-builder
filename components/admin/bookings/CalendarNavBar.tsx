@@ -25,24 +25,24 @@ export function CalendarNavBar({
           className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           onClick={() => onSelectedYmdChange(addDaysYmd(selectedYmd, -1))}
         >
-          Previous
+          Anterior
         </button>
         <button
           type="button"
           className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           onClick={() => onSelectedYmdChange(formatYmd(new Date()))}
         >
-          Today
+          Hoy
         </button>
         <button
           type="button"
           className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           onClick={() => onSelectedYmdChange(addDaysYmd(selectedYmd, 1))}
         >
-          Next
+          Siguiente
         </button>
         <label className="flex items-center gap-2 text-sm text-foreground">
-          <span className="sr-only">Jump to date</span>
+          <span className="sr-only">Ir a fecha</span>
           <input
             type="date"
             value={selectedYmd}
@@ -54,7 +54,7 @@ export function CalendarNavBar({
 
       <div
         role="group"
-        aria-label="View mode"
+        aria-label="Modo de vista"
         className="inline-flex rounded-md border border-border p-0.5"
       >
         <button
@@ -65,7 +65,7 @@ export function CalendarNavBar({
           onClick={() => onViewChange('day')}
           aria-pressed={view === 'day'}
         >
-          Day
+          Día
         </button>
         <button
           type="button"
@@ -75,7 +75,7 @@ export function CalendarNavBar({
           onClick={() => onViewChange('week')}
           aria-pressed={view === 'week'}
         >
-          Week
+          Semana
         </button>
       </div>
     </div>

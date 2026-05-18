@@ -10,7 +10,7 @@ export default async function AdminLoginPage({
   const misconfigured = q.error === 'misconfigured'
 
   return (
-    <Suspense fallback={<p className="p-8 text-center text-muted">Loading…</p>}>
+    <Suspense fallback={<p className="p-8 text-center text-muted">Cargando…</p>}>
       <AdminLoginForm misconfigured={misconfigured} />
     </Suspense>
   )

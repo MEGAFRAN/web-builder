@@ -65,7 +65,7 @@ export function AdminModal({
         </h2>
         <button
           type="button"
-          aria-label="Close"
+          aria-label="Cerrar"
           onClick={onClose}
           className="rounded-md p-1.5 text-muted hover:bg-muted-bg hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
         >

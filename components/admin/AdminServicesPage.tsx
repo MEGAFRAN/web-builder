@@ -33,11 +33,11 @@ export default function AdminServicesPage() {
     setError('')
     try {
       const res = await fetch('/api/admin/services')
-      if (!res.ok) throw new Error('Failed to load services.')
+      if (!res.ok) throw new Error('No se pudieron cargar los servicios.')
       const data = (await res.json()) as { services: AdminBookingService[] }
       setServices(data.services)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load.')
+      setError(e instanceof Error ? e.message : 'No se pudo cargar.')
     } finally {
       setLoading(false)
     }
@@ -56,7 +56,7 @@ export default function AdminServicesPage() {
     })
     if (!res.ok) {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
-      throw new Error(j.error ?? 'Save failed.')
+      throw new Error(j.error ?? 'Error al guardar.')
     }
     setServices(next)
   }
@@ -82,7 +82,7 @@ export default function AdminServicesPage() {
     try {
       await persist(next)
     } catch (e) {
-      setSaveError(e instanceof Error ? e.message : 'Reorder failed.')
+      setSaveError(e instanceof Error ? e.message : 'Error al reordenar.')
     }
   }
 
@@ -91,9 +91,9 @@ export default function AdminServicesPage() {
       <Stack gap="lg">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <Heading text="Services" level="h1" />
+            <Heading text="Servicios" level="h1" />
             <p className="mt-1 text-sm text-muted">
-              Drag cards to change the order customers see in the booking widget.
+              Arrastre las tarjetas para cambiar el orden que ven los clientes en el widget de reservas.
             </p>
           </div>
           <button
@@ -101,7 +101,7 @@ export default function AdminServicesPage() {
             onClick={openAdd}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
-            + Add service
+            + Añadir servicio
           </button>
         </div>
 
@@ -109,18 +109,18 @@ export default function AdminServicesPage() {
         {saveError && <Alert variant="error" title="Error" message={saveError} />}
 
         {loading ? (
-          <p className="text-sm text-muted">Loading…</p>
+          <p className="text-sm text-muted">Cargando…</p>
         ) : services.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-muted-bg px-6 py-14 text-center">
             <p className="text-foreground">
-              You haven&apos;t added any services yet. Add your first one to start accepting bookings.
+              Aún no ha añadido ningún servicio. Añada el primero para empezar a aceptar reservas.
             </p>
             <button
               type="button"
               onClick={openAdd}
               className="mt-4 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              + Add service
+              + Añadir servicio
             </button>
           </div>
         ) : (
@@ -156,17 +156,17 @@ export default function AdminServicesPage() {
                         aria-expanded={expandedId === s.id}
                       >
                         <span className={expandedId === s.id ? '' : 'line-clamp-2'}>
-                          {s.description.trim() ? s.description : 'No description'}
+                          {s.description.trim() ? s.description : 'Sin descripción'}
                         </span>
                         <span className="ml-1 text-primary underline">
-                          {expandedId === s.id ? 'Show less' : 'Expand'}
+                          {expandedId === s.id ? 'Mostrar menos' : 'Ampliar'}
                         </span>
                       </button>
                     </div>
                     <div className="flex shrink-0 gap-2">
                       <button
                         type="button"
-                        aria-label={`Edit ${s.name}`}
+                        aria-label={`Editar ${s.name}`}
                         onClick={() => openEdit(s)}
                         className="rounded-md border border-border p-2 hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                       >
@@ -174,7 +174,7 @@ export default function AdminServicesPage() {
                       </button>
                       <button
                         type="button"
-                        aria-label={`Delete ${s.name}`}
+                        aria-label={`Eliminar ${s.name}`}
                         onClick={() => setDeleteTarget(s)}
                         className="rounded-md border border-border p-2 text-destructive hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                       >
@@ -205,13 +205,13 @@ export default function AdminServicesPage() {
 
       <AdminModal
         open={deleteTarget !== null}
-        title="Delete this service?"
+        title="¿Eliminar este servicio?"
         labelledById="del-svc-title"
         descriptionId="del-svc-desc"
         onClose={() => setDeleteTarget(null)}
         footer={
           <>
-            <Button label="Back" variant="secondary" onClick={() => setDeleteTarget(null)} />
+            <Button label="Volver" variant="secondary" onClick={() => setDeleteTarget(null)} />
             <button
               type="button"
               className="rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-fg hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
@@ -219,18 +219,18 @@ export default function AdminServicesPage() {
                 if (!deleteTarget) return
                 const next = services.filter((x) => x.id !== deleteTarget.id)
                 void persist(next).catch((e) =>
-                  setSaveError(e instanceof Error ? e.message : 'Delete failed.'),
+                  setSaveError(e instanceof Error ? e.message : 'Error al eliminar.'),
                 )
                 setDeleteTarget(null)
               }}
             >
-              Delete
+              Eliminar
             </button>
           </>
         }
       >
         <p id="del-svc-desc" className="text-sm text-muted">
-          This cannot be undone. Existing bookings that reference this service id may show a generic label.
+          Esta acción no se puede deshacer. Las reservas existentes que usen este servicio pueden mostrar una etiqueta genérica.
         </p>
       </AdminModal>
     </Section>
@@ -259,15 +259,15 @@ function ServiceFormModal({
     const dm = Number.parseInt(durationMinutes, 10)
     const pr = Number.parseFloat(price)
     if (!name.trim()) {
-      setFormError('Name is required.')
+      setFormError('El nombre es obligatorio.')
       return
     }
     if (!Number.isFinite(dm) || dm < 1 || dm > 24 * 60) {
-      setFormError('Duration must be between 1 and 1440 minutes.')
+      setFormError('La duración debe estar entre 1 y 1440 minutos.')
       return
     }
     if (!Number.isFinite(pr) || pr < 0) {
-      setFormError('Price must be zero or greater.')
+      setFormError('El precio debe ser cero o mayor.')
       return
     }
     const row: AdminBookingService = {
@@ -282,7 +282,7 @@ function ServiceFormModal({
     try {
       await onSave(row)
     } catch (e) {
-      setFormError(e instanceof Error ? e.message : 'Save failed.')
+      setFormError(e instanceof Error ? e.message : 'Error al guardar.')
     } finally {
       setBusy(false)
     }
@@ -291,19 +291,19 @@ function ServiceFormModal({
   return (
     <AdminModal
       open
-      title={initial ? 'Edit service' : 'Add service'}
+      title={initial ? 'Editar servicio' : 'Añadir servicio'}
       labelledById="svc-form-title"
       onClose={onClose}
       footer={
         <>
-          <Button label="Cancel" variant="secondary" onClick={onClose} />
+          <Button label="Cancelar" variant="secondary" onClick={onClose} />
           <button
             type="button"
             disabled={busy}
             onClick={() => void submit()}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 disabled:opacity-50"
           >
-            Save
+            Guardar
           </button>
         </>
       }
@@ -311,7 +311,7 @@ function ServiceFormModal({
       {formError && <p className="mb-3 text-sm text-destructive">{formError}</p>}
       <Stack gap="md">
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Name
+          Nombre
           <input
             required
             value={name}
@@ -320,7 +320,7 @@ function ServiceFormModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Description (optional)
+          Descripción (opcional)
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -329,7 +329,7 @@ function ServiceFormModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Duration (minutes)
+          Duración (minutos)
           <input
             type="number"
             min={1}
@@ -339,11 +339,11 @@ function ServiceFormModal({
             className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           />
           <span className="font-normal text-xs text-muted">
-            This sets the length of each slot shown to customers when they select this service.
+            Define la duración de cada franja que ven los clientes al elegir este servicio.
           </span>
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Price
+          Precio
           <input
             type="number"
             min={0}
@@ -354,7 +354,7 @@ function ServiceFormModal({
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          Currency symbol
+          Símbolo de moneda
           <input
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}

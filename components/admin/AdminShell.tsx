@@ -6,10 +6,10 @@ import { useState, type ReactNode } from 'react'
 import { Container } from '@/components/layout/Container'
 
 const nav = [
-  { href: '/admin/bookings', label: 'Bookings', icon: IconCalendar },
-  { href: '/admin/services', label: 'Services', icon: IconTag },
-  { href: '/admin/availability', label: 'Availability', icon: IconClock },
-  { href: '/admin/settings', label: 'Settings', icon: IconGear },
+  { href: '/admin/bookings', label: 'Reservas', icon: IconCalendar },
+  { href: '/admin/services', label: 'Servicios', icon: IconTag },
+  { href: '/admin/availability', label: 'Disponibilidad', icon: IconClock },
+  { href: '/admin/settings', label: 'Ajustes', icon: IconGear },
 ] as const
 
 function IconCalendar({ className }: { className?: string }) {
@@ -105,7 +105,7 @@ export default function AdminShell({
 
   function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
     return (
-      <nav aria-label="Admin">
+      <nav aria-label="Administración">
         <ul className="flex flex-col gap-1">
           {nav.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
@@ -158,7 +158,7 @@ export default function AdminShell({
               onClick={() => void signOut()}
               className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-foreground hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
-              Sign out
+              Cerrar sesión
             </button>
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function AdminShell({
           onClick={() => void signOut()}
           className="mt-4 w-full rounded-lg border border-border px-3 py-2.5 text-left text-sm font-medium text-foreground"
         >
-          Sign out
+          Cerrar sesión
         </button>
       </MobileChrome>
 
@@ -202,14 +202,14 @@ function MobileChrome({
           <button
             type="button"
             className="absolute inset-0 bg-black/40"
-            aria-label="Close menu"
+            aria-label="Cerrar menú"
             onClick={() => setOpen(false)}
           />
           <div
             id="admin-mobile-drawer"
             role="dialog"
             aria-modal="true"
-            aria-label={`${businessName} admin menu`}
+            aria-label={`Menú de administración de ${businessName}`}
             className="absolute top-0 right-0 flex h-full w-[min(100%,18rem)] flex-col bg-surface p-4 shadow-xl"
           >
             <div className="mb-4 flex items-center justify-between">
@@ -219,7 +219,7 @@ function MobileChrome({
                 className="rounded-md p-2 hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                 onClick={() => setOpen(false)}
               >
-                <span className="sr-only">Close menu</span>
+                <span className="sr-only">Cerrar menú</span>
                 <IconClose />
               </button>
             </div>
@@ -230,7 +230,7 @@ function MobileChrome({
 
       <nav
         className="fixed bottom-0 left-0 right-0 z-30 flex border-border border-t bg-background/95 backdrop-blur md:hidden"
-        aria-label="Admin sections"
+        aria-label="Secciones de administración"
       >
         {nav.map((item) => {
           const active = pathname === item.href
@@ -259,7 +259,7 @@ function MobileChrome({
           onClick={() => setOpen(true)}
         >
           <IconMenu className="shrink-0" />
-          Menu
+          Menú
         </button>
       </nav>
     </>

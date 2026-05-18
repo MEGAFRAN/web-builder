@@ -126,9 +126,17 @@ describe('RootLayout', () => {
   const consoleError = console.error
 
   beforeEach(() => {
-    // RootLayout returns a full <html> tree; RTL's default wrapper is a <div> (invalid nesting).
+    // RootLayout returns a full <html> tree; RTL mounts under a <div> (invalid nesting).
+    // React logs `In HTML, %s cannot be a child of <%s>...` — not the interpolated sentence.
     vi.spyOn(console, 'error').mockImplementation((msg, ...args) => {
-      if (typeof msg === 'string' && msg.includes('<html> cannot be a child of')) return
+      if (
+        typeof msg === 'string' &&
+        msg.includes('cannot be a child of') &&
+        args[0] === '<html>' &&
+        args[1] === 'div'
+      ) {
+        return
+      }
       consoleError.call(console, msg, ...args)
     })
   })
