@@ -75,6 +75,16 @@ When this function is needed, read the skill file and execute from its instructi
 
 ---
 
+### `booking_system`
+
+`booking_system(scope: string, user_goals: string) returns BookingDesignArtifact: UX recommendations for the public booking widget and/or admin portal`
+
+Use this function when the request involves the booking system: `reservationBlock`, visitor reservation flow, admin bookings calendar, services catalog, availability schedule, or related `/admin` and `/api` booking surfaces.
+
+Skill: `.claude/skills/ux/booking_system.md`
+
+---
+
 ### `update_theme`
 
 `update_theme(change_request: string) returns ThemeRecommendation: token or preset changes with design rationale`
