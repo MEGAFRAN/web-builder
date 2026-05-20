@@ -15,3 +15,7 @@ type Story = StoryObj<typeof meta>
 export const LogoOnly: Story = { args: { logo: 'Acme' } }
 export const WithLinks: Story = { args: { logo: 'Acme', links: mockNavLinks } }
 export const WithCta: Story = { args: { logo: 'Acme', links: mockNavLinks, ctaLabel: 'Book now' } }
+export const MobileMenuOpen: Story = {
+  args: { logo: 'Acme', links: mockNavLinks, ctaLabel: 'Book now', ctaAction: '/contact' },
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+}
