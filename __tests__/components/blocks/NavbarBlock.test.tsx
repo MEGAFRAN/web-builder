@@ -29,8 +29,9 @@ describe('NavbarBlock', () => {
   })
 
   it('does not render a CTA button when ctaLabel is omitted', () => {
-    render(<NavbarBlock _type="navbar" logo="Acme Co" links={links} />)
-    expect(screen.queryByRole('button')).not.toBeInTheDocument()
+    const { container } = render(<NavbarBlock _type="navbar" logo="Acme Co" links={links} />)
+    // Hamburger always renders (has aria-label); check no CTA button (no aria-label) is present
+    expect(container.querySelector('button:not([aria-label])')).toBeNull()
   })
 
   it('renders the nav landmark', () => {

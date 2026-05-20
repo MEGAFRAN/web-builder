@@ -14,21 +14,30 @@ const threeLinks = [
   { label: 'Blog', href: '/blog' },
 ]
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function renderNavbar(props: React.ComponentProps<typeof Navbar>) {
   const { container } = render(<Navbar {...props} />)
   return container
 }
 
-// ─── Tests ────────────────────────────────────────────────────────────────────
+/** Desktop nav bar element — mobile panel is a sibling div outside this element. */
+function desktopNav(container: HTMLElement) {
+  return container.querySelector('nav[data-component="navbar"]')!
+}
+
+/** Mobile panel — the slide-in panel rendered below the nav bar. */
+function mobilePanel(container: HTMLElement) {
+  return container.querySelector('[data-component="mobile-menu"]')!
+}
+
+// ─── Desktop tests ────────────────────────────────────────────────────────────
 
 describe('Navbar', () => {
   describe('root element', () => {
     it('renders a <nav> with data-component="navbar"', () => {
       const container = renderNavbar({ logo: 'Acme' })
-      const nav = container.querySelector('nav[data-component="navbar"]')
-      expect(nav).not.toBeNull()
+      expect(desktopNav(container)).not.toBeNull()
     })
   })
 
@@ -49,8 +58,7 @@ describe('Navbar', () => {
   describe('links — omitted', () => {
     it('renders no nav links (only the logo link) when links is omitted', () => {
       const container = renderNavbar({ logo: 'Acme' })
-      // Only the logo <Link> should produce an <a>
-      const anchors = Array.from(container.querySelectorAll('a'))
+      const anchors = Array.from(desktopNav(container).querySelectorAll('a'))
       expect(anchors).toHaveLength(1)
     })
   })
@@ -58,7 +66,7 @@ describe('Navbar', () => {
   describe('links — null', () => {
     it('renders no nav links when links is null', () => {
       const container = renderNavbar({ logo: 'Acme', links: null })
-      const anchors = Array.from(container.querySelectorAll('a'))
+      const anchors = Array.from(desktopNav(container).querySelectorAll('a'))
       expect(anchors).toHaveLength(1)
     })
   })
@@ -73,14 +81,14 @@ describe('Navbar', () => {
 
     it('renders exactly the correct number of nav links (excluding logo)', () => {
       const container = renderNavbar({ logo: 'Acme', links: threeLinks })
-      // total anchors = logo (1) + nav links (3)
-      const anchors = Array.from(container.querySelectorAll('a'))
+      // Scope to desktop nav bar — mobile panel is a sibling div outside <nav>
+      const anchors = Array.from(desktopNav(container).querySelectorAll('a'))
       expect(anchors).toHaveLength(1 + threeLinks.length)
     })
 
     it('renders links in document order matching the links array', () => {
       const container = renderNavbar({ logo: 'Acme', links: twoLinks })
-      const navAnchors = Array.from(container.querySelectorAll('a')).filter(
+      const navAnchors = Array.from(desktopNav(container).querySelectorAll('a')).filter(
         (a) => a.getAttribute('href') !== '/'
       )
       navAnchors.forEach((anchor, i) => {
@@ -91,16 +99,17 @@ describe('Navbar', () => {
   })
 
   describe('ctaLabel — omitted', () => {
-    it('renders no <button> when ctaLabel is omitted', () => {
+    it('renders no CTA button when ctaLabel is omitted', () => {
       const container = renderNavbar({ logo: 'Acme', links: twoLinks })
-      expect(container.querySelector('button')).toBeNull()
+      // Hamburger always has aria-label; a missing CTA button has no aria-label
+      expect(container.querySelector('button:not([aria-label])')).toBeNull()
     })
   })
 
   describe('ctaLabel — null', () => {
-    it('renders no <button> when ctaLabel is null', () => {
+    it('renders no CTA button when ctaLabel is null', () => {
       const container = renderNavbar({ logo: 'Acme', links: twoLinks, ctaLabel: null })
-      expect(container.querySelector('button')).toBeNull()
+      expect(container.querySelector('button:not([aria-label])')).toBeNull()
     })
   })
 
@@ -117,9 +126,8 @@ describe('Navbar', () => {
     })
   })
 
-  // ctaAction is accepted as a prop but is intentionally unused in the JSX
-  // (it is declared in the prop type but never referenced in the render output).
-  // No assertion is possible — the prop is a no-op at render time.
+  // ctaAction drives the CTA link inside the mobile panel.
+  // On desktop the CTA remains a <button> — ctaAction is not wired to it.
   describe('ctaAction prop', () => {
     it('accepts ctaAction without throwing', () => {
       expect(() =>
@@ -132,27 +140,59 @@ describe('Navbar', () => {
     it('renders all parts together without error', () => {
       renderNavbar({ logo: 'Acme', links: twoLinks, ctaLabel: 'Get Started', ctaAction: '/signup' })
 
-      // Logo link
       expect(screen.getByRole('link', { name: 'Acme' })).toHaveAttribute('href', '/')
-
-      // Nav links
       expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/about')
       expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', '/contact')
-
-      // CTA button
       expect(screen.getByRole('button', { name: 'Get Started' })).toBeInTheDocument()
     })
 
-    it('renders exactly logo + nav links as <a> elements and one <button>', () => {
+    it('renders exactly logo + nav links in the desktop bar, with hamburger + CTA as buttons', () => {
       const container = renderNavbar({
         logo: 'Acme',
         links: twoLinks,
         ctaLabel: 'Get Started',
       })
-      const anchors = Array.from(container.querySelectorAll('a'))
+      const anchors = Array.from(desktopNav(container).querySelectorAll('a'))
       const buttons = Array.from(container.querySelectorAll('button'))
       expect(anchors).toHaveLength(1 + twoLinks.length)
-      expect(buttons).toHaveLength(1)
+      expect(buttons).toHaveLength(2) // hamburger + CTA
+    })
+  })
+
+  // ─── Mobile menu tests ───────────────────────────────────────────────────────
+
+  describe('mobile menu', () => {
+    it('renders the hamburger button with aria-label="Open menu"', () => {
+      const container = renderNavbar({ logo: 'Acme', links: twoLinks })
+      const hamburger = container.querySelector('button[aria-label="Open menu"]')
+      expect(hamburger).not.toBeNull()
+    })
+
+    it('mobile panel is hidden from assistive technology when closed', () => {
+      const container = renderNavbar({ logo: 'Acme', links: twoLinks })
+      expect(mobilePanel(container)).toHaveAttribute('aria-hidden', 'true')
+    })
+
+    it('mobile panel contains all nav links', () => {
+      const container = renderNavbar({ logo: 'Acme', links: twoLinks })
+      const links = Array.from(mobilePanel(container).querySelectorAll('a'))
+      expect(links).toHaveLength(twoLinks.length)
+      twoLinks.forEach(({ label, href }, i) => {
+        expect(links[i].textContent).toBe(label)
+        expect(links[i]).toHaveAttribute('href', href)
+      })
+    })
+
+    it('mobile panel renders a CTA link when both ctaLabel and ctaAction are provided', () => {
+      const container = renderNavbar({ logo: 'Acme', ctaLabel: 'Book now', ctaAction: '/contact' })
+      const ctaLink = mobilePanel(container).querySelector('a[href="/contact"]')
+      expect(ctaLink).not.toBeNull()
+      expect(ctaLink?.textContent).toBe('Book now')
+    })
+
+    it('mobile panel renders no CTA link when ctaAction is omitted', () => {
+      const container = renderNavbar({ logo: 'Acme', ctaLabel: 'Book now' })
+      expect(mobilePanel(container).querySelector('a')).toBeNull()
     })
   })
 })
