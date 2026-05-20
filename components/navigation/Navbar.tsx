@@ -78,6 +78,7 @@ export function Navbar({
 
       {/* Mobile menu panel */}
       <div
+        data-component="mobile-menu"
         aria-hidden={!isOpen}
         className={[
           "md:hidden fixed inset-x-0 top-[57px] bottom-0 z-40 bg-background border-t border-border overflow-y-auto",
