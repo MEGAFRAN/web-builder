@@ -119,7 +119,7 @@ describe('Testimonials', () => {
       const container = renderTestimonials({ testimonials: TESTIMONIALS })
       fireEvent.click(getNextBtn(container))
       const secondSlide = container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement
-      expect(secondSlide.style.visibility).toBe('visible')
+      expect(secondSlide.style.display).toBe('block')
     })
   })
 

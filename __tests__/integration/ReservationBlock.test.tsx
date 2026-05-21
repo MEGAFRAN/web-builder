@@ -143,7 +143,7 @@ describe('ReservationBlock — initial render', () => {
   it('shows booking unavailable when services list is empty', async () => {
     await renderReservation(<ReservationBlock _type="reservationBlock" services={[]} heading="Book" />)
     await waitFor(() => {
-      expect(screen.getByText(/no services are configured/i)).toBeInTheDocument()
+      expect(screen.getByText(/no hay servicios configurados/i)).toBeInTheDocument()
     })
     expect(document.querySelector('form')).not.toBeInTheDocument()
   })
@@ -236,7 +236,7 @@ describe('ReservationBlock — time selection reveals guest form', () => {
     pickService()
     pickDate()
     pickSlot()
-    expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /confirmar reserva/i })).toBeInTheDocument()
   })
 
   it('applies selected styling to the chosen time slot button', async () => {
@@ -283,17 +283,17 @@ describe('ReservationBlock — submit button state', () => {
   })
 
   it('disables submit button when required text fields are empty', () => {
-    expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /confirmar reserva/i })).toBeDisabled()
   })
 
   it('enables submit button only when all required fields are filled', () => {
     fillGuestDetails()
-    expect(screen.getByRole('button', { name: /confirm reservation/i })).not.toBeDisabled()
+    expect(screen.getByRole('button', { name: /confirmar reserva/i })).not.toBeDisabled()
   })
 
   it('disables submit button when name is whitespace-only', () => {
     fillGuestDetails({ name: '   ' })
-    expect(screen.getByRole('button', { name: /confirm reservation/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /confirmar reserva/i })).toBeDisabled()
   })
 })
 
@@ -378,7 +378,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/reservation confirmed/i)).toBeInTheDocument()
+      expect(screen.getByText(/reserva confirmada/i)).toBeInTheDocument()
     })
     expect(document.querySelector('form')).not.toBeInTheDocument()
   })
@@ -391,7 +391,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/we've received your request/i)).toBeInTheDocument()
+      expect(screen.getByText(/hemos recibido tu solicitud/i)).toBeInTheDocument()
     })
   })
 
@@ -415,7 +415,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+      expect(screen.getByText(/algo ha fallado/i)).toBeInTheDocument()
     })
     expect(document.querySelector('form')).toBeInTheDocument()
   })
@@ -428,7 +428,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/couldn't reach our reservations system/i)).toBeInTheDocument()
+      expect(screen.getByText(/no hemos podido conectar/i)).toBeInTheDocument()
     })
   })
 
@@ -440,7 +440,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /confirming/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /confirmando/i })).toBeInTheDocument()
     })
   })
 
@@ -452,7 +452,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /confirming/i })).toBeDisabled()
+      expect(screen.getByRole('button', { name: /confirmando/i })).toBeDisabled()
     })
   })
 
@@ -473,7 +473,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/reservation confirmed/i)).toBeInTheDocument()
+      expect(screen.getByText(/reserva confirmada/i)).toBeInTheDocument()
     })
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
   })
@@ -569,7 +569,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+      expect(screen.getByText(/algo ha fallado/i)).toBeInTheDocument()
     })
   })
 
@@ -600,7 +600,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+      expect(screen.getByText(/algo ha fallado/i)).toBeInTheDocument()
     })
   })
 })
@@ -663,7 +663,7 @@ describe('ReservationBlock — availability integration', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
     })
-    expect(screen.queryByRole('button', { name: /fully booked/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /completo/i })).not.toBeInTheDocument()
   })
 
   it('uses availabilityEndpoint when provided', async () => {
@@ -736,7 +736,7 @@ describe('ReservationBlock — availability integration', () => {
     pickDate()
 
     await waitFor(() => {
-      expect(screen.getByText(/checking availability/i)).toBeInTheDocument()
+      expect(screen.getByText(/comprobando disponibilidad/i)).toBeInTheDocument()
     })
 
     finish({
@@ -745,7 +745,7 @@ describe('ReservationBlock — availability integration', () => {
     } as Response)
 
     await waitFor(() => {
-      expect(screen.queryByText(/checking availability/i)).not.toBeInTheDocument()
+      expect(screen.queryByText(/comprobando disponibilidad/i)).not.toBeInTheDocument()
     })
   })
 
@@ -767,7 +767,7 @@ describe('ReservationBlock — availability integration', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /13:00.*fully booked/i }),
+        screen.getByRole('button', { name: /13:00.*completo/i }),
       ).toBeInTheDocument()
     })
   })
@@ -793,14 +793,14 @@ describe('ReservationBlock — availability integration', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /21:00.*outside opening hours/i }),
+        screen.getByRole('button', { name: /21:00.*fuera del horario/i }),
       ).toBeInTheDocument()
     })
 
     fireEvent.click(screen.getByRole('button', { name: '14:00' }))
     expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
 
-    fireEvent.click(screen.getByRole('button', { name: /21:00.*outside opening hours/i }))
+    fireEvent.click(screen.getByRole('button', { name: /21:00.*fuera del horario/i }))
     expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
   })
 
@@ -821,13 +821,13 @@ describe('ReservationBlock — availability integration', () => {
     pickDate()
 
     await waitFor(() =>
-      expect(screen.getByRole('button', { name: /13:00.*fully booked/i })).toBeInTheDocument(),
+      expect(screen.getByRole('button', { name: /13:00.*completo/i })).toBeInTheDocument(),
     )
 
     fireEvent.click(screen.getByRole('button', { name: '14:00' }))
     expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
 
-    fireEvent.click(screen.getByRole('button', { name: /13:00.*fully booked/i }))
+    fireEvent.click(screen.getByRole('button', { name: /13:00.*completo/i }))
     expect(screen.getByRole('button', { name: '14:00' })).toHaveAttribute('aria-pressed', 'true')
   })
 
@@ -850,7 +850,7 @@ describe('ReservationBlock — availability integration', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: '13:00' })).toBeInTheDocument()
     })
-    expect(screen.queryByRole('button', { name: /fully booked/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /completo/i })).not.toBeInTheDocument()
   })
 
   it('recovers with empty booked slots when availability fetch rejects', async () => {
@@ -880,7 +880,7 @@ describe('end-time range label', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: '09:00' })).toBeInTheDocument()
     })
-    expect(screen.queryByText(/Selected:/)).toBeNull()
+    expect(screen.queryByText(/Seleccionado:/)).toBeNull()
   })
 
   it('shows "HH:MM – HH:MM (N min)" after selecting a slot', async () => {
@@ -918,10 +918,10 @@ describe('end-time range label', () => {
       expect(screen.getByRole('button', { name: '09:30' })).toBeInTheDocument()
     })
     fireEvent.click(screen.getByRole('button', { name: '09:30' }))
-    expect(screen.getByText(/Selected:/)).toBeInTheDocument()
+    expect(screen.getByText(/Seleccionado:/)).toBeInTheDocument()
 
     fireEvent.change(document.getElementById('res-date')!, { target: { value: '' } })
-    expect(screen.queryByText(/Selected:/)).toBeNull()
+    expect(screen.queryByText(/Seleccionado:/)).toBeNull()
   })
 })
 
@@ -947,7 +947,7 @@ describe('covered slots', () => {
     fireEvent.click(screen.getByRole('button', { name: '09:30' }))
     expect(screen.getByText('09:30 – 10:30')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: /10:00.*within your selected booking/i }))
+    fireEvent.click(screen.getByRole('button', { name: /10:00.*dentro de tu reserva/i }))
     expect(screen.getByText('09:30 – 10:30')).toBeInTheDocument()
   })
 
@@ -1000,17 +1000,17 @@ describe('slot unavailability reasons', () => {
     pickDate()
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /13:00.*fully booked/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /13:00.*completo/i })).toBeInTheDocument()
     })
   })
 
-  it('out-of-window slots have accessible label containing "outside opening hours"', async () => {
+  it('out-of-window slots have accessible label containing "fuera de horario"', async () => {
     await renderReservation(<ReservationBlock {...baseProps} clientId="reason-split" />)
     pickService()
     pickDate()
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /21:00.*outside opening hours/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /21:00.*fuera del horario/i })).toBeInTheDocument()
     })
   })
 
@@ -1019,8 +1019,8 @@ describe('slot unavailability reasons', () => {
     pickService()
     pickDate()
 
-    const bookedBtn = await screen.findByRole('button', { name: /13:00.*fully booked/i })
-    const oowBtn = screen.getByRole('button', { name: /21:00.*outside opening hours/i })
+    const bookedBtn = await screen.findByRole('button', { name: /13:00.*completo/i })
+    const oowBtn = screen.getByRole('button', { name: /21:00.*fuera del horario/i })
 
     expect(bookedBtn.className).toContain('line-through')
     expect(oowBtn.className).not.toContain('line-through')
@@ -1040,7 +1040,7 @@ describe('ReservationBlock — inline field validation', () => {
     fireEvent.change(input, { target: { value: 'x' } })
     fireEvent.blur(input)
 
-    expect(await screen.findByText(/please enter a full name/i)).toBeInTheDocument()
+    expect(await screen.findByText(/introduce un nombre completo/i)).toBeInTheDocument()
   })
 
   it('shows the email validation message after blur', async () => {
@@ -1048,7 +1048,7 @@ describe('ReservationBlock — inline field validation', () => {
     fireEvent.change(input, { target: { value: 'not-an-email' } })
     fireEvent.blur(input)
 
-    expect(await screen.findByText(/please enter a valid email/i)).toBeInTheDocument()
+    expect(await screen.findByText(/introduce un correo electrónico válido/i)).toBeInTheDocument()
   })
 
   it('shows the phone validation message after blur', async () => {
@@ -1056,7 +1056,7 @@ describe('ReservationBlock — inline field validation', () => {
     fireEvent.change(input, { target: { value: '123' } })
     fireEvent.blur(input)
 
-    expect(await screen.findByText(/please enter a valid phone number/i)).toBeInTheDocument()
+    expect(await screen.findByText(/introduce un teléfono válido/i)).toBeInTheDocument()
   })
 })
 

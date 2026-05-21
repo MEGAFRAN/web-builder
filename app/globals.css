@@ -76,8 +76,25 @@
 h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); }
 body                    { font-family: var(--font-body); }
 
+[data-scroll-reveal] {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+[data-scroll-reveal][data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Carousel: disable all transitions for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  [data-scroll-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
   [data-component="carousel"] .carousel-track * {
     transition-duration: 0ms !important;
     animation-duration: 0ms !important;

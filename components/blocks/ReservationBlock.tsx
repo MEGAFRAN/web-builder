@@ -7,6 +7,12 @@ import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Stack } from '@/components/layout/Stack'
 import { BOOKING_SLOT_GRID } from '@/lib/booking-slot-grid'
+import {
+  BOOKING_COPY,
+  BOOKING_FIELD_CLASS,
+  formatBookingDate,
+} from '@/lib/booking-public-copy'
+import { ReservationProgress } from '@/components/blocks/ReservationProgress'
 import type {
   ReservationBlock as ReservationBlockProps,
   ReservationServiceItem,
@@ -87,13 +93,6 @@ function parseBookingCatalogRows(raw: unknown): ReservationServiceItem[] {
   }
   return out
 }
-
-const STEPS = [
-  { label: '1 · Service', step: 1 },
-  { label: '2 · Date & time', step: 2 },
-  { label: '3 · Your details', step: 3 },
-  { label: '4 · Confirmed', step: 4 },
-]
 
 export default function ReservationBlock({
   heading,
@@ -224,9 +223,9 @@ export default function ReservationBlock({
   const nameValid = /^[a-zA-ZÀ-ÖØ-öø-ÿ\s'\-]{2,}$/.test(fields.name.trim())
 
   const fieldErrors: Partial<Record<keyof FormFields, string>> = {
-    name: !nameValid ? 'Please enter a full name (at least 2 characters).' : undefined,
-    email: !emailValid ? 'Please enter a valid email address.' : undefined,
-    phone: !phoneValid ? 'Please enter a valid phone number (digits, spaces, +, -, parentheses).' : undefined,
+    name: !nameValid ? BOOKING_COPY.nameError : undefined,
+    email: !emailValid ? BOOKING_COPY.emailError : undefined,
+    phone: !phoneValid ? BOOKING_COPY.phoneError : undefined,
   }
 
   const canSubmit =
@@ -257,7 +256,7 @@ export default function ReservationBlock({
         }),
       })
       if (!res.ok) {
-        let msg = 'Something went wrong. Please try again or call us directly.'
+        let msg = BOOKING_COPY.submitError
         if (res.status === 409) {
           msg = 'This time slot was just taken — please pick another time.'
           setSelectedTime('')
@@ -283,9 +282,7 @@ export default function ReservationBlock({
       })
       setState('success')
     } catch {
-      setErrorMessage(
-        "We couldn't reach our reservations system. Please try again or call us directly.",
-      )
+      setErrorMessage(BOOKING_COPY.networkError)
       setState('error')
     }
   }
@@ -299,23 +296,10 @@ export default function ReservationBlock({
           ? 2
           : 1
 
-  const progressSection = (
-    <ol aria-label="Booking progress" className="flex list-none gap-4 pl-0">
-      {STEPS.map(({ label, step }) => (
-        <li
-          key={step}
-          aria-current={currentStep === step ? 'step' : undefined}
-          className={
-            currentStep === step
-              ? 'text-sm font-medium text-foreground'
-              : 'text-sm text-muted'
-          }
-        >
-          {label}
-        </li>
-      ))}
-    </ol>
-  )
+  const progressSection = <ReservationProgress currentStep={currentStep} />
+
+  const bookingPanelClass =
+    'rounded-[var(--radius)] border border-border bg-surface p-6 shadow-sm md:p-8'
 
   const headingSection =
     (heading || subtext) ? (
@@ -334,43 +318,51 @@ export default function ReservationBlock({
           <Stack gap="md">
             {headingSection}
 
-            {progressSection}
+            <div className={bookingPanelClass} data-component="reservation-panel">
+              <Stack gap="lg">
+                {progressSection}
 
-            <Alert
-              variant="success"
-              title="Reservation confirmed!"
-              message={
-                confirmationMessage ??
-                "We've received your request and will send a confirmation to your email shortly."
-              }
-            />
-            {confirmedBooking && (
-              <dl className="rounded-md border border-border bg-background p-4 text-sm">
-                <div className="flex gap-2 py-1">
-                  <dt className="w-24 shrink-0 font-medium text-foreground">Service</dt>
-                  <dd className="text-muted">{confirmedBooking.serviceSummary}</dd>
-                </div>
-                <div className="flex gap-2 py-1">
-                  <dt className="w-24 shrink-0 font-medium text-foreground">Date</dt>
-                  <dd className="text-muted">
-                    {new Date(confirmedBooking.date + 'T12:00:00').toLocaleDateString('en-GB', {
-                      weekday: 'long',
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    })}
-                  </dd>
-                </div>
-                <div className="flex gap-2 py-1">
-                  <dt className="w-24 shrink-0 font-medium text-foreground">Time</dt>
-                  <dd className="text-muted">{confirmedBooking.time}</dd>
-                </div>
-                <div className="flex gap-2 py-1">
-                  <dt className="w-24 shrink-0 font-medium text-foreground">Confirmation</dt>
-                  <dd className="text-muted">Sent to {confirmedBooking.email}</dd>
-                </div>
-              </dl>
-            )}
+                <Alert
+                  variant="success"
+                  title={BOOKING_COPY.reservationConfirmedTitle}
+                  message={
+                    confirmationMessage ?? BOOKING_COPY.reservationConfirmedFallback
+                  }
+                />
+                {confirmedBooking && (
+                  <dl className="rounded-md border border-border bg-background p-4 text-sm">
+                    <div className="flex gap-2 py-1">
+                      <dt className="w-28 shrink-0 font-medium text-foreground">
+                        {BOOKING_COPY.summaryService}
+                      </dt>
+                      <dd className="text-muted">{confirmedBooking.serviceSummary}</dd>
+                    </div>
+                    <div className="flex gap-2 py-1">
+                      <dt className="w-28 shrink-0 font-medium text-foreground">
+                        {BOOKING_COPY.summaryDate}
+                      </dt>
+                      <dd className="text-muted">
+                        {formatBookingDate(confirmedBooking.date)}
+                      </dd>
+                    </div>
+                    <div className="flex gap-2 py-1">
+                      <dt className="w-28 shrink-0 font-medium text-foreground">
+                        {BOOKING_COPY.summaryTime}
+                      </dt>
+                      <dd className="text-muted">{confirmedBooking.time}</dd>
+                    </div>
+                    <div className="flex gap-2 py-1">
+                      <dt className="w-28 shrink-0 font-medium text-foreground">
+                        {BOOKING_COPY.summaryConfirmation}
+                      </dt>
+                      <dd className="text-muted">
+                        {BOOKING_COPY.summarySentTo} {confirmedBooking.email}
+                      </dd>
+                    </div>
+                  </dl>
+                )}
+              </Stack>
+            </div>
           </Stack>
         </Container>
       </Section>
@@ -384,7 +376,7 @@ export default function ReservationBlock({
           <Stack gap="md">
             {headingSection}
             <p className="text-center text-sm text-muted" role="status" aria-live="polite">
-              Loading services…
+              {BOOKING_COPY.loadingServices}
             </p>
           </Stack>
         </Container>
@@ -400,8 +392,8 @@ export default function ReservationBlock({
             {headingSection}
             <Alert
               variant="error"
-              title="Booking unavailable"
-              message="No services are configured for online booking yet. Please contact us directly."
+              title={BOOKING_COPY.bookingUnavailableTitle}
+              message={BOOKING_COPY.bookingUnavailableMessage}
             />
           </Stack>
         </Container>
@@ -415,14 +407,17 @@ export default function ReservationBlock({
         <Stack gap="md">
           {headingSection}
 
-          {progressSection}
+          <div className={bookingPanelClass} data-component="reservation-panel">
+            <Stack gap="lg">
+              {progressSection}
 
-          <form onSubmit={handleSubmit} noValidate>
-            <Stack gap="md">
+              <form onSubmit={handleSubmit} noValidate>
+                <Stack gap="md">
               {/* Step 0 — Service */}
               <div className="flex flex-col gap-2">
                 <span id="res-service-label" className="text-sm font-medium text-foreground">
-                  Service <span className="text-destructive">*</span>
+                  {BOOKING_COPY.serviceLabel}{' '}
+                  <span className="text-destructive">*</span>
                 </span>
                 <div
                   role="group"
@@ -441,13 +436,29 @@ export default function ReservationBlock({
                         aria-label={`${service.name}, ${service.durationMinutes} minutes, ${priceLabel}`}
                         onClick={() => selectService(service.id)}
                         className={[
-                          'flex flex-col gap-1 rounded-md border px-3 py-3 text-left transition-colors',
+                          'relative flex flex-col gap-1 rounded-md border px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
                           pressed
-                            ? 'border-primary bg-background shadow-sm'
-                            : 'border-border bg-background hover:border-primary hover:text-primary',
+                            ? 'border-2 border-primary bg-muted-bg shadow-sm'
+                            : 'border border-border bg-background hover:border-primary hover:bg-muted-bg',
                         ].join(' ')}
                       >
-                        <span className="text-base font-semibold text-foreground">{service.name}</span>
+                        {pressed ? (
+                          <span
+                            aria-hidden="true"
+                            className="absolute right-2 top-2 text-primary"
+                          >
+                            ✓
+                          </span>
+                        ) : null}
+                        <span
+                          className={
+                            pressed
+                              ? 'text-base font-bold text-primary'
+                              : 'text-base font-semibold text-foreground'
+                          }
+                        >
+                          {service.name}
+                        </span>
                         <span className="text-xs text-muted">
                           {service.durationMinutes} min · {priceLabel}
                         </span>
@@ -466,11 +477,13 @@ export default function ReservationBlock({
               {selectedServiceId && (
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="res-date" className="text-sm font-medium text-foreground">
-                    Date <span className="text-destructive">*</span>
+                    {BOOKING_COPY.dateLabel}{' '}
+                    <span className="text-destructive">*</span>
                   </label>
                   <input
                     id="res-date"
                     type="date"
+                    lang="es"
                     required
                     min={todayISODate()}
                     value={selectedDate}
@@ -480,7 +493,7 @@ export default function ReservationBlock({
                       setBookedSlots([])
                       setOutOfWindowSlots([])
                     }}
-                    className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    className={BOOKING_FIELD_CLASS}
                   />
                 </div>
               )}
@@ -489,7 +502,8 @@ export default function ReservationBlock({
               {selectedServiceId && selectedDate && (
                 <div className="flex flex-col gap-2">
                   <span id="res-time-label" className="text-sm font-medium text-foreground">
-                    Time <span className="text-destructive">*</span>
+                    {BOOKING_COPY.timeLabel}{' '}
+                    <span className="text-destructive">*</span>
                     {loadingSlots && (
                       <span
                         role="status"
@@ -497,7 +511,7 @@ export default function ReservationBlock({
                         aria-atomic="true"
                         className="ml-2 text-xs font-normal text-muted"
                       >
-                        Checking availability…
+                        {BOOKING_COPY.checkingAvailability}
                       </span>
                     )}
                   </span>
@@ -527,11 +541,11 @@ export default function ReservationBlock({
                           aria-pressed={!isCovered && selectedTime === slot}
                           aria-label={
                             isOutOfWindow
-                              ? `${slot} – outside opening hours for this service`
+                              ? `${slot} ${BOOKING_COPY.slotOutsideHoursAria}`
                               : isBooked
-                                ? `${slot} – fully booked`
+                                ? `${slot} ${BOOKING_COPY.slotBookedAria}`
                                 : isCovered
-                                  ? `${slot} – within your selected booking`
+                                  ? `${slot} ${BOOKING_COPY.slotCoveredAria}`
                                   : slot
                           }
                           onClick={() => {
@@ -552,16 +566,22 @@ export default function ReservationBlock({
                           ].join(' ')}
                         >
                           {slot}
-                          {isBooked && <span className="sr-only"> (full)</span>}
-                          {isOutOfWindow && <span className="sr-only"> (outside hours)</span>}
-                          {isCovered && <span className="sr-only"> (within your booking)</span>}
+                          {isBooked && (
+                            <span className="sr-only"> ({BOOKING_COPY.slotFull})</span>
+                          )}
+                          {isOutOfWindow && (
+                            <span className="sr-only"> ({BOOKING_COPY.slotOutsideHours})</span>
+                          )}
+                          {isCovered && (
+                            <span className="sr-only"> ({BOOKING_COPY.slotWithinBooking})</span>
+                          )}
                         </button>
                       )
                     })}
                   </div>
                   {endTime && selectedService && (
                     <p className="text-xs text-muted">
-                      Selected:{' '}
+                      {BOOKING_COPY.selectedRange}{' '}
                       <span className="font-medium text-foreground">
                         {selectedTime} – {endTime}
                       </span>{' '}
@@ -577,7 +597,8 @@ export default function ReservationBlock({
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="res-name" className="text-sm font-medium text-foreground">
-                      Full name <span className="text-destructive">*</span>
+                      {BOOKING_COPY.fullNameLabel}{' '}
+                      <span className="text-destructive">*</span>
                     </label>
                     <input
                       id="res-name"
@@ -591,7 +612,7 @@ export default function ReservationBlock({
                       aria-invalid={touched.name && !!fieldErrors.name}
                       onChange={e => updateField('name', e.target.value)}
                       onBlur={() => touchField('name')}
-                      placeholder="Jane Smith"
+                      placeholder={BOOKING_COPY.namePlaceholder}
                       className={[
                         'rounded-md border bg-background px-3 py-2 text-sm text-foreground placeholder-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
                         touched.name && fieldErrors.name
@@ -608,7 +629,8 @@ export default function ReservationBlock({
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="res-email" className="text-sm font-medium text-foreground">
-                      Email <span className="text-destructive">*</span>
+                      {BOOKING_COPY.emailLabel}{' '}
+                      <span className="text-destructive">*</span>
                     </label>
                     <input
                       id="res-email"
@@ -624,7 +646,7 @@ export default function ReservationBlock({
                       aria-invalid={touched.email && !!fieldErrors.email}
                       onChange={e => updateField('email', e.target.value)}
                       onBlur={() => touchField('email')}
-                      placeholder="jane@example.com"
+                      placeholder={BOOKING_COPY.emailPlaceholder}
                       className={[
                         'rounded-md border bg-background px-3 py-2 text-sm text-foreground placeholder-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
                         touched.email && fieldErrors.email
@@ -641,7 +663,8 @@ export default function ReservationBlock({
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="res-phone" className="text-sm font-medium text-foreground">
-                      Phone <span className="text-destructive">*</span>
+                      {BOOKING_COPY.phoneLabel}{' '}
+                      <span className="text-destructive">*</span>
                     </label>
                     <input
                       id="res-phone"
@@ -657,7 +680,7 @@ export default function ReservationBlock({
                       aria-invalid={touched.phone && !!fieldErrors.phone}
                       onChange={e => updateField('phone', e.target.value)}
                       onBlur={() => touchField('phone')}
-                      placeholder="+34 600 000 000"
+                      placeholder={BOOKING_COPY.phonePlaceholder}
                       className={[
                         'rounded-md border bg-background px-3 py-2 text-sm text-foreground placeholder-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
                         touched.phone && fieldErrors.phone
@@ -674,21 +697,25 @@ export default function ReservationBlock({
 
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="res-notes" className="text-sm font-medium text-foreground">
-                      Special requests{' '}
-                      <span className="font-normal text-muted">(optional)</span>
+                      {BOOKING_COPY.specialRequestsLabel}{' '}
+                      <span className="font-normal text-muted">{BOOKING_COPY.optional}</span>
                     </label>
                     <textarea
                       id="res-notes"
                       rows={3}
                       value={fields.notes}
                       onChange={e => updateField('notes', e.target.value)}
-                      placeholder="Allergies, accessibility needs, occasion…"
+                      placeholder={BOOKING_COPY.notesPlaceholder}
                       className="resize-none rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     />
                   </div>
 
                   <Button
-                    label={state === 'submitting' ? 'Confirming…' : 'Confirm reservation'}
+                    label={
+                      state === 'submitting'
+                        ? BOOKING_COPY.confirming
+                        : BOOKING_COPY.confirmReservation
+                    }
                     variant="primary"
                     size="lg"
                     disabled={state === 'submitting' || !canSubmit}
@@ -699,8 +726,10 @@ export default function ReservationBlock({
               {state === 'error' && errorMessage && (
                 <Alert variant="error" message={errorMessage} />
               )}
+                </Stack>
+              </form>
             </Stack>
-          </form>
+          </div>
         </Stack>
       </Container>
     </Section>

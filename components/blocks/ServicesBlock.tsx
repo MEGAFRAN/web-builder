@@ -356,14 +356,83 @@ function ServiceSubItemsModalList({
   )
 }
 
+function getSubItemSummary(item: ServiceSubItem): string | null {
+  const lines = item.description?.items ?? []
+  const line = lines.find((entry) => entry.trim() !== '')
+  return line?.trim() ?? null
+}
+
+function MenuLayout({
+  heading,
+  items,
+}: {
+  heading?: string | null
+  items: Service[]
+}) {
+  return (
+    <Section paddingY="lg">
+      <Container maxWidth="2xl" padding="theme">
+        <section data-component="services-block" data-layout="menu">
+          <Stack gap="xl">
+            {heading != null && heading !== '' && (
+              <h2 className="text-center text-4xl font-bold tracking-tight text-brand">
+                {heading}
+              </h2>
+            )}
+            {items.map((service, i) => (
+              <div key={i}>
+                <h2 className="text-3xl font-bold tracking-tight text-brand">
+                  {service.title}
+                </h2>
+                <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {(service.subItems ?? []).map((raw, j) => {
+                    const item = normalizeSubItem(raw)
+                    const rows = getSubItemPricingRows(item)
+                    const price = rows[0]?.price ?? item.price
+                    const summary = getSubItemSummary(item)
+
+                    return (
+                      <article
+                        key={j}
+                        className="rounded-[var(--radius)] border border-border bg-surface p-5"
+                      >
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {item.label}
+                        </h3>
+                        {summary ? (
+                          <p className="mt-2 text-base text-muted">{summary}</p>
+                        ) : null}
+                        {price != null && price !== '' ? (
+                          <p className="mt-3 text-right text-sm font-medium text-foreground">
+                            {price}
+                          </p>
+                        ) : null}
+                      </article>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </Stack>
+        </section>
+      </Container>
+    </Section>
+  )
+}
+
 export default function ServicesBlock({
   heading,
   items,
+  layout,
   showModal,
   moreInfoLabel,
   bookingUrl,
 }: ServicesBlockType) {
   const useModal = Boolean(showModal)
+
+  if (layout === 'menu') {
+    return <MenuLayout heading={heading} items={items} />
+  }
 
   return (
     <Section paddingY="lg">

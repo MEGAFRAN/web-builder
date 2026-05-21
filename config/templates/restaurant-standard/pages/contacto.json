@@ -1,23 +1,19 @@
 {
   "metadata": {
-    "title": "Reservas y Contacto",
-    "description": "Reserva tu mesa en Restaurante Pepe. Llámanos al +34 91 234 56 78 o escríbenos. Confirmamos en menos de 2 horas.",
+    "title": "Contacto",
+    "description": "Llámanos, escríbenos o envíanos un mensaje. Respondemos en menos de 1 día laborable.",
     "ogImage": null,
     "noIndex": false
   },
   "blocks": [
     {
-      "_type": "breadcrumb",
-      "items": [
-        { "label": "Inicio", "href": "/" },
-        { "label": "Contacto", "href": null }
-      ]
-    },
-    {
       "_type": "hero",
-      "title": "Reservas y contacto",
-      "subtitle": "Llámanos, escríbenos o rellena el formulario. Confirmamos tu reserva en menos de 2 horas.",
-      "cta": null
+      "title": "Contacto",
+      "subtitle": "Llámanos, escríbenos o envíanos un mensaje.",
+      "cta": {
+        "label": "Reservar mesa online",
+        "href": "/reservas"
+      }
     },
     {
       "_type": "contactInfoBlock",
@@ -31,29 +27,6 @@
       "title": null,
       "showMap": true,
       "mapEmbedSrc": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2892.0756826796364!2d-5.679199624264863!3d43.54246425958653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd367c5c7ff245dd%3A0xf50227a590c950ac!2sBioparc%20Acuario%20de%20Gij%C3%B3n!5e0!3m2!1ses!2ses!4v1778609450387!5m2!1ses!2ses"
-    },
-    {
-      "_type": "faqBlock",
-      "title": "Preguntas frecuentes",
-      "context": "reservations",
-      "items": [
-        {
-          "question": "¿Cuánto tiempo con antelación debo reservar?",
-          "answer": "Para fines de semana y festivos recomendamos reservar con al menos 48 horas de antelación. Entre semana solemos tener disponibilidad el mismo día."
-        },
-        {
-          "question": "¿Admitís grupos grandes?",
-          "answer": "Sí, disponemos de un salón privado para grupos de hasta 40 personas. Para grupos de más de 10 personas contactad directamente por teléfono."
-        },
-        {
-          "question": "¿Tenéis opciones vegetarianas o sin gluten?",
-          "answer": "Contamos con varios platos vegetarianos y adaptamos el menú para alergias e intolerancias. Indicadlo al reservar para prepararlo con antelación."
-        },
-        {
-          "question": "¿Se puede aparcar cerca?",
-          "answer": "Hay un parking público a 100 metros en la Calle Arenal. También hay zona de aparcamiento regulado en las calles adyacentes."
-        }
-      ]
     }
   ]
 }

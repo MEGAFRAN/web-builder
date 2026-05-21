@@ -286,6 +286,11 @@ export function Carousel({
    * Non-active slides use `inert` + `visibility: hidden`.
    */
   function getSlideStyle(index: number): React.CSSProperties {
+    if (carouselMode === 'testimonial') {
+      return {
+        display: index === active ? 'block' : 'none',
+      }
+    }
     if (transitionType === 'fade') {
       return {
         opacity: index === active ? 1 : 0,
@@ -373,10 +378,9 @@ export function Carousel({
           inert={!isActive ? true : undefined}
           className="flex items-center justify-center"
         >
-          <blockquote className="w-full rounded-xl border border-border bg-background p-8">
-            <Stack gap="lg">
-
-              <p className="text-lg leading-relaxed text-foreground">
+          <blockquote className="mx-auto w-full max-w-2xl rounded-xl border border-border bg-background p-6">
+            <Stack gap="md">
+              <p className="text-center text-xl italic leading-relaxed text-foreground">
                 {item.quote}
               </p>
               {starCount > 0 && (
@@ -445,7 +449,9 @@ export function Carousel({
   const trackHeightStyle: React.CSSProperties =
     carouselMode === 'image'
       ? { aspectRatio: aspectRatio ?? '16/9' }
-      : { minHeight: '300px' }
+      : carouselMode === 'testimonial'
+        ? {}
+        : { minHeight: '300px' }
 
   // ---------------------------------------------------------------------------
   // Render
@@ -466,7 +472,7 @@ export function Carousel({
           <Stack gap="md">
             {/* Section title */}
             {title && (
-              <h2 className="text-center text-3xl font-bold text-foreground">
+              <h2 className="text-center text-4xl font-bold tracking-tight text-brand">
                 {title}
               </h2>
             )}

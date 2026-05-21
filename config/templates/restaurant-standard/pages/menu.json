@@ -7,44 +7,107 @@
   },
   "blocks": [
     {
-      "_type": "breadcrumb",
-      "items": [
-        { "label": "Inicio", "href": "/" },
-        { "label": "Menú", "href": null }
-      ]
-    },
-    {
       "_type": "hero",
       "title": "Nuestra carta",
       "subtitle": "Platos elaborados con ingredientes frescos de temporada. Cada semana actualizamos la carta del día.",
-      "cta": { "label": "Reservar mesa", "href": "/contacto" }
+      "cta": { "label": "Reservar mesa", "href": "/reservas" }
     },
     {
       "_type": "services",
+      "layout": "menu",
       "items": [
         {
           "title": "Entrantes",
-          "description": "Croquetas caseras de jamón ibérico, Jamón de bellota D.O. Jabugo, Patatas bravas con alioli de ajo negro, Pulpo a la gallega con pimentón de La Vera.",
-          "imageUrl": "https://picsum.photos/seed/menu-entrantes/800/450",
-          "imageAlt": "Selección de entrantes"
+          "description": "",
+          "imageUrl": null,
+          "subItems": [
+            {
+              "label": "Croquetas caseras de jamón ibérico",
+              "description": { "title": "", "items": ["Cremosas por dentro, crujientes por fuera."] }
+            },
+            {
+              "label": "Jamón de bellota D.O. Jabugo",
+              "description": { "title": "", "items": ["Corte fino servido a temperatura."] }
+            },
+            {
+              "label": "Patatas bravas con alioli de ajo negro",
+              "description": { "title": "", "items": ["Picante suave y alioli aromático."] }
+            },
+            {
+              "label": "Pulpo a la gallega con pimentón de La Vera",
+              "description": { "title": "", "items": ["Tierno, con aceite de oliva y cachelos."] }
+            }
+          ]
         },
         {
           "title": "Pescados",
-          "description": "Merluza a la vasca con almejas, Bacalao al pil-pil, Rodaballo al horno con verduras de temporada, Paella de mariscos (para 2 personas).",
-          "imageUrl": "https://picsum.photos/seed/menu-pescados/800/450",
-          "imageAlt": "Platos de pescado"
+          "description": "",
+          "imageUrl": null,
+          "subItems": [
+            {
+              "label": "Merluza a la vasca con almejas",
+              "description": { "title": "", "items": ["En salsa verde con vino blanco."] }
+            },
+            {
+              "label": "Bacalao al pil-pil",
+              "description": { "title": "", "items": ["Emulsión clásica de ajo y aceite."] }
+            },
+            {
+              "label": "Rodaballo al horno con verduras de temporada",
+              "description": { "title": "", "items": ["Pescado del día con guarnición de mercado."] }
+            },
+            {
+              "label": "Paella de mariscos (para 2 personas)",
+              "description": { "title": "", "items": ["Arroz seco con marisco fresco; mínimo dos comensales."] },
+              "price": "48 €"
+            }
+          ]
         },
         {
           "title": "Carnes",
-          "description": "Cocido madrileño (jueves), Cordero asado al horno de leña, Solomillo de ternera con salsa de boletus, Carrilleras de cerdo ibérico estofadas.",
-          "imageUrl": "https://picsum.photos/seed/menu-carnes/800/450",
-          "imageAlt": "Carnes y guisos"
+          "description": "",
+          "imageUrl": null,
+          "subItems": [
+            {
+              "label": "Cocido madrileño (jueves)",
+              "description": { "title": "", "items": ["Servido en tres vuelcos; solo los jueves."] }
+            },
+            {
+              "label": "Cordero asado al horno de leña",
+              "description": { "title": "", "items": ["Cocción lenta con hierbas aromáticas."] }
+            },
+            {
+              "label": "Solomillo de ternera con salsa de boletus",
+              "description": { "title": "", "items": ["Punto de cocción a elegir."] }
+            },
+            {
+              "label": "Carrilleras de cerdo ibérico estofadas",
+              "description": { "title": "", "items": ["Melosas, con puré de patata."] }
+            }
+          ]
         },
         {
           "title": "Postres",
-          "description": "Tarta de queso de La Viña, Tocino de cielo casero, Natillas de vainilla con galleta María, Fresones de temporada con nata.",
-          "imageUrl": "https://picsum.photos/seed/menu-postres/800/450",
-          "imageAlt": "Postres caseros"
+          "description": "",
+          "imageUrl": null,
+          "subItems": [
+            {
+              "label": "Tarta de queso de La Viña",
+              "description": { "title": "", "items": ["Receta vasca, horneada al momento."] }
+            },
+            {
+              "label": "Tocino de cielo casero",
+              "description": { "title": "", "items": ["Yema confitada con almíbar ligero."] }
+            },
+            {
+              "label": "Natillas de vainilla con galleta María",
+              "description": { "title": "", "items": ["Cremosas, con canela."] }
+            },
+            {
+              "label": "Fresones de temporada con nata",
+              "description": { "title": "", "items": ["Según mercado de primavera."] }
+            }
+          ]
         }
       ]
     },
@@ -56,7 +119,7 @@
       "headline": "Menú del día a 14,50 €",
       "subtext": "Incluye primero, segundo, postre, pan y bebida. Disponible de lunes a viernes al mediodía.",
       "ctaLabel": "Reservar",
-      "ctaHref": "/contacto",
+      "ctaHref": "/reservas",
       "background": "white"
     }
   ]
