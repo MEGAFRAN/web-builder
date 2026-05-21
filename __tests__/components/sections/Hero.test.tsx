@@ -86,7 +86,7 @@ describe('Hero', () => {
     it('applies border button classes to the secondary button', () => {
       const container = renderHero({ headline: 'H', secondaryLabel: 'Learn More' })
       const btn = container.querySelector('button')
-      expect(btn?.className).toContain('border-border')
+      expect(btn?.className).toContain('border-primary')
     })
 
     it('renders both CTA and secondary buttons when both labels are provided', () => {

@@ -30,10 +30,10 @@ describe('Card', () => {
       expect(getRoot(container)).not.toBeNull()
     })
 
-    it('always applies rounded-lg and bg-background base classes', () => {
+    it('always applies rounded-lg and bg-surface base classes', () => {
       const container = renderCard()
       expect(getRoot(container).className).toContain('rounded-lg')
-      expect(getRoot(container).className).toContain('bg-background')
+      expect(getRoot(container).className).toContain('bg-surface')
     })
   })
 
@@ -120,14 +120,15 @@ describe('Card', () => {
   })
 
   describe('border prop', () => {
-    it('renders with a border by default when border is omitted', () => {
+    it('renders with shadow-sm instead of a border by default', () => {
       const container = renderCard()
-      expect(getRoot(container).className).toContain('border')
+      expect(getRoot(container).className).toContain('shadow-sm')
+      expect(getRoot(container).className).not.toContain('border-border')
     })
 
-    it('renders with a border when border={true}', () => {
+    it('renders with shadow-sm when border={true}', () => {
       const container = renderCard({ border: true })
-      expect(getRoot(container).className).toContain('border')
+      expect(getRoot(container).className).toContain('shadow-sm')
     })
 
     it('does not render a border when border={false}', () => {
@@ -136,10 +137,9 @@ describe('Card', () => {
       expect(getRoot(container).className).not.toContain('border-border')
     })
 
-    it('renders with a border when border={null} (truthy default)', () => {
-      // border !== false → showBorder is true
+    it('renders with shadow-sm when border={null}', () => {
       const container = renderCard({ border: null })
-      expect(getRoot(container).className).toContain('border')
+      expect(getRoot(container).className).toContain('shadow-sm')
     })
   })
 

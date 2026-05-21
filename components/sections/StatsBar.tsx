@@ -10,7 +10,7 @@ const bgMap: Record<string, "white" | "gray" | "dark"> = {
 };
 
 const valueColorMap: Record<string, string> = {
-  white: "text-foreground",
+  white: "text-brand",
   gray: "text-foreground",
   dark: "text-primary-fg",
 };

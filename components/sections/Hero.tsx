@@ -27,12 +27,12 @@ export function Hero({
           {(ctaLabel || secondaryLabel) && (
             <div className="flex flex-wrap gap-3">
               {ctaLabel && (
-                <button className="rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-fg hover:opacity-90">
+                <button className="rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90">
                   {ctaLabel}
                 </button>
               )}
               {secondaryLabel && (
-                <button className="rounded-md border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-muted-bg">
+                <button className="rounded-md border border-primary px-6 py-3 text-sm font-medium text-foreground hover:bg-muted-bg">
                   {secondaryLabel}
                 </button>
               )}

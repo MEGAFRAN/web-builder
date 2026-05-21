@@ -384,7 +384,17 @@ function MenuLayout({
                 <h2 className="text-3xl font-bold tracking-tight text-brand">
                   {service.title}
                 </h2>
-                <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {service.imageUrl != null && service.imageUrl !== '' && (
+                  <div className="relative mt-4 aspect-[16/9] w-full overflow-hidden rounded-[var(--radius)]">
+                    <Image
+                      src={service.imageUrl}
+                      fill
+                      objectFit="cover"
+                      alt={service.title}
+                    />
+                  </div>
+                )}
+                <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 items-stretch">
                   {(service.subItems ?? []).map((raw, j) => {
                     const item = normalizeSubItem(raw)
                     const rows = getSubItemPricingRows(item)
@@ -394,7 +404,7 @@ function MenuLayout({
                     return (
                       <article
                         key={j}
-                        className="rounded-[var(--radius)] border border-border bg-surface p-5"
+                        className="flex flex-col rounded-[var(--radius)] bg-surface shadow-sm p-5"
                       >
                         <h3 className="text-lg font-semibold text-foreground">
                           {item.label}

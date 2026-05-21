@@ -63,7 +63,7 @@
     },
     {
       "_type": "statsBlock",
-      "background": "gray",
+      "background": "white",
       "stats": [
         { "value": "1993", "label": "Año de apertura" },
         { "value": "3ª", "label": "Generación familiar" },

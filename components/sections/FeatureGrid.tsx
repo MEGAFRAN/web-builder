@@ -48,7 +48,7 @@ export function FeatureGrid({ title, subtitle, features, cols }: FeatureGridProp
             )}
             <div className={`grid ${colsClass} gap-8`}>
               {features?.map((f, i) => (
-                <div key={i} className="flex flex-col gap-3">
+                <div key={i} className="flex flex-col h-full gap-3 rounded-[var(--radius)] bg-surface shadow-sm p-6">
                   {f.icon && <span className="text-2xl">{f.icon}</span>}
                   <h3 className="text-xl font-semibold text-foreground">{f.title}</h3>
                   <p className="text-base text-muted">{f.description}</p>

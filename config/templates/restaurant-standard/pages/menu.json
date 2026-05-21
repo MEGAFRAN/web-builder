@@ -9,8 +9,7 @@
     {
       "_type": "hero",
       "title": "Nuestra carta",
-      "subtitle": "Platos elaborados con ingredientes frescos de temporada. Cada semana actualizamos la carta del día.",
-      "cta": { "label": "Reservar mesa", "href": "/reservas" }
+      "subtitle": "Platos elaborados con ingredientes frescos de temporada. Cada semana actualizamos la carta del día."
     },
     {
       "_type": "services",
@@ -19,42 +18,49 @@
         {
           "title": "Entrantes",
           "description": "",
-          "imageUrl": null,
+          "imageUrl": "https://picsum.photos/seed/menu-entrantes/800/400",
           "subItems": [
             {
               "label": "Croquetas caseras de jamón ibérico",
-              "description": { "title": "", "items": ["Cremosas por dentro, crujientes por fuera."] }
+              "description": { "title": "", "items": ["Cremosas por dentro, crujientes por fuera."] },
+              "price": "9 €"
             },
             {
               "label": "Jamón de bellota D.O. Jabugo",
-              "description": { "title": "", "items": ["Corte fino servido a temperatura."] }
+              "description": { "title": "", "items": ["Corte fino servido a temperatura."] },
+              "price": "14 €"
             },
             {
               "label": "Patatas bravas con alioli de ajo negro",
-              "description": { "title": "", "items": ["Picante suave y alioli aromático."] }
+              "description": { "title": "", "items": ["Picante suave y alioli aromático."] },
+              "price": "8 €"
             },
             {
               "label": "Pulpo a la gallega con pimentón de La Vera",
-              "description": { "title": "", "items": ["Tierno, con aceite de oliva y cachelos."] }
+              "description": { "title": "", "items": ["Tierno, con aceite de oliva y cachelos."] },
+              "price": "13 €"
             }
           ]
         },
         {
           "title": "Pescados",
           "description": "",
-          "imageUrl": null,
+          "imageUrl": "https://picsum.photos/seed/menu-pescados/800/400",
           "subItems": [
             {
               "label": "Merluza a la vasca con almejas",
-              "description": { "title": "", "items": ["En salsa verde con vino blanco."] }
+              "description": { "title": "", "items": ["En salsa verde con vino blanco."] },
+              "price": "22 €"
             },
             {
               "label": "Bacalao al pil-pil",
-              "description": { "title": "", "items": ["Emulsión clásica de ajo y aceite."] }
+              "description": { "title": "", "items": ["Emulsión clásica de ajo y aceite."] },
+              "price": "20 €"
             },
             {
               "label": "Rodaballo al horno con verduras de temporada",
-              "description": { "title": "", "items": ["Pescado del día con guarnición de mercado."] }
+              "description": { "title": "", "items": ["Pescado del día con guarnición de mercado."] },
+              "price": "26 €"
             },
             {
               "label": "Paella de mariscos (para 2 personas)",
@@ -66,46 +72,54 @@
         {
           "title": "Carnes",
           "description": "",
-          "imageUrl": null,
+          "imageUrl": "https://picsum.photos/seed/menu-carnes/800/400",
           "subItems": [
             {
               "label": "Cocido madrileño (jueves)",
-              "description": { "title": "", "items": ["Servido en tres vuelcos; solo los jueves."] }
+              "description": { "title": "", "items": ["Servido en tres vuelcos; solo los jueves."] },
+              "price": "16 €"
             },
             {
               "label": "Cordero asado al horno de leña",
-              "description": { "title": "", "items": ["Cocción lenta con hierbas aromáticas."] }
+              "description": { "title": "", "items": ["Cocción lenta con hierbas aromáticas."] },
+              "price": "22 €"
             },
             {
               "label": "Solomillo de ternera con salsa de boletus",
-              "description": { "title": "", "items": ["Punto de cocción a elegir."] }
+              "description": { "title": "", "items": ["Punto de cocción a elegir."] },
+              "price": "24 €"
             },
             {
               "label": "Carrilleras de cerdo ibérico estofadas",
-              "description": { "title": "", "items": ["Melosas, con puré de patata."] }
+              "description": { "title": "", "items": ["Melosas, con puré de patata."] },
+              "price": "18 €"
             }
           ]
         },
         {
           "title": "Postres",
           "description": "",
-          "imageUrl": null,
+          "imageUrl": "https://picsum.photos/seed/menu-postres/800/400",
           "subItems": [
             {
               "label": "Tarta de queso de La Viña",
-              "description": { "title": "", "items": ["Receta vasca, horneada al momento."] }
+              "description": { "title": "", "items": ["Receta vasca, horneada al momento."] },
+              "price": "7 €"
             },
             {
               "label": "Tocino de cielo casero",
-              "description": { "title": "", "items": ["Yema confitada con almíbar ligero."] }
+              "description": { "title": "", "items": ["Yema confitada con almíbar ligero."] },
+              "price": "6 €"
             },
             {
               "label": "Natillas de vainilla con galleta María",
-              "description": { "title": "", "items": ["Cremosas, con canela."] }
+              "description": { "title": "", "items": ["Cremosas, con canela."] },
+              "price": "6 €"
             },
             {
               "label": "Fresones de temporada con nata",
-              "description": { "title": "", "items": ["Según mercado de primavera."] }
+              "description": { "title": "", "items": ["Según mercado de primavera."] },
+              "price": "8 €"
             }
           ]
         }
