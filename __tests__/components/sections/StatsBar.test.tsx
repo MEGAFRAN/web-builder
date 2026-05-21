@@ -23,7 +23,7 @@ const STATS_4 = [
 ]
 
 const BACKGROUND_CASES = [
-  ['white', 'text-foreground', 'text-muted'],
+  ['white', 'text-brand',      'text-muted'],
   ['gray',  'text-foreground', 'text-muted'],
   ['dark',  'text-primary-fg', 'text-primary-fg-muted'],
 ] as const
@@ -95,13 +95,13 @@ describe('StatsBar', () => {
     it('defaults to white background when background is omitted', () => {
       renderStatsBar({ stats: [{ value: '1', label: 'Thing' }] })
       const dt = screen.getByText('1').closest('dt')!
-      expect(dt.className).toContain('text-foreground')
+      expect(dt.className).toContain('text-brand')
     })
 
     it('defaults to white background when background={null}', () => {
       renderStatsBar({ stats: [{ value: '1', label: 'Thing' }], background: null })
       const dt = screen.getByText('1').closest('dt')!
-      expect(dt.className).toContain('text-foreground')
+      expect(dt.className).toContain('text-brand')
     })
 
     it('falls back to white for an unrecognised background value', () => {

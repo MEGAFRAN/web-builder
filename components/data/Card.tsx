@@ -15,11 +15,10 @@ interface CardProps {
   children?: ReactNode;
 }
 
-export function Card({ title, description, footer, padding, border, children }: CardProps) {
+export function Card({ title, description, footer, padding, children }: CardProps) {
   const paddingClass = paddingMap[padding ?? "md"] ?? "p-6";
-  const showBorder = border !== false;
   return (
-    <div data-component="card" className={`rounded-lg bg-background ${showBorder ? "border border-border" : ""} ${paddingClass}`}>
+    <div data-component="card" className={`flex flex-col h-full rounded-lg bg-surface shadow-sm ${paddingClass}`}>
       {title && (
         <h3 className="mb-2 text-lg font-semibold text-foreground">{title}</h3>
       )}
