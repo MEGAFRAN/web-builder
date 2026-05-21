@@ -51,7 +51,7 @@ describe('StatsBar', () => {
     it('renders the value for each stat as a <dt>', () => {
       renderStatsBar({ stats: STATS_4 })
       STATS_4.forEach(({ value }) => {
-        expect(screen.getByText(value).tagName).toBe('DT')
+        expect(screen.getByText(value).closest('dt')).not.toBeNull()
       })
     })
 
@@ -85,7 +85,7 @@ describe('StatsBar', () => {
       'background="%s" applies "%s" to value and "%s" to label',
       (background, valueClass, labelClass) => {
         renderStatsBar({ stats: [{ value: '100', label: 'Things' }], background })
-        const dt = screen.getByText('100')
+        const dt = screen.getByText('100').closest('dt')!
         const dd = screen.getByText('Things')
         expect(dt.className).toContain(valueClass)
         expect(dd.className).toContain(labelClass)
@@ -94,19 +94,19 @@ describe('StatsBar', () => {
 
     it('defaults to white background when background is omitted', () => {
       renderStatsBar({ stats: [{ value: '1', label: 'Thing' }] })
-      const dt = screen.getByText('1')
+      const dt = screen.getByText('1').closest('dt')!
       expect(dt.className).toContain('text-foreground')
     })
 
     it('defaults to white background when background={null}', () => {
       renderStatsBar({ stats: [{ value: '1', label: 'Thing' }], background: null })
-      const dt = screen.getByText('1')
+      const dt = screen.getByText('1').closest('dt')!
       expect(dt.className).toContain('text-foreground')
     })
 
     it('falls back to white for an unrecognised background value', () => {
       renderStatsBar({ stats: [{ value: '1', label: 'Thing' }], background: 'purple' })
-      const dt = screen.getByText('1')
+      const dt = screen.getByText('1').closest('dt')!
       expect(dt.className).toContain('text-foreground')
     })
   })

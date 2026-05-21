@@ -23,10 +23,10 @@ export function CTA({
   const bg = bgMap[background ?? "gray"];
   const isDark = background === "dark";
   return (
-    <Section background={bg} paddingY="xl">
+    <Section background={bg} paddingY="lg">
       <Container maxWidth="xl" padding="theme">
         <div data-component="cta" className="flex flex-col items-center gap-6 text-center">
-          <h2 className={`text-3xl font-bold ${isDark ? "text-primary-fg" : "text-foreground"}`}>{headline}</h2>
+          <h2 className={`text-4xl font-bold tracking-tight ${isDark ? "text-primary-fg" : "text-brand"}`}>{headline}</h2>
           {subtext && <p className={`max-w-xl text-lg ${isDark ? "text-primary-fg-muted" : "text-muted"}`}>{subtext}</p>}
           <button className={`rounded-md px-6 py-3 text-sm font-medium ${isDark ? "bg-background text-foreground hover:bg-muted-bg" : "bg-primary text-primary-fg hover:opacity-90"}`}>
             {ctaLabel}

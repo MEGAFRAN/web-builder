@@ -39,6 +39,19 @@ describe('Navbar', () => {
       const container = renderNavbar({ logo: 'Acme' })
       expect(desktopNav(container)).not.toBeNull()
     })
+
+    it('uses surface background and resting shadow for separation from page content', () => {
+      const container = renderNavbar({ logo: 'Acme' })
+      const nav = desktopNav(container)
+      expect(nav.className).toContain('bg-surface')
+      expect(nav.className).toContain('shadow-[')
+    })
+
+    it('is sticky at the top of the viewport', () => {
+      const container = renderNavbar({ logo: 'Acme' })
+      expect(desktopNav(container).className).toContain('sticky')
+      expect(desktopNav(container).className).toContain('top-0')
+    })
   })
 
   describe('logo', () => {
@@ -52,6 +65,23 @@ describe('Navbar', () => {
       const logoLink = screen.getByRole('link', { name: 'Acme Corp' })
       expect(logoLink).toBeInTheDocument()
       expect(logoLink).toHaveAttribute('href', '/')
+    })
+
+    it('applies brand heading typography to the logo link', () => {
+      renderNavbar({ logo: 'Acme Corp' })
+      const logoLink = screen.getByRole('link', { name: 'Acme Corp' })
+      expect(logoLink.className).toContain('text-brand')
+      expect(logoLink.className).toContain('font-[family-name:var(--font-heading)]')
+    })
+  })
+
+  describe('desktop nav links', () => {
+    it('renders NavLink components with hover and focus affordances', () => {
+      renderNavbar({ logo: 'Acme', links: twoLinks })
+      const about = screen.getByRole('link', { name: 'About' })
+      expect(about.getAttribute('data-component')).toBe('nav-link')
+      expect(about.className).toContain('transition-colors')
+      expect(about.className).toContain('hover:text-primary')
     })
   })
 
@@ -143,7 +173,10 @@ describe('Navbar', () => {
       expect(screen.getByRole('link', { name: 'Acme' })).toHaveAttribute('href', '/')
       expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/about')
       expect(screen.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', '/contact')
-      expect(screen.getByRole('button', { name: 'Get Started' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Get Started' })).toHaveAttribute(
+        'href',
+        '/signup',
+      )
     })
 
     it('renders exactly logo + nav links in the desktop bar, with hamburger + CTA as buttons', () => {

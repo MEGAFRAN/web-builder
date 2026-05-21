@@ -116,13 +116,41 @@ describe('FeatureGrid', () => {
       expect(getGrid(container).className).toContain(expectedClass)
     })
 
-    it('defaults to 3-column grid when cols is omitted', () => {
+    it('defaults to 3-column grid when cols is omitted and feature count is not 4', () => {
       const container = renderFeatureGrid({ features: FEATURES })
       expect(getGrid(container).className).toContain('sm:grid-cols-3')
     })
 
-    it('defaults to 3-column grid when cols={null}', () => {
+    it('defaults to 3-column grid when cols={null} and feature count is not 4', () => {
       const container = renderFeatureGrid({ features: FEATURES, cols: null })
+      expect(getGrid(container).className).toContain('sm:grid-cols-3')
+    })
+
+    it('uses 2-column grid when cols is omitted and there are exactly 4 features', () => {
+      const fourFeatures = [
+        ...FEATURES,
+        { title: 'Reliable', description: 'Always available' },
+      ]
+      const container = renderFeatureGrid({ features: fourFeatures })
+      expect(getGrid(container).className).toContain('sm:grid-cols-2')
+      expect(getGrid(container).className).not.toContain('sm:grid-cols-3')
+    })
+
+    it('uses 2-column grid when cols={null} and there are exactly 4 features', () => {
+      const fourFeatures = [
+        ...FEATURES,
+        { title: 'Reliable', description: 'Always available' },
+      ]
+      const container = renderFeatureGrid({ features: fourFeatures, cols: null })
+      expect(getGrid(container).className).toContain('sm:grid-cols-2')
+    })
+
+    it('preserves explicit cols="3" when there are 4 features', () => {
+      const fourFeatures = [
+        ...FEATURES,
+        { title: 'Reliable', description: 'Always available' },
+      ]
+      const container = renderFeatureGrid({ features: fourFeatures, cols: '3' })
       expect(getGrid(container).className).toContain('sm:grid-cols-3')
     })
 

@@ -29,7 +29,7 @@ describe('ContactFormSection', () => {
   it('renders the contact form initially', () => {
     const { container } = render(<ContactFormSection />)
     expect(container.querySelector('[data-component="contact-form"]')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /enviar mensaje/i })).toBeInTheDocument()
   })
 
   it('shows success alert after a successful submission', async () => {
@@ -38,7 +38,7 @@ describe('ContactFormSection', () => {
     fillAndSubmitForm(container)
     await waitFor(() =>
       expect(
-        screen.getByText(/thank you.*we'll be in touch/i)
+        screen.getByText(/gracias.*responderemos/i)
       ).toBeInTheDocument()
     )
   })
@@ -48,7 +48,7 @@ describe('ContactFormSection', () => {
     const { container } = render(<ContactFormSection />)
     fillAndSubmitForm(container)
     await waitFor(() =>
-      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+      expect(screen.getByText(/algo ha fallado/i)).toBeInTheDocument()
     )
   })
 
@@ -66,7 +66,7 @@ describe('ContactFormSection', () => {
     const { container } = render(<ContactFormSection />)
     fillAndSubmitForm(container)
     await waitFor(() =>
-      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
+      expect(screen.getByText(/algo ha fallado/i)).toBeInTheDocument()
     )
   })
 

@@ -35,7 +35,9 @@ describe('FooterBlock', () => {
     render(
       <FooterBlock _type="footer" copyright="© 2025 Acme Inc." />
     )
-    expect(screen.getByText('© 2025 Acme Inc.')).toBeInTheDocument()
+    expect(
+      screen.getByText(`© ${new Date().getFullYear()} Acme Inc.`),
+    ).toBeInTheDocument()
   })
 
   it('renders without columns when columns prop is null', () => {

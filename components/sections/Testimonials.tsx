@@ -35,7 +35,7 @@ export function Testimonials({ title, testimonials }: TestimonialsProps) {
       showIndicators={true}
       loop={true}
       background="gray"
-      paddingY="lg"
+      paddingY="md"
     />
   )
 }

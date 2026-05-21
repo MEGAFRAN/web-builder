@@ -1,5 +1,6 @@
 import type { Block } from '@/types/cms'
 import componentRegistry from '@/components/componentRegistry'
+import { ScrollReveal } from '@/components/motion/ScrollReveal'
 
 interface PageRendererProps {
   blocks: Block[]
@@ -16,7 +17,11 @@ export default function PageRenderer({ blocks }: PageRendererProps) {
           console.warn(`PageRenderer: unknown block type "${block._type}"`)
           return null
         }
-        return <Component key={(block as BlockWithKey)._key || i} {...block} />
+        return (
+          <ScrollReveal key={(block as BlockWithKey)._key || i}>
+            <Component {...block} />
+          </ScrollReveal>
+        )
       })}
     </div>
   )

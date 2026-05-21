@@ -2,69 +2,68 @@ import type { ContactInfoBlock as ContactInfoBlockType } from '@/types/cms'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Stack } from '@/components/layout/Stack'
-import { Heading } from '@/components/content/Heading'
-import { Text } from '@/components/content/Text'
-import { Divider } from '@/components/layout/Divider'
+import { Card } from '@/components/data/Card'
+import { CONTACT_COPY } from '@/lib/contact-public-copy'
 import ContactFormSection from '@/components/blocks/ContactFormSection'
 
-export default function ContactInfoBlock({ email, phone, address, fallbackEmail }: ContactInfoBlockType) {
+export default function ContactInfoBlock({
+  email,
+  phone,
+  address,
+  fallbackEmail,
+}: ContactInfoBlockType) {
   return (
     <div data-component="contact-info-block">
-      {/* Page Header */}
-      <Section background="white" paddingY="lg">
-        <Container maxWidth="2xl" padding="md">
-          <Stack gap="sm">
-            <Heading text="Get in Touch" level="h1" />
-            <Text
-              content="We respond to all inquiries within 1 business day. Fill in the form and we'll get back to you as soon as possible."
-              size="lg"
-              color="muted"
-            />
-          </Stack>
-        </Container>
-      </Section>
-
-      {/* Two-column form + contact details */}
-      <Section background="white" paddingY="md">
-        <Container maxWidth="2xl" padding="md">
-          {/* Asymmetric two-column grid: ~60% left, ~40% right */}
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
-            {/* Left column: form + alert */}
+      <Section background="gray" paddingY="md">
+        <Container maxWidth="2xl" padding="theme">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-5 lg:gap-12">
             <div className="lg:col-span-3">
-              <ContactFormSection fallbackEmail={fallbackEmail ?? email} />
+              <Card title={undefined} description={undefined} padding="lg">
+                <ContactFormSection fallbackEmail={fallbackEmail ?? email} />
+              </Card>
             </div>
 
-            {/* Right column: contact details */}
             <div className="lg:col-span-2">
-              <Stack gap="lg">
+              <Stack gap="md">
                 {email && (
-                  <Stack gap="sm">
-                    <Heading text="Email" level="h3" />
-                    <Text content={email} color="muted" />
-                  </Stack>
+                  <div className="rounded-[var(--radius)] border border-border bg-surface p-5">
+                    <p className="text-sm font-semibold text-brand">
+                      {CONTACT_COPY.emailLabel}
+                    </p>
+                    <a
+                      href={`mailto:${email}`}
+                      className="mt-2 block text-base text-foreground transition-colors hover:text-primary"
+                    >
+                      {email}
+                    </a>
+                  </div>
                 )}
                 {phone && (
-                  <Stack gap="sm">
-                    <Heading text="Phone" level="h3" />
-                    <Text content={phone} color="muted" />
-                  </Stack>
+                  <div className="rounded-[var(--radius)] border border-border bg-surface p-5">
+                    <p className="text-sm font-semibold text-brand">
+                      {CONTACT_COPY.phoneLabel}
+                    </p>
+                    <a
+                      href={`tel:${phone.replace(/\s/g, '')}`}
+                      className="mt-2 block text-base text-foreground transition-colors hover:text-primary"
+                    >
+                      {phone}
+                    </a>
+                  </div>
                 )}
                 {address && (
-                  <Stack gap="sm">
-                    <Heading text="Office" level="h3" />
-                    <Text content={address} color="muted" />
-                  </Stack>
+                  <div className="rounded-[var(--radius)] border border-border bg-surface p-5">
+                    <p className="text-sm font-semibold text-brand">
+                      {CONTACT_COPY.addressLabel}
+                    </p>
+                    <p className="mt-2 text-base text-muted">{address}</p>
+                  </div>
                 )}
               </Stack>
             </div>
           </div>
         </Container>
       </Section>
-
-      {/* Divider before FAQ */}
-      <Container maxWidth="2xl" padding="md">
-        <Divider />
-      </Container>
     </div>
   )
 }

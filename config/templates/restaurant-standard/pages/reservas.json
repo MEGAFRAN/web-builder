@@ -7,13 +7,6 @@
   },
   "blocks": [
     {
-      "_type": "breadcrumb",
-      "items": [
-        { "label": "Inicio", "href": "/" },
-        { "label": "Reservas", "href": null }
-      ]
-    },
-    {
       "_type": "reservationBlock",
       "heading": "Reserva tu mesa",
       "subtext": "Selecciona el tipo de experiencia, fecha y hora. Confirmamos tu reserva en menos de 2 horas.",
@@ -29,6 +22,10 @@
           "answer": "Para fines de semana y festivos recomendamos reservar con al menos 48 horas de antelación. Entre semana solemos tener disponibilidad el mismo día."
         },
         {
+          "question": "¿Con cuánto tiempo de antelación puedo cancelar mi reserva?",
+          "answer": "Puedes cancelar o modificar tu reserva llamándonos al teléfono del restaurante con al menos 24 horas de antelación."
+        },
+        {
           "question": "¿Admitís grupos de más de 10 personas?",
           "answer": "Para grupos de más de 10 personas, por favor contactadnos directamente por teléfono para asegurarnos de prepararlo todo correctamente."
         },
@@ -37,8 +34,8 @@
           "answer": "Contamos con varios platos vegetarianos y adaptamos el menú para alergias e intolerancias. Indicadlo en el campo de peticiones especiales al reservar."
         },
         {
-          "question": "¿Puedo cancelar o modificar mi reserva?",
-          "answer": "Sí, puedes cancelar o modificar llamándonos al teléfono del restaurante con al menos 24 horas de antelación."
+          "question": "¿Se puede aparcar cerca?",
+          "answer": "Hay un parking público a 100 metros en la Calle Arenal. También hay zona de aparcamiento regulado en las calles adyacentes."
         }
       ]
     }
