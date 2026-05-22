@@ -20,6 +20,12 @@
 4. Apply visual hierarchy: order sections so weight matches content priority
 5. Flag every user need that no current registry component can satisfy
 
+## Grid Layout Rules
+- Never propose a grid that results in orphan items (2+1, 3+1)
+- Always specify equal card heights using CSS grid items-stretch
+- Always specify card internal structure as flex flex-col h-full
+- Always specify min-h on title containers when titles may wrap
+
 ## Output
 
 Success:

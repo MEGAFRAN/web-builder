@@ -14,11 +14,11 @@ export default function ValuesBlock({ heading, items }: ValuesBlockType) {
             {heading && (
               <Heading text={heading} level="h2" align="center" color="default" />
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
               {items.map((value, i) => (
                 <Card key={i} padding="lg">
                   <Stack gap="md">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-h-[4rem]">
                       {value.icon && (
                         <span className="text-2xl">{value.icon}</span>
                       )}

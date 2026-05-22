@@ -23,6 +23,9 @@ Parse rules:
 - Read `file` with Read (or project tools) before changing it — do not invent content or “fix” from memory.
 - If the path does not exist or is not readable, stop and return **Failure** (do not create a new file unless the user asked to).
 
+## Language Consistency Rule
+Before fixing individual grammar errors, scan the entire file for language mixing. Flag and correct any UI labels, button text, step indicators, form fields, or section titles in a different language than the declared content language.
+
 ## Process
 
 1. **Confirm language norms**  

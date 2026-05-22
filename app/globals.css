@@ -101,6 +101,14 @@ body                    { font-family: var(--font-body); }
   }
 }
 
+/* Alternating section backgrounds for visual rhythm — skip dark (bg-primary) sections */
+[data-scroll-reveal]:nth-child(odd) section[data-component="section"]:not([data-bg="dark"]) {
+  background-color: var(--color-bg);
+}
+[data-scroll-reveal]:nth-child(even) section[data-component="section"]:not([data-bg="dark"]) {
+  background-color: var(--color-surface);
+}
+
 /* Fallback values — overridden per-client by layout.tsx */
 :root {
   --color-primary: #000000;

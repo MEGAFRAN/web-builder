@@ -32,7 +32,7 @@ export function Hero({
                 </button>
               )}
               {secondaryLabel && (
-                <button className="rounded-md border border-primary px-6 py-3 text-sm font-medium text-foreground hover:bg-muted-bg">
+                <button className="rounded-md border border-primary bg-white px-6 py-3 text-sm font-medium text-primary transition-colors duration-200 hover:bg-primary hover:text-white">
                   {secondaryLabel}
                 </button>
               )}

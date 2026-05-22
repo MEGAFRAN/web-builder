@@ -13,6 +13,12 @@ Read all three files before proceeding — do not answer from memory or assumpti
 - `lib/theme-presets.ts`
 - `lib/theme.json`
 
+## Visual Rhythm Rule
+- Card components use --color-surface, not plain white
+- Page sections alternate between --color-surface and white
+- No two adjacent sections share the exact same background color
+- Border radius on cards matches theme character — warm themes use smaller radius (4-8px)
+
 ## Process
 
 1. Identify which token(s) or preset(s) the `change_request` maps to

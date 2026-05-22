@@ -404,16 +404,18 @@ function MenuLayout({
                     return (
                       <article
                         key={j}
-                        className="flex flex-col rounded-[var(--radius)] bg-surface shadow-sm p-5"
+                        className="flex flex-col h-full rounded-[var(--radius)] bg-surface shadow-sm p-5"
                       >
-                        <h3 className="text-lg font-semibold text-foreground">
-                          {item.label}
-                        </h3>
+                        <div className="min-h-[3.5rem]">
+                          <h3 className="text-lg font-semibold text-foreground">
+                            {item.label}
+                          </h3>
+                        </div>
                         {summary ? (
                           <p className="mt-2 text-base text-muted">{summary}</p>
                         ) : null}
                         {price != null && price !== '' ? (
-                          <p className="mt-3 text-right text-sm font-medium text-foreground">
+                          <p className="mt-auto text-right text-sm font-medium text-foreground">
                             {price}
                           </p>
                         ) : null}
