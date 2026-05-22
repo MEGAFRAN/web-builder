@@ -84,6 +84,14 @@ function getIndicatorBtns(container: HTMLElement) {
   return container.querySelectorAll('button[role="tab"]')
 }
 
+function expectSlideVisible(slide: HTMLElement) {
+  expect(slide.style.display).toBe('block')
+}
+
+function expectSlideHidden(slide: HTMLElement) {
+  expect(slide.style.display).toBe('none')
+}
+
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
 describe('Carousel', () => {
@@ -143,13 +151,13 @@ describe('Carousel', () => {
     it('renders the first slide as visible (active)', () => {
       const container = renderCarousel(makeProps())
       const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
-      expect(firstSlide.style.visibility).toBe('visible')
+      expectSlideVisible(firstSlide)
     })
 
     it('renders subsequent slides as hidden initially', () => {
       const container = renderCarousel(makeProps())
       const secondSlide = container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement
-      expect(secondSlide.style.visibility).toBe('hidden')
+      expectSlideHidden(secondSlide)
     })
 
     it('renders the author name in the first slide', () => {
@@ -276,7 +284,7 @@ describe('Carousel', () => {
       const container = renderCarousel(makeProps())
       fireEvent.click(getNextBtn(container))
       const secondSlide = container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement
-      expect(secondSlide.style.visibility).toBe('visible')
+      expectSlideVisible(secondSlide)
     })
 
     it('goes back to previous slide when prev button is clicked after advancing', () => {
@@ -284,7 +292,7 @@ describe('Carousel', () => {
       fireEvent.click(getNextBtn(container))
       fireEvent.click(getPrevBtn(container))
       const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
-      expect(firstSlide.style.visibility).toBe('visible')
+      expectSlideVisible(firstSlide)
     })
 
     it('disables next button on the last slide when loop=false', () => {
@@ -308,7 +316,7 @@ describe('Carousel', () => {
       fireEvent.click(getNextBtn(container))
       fireEvent.click(getNextBtn(container))
       const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
-      expect(firstSlide.style.visibility).toBe('visible')
+      expectSlideVisible(firstSlide)
     })
 
     it('hides arrows visually when showArrows=false but still renders them in DOM', () => {
@@ -350,7 +358,7 @@ describe('Carousel', () => {
       const indicators = getIndicatorBtns(container)
       fireEvent.click(indicators[2])
       const thirdSlide = container.querySelector('[aria-label="Slide 3 of 3"]') as HTMLElement
-      expect(thirdSlide.style.visibility).toBe('visible')
+      expectSlideVisible(thirdSlide)
     })
 
     it('updates aria-current when an indicator is clicked', () => {
@@ -391,7 +399,7 @@ describe('Carousel', () => {
       const track = getTrack(container)
       fireEvent.keyDown(track, { key: 'ArrowRight' })
       const secondSlide = container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement
-      expect(secondSlide.style.visibility).toBe('visible')
+      expectSlideVisible(secondSlide)
     })
 
     it('goes to the previous slide on ArrowLeft key after advancing', () => {
@@ -400,7 +408,7 @@ describe('Carousel', () => {
       fireEvent.keyDown(track, { key: 'ArrowRight' })
       fireEvent.keyDown(track, { key: 'ArrowLeft' })
       const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
-      expect(firstSlide.style.visibility).toBe('visible')
+      expectSlideVisible(firstSlide)
     })
   })
 
@@ -432,14 +440,18 @@ describe('Carousel', () => {
 
   describe('transition prop', () => {
     it('renders with slide transition by default', () => {
-      const container = renderCarousel(makeProps({ transition: 'slide' }))
-      const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
+      const container = renderCarousel(
+        makeProps({ mode: 'card', items: CARD_ITEMS, transition: 'slide' }),
+      )
+      const firstSlide = container.querySelector('[aria-label="Slide 1 of 2"]') as HTMLElement
       expect(firstSlide.style.transform).toContain('translateX')
     })
 
     it('renders with fade transition when transition="fade"', () => {
-      const container = renderCarousel(makeProps({ transition: 'fade' }))
-      const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
+      const container = renderCarousel(
+        makeProps({ mode: 'card', items: CARD_ITEMS, transition: 'fade' }),
+      )
+      const firstSlide = container.querySelector('[aria-label="Slide 1 of 2"]') as HTMLElement
       // In fade mode, opacity is used not transform
       expect(firstSlide.style.opacity).toBe('1')
     })
@@ -479,7 +491,7 @@ describe('Carousel', () => {
       fireEvent.pointerDown(track, { clientX: 260, clientY: 80 })
       fireEvent.pointerUp(track, { clientX: 140, clientY: 82 })
       const secondSlide = container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement
-      expect(secondSlide.style.visibility).toBe('visible')
+      expectSlideVisible(secondSlide)
     })
 
     it('returns to the previous slide after a swipe-right gesture', () => {
@@ -489,7 +501,7 @@ describe('Carousel', () => {
       fireEvent.pointerDown(track, { clientX: 140, clientY: 80 })
       fireEvent.pointerUp(track, { clientX: 260, clientY: 82 })
       const firstSlide = container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement
-      expect(firstSlide.style.visibility).toBe('visible')
+      expectSlideVisible(firstSlide)
     })
   })
 
@@ -578,8 +590,8 @@ describe('Carousel', () => {
       act(() => {
         vi.advanceTimersByTime(20_000)
       })
-      expect((container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement).style.visibility).toBe(
-        'visible',
+      expectSlideVisible(
+        container.querySelector('[aria-label="Slide 1 of 3"]') as HTMLElement,
       )
 
       act(() => {
@@ -590,8 +602,8 @@ describe('Carousel', () => {
         vi.advanceTimersByTime(2000)
       })
 
-      expect((container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement).style.visibility).toBe(
-        'visible',
+      expectSlideVisible(
+        container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement,
       )
 
       hiddenSpy.mockRestore()
@@ -615,8 +627,8 @@ describe('Carousel', () => {
         vi.advanceTimersByTime(2000)
       })
 
-      expect((container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement).style.visibility).toBe(
-        'visible',
+      expectSlideVisible(
+        container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement,
       )
     })
 
@@ -638,8 +650,8 @@ describe('Carousel', () => {
         vi.advanceTimersByTime(2000)
       })
 
-      expect((container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement).style.visibility).toBe(
-        'visible',
+      expectSlideVisible(
+        container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement,
       )
     })
 
@@ -656,8 +668,8 @@ describe('Carousel', () => {
       act(() => {
         vi.advanceTimersByTime(2000)
       })
-      expect((container.querySelector('[aria-label="Slide 2 of 2"]') as HTMLElement).style.visibility).toBe(
-        'visible',
+      expectSlideVisible(
+        container.querySelector('[aria-label="Slide 2 of 2"]') as HTMLElement,
       )
 
       act(() => {
@@ -665,8 +677,8 @@ describe('Carousel', () => {
       })
 
       expect(screen.getByRole('button', { name: /play slideshow/i })).toBeInTheDocument()
-      expect((container.querySelector('[aria-label="Slide 2 of 2"]') as HTMLElement).style.visibility).toBe(
-        'visible',
+      expectSlideVisible(
+        container.querySelector('[aria-label="Slide 2 of 2"]') as HTMLElement,
       )
     })
   })

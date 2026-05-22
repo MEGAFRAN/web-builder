@@ -39,6 +39,7 @@ export type HeroBlock = {
 export type ServicesBlock = {
   _type: 'services'
   heading?: string | null
+  layout?: 'default' | 'menu' | null
   showModal?: boolean | null
   moreInfoLabel?: string | null
   /**

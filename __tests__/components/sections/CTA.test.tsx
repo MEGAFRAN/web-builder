@@ -71,22 +71,21 @@ describe('CTA', () => {
         if (isDark) {
           expect(heading.className).toContain('text-primary-fg')
         } else {
-          expect(heading.className).toContain('text-foreground')
+          expect(heading.className).toContain('text-brand')
         }
       }
     )
 
     it('defaults to gray background when background is omitted', () => {
-      // gray is not isDark, so heading should use text-foreground
       renderCTA({ headline: 'H', ctaLabel: 'Go' })
       const heading = screen.getByRole('heading', { level: 2 })
-      expect(heading.className).toContain('text-foreground')
+      expect(heading.className).toContain('text-brand')
     })
 
     it('defaults to gray background when background={null}', () => {
       renderCTA({ headline: 'H', ctaLabel: 'Go', background: null })
       const heading = screen.getByRole('heading', { level: 2 })
-      expect(heading.className).toContain('text-foreground')
+      expect(heading.className).toContain('text-brand')
     })
 
     it('applies dark-mode button class when background="dark"', () => {

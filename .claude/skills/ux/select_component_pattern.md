@@ -18,6 +18,12 @@
 3. Map the convention to specific registry component names; verify each name exists in `registry.ts`
 4. If the registry cannot satisfy the need, describe the gap with: component name, required props, expected behavior, and use case
 
+## Card Component Rules
+- Background must use --color-surface, not plain white
+- Border radius must match theme character
+- Cards in a grid must use same background, padding, and border treatment
+- If card contains price or CTA, always use mt-auto to anchor it to card bottom
+
 ## Output
 
 Success:

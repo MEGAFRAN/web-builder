@@ -2,6 +2,12 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { NavLink } from "@/components/navigation/NavLink";
+
+const NAVBAR_SHADOW =
+  "shadow-[0_1px_0_color-mix(in_srgb,var(--color-text)_8%,transparent)]";
+const NAVBAR_SCROLLED_SHADOW =
+  "shadow-[0_4px_24px_color-mix(in_srgb,var(--color-text)_8%,transparent)]";
 
 export function Navbar({
   logo,
@@ -15,58 +21,122 @@ export function Navbar({
   ctaAction?: string | null;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
-    const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsOpen(false); };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [isOpen]);
 
+  const navSurface = isScrolled
+    ? "border-b border-border bg-surface/95 supports-[backdrop-filter]:bg-surface/90 supports-[backdrop-filter]:backdrop-blur-sm"
+    : "border-b border-border bg-surface";
+  const navShadow = isScrolled ? NAVBAR_SCROLLED_SHADOW : NAVBAR_SHADOW;
+  const navTransition = reduceMotion
+    ? ""
+    : "transition-[box-shadow,background-color] duration-200";
+
   return (
     <div className="relative">
-      <nav data-component="navbar" className="w-full border-b border-border bg-background py-4">
+      <nav
+        data-component="navbar"
+        data-scrolled={isScrolled ? "true" : "false"}
+        className={`sticky top-0 z-40 w-full py-4 ${navSurface} ${navShadow} ${navTransition}`}
+      >
         <div
           className="mx-auto flex max-w-6xl items-center justify-between"
           style={{ paddingInline: "var(--page-inset)" }}
         >
-          <Link href="/" className="text-lg font-bold text-foreground">{logo}</Link>
+          <Link
+            href="/"
+            className="font-[family-name:var(--font-heading)] text-xl font-bold tracking-tight text-brand transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:text-2xl"
+          >
+            {logo}
+          </Link>
 
-          {/* Desktop links + CTA */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden items-center gap-6 md:flex">
             {links?.map((link, i) => (
-              <a key={`${i}-${link.href}`} href={link.href} className="text-sm text-muted hover:text-foreground">
-                {link.label}
-              </a>
+              <NavLink key={`${i}-${link.href}`} label={link.label} href={link.href} />
             ))}
-            {ctaLabel && (
-              <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90">
-                {ctaLabel}
-              </button>
-            )}
+            {ctaLabel &&
+              (ctaAction ? (
+                <a
+                  href={ctaAction}
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  {ctaLabel}
+                </a>
+              ) : (
+                <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90">
+                  {ctaLabel}
+                </button>
+              ))}
           </div>
 
-          {/* Hamburger button (mobile only) */}
           <button
             type="button"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
             onClick={() => setIsOpen((v) => !v)}
-            className="md:hidden flex items-center justify-center w-9 h-9 text-foreground"
+            className="flex h-9 w-9 items-center justify-center text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden"
           >
             {isOpen ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <line x1="3" y1="12" x2="21" y2="12" />
                 <line x1="3" y1="18" x2="21" y2="18" />
@@ -76,23 +146,28 @@ export function Navbar({
         </div>
       </nav>
 
-      {/* Mobile menu panel */}
       <div
         data-component="mobile-menu"
         aria-hidden={!isOpen}
         className={[
-          "md:hidden fixed inset-x-0 top-[57px] bottom-0 z-40 bg-background border-t border-border overflow-y-auto",
-          "transition-[opacity,transform] duration-200 ease-out",
-          isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none",
+          "fixed inset-x-0 bottom-0 z-40 overflow-y-auto border-t border-border bg-surface md:hidden",
+          "top-[var(--navbar-height,4.5rem)]",
+          reduceMotion ? "" : "transition-[opacity,transform] duration-200 ease-out",
+          isOpen
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-2 opacity-0",
         ].join(" ")}
       >
-        <nav className="flex flex-col py-6 gap-1" style={{ paddingInline: "var(--page-inset)" }}>
+        <nav
+          className="flex flex-col gap-1 py-6"
+          style={{ paddingInline: "var(--page-inset)" }}
+        >
           {links?.map((link, i) => (
             <a
               key={`${i}-${link.href}`}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="text-base text-foreground hover:text-primary py-3 border-b border-border/40"
+              className="border-b border-border/40 py-3 text-base text-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {link.label}
             </a>
@@ -101,7 +176,7 @@ export function Navbar({
             <a
               href={ctaAction}
               onClick={() => setIsOpen(false)}
-              className="mt-4 rounded-md bg-primary px-4 py-3 text-center text-sm font-medium text-primary-fg hover:opacity-90"
+              className="mt-4 rounded-md bg-primary px-4 py-3 text-center text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {ctaLabel}
             </a>

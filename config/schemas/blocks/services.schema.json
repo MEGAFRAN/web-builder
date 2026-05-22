@@ -7,6 +7,12 @@
   "properties": {
     "_type": { "type": "string", "const": "services" },
     "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "layout": {
+      "oneOf": [
+        { "type": "string", "enum": ["default", "menu"] },
+        { "type": "null" }
+      ]
+    },
     "items": {
       "type": "array",
       "items": {

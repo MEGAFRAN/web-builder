@@ -17,23 +17,28 @@ describe('FaqBlock', () => {
 
   it('does not show answers before any question is expanded', () => {
     render(<FaqBlock _type="faqBlock" items={items} />)
-    expect(screen.queryByText('You can return items within 30 days.')).not.toBeInTheDocument()
-    expect(screen.queryByText('Yes, on orders over $50.')).not.toBeInTheDocument()
+    items.forEach(({ question }) => {
+      expect(screen.getByRole('button', { name: question })).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      )
+    })
   })
 
   it('reveals an answer when its question is clicked', () => {
     render(<FaqBlock _type="faqBlock" items={items} />)
-    fireEvent.click(screen.getByText('What is your return policy?'))
-    expect(screen.getByText('You can return items within 30 days.')).toBeInTheDocument()
+    const button = screen.getByRole('button', { name: 'What is your return policy?' })
+    fireEvent.click(button)
+    expect(button).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByText('You can return items within 30 days.')).toBeVisible()
   })
 
   it('collapses an open answer when its question is clicked again', () => {
     render(<FaqBlock _type="faqBlock" items={items} />)
-    fireEvent.click(screen.getByText('What is your return policy?'))
-    fireEvent.click(screen.getByText('What is your return policy?'))
-    expect(
-      screen.queryByText('You can return items within 30 days.')
-    ).not.toBeInTheDocument()
+    const button = screen.getByRole('button', { name: 'What is your return policy?' })
+    fireEvent.click(button)
+    fireEvent.click(button)
+    expect(button).toHaveAttribute('aria-expanded', 'false')
   })
 
   it('renders the optional section title', () => {

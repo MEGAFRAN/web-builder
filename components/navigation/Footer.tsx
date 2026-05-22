@@ -1,3 +1,5 @@
+import { formatCopyright } from "@/lib/format-copyright";
+
 const colsMap: Record<number, string> = {
   1: "grid-cols-1",
   2: "grid-cols-1 sm:grid-cols-2",
@@ -44,7 +46,7 @@ export function Footer({ columns, copyright }: FooterProps) {
         )}
         {copyright && (
           <p className="border-t border-border pt-6 text-sm text-muted break-words">
-            {copyright}
+            {formatCopyright(copyright)}
           </p>
         )}
       </div>

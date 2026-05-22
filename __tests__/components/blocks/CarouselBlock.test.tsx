@@ -75,7 +75,7 @@ describe('CarouselBlock — testimonial mode', () => {
     fireEvent.click(nextBtn)
     // After advancing, slide 2 should become visible
     const slide2 = container.querySelector('[aria-label="Slide 2 of 3"]') as HTMLElement
-    expect(slide2.style.visibility).toBe('visible')
+    expect(slide2.style.display).toBe('block')
   })
 
   it('renders dot indicators when showIndicators is true', () => {

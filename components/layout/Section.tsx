@@ -49,6 +49,7 @@ export function Section({
   return (
     <section
       data-component={dataComponent}
+      data-bg={background ?? "white"}
       data-full-bleed={fullBleed ? "true" : undefined}
       className={`w-full ${bgMap[background ?? "white"]}`}
       style={sectionStyle}

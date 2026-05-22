@@ -1,6 +1,7 @@
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Stack } from "@/components/layout/Stack";
+import { AnimatedStatValue } from "@/components/sections/AnimatedStatValue";
 
 const bgMap: Record<string, "white" | "gray" | "dark"> = {
   white: "white",
@@ -9,7 +10,7 @@ const bgMap: Record<string, "white" | "gray" | "dark"> = {
 };
 
 const valueColorMap: Record<string, string> = {
-  white: "text-foreground",
+  white: "text-brand",
   gray: "text-foreground",
   dark: "text-primary-fg",
 };
@@ -44,7 +45,7 @@ export function StatsBar({ stats, background }: StatsBarProps) {
             <div key={i}>
               <Stack gap="sm">
                 <dt className={`text-4xl font-bold ${valueColorMap[bg] ?? "text-foreground"}`}>
-                  {stat.value}
+                  <AnimatedStatValue value={stat.value} />
                 </dt>
                 <dd className={`text-sm ${labelColorMap[bg] ?? "text-muted"}`}>
                   {stat.label}

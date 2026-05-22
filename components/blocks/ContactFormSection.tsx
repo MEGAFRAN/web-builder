@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ContactForm } from '@/components/inputs/ContactForm'
 import { Alert } from '@/components/content/Alert'
+import { CONTACT_COPY } from '@/lib/contact-public-copy'
 
 type SubmissionState = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -32,27 +33,23 @@ export default function ContactFormSection({ fallbackEmail }: ContactFormSection
   }
 
   const errorMessage = fallbackEmail
-    ? `Something went wrong. Please try again or email us directly at ${fallbackEmail}.`
-    : 'Something went wrong. Please try again later.'
+    ? CONTACT_COPY.errorWithEmail(fallbackEmail)
+    : CONTACT_COPY.errorGeneric
 
   return (
     <div data-component="contact-form-section" className="flex flex-col gap-6">
       <ContactForm
         isSubmitting={state === 'submitting'}
         onSubmitData={handleSubmit}
+        submitLabel={CONTACT_COPY.submitLabel}
+        nameLabel={CONTACT_COPY.nameLabel}
+        emailLabel={CONTACT_COPY.emailLabel}
+        messageLabel={CONTACT_COPY.messageLabel}
       />
       {state === 'success' && (
-        <Alert
-          variant="success"
-          message="Thank you — we'll be in touch within 1 business day."
-        />
+        <Alert variant="success" message={CONTACT_COPY.successMessage} />
       )}
-      {state === 'error' && (
-        <Alert
-          variant="error"
-          message={errorMessage}
-        />
-      )}
+      {state === 'error' && <Alert variant="error" message={errorMessage} />}
     </div>
   )
 }

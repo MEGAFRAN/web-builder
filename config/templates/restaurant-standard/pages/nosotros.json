@@ -7,13 +7,6 @@
   },
   "blocks": [
     {
-      "_type": "breadcrumb",
-      "items": [
-        { "label": "Inicio", "href": "/" },
-        { "label": "Nosotros", "href": null }
-      ]
-    },
-    {
       "_type": "missionBlock",
       "heading": "Nuestra historia",
       "body": "Restaurante Pepe nació en 1993 de la mano de José 'Pepe' Sánchez, cocinero autodidacta que aprendió el oficio junto a su madre en un pequeño pueblo de Castilla. Con la ilusión de preservar la cocina tradicional española en la ciudad, abrió las puertas de este local en el corazón de Madrid. Hoy, su hijo David continúa el legado con el mismo amor por los ingredientes honestos y las recetas de toda la vida.",
@@ -70,7 +63,7 @@
     },
     {
       "_type": "statsBlock",
-      "background": "gray",
+      "background": "white",
       "stats": [
         { "value": "1993", "label": "Año de apertura" },
         { "value": "3ª", "label": "Generación familiar" },

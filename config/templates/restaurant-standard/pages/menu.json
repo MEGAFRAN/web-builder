@@ -7,44 +7,121 @@
   },
   "blocks": [
     {
-      "_type": "breadcrumb",
-      "items": [
-        { "label": "Inicio", "href": "/" },
-        { "label": "Menú", "href": null }
-      ]
-    },
-    {
       "_type": "hero",
       "title": "Nuestra carta",
-      "subtitle": "Platos elaborados con ingredientes frescos de temporada. Cada semana actualizamos la carta del día.",
-      "cta": { "label": "Reservar mesa", "href": "/contacto" }
+      "subtitle": "Platos elaborados con ingredientes frescos de temporada. Cada semana actualizamos la carta del día."
     },
     {
       "_type": "services",
+      "layout": "menu",
       "items": [
         {
           "title": "Entrantes",
-          "description": "Croquetas caseras de jamón ibérico, Jamón de bellota D.O. Jabugo, Patatas bravas con alioli de ajo negro, Pulpo a la gallega con pimentón de La Vera.",
-          "imageUrl": "https://picsum.photos/seed/menu-entrantes/800/450",
-          "imageAlt": "Selección de entrantes"
+          "description": "",
+          "imageUrl": "https://picsum.photos/seed/menu-entrantes/800/400",
+          "subItems": [
+            {
+              "label": "Croquetas caseras de jamón ibérico",
+              "description": { "title": "", "items": ["Cremosas por dentro, crujientes por fuera."] },
+              "price": "9 €"
+            },
+            {
+              "label": "Jamón de bellota D.O. Jabugo",
+              "description": { "title": "", "items": ["Corte fino servido a temperatura."] },
+              "price": "14 €"
+            },
+            {
+              "label": "Patatas bravas con alioli de ajo negro",
+              "description": { "title": "", "items": ["Picante suave y alioli aromático."] },
+              "price": "8 €"
+            },
+            {
+              "label": "Pulpo a la gallega con pimentón de La Vera",
+              "description": { "title": "", "items": ["Tierno, con aceite de oliva y cachelos."] },
+              "price": "13 €"
+            }
+          ]
         },
         {
           "title": "Pescados",
-          "description": "Merluza a la vasca con almejas, Bacalao al pil-pil, Rodaballo al horno con verduras de temporada, Paella de mariscos (para 2 personas).",
-          "imageUrl": "https://picsum.photos/seed/menu-pescados/800/450",
-          "imageAlt": "Platos de pescado"
+          "description": "",
+          "imageUrl": "https://picsum.photos/seed/menu-pescados/800/400",
+          "subItems": [
+            {
+              "label": "Merluza a la vasca con almejas",
+              "description": { "title": "", "items": ["En salsa verde con vino blanco."] },
+              "price": "22 €"
+            },
+            {
+              "label": "Bacalao al pil-pil",
+              "description": { "title": "", "items": ["Emulsión clásica de ajo y aceite."] },
+              "price": "20 €"
+            },
+            {
+              "label": "Rodaballo al horno con verduras de temporada",
+              "description": { "title": "", "items": ["Pescado del día con guarnición de mercado."] },
+              "price": "26 €"
+            },
+            {
+              "label": "Paella de mariscos (para 2 personas)",
+              "description": { "title": "", "items": ["Arroz seco con marisco fresco; mínimo dos comensales."] },
+              "price": "48 €"
+            }
+          ]
         },
         {
           "title": "Carnes",
-          "description": "Cocido madrileño (jueves), Cordero asado al horno de leña, Solomillo de ternera con salsa de boletus, Carrilleras de cerdo ibérico estofadas.",
-          "imageUrl": "https://picsum.photos/seed/menu-carnes/800/450",
-          "imageAlt": "Carnes y guisos"
+          "description": "",
+          "imageUrl": "https://picsum.photos/seed/menu-carnes/800/400",
+          "subItems": [
+            {
+              "label": "Cocido madrileño (jueves)",
+              "description": { "title": "", "items": ["Servido en tres vuelcos; solo los jueves."] },
+              "price": "16 €"
+            },
+            {
+              "label": "Cordero asado al horno de leña",
+              "description": { "title": "", "items": ["Cocción lenta con hierbas aromáticas."] },
+              "price": "22 €"
+            },
+            {
+              "label": "Solomillo de ternera con salsa de boletus",
+              "description": { "title": "", "items": ["Punto de cocción a elegir."] },
+              "price": "24 €"
+            },
+            {
+              "label": "Carrilleras de cerdo ibérico estofadas",
+              "description": { "title": "", "items": ["Melosas, con puré de patata."] },
+              "price": "18 €"
+            }
+          ]
         },
         {
           "title": "Postres",
-          "description": "Tarta de queso de La Viña, Tocino de cielo casero, Natillas de vainilla con galleta María, Fresones de temporada con nata.",
-          "imageUrl": "https://picsum.photos/seed/menu-postres/800/450",
-          "imageAlt": "Postres caseros"
+          "description": "",
+          "imageUrl": "https://picsum.photos/seed/menu-postres/800/400",
+          "subItems": [
+            {
+              "label": "Tarta de queso de La Viña",
+              "description": { "title": "", "items": ["Receta vasca, horneada al momento."] },
+              "price": "7 €"
+            },
+            {
+              "label": "Tocino de cielo casero",
+              "description": { "title": "", "items": ["Yema confitada con almíbar ligero."] },
+              "price": "6 €"
+            },
+            {
+              "label": "Natillas de vainilla con galleta María",
+              "description": { "title": "", "items": ["Cremosas, con canela."] },
+              "price": "6 €"
+            },
+            {
+              "label": "Fresones de temporada con nata",
+              "description": { "title": "", "items": ["Según mercado de primavera."] },
+              "price": "8 €"
+            }
+          ]
         }
       ]
     },
@@ -56,7 +133,7 @@
       "headline": "Menú del día a 14,50 €",
       "subtext": "Incluye primero, segundo, postre, pan y bebida. Disponible de lunes a viernes al mediodía.",
       "ctaLabel": "Reservar",
-      "ctaHref": "/contacto",
+      "ctaHref": "/reservas",
       "background": "white"
     }
   ]

@@ -14,17 +14,30 @@ interface FeatureGridProps {
   cols?: string | null;
 }
 
+function resolveColsClass(
+  cols: string | null | undefined,
+  featureCount: number,
+): string {
+  if (cols != null && cols in colsMap) {
+    return colsMap[cols];
+  }
+  if (cols == null && featureCount === 4) {
+    return colsMap["2"];
+  }
+  return colsMap["3"];
+}
+
 export function FeatureGrid({ title, subtitle, features, cols }: FeatureGridProps) {
-  const colsClass = colsMap[cols ?? "3"] ?? "grid-cols-1 sm:grid-cols-3";
+  const colsClass = resolveColsClass(cols, features?.length ?? 0);
   return (
-    <Section paddingY="lg">
+    <Section paddingY="md">
       <Container maxWidth="2xl" padding="theme">
         <div data-component="feature-grid">
           <Stack gap="lg">
             {(title || subtitle) && (
               <Stack gap="lg">
                 {title && (
-                  <h2 className="text-center text-3xl font-bold text-foreground">
+                  <h2 className="text-center text-4xl font-bold tracking-tight text-brand">
                     {title}
                   </h2>
                 )}
@@ -35,10 +48,10 @@ export function FeatureGrid({ title, subtitle, features, cols }: FeatureGridProp
             )}
             <div className={`grid ${colsClass} gap-8`}>
               {features?.map((f, i) => (
-                <div key={i} className="flex flex-col gap-3">
+                <div key={i} className="flex flex-col h-full gap-3 rounded-[var(--radius)] bg-surface shadow-sm p-6">
                   {f.icon && <span className="text-2xl">{f.icon}</span>}
-                  <h3 className="text-lg font-semibold text-foreground">{f.title}</h3>
-                  <p className="text-muted">{f.description}</p>
+                  <h3 className="text-xl font-semibold text-foreground">{f.title}</h3>
+                  <p className="text-base text-muted">{f.description}</p>
                 </div>
               ))}
             </div>

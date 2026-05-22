@@ -6,7 +6,7 @@ import { NavLink } from '@/components/navigation/NavLink'
 
 const BASE_CLASSES = ['text-sm', 'transition-colors']
 const ACTIVE_CLASSES = ['font-medium', 'text-foreground']
-const INACTIVE_CLASSES = ['text-muted', 'hover:text-foreground']
+const INACTIVE_CLASSES = ['text-muted', 'hover:text-primary']
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
@@ -70,7 +70,7 @@ describe('NavLink', () => {
   })
 
   describe('active={false}', () => {
-    it('className contains text-muted and hover:text-foreground', () => {
+    it('className contains text-muted and hover:text-primary', () => {
       const container = renderNavLink({ label: 'Home', href: '/', active: false })
       const anchor = getAnchor(container)
       INACTIVE_CLASSES.forEach((cls) => expect(anchor.className).toContain(cls))
@@ -83,7 +83,7 @@ describe('NavLink', () => {
   })
 
   describe('active omitted (defaults to undefined/falsy)', () => {
-    it('className contains text-muted and hover:text-foreground', () => {
+    it('className contains text-muted and hover:text-primary', () => {
       const container = renderNavLink({ label: 'Home', href: '/' })
       const anchor = getAnchor(container)
       INACTIVE_CLASSES.forEach((cls) => expect(anchor.className).toContain(cls))
@@ -96,7 +96,7 @@ describe('NavLink', () => {
   })
 
   describe('active={null} (null is falsy)', () => {
-    it('className contains text-muted and hover:text-foreground', () => {
+    it('className contains text-muted and hover:text-primary', () => {
       const container = renderNavLink({ label: 'Home', href: '/', active: null })
       const anchor = getAnchor(container)
       INACTIVE_CLASSES.forEach((cls) => expect(anchor.className).toContain(cls))

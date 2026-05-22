@@ -1,6 +1,24 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeAll } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { FAQ } from '@/components/sections/FAQ'
+
+beforeAll(() => {
+  if (typeof window.matchMedia !== 'function') {
+    vi.stubGlobal(
+      'matchMedia',
+      (query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }),
+    )
+  }
+})
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -56,59 +74,63 @@ describe('FAQ', () => {
       })
     })
 
-    it('renders no answers initially (all collapsed)', () => {
+    it('keeps answers collapsed initially', () => {
       renderFAQ({ items: ITEMS })
-      ITEMS.forEach(({ answer }) => {
-        expect(screen.queryByText(answer)).not.toBeInTheDocument()
+      ITEMS.forEach(({ question }) => {
+        const button = screen.getByRole('button', { name: question })
+        expect(button).toHaveAttribute('aria-expanded', 'false')
       })
     })
 
-    it('renders a "+" indicator for each collapsed item initially', () => {
+    it('renders a chevron icon for each item', () => {
       const container = renderFAQ({ items: ITEMS })
-      const indicators = container.querySelectorAll('span.text-muted')
-      // Each item has a +/− indicator
-      const plusSigns = Array.from(indicators).filter((el) => el.textContent === '+')
-      expect(plusSigns).toHaveLength(ITEMS.length)
+      expect(container.querySelectorAll('svg[aria-hidden="true"]')).toHaveLength(
+        ITEMS.length,
+      )
     })
   })
 
   describe('accordion interaction', () => {
     it('shows the answer when a question button is clicked', () => {
       renderFAQ({ items: ITEMS })
-      fireEvent.click(screen.getByText(ITEMS[0].question))
-      expect(screen.getByText(ITEMS[0].answer)).toBeInTheDocument()
+      const button = screen.getByRole('button', { name: ITEMS[0].question })
+      fireEvent.click(button)
+      expect(button).toHaveAttribute('aria-expanded', 'true')
+      expect(screen.getByText(ITEMS[0].answer)).toBeVisible()
     })
 
-    it('shows "−" indicator for the open item after click', () => {
+    it('marks the open item with aria-expanded after click', () => {
       renderFAQ({ items: ITEMS })
-      fireEvent.click(screen.getByText(ITEMS[0].question))
-      expect(screen.getByText('−')).toBeInTheDocument()
+      const button = screen.getByRole('button', { name: ITEMS[0].question })
+      fireEvent.click(button)
+      expect(button).toHaveAttribute('aria-expanded', 'true')
     })
 
-    it('hides the answer when the same question is clicked again (toggle)', () => {
+    it('collapses the answer when the same question is clicked again (toggle)', () => {
       renderFAQ({ items: ITEMS })
-      const btn = screen.getByText(ITEMS[0].question)
-      fireEvent.click(btn)
-      expect(screen.getByText(ITEMS[0].answer)).toBeInTheDocument()
-      fireEvent.click(btn)
-      expect(screen.queryByText(ITEMS[0].answer)).not.toBeInTheDocument()
+      const button = screen.getByRole('button', { name: ITEMS[0].question })
+      fireEvent.click(button)
+      fireEvent.click(button)
+      expect(button).toHaveAttribute('aria-expanded', 'false')
     })
 
     it('closes a previously open item when another is opened', () => {
       renderFAQ({ items: ITEMS })
-      fireEvent.click(screen.getByText(ITEMS[0].question))
-      expect(screen.getByText(ITEMS[0].answer)).toBeInTheDocument()
-
-      fireEvent.click(screen.getByText(ITEMS[1].question))
-      expect(screen.queryByText(ITEMS[0].answer)).not.toBeInTheDocument()
-      expect(screen.getByText(ITEMS[1].answer)).toBeInTheDocument()
+      const first = screen.getByRole('button', { name: ITEMS[0].question })
+      const second = screen.getByRole('button', { name: ITEMS[1].question })
+      fireEvent.click(first)
+      fireEvent.click(second)
+      expect(first).toHaveAttribute('aria-expanded', 'false')
+      expect(second).toHaveAttribute('aria-expanded', 'true')
     })
 
-    it('only shows one answer at a time', () => {
+    it('only shows one answer expanded at a time', () => {
       renderFAQ({ items: ITEMS })
-      fireEvent.click(screen.getByText(ITEMS[2].question))
-      const visibleAnswers = ITEMS.filter(({ answer }) => screen.queryByText(answer))
-      expect(visibleAnswers).toHaveLength(1)
+      fireEvent.click(screen.getByRole('button', { name: ITEMS[2].question }))
+      const expanded = screen
+        .getAllByRole('button')
+        .filter((button) => button.getAttribute('aria-expanded') === 'true')
+      expect(expanded).toHaveLength(1)
     })
   })
 

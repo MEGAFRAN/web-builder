@@ -21,6 +21,12 @@
 3. Cite the exact WCAG criterion number for every finding (e.g., WCAG 1.4.3)
 4. Provide a concrete, implementable fix for every issue — never flag without a solution
 
+## Visual Contrast Checklist
+- Adjacent sections must not share the same background color
+- Cards must have sufficient contrast against page background
+- Interactive elements must have visible focus and hover states meeting WCAG 1.4.11
+- Mobile layouts must have minimum px-4 horizontal padding
+
 ## Output
 
 Success:

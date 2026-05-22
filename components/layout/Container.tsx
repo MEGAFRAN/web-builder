@@ -23,7 +23,7 @@ export function Container({
     "mx-auto",
     "w-full",
     maxWidthMap[maxWidth ?? "xl"],
-    padding === "theme" ? "px-[8px] md:[padding-inline:var(--page-inset)]" : "",
+    padding === "theme" ? "px-4 sm:px-6 md:[padding-inline:var(--page-inset)]" : "",
     paddingClass,
   ]
     .filter(Boolean)
