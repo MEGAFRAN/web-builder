@@ -1,18 +1,6 @@
 name: Deploy Admin SPA
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'app/admin/**'
-      - 'components/admin/**'
-      - 'lib/admin-api.ts'
-      - 'lib/admin-auth-context.tsx'
-      - 'lib/admin-session.ts'
-      - 'lib/admin-session-constants.ts'
-      - 'scripts/prepare-admin-export.mjs'
-      - '.github/workflows/deploy-admin.yml'
   workflow_dispatch:
 
 permissions:
