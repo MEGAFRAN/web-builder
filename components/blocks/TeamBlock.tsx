@@ -1,6 +1,7 @@
 import type { TeamBlock as TeamBlockType } from '@/types/cms'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
+import { Stack } from '@/components/layout/Stack'
 import { Heading } from '@/components/content/Heading'
 import { Avatar } from '@/components/content/Avatar'
 import { Card } from '@/components/data/Card'
