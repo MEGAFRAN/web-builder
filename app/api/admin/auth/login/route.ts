@@ -25,6 +25,11 @@ export async function POST(req: NextRequest) {
   const b = body as Record<string, unknown>
   const email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : ''
   const password = typeof b.password === 'string' ? b.password : ''
+  const submittedClientId = typeof b.clientId === 'string' ? b.clientId.trim() : ''
+
+  if (!submittedClientId || submittedClientId !== clientId) {
+    return NextResponse.json({ error: 'Incorrect email or password' }, { status: 401 })
+  }
 
   const expectedEmail = emailEnv.trim().toLowerCase()
   const okEmail =
@@ -38,8 +43,9 @@ export async function POST(req: NextRequest) {
   }
 
   const exp = Date.now() + 7 * 24 * 60 * 60 * 1000
-  const token = signSession({ email: emailEnv.trim(), clientId, exp }, secret)
-  const res = NextResponse.json({ ok: true })
+  const sessionEmail = emailEnv.trim()
+  const token = signSession({ email: sessionEmail, clientId, exp }, secret)
+  const res = NextResponse.json({ ok: true, email: sessionEmail, clientId })
   res.cookies.set(ADMIN_SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: 'lax',

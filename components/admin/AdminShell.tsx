@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useState, type ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Container } from '@/components/layout/Container'
 import { adminCopy } from '@/components/admin/admin-copy'
+import { useAdminAuth } from '@/lib/admin-auth-context'
+import { adminClientConfigUrl, adminFetch, type AdminClientConfigResponse } from '@/lib/admin-api'
 
 const nav = [
   { href: '/admin/bookings', label: adminCopy.nav.bookings, icon: IconCalendar },
@@ -83,25 +85,38 @@ function IconClose({ className }: { className?: string }) {
   )
 }
 
-export default function AdminShell({
-  businessName,
-  logoUrl,
-  children,
-}: {
-  businessName: string
-  logoUrl?: string | null
-  children: ReactNode
-}) {
+export default function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const router = useRouter()
+  const { session, signOut } = useAdminAuth()
+  const [businessName, setBusinessName] = useState(session?.clientId ?? '')
+  const [logoUrl, setLogoUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!session?.clientId) return
+    let cancelled = false
+    void adminFetch(adminClientConfigUrl(session.clientId))
+      .then(async (res) => {
+        if (!res.ok || cancelled) return
+        const data = (await res.json()) as AdminClientConfigResponse
+        if (cancelled) return
+        setBusinessName(data.displayName)
+        setLogoUrl(data.logoUrl)
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setBusinessName(session.clientId)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [session?.clientId])
 
   const mainFullWidth =
     pathname.startsWith('/admin/availability') || pathname.startsWith('/admin/bookings')
 
-  async function signOut() {
-    await fetch('/api/admin/auth/logout', { method: 'POST' })
-    router.push('/admin/login')
-    router.refresh()
+  async function handleSignOut() {
+    await signOut()
   }
 
   function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
@@ -156,7 +171,7 @@ export default function AdminShell({
           <div className="mt-auto border-border border-t pt-4">
             <button
               type="button"
-              onClick={() => void signOut()}
+              onClick={() => void handleSignOut()}
               className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-foreground hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
             >
               {adminCopy.nav.signOut}

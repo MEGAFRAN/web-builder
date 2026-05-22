@@ -10,6 +10,7 @@ import { Section } from '@/components/layout/Section'
 import { AdminModal } from '@/components/admin/AdminModal'
 import type { AdminBookingService } from '@/types/admin'
 import { adminCopy } from '@/components/admin/admin-copy'
+import { adminDataUrl, adminFetch } from '@/lib/admin-api'
 
 function formatPrice(price: number, currency: string): string {
   const text = Number.isInteger(price)
@@ -33,7 +34,7 @@ export default function AdminServicesPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/admin/services')
+      const res = await adminFetch(adminDataUrl('/services'))
       if (!res.ok) throw new Error(adminCopy.services.errors.failedLoad)
       const data = (await res.json()) as { services: AdminBookingService[] }
       setServices(data.services)
@@ -50,7 +51,7 @@ export default function AdminServicesPage() {
 
   async function persist(next: AdminBookingService[]) {
     setSaveError('')
-    const res = await fetch('/api/admin/services', {
+    const res = await adminFetch(adminDataUrl('/services'), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ services: next }),

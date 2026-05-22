@@ -60,8 +60,8 @@ describe('AdminAvailabilityPage', () => {
       expect(screen.getByRole('heading', { name: adminCopy.availability.weeklyHours })).toBeInTheDocument()
     })
 
-    expect(fetch).toHaveBeenCalledWith('/api/admin/schedule')
-    expect(fetch).toHaveBeenCalledWith('/api/admin/services')
+    expect(fetch).toHaveBeenCalledWith('/api/admin/schedule', { credentials: 'include' })
+    expect(fetch).toHaveBeenCalledWith('/api/admin/services', { credentials: 'include' })
     expect(screen.getByText(DAY_LABEL.mon)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: adminCopy.availability.saveSchedule })).toBeInTheDocument()
   })

@@ -6,6 +6,7 @@ import { Button } from '@/components/inputs/Button'
 import { Stack } from '@/components/layout/Stack'
 import { BOOKING_SLOT_GRID } from '@/lib/booking-slot-grid'
 import { adminCopy } from '@/components/admin/admin-copy'
+import { adminDataUrl, adminFetch } from '@/lib/admin-api'
 
 type Service = {
   id: string
@@ -41,7 +42,7 @@ export function NewAppointmentModal({
   const selected = services.find((s) => s.id === serviceId)
 
   useEffect(() => {
-    void fetch('/api/admin/services')
+    void adminFetch(adminDataUrl('/services'))
       .then((r) => r.json())
       .then((d: { services: Service[] }) => {
         setServices(d.services)
@@ -77,7 +78,7 @@ export function NewAppointmentModal({
     }
     setSubmitting(true)
     try {
-      const res = await fetch('/api/admin/reservations', {
+      const res = await adminFetch(adminDataUrl('/reservations'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

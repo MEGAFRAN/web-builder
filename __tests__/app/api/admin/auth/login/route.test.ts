@@ -64,6 +64,7 @@ describe('POST /api/admin/auth/login', () => {
       {
         email: 'other@example.com',
         password: 'hunter2',
+        clientId: 'client-x',
       },
     ],
     [
@@ -71,6 +72,15 @@ describe('POST /api/admin/auth/login', () => {
       {
         email: 'admin@example.com',
         password: 'wrong',
+        clientId: 'client-x',
+      },
+    ],
+    [
+      'wrong clientId',
+      {
+        email: 'admin@example.com',
+        password: 'hunter2',
+        clientId: 'other-client',
       },
     ],
     [
@@ -78,6 +88,7 @@ describe('POST /api/admin/auth/login', () => {
       {
         email: 1,
         password: 'hunter2',
+        clientId: 'client-x',
       },
     ],
   ] as const)('returns 401 when credentials are rejected (%s)', async (_label, body) => {
@@ -88,10 +99,14 @@ describe('POST /api/admin/auth/login', () => {
 
   it('returns 200 with a signed session cookie on success', async () => {
     const res = await POST(
-      post({ email: '  admin@example.com  ', password: 'hunter2' }),
+      post({ email: '  admin@example.com  ', password: 'hunter2', clientId: 'client-x' }),
     )
     expect(res.status).toBe(200)
-    expect(await res.json()).toEqual({ ok: true })
+    expect(await res.json()).toEqual({
+      ok: true,
+      email: 'Admin@Example.com',
+      clientId: 'client-x',
+    })
     const token = res.cookies.get(ADMIN_SESSION_COOKIE)?.value
     expect(token).toBeDefined()
     const payload = verifySessionToken(token!, process.env.ADMIN_SESSION_SECRET!)
@@ -101,7 +116,7 @@ describe('POST /api/admin/auth/login', () => {
 
   it('sets Secure on the cookie in production', async () => {
     vi.stubEnv('NODE_ENV', 'production')
-    const res = await POST(post({ email: 'admin@example.com', password: 'hunter2' }))
+    const res = await POST(post({ email: 'admin@example.com', password: 'hunter2', clientId: 'client-x' }))
     expect(res.status).toBe(200)
     expect(res.cookies.get(ADMIN_SESSION_COOKIE)?.secure).toBe(true)
   })

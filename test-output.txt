@@ -1,0 +1,82 @@
+> vitest run
+ RUN  v4.1.6 /Users/admin/Desktop/agentic repositories/web-builder
+      Coverage enabled with v8
+ Test Files  122 passed (122)
+      Tests  1457 passed (1457)
+   Start at  00:11:27
+   Duration  17.16s (transform 4.15s, setup 6.95s, import 11.36s, tests 21.57s, environment 51.81s)
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   86.32 |    85.24 |   82.83 |   88.64 |                   
+ web-builder       |       0 |        0 |       0 |       0 |                   
+  proxy.ts         |       0 |        0 |       0 |       0 | 7-139             
+ ...in/(dashboard) |   94.73 |       75 |     100 |   94.44 |                   
+  layout.tsx       |   92.85 |       75 |     100 |    92.3 | 21                
+ ...min/auth/login |     100 |    91.66 |     100 |     100 |                   
+  route.ts         |     100 |    91.66 |     100 |     100 | 27-28             
+ .../admin/auth/me |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 6-8               
+ .../client-config |       0 |        0 |       0 |       0 |                   
+  route.ts         |       0 |        0 |       0 |       0 | 7-10              
+ ...n/reservations |   95.74 |    88.63 |     100 |     100 |                   
+  route.ts         |   95.74 |    88.63 |     100 |     100 | 25,64,76,115      
+ ...admin/schedule |   91.57 |    85.71 |     100 |    98.8 |                   
+  route.ts         |   91.57 |    85.71 |     100 |    98.8 | 82                
+ ...admin/services |    91.3 |    91.66 |     100 |     100 |                   
+  route.ts         |    91.3 |    91.66 |     100 |     100 | 10,38             
+ ...i/availability |      96 |    96.96 |     100 |   95.91 |                   
+  route.ts         |      96 |    96.96 |     100 |   95.91 | 27,57             
+ ...pi/reservation |   94.44 |      100 |     100 |   94.28 |                   
+  route.ts         |   94.44 |      100 |     100 |   94.28 | 125-126           
+ ...der/components |   30.76 |      100 |    6.89 |   30.76 |                   
+  ...ntRegistry.ts |    3.57 |      100 |       0 |    3.57 | 9-35              
+ ...mponents/admin |   80.98 |    75.35 |   70.32 |   83.89 |                   
+  ...ilityPage.tsx |    70.8 |    63.29 |   56.52 |   74.28 | ...25,537-603,682 
+  ...kingsPage.tsx |   83.78 |       80 |   71.42 |   84.84 | ...78,190-200,241 
+  ...LoginForm.tsx |   90.32 |    88.88 |   85.71 |   93.33 | 44-45             
+  AdminModal.tsx   |    92.3 |       75 |     100 |   94.73 | 33                
+  ...vicesPage.tsx |   87.73 |    82.27 |   80.55 |   90.72 | ...85,326,352-360 
+  AdminShell.tsx   |   76.08 |       75 |   68.18 |   81.39 | ...87,222-242,275 
+  admin-copy.ts    |   95.83 |       70 |   92.85 |   95.23 | 32                
+ ...admin/bookings |   92.12 |     75.4 |   86.53 |   92.56 |                   
+  BookingCard.tsx  |     100 |    80.95 |     100 |     100 | 37,53-54,82       
+  ...ailDrawer.tsx |     100 |    71.42 |     100 |     100 | 64                
+  ...mptyState.tsx |     100 |       75 |     100 |     100 | 16                
+  ...mentModal.tsx |      85 |    66.66 |   73.91 |   85.71 | ...00,132,147,198 
+  WeekGrid.tsx     |    90.9 |      100 |    87.5 |      90 | 23                
+ ...ponents/blocks |   91.86 |    86.26 |   92.85 |   94.49 |                   
+  ...diesBlock.tsx |      80 |    78.94 |     100 |     100 | 18-19,43          
+  ...PageBlock.tsx |     100 |    80.95 |     100 |     100 | 29-45             
+  ...tionBlock.tsx |    94.9 |    92.82 |   97.29 |   97.95 | 77,81,141         
+  ...icesBlock.tsx |   79.01 |    69.93 |   75.86 |   81.57 | 64,75,344-404,446 
+  ...PageBlock.tsx |     100 |    82.14 |     100 |     100 | 68,142-145,176    
+  ...PageBlock.tsx |     100 |    89.28 |     100 |     100 | 36-37,109         
+ ...ponents/motion |   84.21 |     62.5 |     100 |   88.23 |                   
+  ScrollReveal.tsx |   84.21 |     62.5 |     100 |   88.23 | 15-16             
+ ...nts/navigation |   84.78 |    85.86 |   76.47 |   87.34 |                   
+  Footer.tsx       |     100 |    88.88 |     100 |     100 | 27                
+  Navbar.tsx       |   69.56 |    58.62 |   55.55 |   72.97 | ...56,108,169-178 
+ ...nents/sections |   94.97 |    91.72 |   98.38 |   97.96 |                   
+  ...StatValue.tsx |      85 |       50 |     100 |   89.18 | 26,47,56-57       
+  Carousel.tsx     |   97.54 |    92.04 |     100 |     100 | ...54,269-270,348 
+  FAQ.tsx          |    90.9 |    81.25 |   88.88 |     100 | 95,120,122        
+  FeatureGrid.tsx  |     100 |    94.73 |     100 |     100 | 31                
+ ...onents/vendors |   98.03 |    90.47 |     100 |     100 |                   
+  ...iptWidget.tsx |   98.03 |    90.47 |     100 |     100 | 18,41             
+ web-builder/lib   |   94.96 |     92.1 |   96.47 |   96.83 |                   
+  ...h-context.tsx |   97.46 |    91.17 |     100 |     100 | 34,49,97          
+  booking-utils.ts |    57.5 |    46.87 |      70 |   67.64 | 42-55,63,69-72    
+  ...-copyright.ts |   88.88 |    85.71 |     100 |    87.5 | 15                
+  ...stat-value.ts |   91.66 |       80 |     100 |     100 | 28-45             
+ .../stories/mocks |       0 |        0 |       0 |       0 |                   
+  cms-fixtures.ts  |       0 |        0 |       0 |       0 | 16-276            
+-------------------|---------|----------|---------|---------|-------------------
+=============================== Coverage summary ===============================
+Statements   : 86.32% ( 2052/2377 )
+Branches     : 85.24% ( 1860/2182 )
+Functions    : 82.83% ( 555/670 )
+Lines        : 88.64% ( 1928/2175 )
+================================================================================
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.

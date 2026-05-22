@@ -45,7 +45,7 @@ jobs:
       - name: Build static site
         run: |
           echo "CLIENT_ID=${{ github.event.inputs.clientId }}" > .env.local
-          npm run build
+          npm run build:blob
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1

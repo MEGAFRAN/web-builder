@@ -54,7 +54,7 @@ describe('AdminServicesPage', () => {
       expect(screen.getByRole('heading', { name: 'Haircut', level: 2 })).toBeInTheDocument()
     })
 
-    expect(fetch).toHaveBeenCalledWith('/api/admin/services')
+    expect(fetch).toHaveBeenCalledWith('/api/admin/services', { credentials: 'include' })
     expect(screen.getByText(/wash and trim/i)).toBeInTheDocument()
   })
 

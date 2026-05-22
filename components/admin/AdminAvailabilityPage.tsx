@@ -7,6 +7,7 @@ import { AdminModal } from '@/components/admin/AdminModal'
 import { Button } from '@/components/inputs/Button'
 import type { BookingScheduleFile, DayCode, ScheduleException, WeeklyHoursRow } from '@/types/admin'
 import { adminCopy, DAY_LABEL } from '@/components/admin/admin-copy'
+import { adminDataUrl, adminFetch } from '@/lib/admin-api'
 
 /** Hides the native clock/calendar affordance on `<input type="time" />`; the control remains usable. */
 const TIME_INPUT_HIDE_NATIVE_ICON =
@@ -143,8 +144,8 @@ export default function AdminAvailabilityPage() {
     setError('')
     try {
       const [scheduleRes, servicesRes] = await Promise.all([
-        fetch('/api/admin/schedule'),
-        fetch('/api/admin/services'),
+        adminFetch(adminDataUrl('/schedule')),
+        adminFetch(adminDataUrl('/services')),
       ])
       if (!scheduleRes.ok) throw new Error(adminCopy.availability.errors.failedLoad)
       const data = (await scheduleRes.json()) as BookingScheduleFile
@@ -195,7 +196,7 @@ export default function AdminAvailabilityPage() {
           ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].indexOf(a.day) -
           ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].indexOf(b.day),
       )
-      const res = await fetch('/api/admin/schedule', {
+      const res = await adminFetch(adminDataUrl('/schedule'), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ weekly: weeklyOrdered }),
@@ -228,7 +229,7 @@ export default function AdminAvailabilityPage() {
   }
 
   async function deleteException(id: string) {
-    const res = await fetch(`/api/admin/schedule?id=${encodeURIComponent(id)}`, {
+    const res = await adminFetch(adminDataUrl(`/schedule?id=${encodeURIComponent(id)}`), {
       method: 'DELETE',
     })
     if (!res.ok) {
@@ -627,7 +628,7 @@ function ExceptionModal({
   async function submit() {
     setErr('')
     const body = mode === 'closed' ? { date, closed: true } : { date, closed: false, from, to }
-    const res = await fetch('/api/admin/schedule', {
+    const res = await adminFetch(adminDataUrl('/schedule'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

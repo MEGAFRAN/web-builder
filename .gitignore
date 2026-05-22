@@ -21,6 +21,12 @@
 /out/
 /public/images/
 
+# blob-build temp dir (created by scripts/prepare-static-export.mjs, always restored)
+/.blob-excluded/
+
+# admin-build temp dir (created by scripts/prepare-admin-export.mjs, always restored)
+/.admin-excluded/
+
 # production
 /build
 

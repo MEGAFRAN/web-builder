@@ -18,8 +18,12 @@ import { adminCopy, formatPrettyDateEs } from '@/components/admin/admin-copy'
 import { resolveDayMinutesWindow } from '@/lib/booking-schedule-window'
 import type { BookingScheduleFile, ReservationRow } from '@/types/admin'
 import { SimpleDayList } from '@/components/admin/bookings/SimpleDayList'
+import { useAdminAuth } from '@/lib/admin-auth-context'
+import { adminDataUrl, adminFetch } from '@/lib/admin-api'
 
-export default function AdminBookingsPage({ clientId }: { clientId: string }) {
+export default function AdminBookingsPage() {
+  const { session } = useAdminAuth()
+  const clientId = session?.clientId ?? ''
   const [selectedYmd, setSelectedYmd] = useState<string>(() => formatYmd(new Date()))
   const [view, setView] = useState<'day' | 'week'>('day')
   const [schedule, setSchedule] = useState<BookingScheduleFile | null>(null)
@@ -40,11 +44,11 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
     setError('')
     try {
       const [rs, sch] = await Promise.all([
-        fetch(`/api/admin/reservations?startDate=${start}&endDate=${end}`).then(async (r) => {
+        adminFetch(adminDataUrl(`/reservations?startDate=${start}&endDate=${end}`)).then(async (r) => {
           if (!r.ok) throw new Error(adminCopy.bookings.errors.failedReservations)
           return r.json() as Promise<{ reservations: ReservationRow[] }>
         }),
-        fetch(`/api/admin/schedule`).then(async (r) => {
+        adminFetch(adminDataUrl('/schedule')).then(async (r) => {
           if (!r.ok) throw new Error(adminCopy.bookings.errors.failedSchedule)
           return r.json() as Promise<BookingScheduleFile>
         }),
@@ -79,7 +83,7 @@ export default function AdminBookingsPage({ clientId }: { clientId: string }) {
     dayWindow !== null ? Math.max((dayWindow.closeMin - dayWindow.openMin) * ppm, 120) : 0
 
   async function patchReservation(id: string, action: 'cancel' | 'no-show', reason?: string) {
-    const res = await fetch(`/api/admin/reservations/${encodeURIComponent(id)}`, {
+    const res = await adminFetch(adminDataUrl(`/reservations/${encodeURIComponent(id)}`), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action, reason }),

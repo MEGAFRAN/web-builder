@@ -4,15 +4,20 @@ import AdminLoginForm from '@/components/admin/AdminLoginForm'
 import { adminCopy } from '@/components/admin/admin-copy'
 
 const mockPush = vi.fn()
-const mockRefresh = vi.fn()
+const mockSetSession = vi.fn()
 const mockSearchParams = new URLSearchParams()
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
-    refresh: mockRefresh,
   }),
   useSearchParams: () => mockSearchParams,
+}))
+
+vi.mock('@/lib/admin-auth-context', () => ({
+  useAdminAuth: () => ({
+    setSession: mockSetSession,
+  }),
 }))
 
 describe('AdminLoginForm', () => {
@@ -20,7 +25,7 @@ describe('AdminLoginForm', () => {
     vi.restoreAllMocks()
     mockSearchParams.delete('redirect')
     mockPush.mockReset()
-    mockRefresh.mockReset()
+    mockSetSession.mockReset()
     vi.stubGlobal(
       'fetch',
       vi.fn(() =>
@@ -35,13 +40,16 @@ describe('AdminLoginForm', () => {
   it('renders sign-in copy and submits credentials to the admin login API', async () => {
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({}),
+      json: async () => ({ ok: true, email: 'owner@example.com', clientId: 'client-a' }),
     } as Response)
 
     render(<AdminLoginForm />)
 
     expect(screen.getByRole('heading', { name: adminCopy.login.heading })).toBeInTheDocument()
 
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.clientIdLabel, 'i')), {
+      target: { value: 'client-a' },
+    })
     fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
       target: { value: 'owner@example.com' },
     })
@@ -56,14 +64,22 @@ describe('AdminLoginForm', () => {
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: 'owner@example.com', password: 'secret-pass' }),
+          body: JSON.stringify({
+            email: 'owner@example.com',
+            password: 'secret-pass',
+            clientId: 'client-a',
+          }),
+          credentials: 'include',
         }),
       )
     })
 
     await waitFor(() => {
+      expect(mockSetSession).toHaveBeenCalledWith({
+        email: 'owner@example.com',
+        clientId: 'client-a',
+      })
       expect(mockPush).toHaveBeenCalledWith('/admin/bookings')
-      expect(mockRefresh).toHaveBeenCalled()
     })
   })
 
@@ -75,6 +91,9 @@ describe('AdminLoginForm', () => {
 
     render(<AdminLoginForm />)
 
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.clientIdLabel, 'i')), {
+      target: { value: 'client-a' },
+    })
     fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
       target: { value: 'a@b.co' },
     })
@@ -99,11 +118,14 @@ describe('AdminLoginForm', () => {
     mockSearchParams.set('redirect', '/admin/settings')
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({}),
+      json: async () => ({ ok: true, email: 'o@z.co', clientId: 'client-a' }),
     } as Response)
 
     render(<AdminLoginForm />)
 
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.clientIdLabel, 'i')), {
+      target: { value: 'client-a' },
+    })
     fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
       target: { value: 'o@z.co' },
     })
@@ -121,11 +143,14 @@ describe('AdminLoginForm', () => {
     mockSearchParams.set('redirect', 'https://evil.example')
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({}),
+      json: async () => ({ ok: true, email: 'o@z.co', clientId: 'client-a' }),
     } as Response)
 
     render(<AdminLoginForm />)
 
+    fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.clientIdLabel, 'i')), {
+      target: { value: 'client-a' },
+    })
     fireEvent.change(screen.getByLabelText(new RegExp(adminCopy.login.emailLabel, 'i')), {
       target: { value: 'o@z.co' },
     })

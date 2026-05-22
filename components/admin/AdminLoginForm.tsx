@@ -6,6 +6,8 @@ import { Alert } from '@/components/content/Alert'
 import { Stack } from '@/components/layout/Stack'
 import { Section } from '@/components/layout/Section'
 import { adminCopy } from '@/components/admin/admin-copy'
+import { useAdminAuth } from '@/lib/admin-auth-context'
+import { adminAuthUrl, adminFetch, type AdminLoginResponse } from '@/lib/admin-api'
 
 export default function AdminLoginForm({
   misconfigured,
@@ -15,7 +17,9 @@ export default function AdminLoginForm({
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirect') ?? '/admin/bookings'
+  const { setSession } = useAdminAuth()
 
+  const [clientId, setClientId] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -26,18 +30,22 @@ export default function AdminLoginForm({
     setError('')
     setBusy(true)
     try {
-      const res = await fetch('/api/admin/auth/login', {
+      const res = await adminFetch(adminAuthUrl('login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, clientId: clientId.trim() }),
       })
-      const data = (await res.json().catch(() => ({}))) as { error?: string }
+      const data = (await res.json().catch(() => ({}))) as AdminLoginResponse
       if (!res.ok) {
         setError(data.error ?? adminCopy.login.defaultError)
         return
       }
+      if (typeof data.email !== 'string' || typeof data.clientId !== 'string') {
+        setError(adminCopy.login.defaultError)
+        return
+      }
+      setSession({ email: data.email, clientId: data.clientId })
       router.push(redirectTo.startsWith('/admin') ? redirectTo : '/admin/bookings')
-      router.refresh()
     } finally {
       setBusy(false)
     }
@@ -72,6 +80,17 @@ export default function AdminLoginForm({
                 {error}
               </p>
             )}
+            <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
+              {adminCopy.login.clientIdLabel}
+              <input
+                type="text"
+                autoComplete="organization"
+                required
+                value={clientId}
+                onChange={(e) => setClientId(e.target.value)}
+                className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+              />
+            </label>
             <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
               {adminCopy.login.emailLabel}
               <input

@@ -3,8 +3,7 @@ import { render, screen, fireEvent, within } from '@testing-library/react'
 import AdminShell from '@/components/admin/AdminShell'
 import { adminCopy } from '@/components/admin/admin-copy'
 
-const mockPush = vi.fn()
-const mockRefresh = vi.fn()
+const mockSignOut = vi.fn(async () => {})
 const mockPathname = vi.fn(() => '/admin/bookings')
 
 vi.mock('next/link', () => ({
@@ -27,24 +26,26 @@ vi.mock('next/link', () => ({
 
 vi.mock('next/navigation', () => ({
   usePathname: () => mockPathname(),
-  useRouter: () => ({
-    push: mockPush,
-    refresh: mockRefresh,
+}))
+
+vi.mock('@/lib/admin-auth-context', () => ({
+  useAdminAuth: () => ({
+    session: { email: 'owner@example.com', clientId: 'acme-spa' },
+    signOut: mockSignOut,
   }),
 }))
 
 describe('AdminShell', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
-    mockPush.mockReset()
-    mockRefresh.mockReset()
+    mockSignOut.mockReset()
     mockPathname.mockReturnValue('/admin/bookings')
     vi.stubGlobal(
       'fetch',
       vi.fn(() =>
         Promise.resolve({
           ok: true,
-          json: async () => ({}),
+          json: async () => ({ displayName: 'Acme Spa', logoUrl: null }),
         }),
       ),
     )
@@ -58,7 +59,7 @@ describe('AdminShell', () => {
   ] as const)('uses pathname "%s" to show section "%s" in mobile bottom bar', (pathname, title) => {
     mockPathname.mockReturnValue(pathname)
     render(
-      <AdminShell businessName="Acme Spa">
+      <AdminShell>
         <p>Page body</p>
       </AdminShell>,
     )
@@ -71,7 +72,7 @@ describe('AdminShell', () => {
   it('does not mark a mobile tab as current on unknown admin paths', () => {
     mockPathname.mockReturnValue('/admin/unknown')
     render(
-      <AdminShell businessName="Acme Spa">
+      <AdminShell>
         <p>Page body</p>
       </AdminShell>,
     )
@@ -81,30 +82,37 @@ describe('AdminShell', () => {
     expect(screen.getByText('Page body')).toBeInTheDocument()
   })
 
-  it('shows logo image when logoUrl is set and otherwise shows initials fallback', () => {
-    const { rerender } = render(
-      <AdminShell businessName="Beta Co">
+  it('shows logo image when logoUrl is returned from client config and otherwise shows initials fallback', async () => {
+    render(
+      <AdminShell>
         <span>inner</span>
       </AdminShell>,
     )
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     const sidebar = screen.getByRole('complementary')
-    expect(within(sidebar).getByText('B')).toBeInTheDocument()
+    expect(within(sidebar).getByText('A')).toBeInTheDocument()
 
-    rerender(
-      <AdminShell businessName="Beta Co" logoUrl="https://example.com/logo.png">
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ displayName: 'Beta Co', logoUrl: 'https://example.com/logo.png' }),
+    } as Response)
+
+    render(
+      <AdminShell>
         <span>inner</span>
       </AdminShell>,
     )
 
-    const img = document.querySelector('aside img[src="https://example.com/logo.png"]')
-    expect(img).not.toBeNull()
+    await vi.waitFor(() => {
+      const img = document.querySelector('aside img[src="https://example.com/logo.png"]')
+      expect(img).not.toBeNull()
+    })
   })
 
-  it('posts logout then navigates to /admin/login when Sign out is used', async () => {
+  it('calls signOut when Sign out is used', async () => {
     render(
-      <AdminShell businessName="Gamma">
+      <AdminShell>
         <span>kids</span>
       </AdminShell>,
     )
@@ -112,9 +120,7 @@ describe('AdminShell', () => {
     fireEvent.click(screen.getAllByRole('button', { name: adminCopy.nav.signOut })[0])
 
     await vi.waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith('/api/admin/auth/logout', { method: 'POST' })
-      expect(mockPush).toHaveBeenCalledWith('/admin/login')
-      expect(mockRefresh).toHaveBeenCalled()
+      expect(mockSignOut).toHaveBeenCalled()
     })
   })
 
@@ -126,7 +132,7 @@ describe('AdminShell', () => {
     (route, bodyText) => {
       mockPathname.mockReturnValue(route)
       render(
-        <AdminShell businessName="Wide Co">
+        <AdminShell>
           <span>{bodyText}</span>
         </AdminShell>,
       )
@@ -141,7 +147,7 @@ describe('AdminShell', () => {
   it('uses xl container on services/settings routes and exposes sidebar navigation links for all admin routes', () => {
     mockPathname.mockReturnValue('/admin/services')
     render(
-      <AdminShell businessName="Delta">
+      <AdminShell>
         <span>x</span>
       </AdminShell>,
     )

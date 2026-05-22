@@ -4,6 +4,17 @@ import AdminBookingsPage from '@/components/admin/AdminBookingsPage'
 import type { BookingScheduleFile } from '@/types/admin'
 import { adminCopy, WEEK_SHORT_LABELS, weekDayHeader } from '@/components/admin/admin-copy'
 
+const fetchCredentials = { credentials: 'include' }
+
+vi.mock('@/lib/admin-auth-context', () => ({
+  useAdminAuth: () => ({
+    session: { email: 'owner@example.com', clientId: 'client-1' },
+    status: 'authenticated',
+    setSession: vi.fn(),
+    signOut: vi.fn(),
+  }),
+}))
+
 const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
 
 function makeSchedule(
@@ -78,7 +89,7 @@ describe('AdminBookingsPage', () => {
       ),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     expect(screen.getByText(adminCopy.common.loading)).toBeInTheDocument()
   })
@@ -105,7 +116,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByText(adminCopy.bookings.emptyDay)).toBeInTheDocument()
@@ -113,8 +124,9 @@ describe('AdminBookingsPage', () => {
 
     expect(fetch).toHaveBeenCalledWith(
       '/api/admin/reservations?startDate=2026-05-18&endDate=2026-05-18',
+      fetchCredentials,
     )
-    expect(fetch).toHaveBeenCalledWith('/api/admin/schedule')
+    expect(fetch).toHaveBeenCalledWith('/api/admin/schedule', fetchCredentials)
   })
 
   it('surfaces an error alert when reservations cannot be loaded', async () => {
@@ -138,7 +150,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByText(adminCopy.common.error)).toBeInTheDocument()
@@ -168,7 +180,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.queryByText(adminCopy.common.loading)).not.toBeInTheDocument()
@@ -181,6 +193,7 @@ describe('AdminBookingsPage', () => {
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
         '/api/admin/reservations?startDate=2026-05-18&endDate=2026-05-24',
+        fetchCredentials,
       )
     })
   })
@@ -206,7 +219,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByText(adminCopy.bookings.errors.failedSchedule)).toBeInTheDocument()
@@ -236,7 +249,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByText(new RegExp(adminCopy.bookings.closedPrefix, 'i'))).toBeInTheDocument()
@@ -266,7 +279,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByText(adminCopy.bookings.specialDayListNote)).toBeInTheDocument()
@@ -302,7 +315,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /pat guest/i })).toBeInTheDocument()
@@ -331,6 +344,7 @@ describe('AdminBookingsPage', () => {
         '/api/admin/reservations/r1',
         expect.objectContaining({
           method: 'PATCH',
+          credentials: 'include',
           body: JSON.stringify({ action: 'cancel', reason: 'Test reason' }),
         }),
       )
@@ -365,7 +379,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /pat guest/i })).toBeInTheDocument()
@@ -381,6 +395,7 @@ describe('AdminBookingsPage', () => {
         '/api/admin/reservations/r1',
         expect.objectContaining({
           method: 'PATCH',
+          credentials: 'include',
           body: JSON.stringify({ action: 'no-show' }),
         }),
       )
@@ -409,7 +424,7 @@ describe('AdminBookingsPage', () => {
       }),
     )
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.queryByText(adminCopy.common.loading)).not.toBeInTheDocument()
@@ -433,6 +448,7 @@ describe('AdminBookingsPage', () => {
     })
     expect(fetch).toHaveBeenCalledWith(
       '/api/admin/reservations?startDate=2026-05-21&endDate=2026-05-21',
+      fetchCredentials,
     )
   })
 
@@ -473,7 +489,7 @@ describe('AdminBookingsPage', () => {
     })
     vi.stubGlobal('fetch', fetchMock)
 
-    render(<AdminBookingsPage clientId="client-1" />)
+    render(<AdminBookingsPage />)
 
     await waitFor(() => {
       expect(screen.getByText(adminCopy.bookings.emptyDay)).toBeInTheDocument()
@@ -512,6 +528,7 @@ describe('AdminBookingsPage', () => {
         '/api/admin/reservations',
         expect.objectContaining({
           method: 'POST',
+          credentials: 'include',
         }),
       )
     })

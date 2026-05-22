@@ -2,48 +2,90 @@
 
 ## Goal
 
-A multi-tenant Next.js SSG platform where a single codebase builds isolated static sites for 100+ clients. Each client is fully described by a single JSON config file and deployed independently to Azure Static Web Apps.
+A multi-tenant Next.js SSG platform where a single codebase builds isolated static sites for 100+ clients. Each client is fully described by a single JSON config file and deployed independently to Azure Blob Storage (primary) or Azure Static Web Apps.
 
 ---
 
 ## Core Principle: Build-Time Tenant Isolation
 
-The `CLIENT_ID` environment variable is the single gate for every build. It selects exactly one client config JSON, which contains:
+The `CLIENT_ID` environment variable is the single gate for every public client build. It selects exactly one client config JSON, which contains:
 - All page content (slugs + block arrays)
 - Theme tokens (CSS variables)
 - Feature flags (which blocks are enabled)
 
-No runtime tenant switching: each deployment targets exactly one `CLIENT_ID`. Page content, theme, and navigation are baked from JSON at build time. Interactive features (**booking widget**, **contact forms**, **admin portal**) use Route Handlers under `app/api/` and browser `fetch`, always scoped to that deployment’s client — see [Runtime APIs, booking & admin](#runtime-apis-booking--admin).
+No runtime tenant switching for **public client sites**: each blob build targets exactly one `CLIENT_ID`. Page content, theme, and navigation are baked from JSON at build time. Interactive features (**booking widget**, **contact forms**) call external Azure Functions via URLs configured in `client.json`.
+
+The **admin portal** is a separate deployment — a single shared client-side SPA that serves all tenants. It identifies the active tenant from the authenticated user's JWT, not from `CLIENT_ID` at build time. See [Runtime APIs, booking & admin](#runtime-apis-booking--admin) and [`architecture-booking-system.md`](architecture-booking-system.md).
+
+---
+
+## Build Targets
+
+Three distinct build modes are supported, each producing a different static artifact:
+
+| Command | Script | Output | Includes | Excludes |
+|---|---|---|---|---|
+| `npm run build:blob` | `scripts/prepare-static-export.mjs` | `/out` (trailing slash) | Public site routes only | `app/api/`, `app/admin/` |
+| `npm run build:admin` | `scripts/prepare-admin-export.mjs` | `/out` | Admin SPA routes only | `app/api/`, `app/(site)/` |
+| `npm run dev` | `scripts/run-next-dev.mjs` | Dev server | All routes | Nothing |
+
+The prepare scripts temporarily move excluded directories outside `app/` before calling `next build`, then restore them on exit regardless of build success or failure. `next.config.ts` enables `output: 'export'` for all non-dev builds; `trailingSlash` is enabled only for `DEPLOY_TARGET=blob`.
 
 ---
 
 ## Build Flow
 
+### Public client site (blob deploy)
+
 ```
-GitHub Actions (manual dispatch, input: clientId)
+GitHub Actions — deploy-websites.yml (manual dispatch, input: clientId)
         │
         ▼
 echo CLIENT_ID={clientId} > .env.local
         │
         ▼
-npm run build
-  (env: CLIENT_ID)
-        │
-        ├── app/layout.tsx
-        │     getClientConfig(CLIENT_ID) → resolveTheme() → buildThemeStyles()
-        │     inject <style>:root { --color-primary: ...; --color-text: ...; ... }</style>
-        │
-        └── app/[[...slug]]/page.tsx
-              getClientConfig(CLIENT_ID) → config.pages[]
-              createJSONCMSClient(config.pages)
-              generateStaticParams() → slugs[]
-              Page() → getPage(slug) → <PageRenderer blocks={blocks} />
-        │
-        ▼
-/out  (static HTML + CSS + JS)
+npm run build:blob
+  scripts/prepare-static-export.mjs
+    ├── move app/api/   → .blob-excluded/api/
+    ├── move app/admin/ → .blob-excluded/admin/
+    ├── next build  (DEPLOY_TARGET=blob, output: export, trailingSlash: true)
+    │     app/layout.tsx
+    │       getClientConfig(CLIENT_ID) → resolveTheme() → buildThemeStyles()
+    │       inject <style>:root { --color-primary: ...; ... }</style>
+    │     app/[[...slug]]/page.tsx
+    │       getClientConfig(CLIENT_ID) → config.pages[]
+    │       generateStaticParams() → slugs[]
+    │       Page() → getPage(slug) → <PageRenderer blocks={blocks} />
+    └── restore app/api/ and app/admin/
         │
         ▼
-Azure Static Web Apps (deploy token: SWA_TOKEN_{CLIENT_KEY})
+/out  (static HTML + CSS + JS, no admin or API artifacts)
+        │
+        ▼
+Azure Blob Storage — $web container (synced via az storage blob sync)
+```
+
+### Admin SPA (single shared deployment)
+
+```
+GitHub Actions — deploy-admin.yml (triggers on push to main / manual)
+        │
+        ▼
+npm run build:admin
+  scripts/prepare-admin-export.mjs
+    ├── require NEXT_PUBLIC_ADMIN_API_URL
+    ├── move app/api/    → .admin-excluded/api/
+    ├── move app/(site)/ → .admin-excluded/site/
+    ├── next build  (DEPLOY_TARGET=admin, output: export)
+    │     app/admin/* — all "use client", no server data fetching
+    │     NEXT_PUBLIC_ADMIN_API_URL baked into bundle
+    └── restore app/api/ and app/(site)/
+        │
+        ▼
+/out  (admin SPA — one deployment, serves all clients)
+        │
+        ▼
+Azure Static Web Apps — $web-admin (single instance)
 ```
 
 ---
@@ -131,7 +173,7 @@ type ClientConfig = {
 }
 ```
 
-Adding a new client = creating a `config/clients/{clientId}/` directory with `client.json` + one GitHub secret (`SWA_TOKEN_{CLIENT_KEY}`). If the client declares a `template`, all pages, header, and footer are inherited automatically — no `pages/` directory required.
+Adding a new client = creating a `config/clients/{clientId}/` directory with `client.json` + one GitHub secret (`SWA_TOKEN_{CLIENT_KEY}` for SWA deploys) or an Azure Blob Storage container for blob deploys. If the client declares a `template`, all pages, header, and footer are inherited automatically — no `pages/` directory required.
 
 Content changes = editing the relevant `pages/*.json` file (typically done by an AI agent acting on client instructions) + triggering a rebuild. Each page file is an independent unit — agents read and write only the file for the page being changed.
 
@@ -200,40 +242,44 @@ Pages are arrays of typed blocks dispatched through a component registry (`compo
 
 ## Runtime APIs, booking & admin
 
-Production builds use `output: 'export'` in `next.config.ts` (static HTML/CSS/JS under `/out`). That artifact is ideal for Azure Static Web Apps. **Route Handlers** in `app/api/` run when the app is executed as a Next.js server (for example local `npm run dev` or a Node-hosted preview). For fully static hosting, point dynamic behavior at backends via config:
+`next.config.ts` enables `output: 'export'` for all non-dev builds. The resulting static artifact contains no server-side Route Handlers. **Route Handlers** in `app/api/` run only when the app executes as a Next.js server (`npm run dev`) and are excluded from all static export builds via the prepare scripts.
+
+For deployed environments, dynamic behavior is handled by Azure Functions configured via `client.json`:
 
 | Mechanism | Purpose |
 |-----------|---------|
-| `client.json` → `reservationEndpoint` | Optional URL for `POST` reservation payloads (e.g. Azure Function). If unset, submissions append to `data/reservations-local.json` via `/api/reservation`. |
-| `reservationBlock` → `availabilityEndpoint` | Optional URL for booked-slot queries. If unset, the widget calls `/api/availability`. |
-| `reservationBlock` → `clientId` | Scopes availability and reservation records to this tenant (must align with `CLIENT_ID` for built-in APIs). |
+| `client.json` → `reservationEndpoint` | POST target for reservation submissions. If unset, the booking widget calls the local Route Handler (dev only). |
+| `reservationBlock` → `availabilityEndpoint` | GET target for booked-slot queries. If unset, calls local `/api/availability` (dev only). |
+| `reservationBlock` → `clientId` | Scopes availability and reservation records to this tenant. |
+| `NEXT_PUBLIC_ADMIN_API_URL` | Azure Functions base URL for the admin SPA. If unset, admin SPA calls local Route Handlers (dev only). |
 
-Reference implementation for hosted reservations + Cosmos: [`azure-functions/README.md`](azure-functions/README.md).
+Reference implementation for hosted reservations and Cosmos DB: [`azure-functions/README.md`](azure-functions/README.md).
 
-### Public-facing APIs (unauthenticated)
+### Public-facing APIs (unauthenticated, dev only)
 
-Used by site blocks and forms; all assume `CLIENT_ID` is set server-side for this deployment.
+Used by site blocks and forms during local development. In production, the equivalent Azure Functions are called directly from the browser.
 
 | Route | Role |
 |-------|------|
-| `GET /api/booking-services` | Read-only service catalog for the booking widget. Same persistence as admin services (`data/booking-services-local.json`). Optional query `?clientId=` must match `CLIENT_ID` when both are set. |
+| `GET /api/booking-services` | Read-only service catalog for the booking widget. |
 | `POST /api/reservation` | Accepts widget submissions; forwards to `reservationEndpoint` when configured, otherwise local JSON append. |
-| `GET /api/availability` | Returns booked time slots for a date + duration (local/dev companion to the widget). |
-| `POST /api/contact` | Contact form; forwards to `client.json` → `contactEndpoint` when set, otherwise logs server-side and returns `{ ok: true }`. |
-
-### `reservationBlock` & admin-managed services
-
-- **Admin** (`/admin/services`) reads/writes the catalog via `GET`/`PUT /api/admin/services` (session-protected).
-- **`ReservationBlock`** loads `GET /api/booking-services` on mount. If the admin catalog has one or more services, **those are shown**. Optional `services` on the page JSON are **CMS fallback** only when the live catalog is empty.
-- While the catalog request is in flight and there is no CMS fallback, the block shows a short loading state instead of stale placeholders.
+| `GET /api/availability` | Returns booked time slots for a date + duration. |
+| `POST /api/contact` | Contact form; forwards to `client.json` → `contactEndpoint` when set, otherwise logs server-side. |
 
 ### Admin portal
 
-Routes under `/admin` (bookings, services, availability schedule, settings). Dashboard APIs live under `/api/admin/*` and require a signed session cookie derived from `ADMIN_SESSION_SECRET`; the session payload is bound to `CLIENT_ID` so operators cannot cross tenants.
+Routes under `/admin` are a **client-side SPA** — all pages are `"use client"` with no server rendering. The admin surface is excluded from public blob builds and deployed independently via `deploy-admin.yml` to a shared Azure Static Web Apps instance.
+
+- One admin SPA deployment serves all clients.
+- The active tenant is identified from the JWT issued at login (`{ email, clientId, exp }`), not from `CLIENT_ID`.
+- `lib/admin-api.ts` routes all admin fetches to local Route Handlers (dev) or Azure Functions (deployed) based on `NEXT_PUBLIC_ADMIN_API_URL`.
+- Session state is managed by `AdminAuthContext` (`lib/admin-auth-context.tsx`) using `sessionStorage`.
+
+Full admin architecture: [`architecture-booking-system.md`](architecture-booking-system.md).
 
 ### Local persistence (`data/`)
 
-For development and installs without upstream Functions, JSON files hold operational state (examples):
+For development without upstream Functions. JSON files hold operational state:
 
 | File | Managed by |
 |------|------------|
@@ -241,28 +287,51 @@ For development and installs without upstream Functions, JSON files hold operati
 | `reservations-local.json` | `/api/reservation` when no `reservationEndpoint` |
 | `booking-schedule-local.json` | Admin availability / schedule APIs |
 
-These files are **per deployment / per clone**, not shared across clients in Git — treat them like environment-specific data.
+These files are **per deployment / per clone**, not shared across clients in Git — treat them like environment-specific data. They will be retired once Azure Functions and Cosmos DB are the authoritative data store.
 
 ---
 
 ## Deployment & Secrets
 
-GitHub Actions workflow (`.github/workflows/deploy-client.yml`) is manual dispatch:
+### Client sites — `deploy-websites.yml` (blob)
+
+Manual dispatch workflow; one run per client:
 
 | Input | Example |
 |-------|---------|
 | `clientId` | `restaurante-pepe` |
 
-Secret naming convention (hyphens → underscores):
+The workflow runs `npm run build:blob`, which excludes server-only routes via `scripts/prepare-static-export.mjs`, then syncs `/out` to the client's Azure Blob Storage `$web` container using `az storage blob sync`.
 
-| Secret | Purpose |
+Azure resources are discovered by tag (`client_id` or `team_id` on the storage account) — no per-client secret needed beyond Azure OIDC credentials.
+
+### Client sites — `deploy-azure-static.yml` (SWA, legacy)
+
+Alternative deploy target using Azure Static Web Apps. Runs `npm run build:blob`. Requires a per-client deploy token:
+
+| Secret | Naming convention |
 |--------|---------|
-| `SWA_TOKEN_{CLIENT_KEY}` | Azure SWA deployment token |
-| `ADMIN_SESSION_SECRET` | HMAC secret for admin login sessions (required for `/admin` and `/api/admin/*` outside auth routes). |
+| `SWA_TOKEN_{CLIENT_KEY}` | Hyphens in `clientId` replaced with underscores |
 
-Optional when using Azure Functions for reservations (see `azure-functions/`): Cosmos and SendGrid variables are configured on the Function App, not in the static site repo.
+### Admin SPA — `deploy-admin.yml`
 
-No CMS tokens for page content. The only secret **per client** in the static deploy workflow is typically the Azure deploy token; admin bookings need `ADMIN_SESSION_SECRET` wherever Route Handlers run.
+Triggered on push to `main` when admin-related files change, or via manual dispatch. Runs `npm run build:admin`.
+
+| Secret / Variable | Purpose |
+|--------|---------|
+| `SWA_TOKEN_ADMIN` | Azure SWA deployment token for the shared admin instance |
+| `ADMIN_API_URL` (variable) | Azure Functions base URL, baked into the admin bundle as `NEXT_PUBLIC_ADMIN_API_URL` |
+| `ADMIN_BUILD_CLIENT_ID` (variable) | Any valid `clientId` used only to resolve root layout CSS tokens at build time |
+
+### Local dev secrets
+
+| Variable | Required for |
+|----------|-------------|
+| `CLIENT_ID` | Every build and `npm run dev` |
+| `ADMIN_SESSION_SECRET` | Local admin login and session validation |
+| `ADMIN_EMAIL` | Local admin login |
+| `ADMIN_PASSWORD` | Local admin login |
+
+Optional for local Azure Functions testing: `COSMOS_DB_ENDPOINT`, `COSMOS_DB_KEY`, `ADMIN_JWT_SECRET` — see [`azure-functions/README.md`](azure-functions/README.md).
 
 Build cache is keyed by `{clientId}-{package-lock-hash}` so each client gets its own cache entry.
-

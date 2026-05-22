@@ -34,6 +34,7 @@ export const adminCopy = {
   login: {
     heading: 'Iniciar sesión',
     submit: 'Iniciar sesión',
+    clientIdLabel: 'ID del negocio',
     emailLabel: 'Correo electrónico',
     passwordLabel: 'Contraseña',
     defaultError: 'Correo o contraseña incorrectos',

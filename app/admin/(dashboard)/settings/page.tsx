@@ -1,3 +1,5 @@
+'use client'
+
 import { Heading } from '@/components/content/Heading'
 import { Text } from '@/components/content/Text'
 import { Section } from '@/components/layout/Section'

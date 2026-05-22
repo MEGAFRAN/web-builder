@@ -1,17 +1,20 @@
+'use client'
+
 import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import AdminLoginForm from '@/components/admin/AdminLoginForm'
 
-export default async function AdminLoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>
-}) {
-  const q = await searchParams
-  const misconfigured = q.error === 'misconfigured'
+function AdminLoginPageContent() {
+  const searchParams = useSearchParams()
+  const misconfigured = searchParams.get('error') === 'misconfigured'
 
+  return <AdminLoginForm misconfigured={misconfigured} />
+}
+
+export default function AdminLoginPage() {
   return (
     <Suspense fallback={<p className="p-8 text-center text-muted">Cargando…</p>}>
-      <AdminLoginForm misconfigured={misconfigured} />
+      <AdminLoginPageContent />
     </Suspense>
   )
 }
