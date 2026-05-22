@@ -1,4 +1,5 @@
 import type { ServicesPageBlock as ServicesPageBlockType } from '@/types/cms'
+import Link from 'next/link'
 import { Breadcrumb } from '@/components/navigation/Breadcrumb'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
@@ -211,12 +212,12 @@ export default function ServicesPageBlock({
               align="center"
             />
             <div className="pt-2">
-              <a
+              <Link
                 href="/contact"
                 className="rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-fg transition-colors hover:opacity-90"
               >
                 Book a Free Consultation
-              </a>
+              </Link>
             </div>
           </Stack>
         </Container>

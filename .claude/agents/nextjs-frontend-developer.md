@@ -61,10 +61,10 @@ When this function is needed, read the skill file and execute from its instructi
 
 ### Verify with a build check
 
-After writing files, run a TypeScript type check to catch errors early and check if test are failing:
+After writing files, run a TypeScript type check and lint to catch errors early and check if tests are failing:
 
 ```bash
-npx tsc --noEmit 2>&1 | head -40 && npm run test
+npx tsc --noEmit 2>&1 | head -40 && npm run lint && npm run test
 ```
 
 If type errors are present, fix them before reporting completion.

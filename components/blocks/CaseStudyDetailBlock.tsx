@@ -1,4 +1,5 @@
 import type { CaseStudyDetailBlock as CaseStudyDetailBlockType } from '@/types/cms'
+import Link from 'next/link'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Stack } from '@/components/layout/Stack'
@@ -185,12 +186,12 @@ export default function CaseStudyDetailBlock({
       {/* Back link */}
       <Section background="gray" paddingY="md">
         <Container maxWidth="2xl" padding="md">
-          <a
+          <Link
             href="/success-cases"
             className="inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-foreground"
           >
             <span aria-hidden="true">&larr;</span> Back to Success Cases
-          </a>
+          </Link>
         </Container>
       </Section>
     </div>

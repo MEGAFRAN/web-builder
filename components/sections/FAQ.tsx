@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Stack } from "@/components/layout/Stack";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 interface FAQProps {
   title?: string | null;
@@ -31,15 +32,7 @@ function ChevronIcon({ open }: { open: boolean }) {
 
 export function FAQ({ title, items }: FAQProps) {
   const [open, setOpen] = useState<number | null>(null);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+  const reduceMotion = usePrefersReducedMotion();
 
   return (
     <Section paddingY="lg">

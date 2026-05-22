@@ -30,24 +30,31 @@ export default function AdminServicesPage() {
   const [deleteTarget, setDeleteTarget] = useState<AdminBookingService | null>(null)
   const [dragId, setDragId] = useState<string | null>(null)
 
-  const reload = useCallback(async () => {
-    setLoading(true)
-    setError('')
+  const fetchServices = useCallback(async (signal?: { cancelled: boolean }) => {
     try {
       const res = await adminFetch(adminDataUrl('/services'))
+      if (signal?.cancelled) return
       if (!res.ok) throw new Error(adminCopy.services.errors.failedLoad)
       const data = (await res.json()) as { services: AdminBookingService[] }
+      if (signal?.cancelled) return
       setServices(data.services)
     } catch (e) {
+      if (signal?.cancelled) return
       setError(e instanceof Error ? e.message : adminCopy.services.errors.loadFailed)
     } finally {
-      setLoading(false)
+      if (!signal?.cancelled) setLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    void reload()
-  }, [reload])
+    const signal = { cancelled: false }
+    queueMicrotask(() => {
+      void fetchServices(signal)
+    })
+    return () => {
+      signal.cancelled = true
+    }
+  }, [fetchServices])
 
   async function persist(next: AdminBookingService[]) {
     setSaveError('')

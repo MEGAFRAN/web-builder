@@ -28,7 +28,10 @@ const VELOCITY_THRESHOLD = 0.3 // px/ms
  *
  * Does NOT call preventDefault on vertical gestures — page scroll is preserved.
  */
-export function useSwipe(_ref: RefObject<HTMLElement | null>): UseSwipeReturn {
+export function useSwipe(
+  _ref: RefObject<HTMLElement | null>,
+  onSwipe?: (direction: 'left' | 'right') => void,
+): UseSwipeReturn {
   const start = useRef<SwipePoint | null>(null)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)
 
@@ -64,8 +67,10 @@ export function useSwipe(_ref: RefObject<HTMLElement | null>): UseSwipeReturn {
 
     if (!triggered) return
 
-    setSwipeDirection(dx < 0 ? 'left' : 'right')
-  }, [])
+    const direction = dx < 0 ? 'left' : 'right'
+    setSwipeDirection(direction)
+    onSwipe?.(direction)
+  }, [onSwipe])
 
   return { swipeDirection, onPointerDown, onPointerMove, onPointerUp }
 }

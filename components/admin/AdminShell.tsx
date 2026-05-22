@@ -85,6 +85,42 @@ function IconClose({ className }: { className?: string }) {
   )
 }
 
+function NavLinks({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string
+  onNavigate?: () => void
+}) {
+  return (
+    <nav aria-label={adminCopy.nav.ariaAdmin}>
+      <ul className="flex flex-col gap-1">
+        {nav.map((item) => {
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
+          const Icon = item.icon
+          return (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                onClick={onNavigate}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium outline-none ring-primary transition-colors focus-visible:ring-2 ${
+                  active
+                    ? 'bg-primary text-primary-fg'
+                    : 'text-foreground hover:bg-muted-bg'
+                }`}
+                aria-current={active ? 'page' : undefined}
+              >
+                <Icon className="shrink-0 opacity-90" />
+                {item.label}
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}
+
 export default function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const { session, signOut } = useAdminAuth()
@@ -119,36 +155,6 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     await signOut()
   }
 
-  function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
-    return (
-      <nav aria-label={adminCopy.nav.ariaAdmin}>
-        <ul className="flex flex-col gap-1">
-          {nav.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
-            const Icon = item.icon
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={onNavigate}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium outline-none ring-primary transition-colors focus-visible:ring-2 ${
-                    active
-                      ? 'bg-primary text-primary-fg'
-                      : 'text-foreground hover:bg-muted-bg'
-                  }`}
-                  aria-current={active ? 'page' : undefined}
-                >
-                  <Icon className="shrink-0 opacity-90" />
-                  {item.label}
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
-    )
-  }
-
   return (
     <div className="flex min-h-screen flex-col bg-background md:flex-row">
       <aside className="hidden w-56 shrink-0 border-border bg-surface md:flex md:flex-col md:border-r">
@@ -167,7 +173,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
             )}
             <span className="font-semibold text-foreground leading-tight">{businessName}</span>
           </div>
-          <NavLinks />
+          <NavLinks pathname={pathname} />
           <div className="mt-auto border-border border-t pt-4">
             <button
               type="button"
@@ -181,7 +187,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       </aside>
 
       <MobileChrome pathname={pathname} businessName={businessName}>
-        <NavLinks />
+        <NavLinks pathname={pathname} />
         <button
           type="button"
           onClick={() => void signOut()}

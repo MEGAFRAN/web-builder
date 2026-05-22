@@ -1,4 +1,5 @@
 import type { PricingPageBlock as PricingPageBlockType } from '@/types/cms'
+import Link from 'next/link'
 import { Breadcrumb } from '@/components/navigation/Breadcrumb'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
@@ -176,18 +177,18 @@ export default function PricingPageBlock({
               align="center"
             />
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-              <a
+              <Link
                 href="/contact"
                 className="rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-fg transition-colors hover:opacity-90"
               >
                 Talk to Sales
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/signup"
                 className="rounded-md border border-border bg-background px-6 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted-bg"
               >
                 Start Free Trial
-              </a>
+              </Link>
             </div>
           </Stack>
         </Container>

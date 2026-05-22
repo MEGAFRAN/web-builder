@@ -523,42 +523,41 @@ describe('Carousel', () => {
     })
 
     it('shows play control when autoplay begins under reduced-motion preference', () => {
-      vi.stubGlobal(
-        'matchMedia',
-        (query: string) => ({
-          matches: query.includes('prefers-reduced-motion'),
-          media: query,
-          onchange: null,
-          addListener: vi.fn(),
-          removeListener: vi.fn(),
-          addEventListener: vi.fn(),
-          removeEventListener: vi.fn(),
-          dispatchEvent: vi.fn(),
-        }),
-      )
+      const mediaQueryList = {
+        matches: true,
+        media: '(prefers-reduced-motion: reduce)',
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }
+      vi.stubGlobal('matchMedia', () => mediaQueryList)
       renderCarousel(makeProps({ autoPlay: true }))
       expect(screen.getByRole('button', { name: /play slideshow/i })).toBeInTheDocument()
     })
 
     it('halts autoplay when reduced-motion query starts matching', () => {
       let onChange: ((event: MediaQueryListEvent) => void) | undefined
-      vi.stubGlobal(
-        'matchMedia',
-        (query: string) => ({
-          matches: false,
-          media: query,
-          onchange: null,
-          addListener: vi.fn(),
-          removeListener: vi.fn(),
-          addEventListener: (type: string, listener: EventListener) => {
-            if (type === 'change' && query.includes('prefers-reduced-motion')) {
-              onChange = listener as (event: MediaQueryListEvent) => void
+      const mediaQueryList = {
+        matches: false,
+        media: '(prefers-reduced-motion: reduce)',
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: (type: string, listener: EventListener) => {
+          if (type === 'change') {
+            onChange = (event: MediaQueryListEvent) => {
+              mediaQueryList.matches = event.matches
+              listener(event)
             }
-          },
-          removeEventListener: vi.fn(),
-          dispatchEvent: vi.fn(),
-        }),
-      )
+          }
+        },
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }
+      vi.stubGlobal('matchMedia', () => mediaQueryList)
       renderCarousel(makeProps({ autoPlay: true }))
       expect(screen.getByRole('button', { name: /pause slideshow/i })).toBeInTheDocument()
       act(() => {

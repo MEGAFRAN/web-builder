@@ -139,16 +139,16 @@ export default function AdminAvailabilityPage() {
   const [kebabOpen, setKebabOpen] = useState(false)
   const kebabWrapRef = useRef<HTMLDivElement>(null)
 
-  const reload = useCallback(async () => {
-    setLoading(true)
-    setError('')
+  const fetchSchedule = useCallback(async (signal?: { cancelled: boolean }) => {
     try {
       const [scheduleRes, servicesRes] = await Promise.all([
         adminFetch(adminDataUrl('/schedule')),
         adminFetch(adminDataUrl('/services')),
       ])
+      if (signal?.cancelled) return
       if (!scheduleRes.ok) throw new Error(adminCopy.availability.errors.failedLoad)
       const data = (await scheduleRes.json()) as BookingScheduleFile
+      if (signal?.cancelled) return
       setSchedule(data)
       setWeeklyDraft(sortWeekly(data.weekly))
 
@@ -159,15 +159,28 @@ export default function AdminAvailabilityPage() {
         setServiceCount(0)
       }
     } catch (e) {
+      if (signal?.cancelled) return
       setError(e instanceof Error ? e.message : adminCopy.availability.errors.loadFailed)
     } finally {
-      setLoading(false)
+      if (!signal?.cancelled) setLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    void reload()
-  }, [reload])
+    const signal = { cancelled: false }
+    queueMicrotask(() => {
+      void fetchSchedule(signal)
+    })
+    return () => {
+      signal.cancelled = true
+    }
+  }, [fetchSchedule])
+
+  const reload = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    await fetchSchedule()
+  }, [fetchSchedule])
 
   useEffect(() => {
     if (!kebabOpen) return

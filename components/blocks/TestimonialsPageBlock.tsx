@@ -1,4 +1,5 @@
 import type { TestimonialsPageBlock as TestimonialsPageBlockType } from '@/types/cms'
+import Link from 'next/link'
 import { getClientConfig } from '@/lib/client-config'
 import { Breadcrumb } from '@/components/navigation/Breadcrumb'
 import { Section } from '@/components/layout/Section'
@@ -237,12 +238,12 @@ export default function TestimonialsPageBlock({
               align="center"
             />
             <div className="pt-2">
-              <a
+              <Link
                 href="/contact"
                 className="rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-fg transition-colors hover:opacity-90"
               >
                 Contact Us Today
-              </a>
+              </Link>
             </div>
           </Stack>
         </Container>

@@ -40,6 +40,7 @@ export function NewAppointmentModal({
   const [submitting, setSubmitting] = useState(false)
 
   const selected = services.find((s) => s.id === serviceId)
+  const unavailableSlots = !selected || !date ? [] : bookedSlots
 
   useEffect(() => {
     void adminFetch(adminDataUrl('/services'))
@@ -52,23 +53,27 @@ export function NewAppointmentModal({
   }, [])
 
   useEffect(() => {
-    if (!selected || !date) {
-      setBookedSlots([])
-      return
-    }
+    if (!selected || !date) return
     const dur = selected.durationMinutes
     const url = `/api/availability?clientId=${encodeURIComponent(clientId)}&date=${encodeURIComponent(date)}&duration=${encodeURIComponent(String(dur))}`
+    let cancelled = false
     void fetch(url)
       .then((r) => (r.ok ? r.json() : { bookedSlots: [], outOfWindowSlots: [] }))
       .then((d: { bookedSlots?: string[]; outOfWindowSlots?: string[] }) => {
+        if (cancelled) return
         const booked = d.bookedSlots ?? []
         const oow = d.outOfWindowSlots ?? []
         setBookedSlots([...new Set([...booked, ...oow])])
       })
-      .catch(() => setBookedSlots([]))
+      .catch(() => {
+        if (!cancelled) setBookedSlots([])
+      })
+    return () => {
+      cancelled = true
+    }
   }, [clientId, date, selected])
 
-  const openSlots = BOOKING_SLOT_GRID.filter((s) => !bookedSlots.includes(s))
+  const openSlots = BOOKING_SLOT_GRID.filter((s) => !unavailableSlots.includes(s))
 
   async function submit() {
     setFormError('')

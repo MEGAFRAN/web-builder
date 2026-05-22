@@ -39,9 +39,7 @@ export default function AdminBookingsPage() {
   const weekStart = useMemo(() => mondayOfWeek(selectedYmd), [selectedYmd])
   const weekEnd = useMemo(() => addDaysYmd(weekStart, 6), [weekStart])
 
-  const fetchRange = useCallback(async (start: string, end: string) => {
-    setLoading(true)
-    setError('')
+  const fetchRange = useCallback(async (start: string, end: string, signal?: { cancelled: boolean }) => {
     try {
       const [rs, sch] = await Promise.all([
         adminFetch(adminDataUrl(`/reservations?startDate=${start}&endDate=${end}`)).then(async (r) => {
@@ -53,22 +51,39 @@ export default function AdminBookingsPage() {
           return r.json() as Promise<BookingScheduleFile>
         }),
       ])
+      if (signal?.cancelled) return
       setRows(rs.reservations)
       setSchedule(sch)
     } catch (e) {
+      if (signal?.cancelled) return
       setError(e instanceof Error ? e.message : adminCopy.bookings.errors.generic)
     } finally {
-      setLoading(false)
+      if (!signal?.cancelled) setLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    if (view === 'day') {
-      void fetchRange(selectedYmd, selectedYmd)
-    } else {
-      void fetchRange(weekStart, weekEnd)
+    const signal = { cancelled: false }
+    queueMicrotask(() => {
+      if (view === 'day') {
+        void fetchRange(selectedYmd, selectedYmd, signal)
+      } else {
+        void fetchRange(weekStart, weekEnd, signal)
+      }
+    })
+    return () => {
+      signal.cancelled = true
     }
   }, [fetchRange, selectedYmd, view, weekStart, weekEnd])
+
+  function refreshRange() {
+    setLoading(true)
+    setError('')
+    void fetchRange(
+      view === 'day' ? selectedYmd : weekStart,
+      view === 'day' ? selectedYmd : weekEnd,
+    )
+  }
 
   const dayRows = useMemo(() => {
     const list = rows.filter((r) => r.date === selectedYmd)
@@ -93,17 +108,7 @@ export default function AdminBookingsPage() {
       throw new Error(j.error ?? adminCopy.bookings.errors.updateFailed)
     }
     setDetail(null)
-    void fetchRange(
-      view === 'day' ? selectedYmd : weekStart,
-      view === 'day' ? selectedYmd : weekEnd,
-    )
-  }
-
-  function refreshRange() {
-    void fetchRange(
-      view === 'day' ? selectedYmd : weekStart,
-      view === 'day' ? selectedYmd : weekEnd,
-    )
+    refreshRange()
   }
 
   return (

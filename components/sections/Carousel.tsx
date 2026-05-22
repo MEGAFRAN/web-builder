@@ -8,6 +8,7 @@ import { Stack } from '@/components/layout/Stack'
 import { Avatar } from '@/components/content/Avatar'
 import { Card } from '@/components/data/Card'
 import { Image } from '@/components/content/Image'
+import { usePrefersReducedMotion } from '@/lib/hooks/usePrefersReducedMotion'
 import { useSwipe } from '@/lib/hooks/useSwipe'
 
 // ---------------------------------------------------------------------------
@@ -144,18 +145,10 @@ export function Carousel({
 
   const [active, setActive] = useState(0)
   const [playing, setPlaying] = useState(autoPlay ?? false)
+  const prefersReducedMotion = usePrefersReducedMotion()
+  const effectivePlaying = playing && !prefersReducedMotion
   const trackRef = useRef<HTMLDivElement>(null)
   const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  // Swipe
-  const { swipeDirection, onPointerDown, onPointerMove, onPointerUp } = useSwipe(trackRef)
-
-  // ---------------------------------------------------------------------------
-  // Navigation helpers
-  // ---------------------------------------------------------------------------
-
-  const canGoPrev = isLoop || active > 0
-  const canGoNext = isLoop || active < count - 1
 
   const goTo = useCallback(
     (index: number) => {
@@ -174,16 +167,13 @@ export function Carousel({
   const goPrev = useCallback(() => goTo(active - 1), [active, goTo])
   const goNext = useCallback(() => goTo(active + 1), [active, goTo])
 
-  // ---------------------------------------------------------------------------
-  // Swipe direction effect
-  // ---------------------------------------------------------------------------
-
-  useEffect(() => {
-    if (!swipeDirection) return
-    if (swipeDirection === 'left') goNext()
+  const { onPointerDown, onPointerMove, onPointerUp } = useSwipe(trackRef, (direction) => {
+    if (direction === 'left') goNext()
     else goPrev()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [swipeDirection])
+  })
+
+  const canGoPrev = isLoop || active > 0
+  const canGoNext = isLoop || active < count - 1
 
   // ---------------------------------------------------------------------------
   // Auto-play
@@ -197,7 +187,7 @@ export function Carousel({
   }, [])
 
   const startTimer = useCallback(() => {
-    if (!playing || count <= 1) return
+    if (!effectivePlaying || count <= 1) return
     clearTimer()
     autoPlayTimerRef.current = setInterval(() => {
       setActive((prev) => {
@@ -208,7 +198,7 @@ export function Carousel({
         return prev
       })
     }, safeInterval)
-  }, [playing, count, isLoop, safeInterval, clearTimer])
+  }, [effectivePlaying, count, isLoop, safeInterval, clearTimer])
 
   useEffect(() => {
     startTimer()
@@ -219,28 +209,11 @@ export function Carousel({
   useEffect(() => {
     const handler = () => {
       if (document.hidden) clearTimer()
-      else if (playing) startTimer()
+      else if (effectivePlaying) startTimer()
     }
     document.addEventListener('visibilitychange', handler)
     return () => document.removeEventListener('visibilitychange', handler)
-  }, [playing, clearTimer, startTimer])
-
-  // Respect prefers-reduced-motion for auto-play
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (mq.matches) {
-      setPlaying(false)
-      clearTimer()
-    }
-    const handler = (e: MediaQueryListEvent) => {
-      if (e.matches) {
-        setPlaying(false)
-        clearTimer()
-      }
-    }
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [clearTimer])
+  }, [effectivePlaying, clearTimer, startTimer])
 
   // ---------------------------------------------------------------------------
   // Keyboard navigation on track
@@ -482,13 +455,13 @@ export function Carousel({
               <div className="flex justify-end">
                 <button
                   type="button"
-                  aria-label={playing ? 'Pause slideshow' : 'Play slideshow'}
-                  aria-pressed={playing}
+                  aria-label={effectivePlaying ? 'Pause slideshow' : 'Play slideshow'}
+                  aria-pressed={effectivePlaying}
                   onClick={() => setPlaying((p) => !p)}
                   className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-[var(--radius)] border border-border bg-background text-foreground transition-opacity hover:opacity-80 focus-visible:outline-none"
                   style={{ minWidth: 44, minHeight: 44 }}
                 >
-                  {playing ? (
+                  {effectivePlaying ? (
                     // Pause icon
                     <svg
                       aria-hidden="true"
@@ -529,10 +502,10 @@ export function Carousel({
                 onPointerDown={onPointerDown}
                 onPointerMove={onPointerMove}
                 onPointerUp={onPointerUp}
-                onMouseEnter={() => playing && clearTimer()}
-                onMouseLeave={() => playing && startTimer()}
-                onFocus={() => playing && clearTimer()}
-                onBlur={() => playing && startTimer()}
+                onMouseEnter={() => effectivePlaying && clearTimer()}
+                onMouseLeave={() => effectivePlaying && startTimer()}
+                onFocus={() => effectivePlaying && clearTimer()}
+                onBlur={() => effectivePlaying && startTimer()}
                 className="carousel-track relative w-full overflow-hidden focus:outline-none focus-visible:ring-2"
                 style={trackHeightStyle}
               >
