@@ -26,9 +26,10 @@ changelog:
 
 ## 2. PROCESS
 
-1. Run `git add .` to stage all changes
-2. Run `git diff --cached` to inspect what changed
-3. Write a commit message with `git commit -m "<generated message>"`
+1. Run `npm run test` — if any test fails, stop immediately and report the failure; do not stage or commit
+2. Run `git add .` to stage all changes
+3. Run `git diff --cached` to inspect what changed
+4. Write a commit message with `git commit -m "<generated message>"`
 
 **Commit message format:**
 ```
@@ -67,7 +68,7 @@ Optional body (only for complex changes).
 - Explain *what changed and why*, not how
 - Wrap at 72 characters per line
 
-4. Run `git push origin <branch-name>` to push changes
+5. Run `git push origin <branch-name>` to push changes
 
 
 ## 3. OUTPUT (Artifacts)
