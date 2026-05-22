@@ -2,8 +2,6 @@ import './globals.css'
 import { getClientConfig, resolveTheme } from '@/lib/client-config'
 import { buildThemeStyles } from '@/lib/theme-utils'
 
-export { buildThemeStyles }
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const clientId = process.env.CLIENT_ID!
   const config = getClientConfig(clientId)

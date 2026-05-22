@@ -19,7 +19,6 @@ describe('POST /api/admin/auth/login', () => {
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     CLIENT_ID: process.env.CLIENT_ID,
-    NODE_ENV: process.env.NODE_ENV,
   }
 
   beforeEach(() => {
@@ -27,7 +26,7 @@ describe('POST /api/admin/auth/login', () => {
     process.env.ADMIN_EMAIL = 'Admin@Example.com '
     process.env.ADMIN_PASSWORD = 'hunter2'
     process.env.CLIENT_ID = 'client-x'
-    process.env.NODE_ENV = 'development'
+    vi.stubEnv('NODE_ENV', 'development')
   })
 
   afterEach(() => {
@@ -35,7 +34,7 @@ describe('POST /api/admin/auth/login', () => {
     process.env.ADMIN_EMAIL = env.ADMIN_EMAIL
     process.env.ADMIN_PASSWORD = env.ADMIN_PASSWORD
     process.env.CLIENT_ID = env.CLIENT_ID
-    process.env.NODE_ENV = env.NODE_ENV
+    vi.unstubAllEnvs()
     vi.restoreAllMocks()
   })
 
@@ -101,7 +100,7 @@ describe('POST /api/admin/auth/login', () => {
   })
 
   it('sets Secure on the cookie in production', async () => {
-    process.env.NODE_ENV = 'production'
+    vi.stubEnv('NODE_ENV', 'production')
     const res = await POST(post({ email: 'admin@example.com', password: 'hunter2' }))
     expect(res.status).toBe(200)
     expect(res.cookies.get(ADMIN_SESSION_COOKIE)?.secure).toBe(true)

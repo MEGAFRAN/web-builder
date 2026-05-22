@@ -48,6 +48,8 @@ export const BOOKING_COPY = {
   phoneError:
     'Introduce un teléfono válido (dígitos, espacios, +, -, paréntesis).',
   submitError: 'Algo ha fallado. Inténtalo de nuevo o llámanos directamente.',
+  slotTakenError:
+    'Ese horario acaba de reservarse — elige otra hora.',
 } as const
 
 export const BOOKING_FIELD_CLASS =

@@ -80,7 +80,7 @@ describe('admin-session', () => {
       [{ email: 1, clientId: 'c', exp: Date.now() + 1 }, 'email'],
       [{ email: 'e', clientId: 1, exp: Date.now() + 1 }, 'clientId'],
       [{ email: 'e', clientId: 'c', exp: 'x' }, 'exp'],
-    ] as const)('returns null when payload shape is wrong', (bad) => {
+    ] as const)('returns null when payload shape is wrong', (bad, _field) => {
       const payloadJson = JSON.stringify(bad)
       const sig = createHmac('sha256', secret).update(payloadJson).digest('hex')
       const b64 = Buffer.from(payloadJson, 'utf8').toString('base64url')

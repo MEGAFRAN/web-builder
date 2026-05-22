@@ -17,7 +17,7 @@ function makeSchedule(
         ? monOpen
         : day === 'sun'
           ? sunOpen
-          : day !== 'sun',
+          : true,
     from: '09:00',
     to: '18:00',
   }))

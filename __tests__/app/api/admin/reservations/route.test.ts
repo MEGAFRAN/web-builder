@@ -237,7 +237,7 @@ describe('/api/admin/reservations', () => {
       [{ serviceId: '' }, 'empty serviceId'],
       [{ date: '2026/05/05' }, 'non-ISO date'],
       [{ name: '', email: 'a@b.co', phone: '1', serviceId: 'hair', date: '2026-05-05', time: '09:00' }, 'empty name'],
-    ] as const)('returns 422 when payload fails validation (%s)', async (partial) => {
+    ] as const)('returns 422 when payload fails validation (%s)', async (partial, _label) => {
       const res = await POST(adminPost({ ...validManual, ...partial }))
       expect(res.status).toBe(422)
     })

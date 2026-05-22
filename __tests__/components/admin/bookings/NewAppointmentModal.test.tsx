@@ -51,7 +51,7 @@ describe('NewAppointmentModal', () => {
 
   function timeSelect(): HTMLSelectElement {
     const selects = screen.getAllByRole('combobox')
-    return selects[1]!
+    return selects[1] as HTMLSelectElement
   }
 
   it('requires a chosen time before submitting', async () => {

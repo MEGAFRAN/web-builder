@@ -25,7 +25,7 @@ vi.mock('@/components/navigation/BottomCtaBar', () => ({
   BottomCtaBar: () => <nav aria-label="Quick actions">bottom-cta</nav>,
 }))
 
-import { buildThemeStyles } from '@/app/layout'
+import { buildThemeStyles } from '@/lib/theme-utils'
 import RootLayout from '@/app/layout'
 import SiteLayout from '@/app/(site)/layout'
 import { getClientConfig } from '@/lib/client-config'

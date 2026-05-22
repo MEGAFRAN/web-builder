@@ -505,7 +505,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/time slot was just taken/i)).toBeInTheDocument()
+      expect(screen.getByText(/acaba de reservarse/i)).toBeInTheDocument()
     })
   })
 
@@ -536,7 +536,7 @@ describe('ReservationBlock — form submission', () => {
     submitForm()
 
     await waitFor(() => {
-      expect(screen.getByText(/time slot was just taken/i)).toBeInTheDocument()
+      expect(screen.getByText(/acaba de reservarse/i)).toBeInTheDocument()
     })
   })
 

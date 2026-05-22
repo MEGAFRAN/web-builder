@@ -18,13 +18,24 @@ if (typeof globalThis.matchMedia !== 'function') {
 }
 
 if (typeof globalThis.IntersectionObserver === 'undefined') {
-  class IntersectionObserverStub {
+  class IntersectionObserverStub implements IntersectionObserver {
+    readonly root: Element | null = null
+    readonly rootMargin = ''
+    readonly thresholds: ReadonlyArray<number> = []
+
     constructor(private callback: IntersectionObserverCallback) {}
+
     observe(target: Element) {
-      this.callback([{ isIntersecting: true, target } as IntersectionObserverEntry], this)
+      this.callback(
+        [{ isIntersecting: true, target } as IntersectionObserverEntry],
+        this,
+      )
     }
     unobserve() {}
     disconnect() {}
+    takeRecords(): IntersectionObserverEntry[] {
+      return []
+    }
   }
   vi.stubGlobal('IntersectionObserver', IntersectionObserverStub)
 }

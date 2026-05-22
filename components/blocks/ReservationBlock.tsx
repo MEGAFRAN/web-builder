@@ -256,15 +256,15 @@ export default function ReservationBlock({
         }),
       })
       if (!res.ok) {
-        let msg = BOOKING_COPY.submitError
+        let msg: string = BOOKING_COPY.submitError
         if (res.status === 409) {
-          msg = 'This time slot was just taken — please pick another time.'
+          msg = BOOKING_COPY.slotTakenError
           setSelectedTime('')
         } else {
           try {
             const body = await res.json()
             if (body?.error === 'SLOT_TAKEN') {
-              msg = 'This time slot was just taken — please pick another time.'
+              msg = BOOKING_COPY.slotTakenError
               setSelectedTime('')
             }
           } catch { /* ignore parse errors */ }
