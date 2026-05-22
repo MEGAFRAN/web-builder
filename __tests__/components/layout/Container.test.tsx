@@ -71,18 +71,20 @@ describe('Container', () => {
   })
 
   describe('padding prop', () => {
-    it('uses 8px horizontal padding on small screens and --page-inset from md when padding is omitted (defaults to "theme")', () => {
+    it('uses responsive horizontal padding and --page-inset from md when padding is omitted (defaults to "theme")', () => {
       const container = renderContainer()
       const div = getDiv(container)
-      expect(div.className).toMatch(/px-\[8px\]/)
+      expect(div.className).toContain('px-4')
+      expect(div.className).toContain('sm:px-6')
       expect(div.className).toContain('md:[padding-inline:var(--page-inset)]')
       expect(div.style.paddingInline).toBe('')
     })
 
-    it('uses 8px horizontal padding on small screens and --page-inset from md when padding="theme" explicitly', () => {
+    it('uses responsive horizontal padding and --page-inset from md when padding="theme" explicitly', () => {
       const container = renderContainer({ padding: 'theme' })
       const div = getDiv(container)
-      expect(div.className).toMatch(/px-\[8px\]/)
+      expect(div.className).toContain('px-4')
+      expect(div.className).toContain('sm:px-6')
       expect(div.className).toContain('md:[padding-inline:var(--page-inset)]')
       expect(div.style.paddingInline).toBe('')
     })
