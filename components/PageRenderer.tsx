@@ -17,11 +17,14 @@ export default function PageRenderer({ blocks }: PageRendererProps) {
           console.warn(`PageRenderer: unknown block type "${block._type}"`)
           return null
         }
-        return (
-          <ScrollReveal key={(block as BlockWithKey)._key || i}>
-            <Component {...block} />
-          </ScrollReveal>
-        )
+        const key = (block as BlockWithKey)._key || i
+        const content = <Component {...block} />
+
+        if (i === 0) {
+          return <div key={key}>{content}</div>
+        }
+
+        return <ScrollReveal key={key}>{content}</ScrollReveal>
       })}
     </div>
   )
