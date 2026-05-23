@@ -1,7 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, within } from '@testing-library/react'
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react'
 import AdminShell from '@/components/admin/AdminShell'
 import { adminCopy } from '@/components/admin/admin-copy'
+
+const defaultClientConfig = { displayName: 'Acme Spa', logoUrl: null as string | null }
+
+async function flushAdminShellConfig(expectedDisplayName = defaultClientConfig.displayName) {
+  await waitFor(() => {
+    expect(vi.mocked(fetch)).toHaveBeenCalled()
+  })
+  await waitFor(() => {
+    expect(screen.getAllByText(expectedDisplayName).length).toBeGreaterThan(0)
+  })
+}
+
+async function renderAdminShell(children: React.ReactNode) {
+  const view = render(<AdminShell>{children}</AdminShell>)
+  await flushAdminShellConfig()
+  return view
+}
 
 const mockSignOut = vi.fn(async () => {})
 const mockPathname = vi.fn(() => '/admin/bookings')
@@ -45,7 +62,7 @@ describe('AdminShell', () => {
       vi.fn(() =>
         Promise.resolve({
           ok: true,
-          json: async () => ({ displayName: 'Acme Spa', logoUrl: null }),
+          json: async () => defaultClientConfig,
         }),
       ),
     )
@@ -56,26 +73,18 @@ describe('AdminShell', () => {
     ['/admin/services/extra', adminCopy.nav.services],
     ['/admin/availability', adminCopy.nav.availability],
     ['/admin/settings', adminCopy.nav.settings],
-  ] as const)('uses pathname "%s" to show section "%s" in mobile bottom bar', (pathname, title) => {
+  ] as const)('uses pathname "%s" to show section "%s" in mobile bottom bar', async (pathname, title) => {
     mockPathname.mockReturnValue(pathname)
-    render(
-      <AdminShell>
-        <p>Page body</p>
-      </AdminShell>,
-    )
+    await renderAdminShell(<p>Page body</p>)
 
     const headers = screen.getAllByText(title)
     expect(headers.length).toBeGreaterThan(0)
     expect(screen.getByText('Page body')).toBeInTheDocument()
   })
 
-  it('does not mark a mobile tab as current on unknown admin paths', () => {
+  it('does not mark a mobile tab as current on unknown admin paths', async () => {
     mockPathname.mockReturnValue('/admin/unknown')
-    render(
-      <AdminShell>
-        <p>Page body</p>
-      </AdminShell>,
-    )
+    await renderAdminShell(<p>Page body</p>)
 
     const sectionNav = screen.getByRole('navigation', { name: adminCopy.nav.ariaSections })
     expect(sectionNav.querySelector('[aria-current="page"]')).toBeNull()
@@ -92,6 +101,7 @@ describe('AdminShell', () => {
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     const sidebar = screen.getByRole('complementary')
     expect(within(sidebar).getByText('A')).toBeInTheDocument()
+    await flushAdminShellConfig()
 
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
@@ -104,22 +114,20 @@ describe('AdminShell', () => {
       </AdminShell>,
     )
 
-    await vi.waitFor(() => {
+    await flushAdminShellConfig('Beta Co')
+
+    await waitFor(() => {
       const img = document.querySelector('aside img[src="https://example.com/logo.png"]')
       expect(img).not.toBeNull()
     })
   })
 
   it('calls signOut when Sign out is used', async () => {
-    render(
-      <AdminShell>
-        <span>kids</span>
-      </AdminShell>,
-    )
+    await renderAdminShell(<span>kids</span>)
 
     fireEvent.click(screen.getAllByRole('button', { name: adminCopy.nav.signOut })[0])
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockSignOut).toHaveBeenCalled()
     })
   })
@@ -129,13 +137,9 @@ describe('AdminShell', () => {
     ['/admin/bookings', 'bookings body'],
   ] as const)(
     'uses full-width main container on %s so wide layouts can use the sidebar-to-edge space',
-    (route, bodyText) => {
+    async (route, bodyText) => {
       mockPathname.mockReturnValue(route)
-      render(
-        <AdminShell>
-          <span>{bodyText}</span>
-        </AdminShell>,
-      )
+      await renderAdminShell(<span>{bodyText}</span>)
 
       const container = document.querySelector('[data-component="container"]')
       expect(container).not.toBeNull()
@@ -144,13 +148,9 @@ describe('AdminShell', () => {
     },
   )
 
-  it('uses xl container on services/settings routes and exposes sidebar navigation links for all admin routes', () => {
+  it('uses xl container on services/settings routes and exposes sidebar navigation links for all admin routes', async () => {
     mockPathname.mockReturnValue('/admin/services')
-    render(
-      <AdminShell>
-        <span>x</span>
-      </AdminShell>,
-    )
+    await renderAdminShell(<span>x</span>)
 
     const container = document.querySelector('[data-component="container"]')
     expect(container?.className).toContain('max-w-xl')

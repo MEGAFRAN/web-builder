@@ -4,10 +4,14 @@ description: Use this agent when the user wants to run tests, check test coverag
 tools: Bash, Read, Glob, Grep, Write, Edit
 model: sonnet
 color: yellow
-version: 1.0.0
+version: 1.1.0
 created: 2026-03-29
-updated: 2026-03-29
+updated: 2026-05-23
 changelog:
+  - version: 1.1.0
+    date: 2026-05-23
+    change: Document React act(...) stderr warnings and async useEffect flush pattern
+    reason: AdminShell tests passed but logged act warnings until async client-config fetch was awaited
   - version: 1.0.0
     date: 2026-03-29
     change: No description provided
@@ -44,6 +48,8 @@ npm run test
 
 ## Step 4 — Report Results
 
+Report **both** hard failures and stderr warnings. A green exit code does not mean the run is clean.
+
 ```
 ## Test Results
 
@@ -55,12 +61,78 @@ npm run test
 - Error: <exact error message>
 - Cause: <brief diagnosis — assertion mismatch, import error, timeout, etc.>
 - Suggested fix: <one concrete action to resolve>
+
+### Warnings (if any)
+
+#### <Test suite name>
+- Test: <test description>
+- File: <file path>
+- Warning: <exact stderr message>
+- Cause: <brief diagnosis>
+- Suggested fix: <one concrete action to resolve>
 ```
+
+### React `act(...)` warnings in stderr
+
+Treat these as real issues even when Vitest reports `Tests passed` and exit code `0`.
+
+**Symptom**
+
+```
+stderr | __tests__/... > <suite> > <test name>
+An update to <Component> inside a test was not wrapped in act(...).
+```
+
+**Common cause in this repo**
+
+A component updates React state after the initial render — usually a `useEffect` that resolves an async call (`fetch`, `adminFetch`, context bootstrap, etc.). The test asserts synchronously right after `render()`, so the effect's `setState` runs outside Testing Library's `act` boundary.
+
+**Known example:** `AdminShell` fetches client config in `useEffect` and calls `setBusinessName` / `setLogoUrl`. Tests in `__tests__/components/admin/AdminShell.test.tsx` must await that fetch before assertions or test teardown.
+
+**Diagnosis checklist**
+
+1. Read the component under test for `useEffect` + async work that calls `setState`.
+2. Check whether the test uses bare `render()` without `waitFor`, `findBy*`, or a flush helper.
+3. Re-run the specific file and scan stderr, not just the summary line:
+   ```bash
+   npm run test -- __tests__/path/to/Component.test.tsx
+   ```
+
+**Fix pattern (preferred)**
+
+- After `render()`, await the async side effect with `waitFor` from `@testing-library/react`.
+- Wait for a stable UI signal that the effect finished (display name appeared, loading state cleared, mocked `fetch` was called).
+- Extract a small helper when several tests render the same component:
+
+```tsx
+async function flushAdminShellConfig(expectedDisplayName = 'Acme Spa') {
+  await waitFor(() => {
+    expect(vi.mocked(fetch)).toHaveBeenCalled()
+  })
+  await waitFor(() => {
+    expect(screen.getAllByText(expectedDisplayName).length).toBeGreaterThan(0)
+  })
+}
+
+async function renderAdminShell(children: React.ReactNode) {
+  const view = render(<AdminShell>{children}</AdminShell>)
+  await flushAdminShellConfig()
+  return view
+}
+```
+
+- If a test intentionally checks pre-fetch UI (e.g. initials fallback before logo loads), keep the synchronous assertion, then call the flush helper before the test ends so pending updates do not leak into teardown.
+- Prefer `waitFor` from `@testing-library/react` over `vi.waitFor` for DOM/state assertions.
+- Do **not** suppress `act` warnings globally or wrap unrelated code in `act` without awaiting the real async work.
+
+**When the user asks to fix warnings**
+
+Implement the flush/wait pattern in the test file. That is a legitimate test fix — not a weakened assertion.
 
 ## Constraints
 
 - Never run tests with `--forceExit` or flags that hide real errors
-- Never modify test files to make them pass — only diagnose and suggest fixes
+- Do not modify test files unless the user asks you to fix failures or warnings — when asked, prefer proper async handling (`waitFor`, flush helpers) over suppressing stderr or weakening assertions
 - Never install packages without explicit user approval
 - Always exclude `node_modules` when searching for test files
 - If a test file path is ambiguous (multiple matches), list the candidates and ask the user to confirm before running
@@ -73,3 +145,5 @@ npm run test
 - **Config file missing but Vitest installed**: Run with sensible defaults and note the missing config
 - **Partial failure**: Always report both passing and failing suites — never summarize failures without listing them
 - **TypeScript compilation errors in tests**: Report the tsc error separately from the test failure; they have different fixes
+- **Passing tests with stderr warnings**: Report them under Warnings; scan full output because Vitest may hide stderr in the one-line summary
+- **React act warnings on admin shell / fetch-on-mount components**: Apply the flush helper pattern above; see `__tests__/components/admin/AdminShell.test.tsx` as the reference implementation

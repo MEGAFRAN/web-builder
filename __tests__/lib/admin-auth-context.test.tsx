@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import {
   AdminAuthProvider,
   useAdminAuth,
@@ -311,7 +311,9 @@ describe('AdminAuthProvider', () => {
         expect(screen.getByTestId('status')).toHaveTextContent('unauthenticated')
       })
 
-      authActions!.setSession(validSession)
+      act(() => {
+        authActions!.setSession(validSession)
+      })
 
       await waitFor(() => {
         expect(screen.getByTestId('status')).toHaveTextContent('authenticated')
@@ -343,13 +345,17 @@ describe('AdminAuthProvider', () => {
         expect(screen.getByTestId('status')).toHaveTextContent('unauthenticated')
       })
 
-      authActions!.setSession(validSession)
+      act(() => {
+        authActions!.setSession(validSession)
+      })
 
       await waitFor(() => {
         expect(screen.getByTestId('status')).toHaveTextContent('authenticated')
       })
 
-      await authActions!.signOut()
+      await act(async () => {
+        await authActions!.signOut()
+      })
 
       await waitFor(() => {
         expect(screen.getByTestId('status')).toHaveTextContent('unauthenticated')
@@ -383,13 +389,17 @@ describe('AdminAuthProvider', () => {
         expect(screen.getByTestId('status')).toHaveTextContent('unauthenticated')
       })
 
-      authActions!.setSession(validSession)
+      act(() => {
+        authActions!.setSession(validSession)
+      })
 
       await waitFor(() => {
         expect(screen.getByTestId('status')).toHaveTextContent('authenticated')
       })
 
-      authActions!.setSession(null)
+      act(() => {
+        authActions!.setSession(null)
+      })
 
       await waitFor(() => {
         expect(screen.getByTestId('status')).toHaveTextContent('unauthenticated')
