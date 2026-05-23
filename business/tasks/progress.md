@@ -2,3 +2,17 @@ DONE: business/tasks/01-fix-deploy-azure-static-workflow.md
 DONE: business/tasks/02-add-admin-auth-context-tests.md
 
 TODO: business/tasks/03-setup-cosmos-db-admin-containers.md
+TODO: business/tasks/04-implement-admin-azure-functions.md
+TODO: business/tasks/05-configure-admin-deploy-pipeline.md
+TODO: business/tasks/06-stripe-checkout-customer-portal-integration.md
+TODO: business/tasks/07-resend-transactional-email-integration.md
+TODO: business/tasks/08-cloudflare-azure-blob-custom-domain.md
+TODO: business/tasks/09-solo-beauty-pro-starter-template.md
+TODO: business/tasks/10-scripts-provision-client.md
+TODO: business/tasks/11-vertical-tag-placeholder-schema.md
+TODO: business/tasks/12-today-card-stack-bookings-entry-view.md
+TODO: business/tasks/13-in-admin-monthly-bookings-revenue-kpi-tile.md
+TODO: business/tasks/14-14-day-trial-auto-charge-billing-flow.md
+TODO: business/tasks/15-cold-dm-outreach-tracking.md
+TODO: business/tasks/16-case-study-page-referral-mechanics.md
+TODO: business/tasks/17-post-mvp-block-affordance-non-cto-agents.md
