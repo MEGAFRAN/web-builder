@@ -359,7 +359,7 @@ These Route Handlers are active during `npm run dev` and used by the admin SPA w
 
 ### Admin — Azure Functions (deployed)
 
-When `NEXT_PUBLIC_ADMIN_API_URL` is set, the admin SPA calls Azure Functions instead. The endpoint shape mirrors the local Route Handlers; the URL prefix changes. See [`azure-functions/README.md`](azure-functions/README.md) and `tasks/04-implement-admin-azure-functions.md` for the full specification.
+When `NEXT_PUBLIC_ADMIN_API_URL` is set, the admin SPA calls Azure Functions instead. The endpoint shape mirrors the local Route Handlers; the URL prefix changes. See [`azure-functions/README.md`](azure-functions/README.md) and `business/tasks/04-implement-admin-azure-functions.md` for the full specification.
 
 ---
 
@@ -488,5 +488,5 @@ Tests are colocated under `__tests__/` mirroring the above paths.
 | [`architecture.md`](architecture.md) | Multi-tenant SSG, `ClientConfig`, runtime APIs summary |
 | [`docs/blocks.md`](docs/blocks.md) | Block registry and page JSON |
 | [`azure-functions/README.md`](azure-functions/README.md) | Production Cosmos + email |
-| [`tasks/04-implement-admin-azure-functions.md`](tasks/04-implement-admin-azure-functions.md) | Admin Azure Functions specification |
-| [`tasks/refactor-admin-multitenant-spa.md`](tasks/refactor-admin-multitenant-spa.md) | Multi-tenant admin SPA design decision record |
+| [`business/tasks/04-implement-admin-azure-functions.md`](business/tasks/04-implement-admin-azure-functions.md) | Admin Azure Functions specification |
+| [`business/tasks/refactor-admin-multitenant-spa.md`](business/tasks/refactor-admin-multitenant-spa.md) | Multi-tenant admin SPA design decision record |

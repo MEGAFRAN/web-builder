@@ -3,7 +3,7 @@
 **Market:** Colombia  
 **Status:** Locked — May 23, 2026  
 **Currency:** COP only (no USD prices shown to clients)  
-**Source of truth:** `tasks/2026-05-23-roadmap-to-first-10-paying-clients.md`
+**Source of truth:** `business/roadmap/2026-05-23-roadmap-to-first-10-paying-clients.md`
 
 ---
 

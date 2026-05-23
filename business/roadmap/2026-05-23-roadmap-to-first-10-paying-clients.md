@@ -140,9 +140,9 @@ Milestone tags: **M1** = weeks 1–4, **M2** = weeks 5–8, **M3** = weeks 9–1
 ### M1 — Commercial-Ready Platform + First Paying Client (weeks 1–4)
 
 In flight already:
-- **Task 03 — Cosmos DB Admin Containers** (`tasks/03-setup-cosmos-db-admin-containers.md`) [▶ in progress] [M] [M1]
-- **Task 04 — Implement Admin Azure Functions** (`tasks/04-implement-admin-azure-functions.md`) [☐] [L] [M1]
-- **Task 05 — Configure Unified Admin Deployment Pipeline** (`tasks/05-configure-admin-deploy-pipeline.md`) [☐] [M] [M1]
+- **Task 03 — Cosmos DB Admin Containers** (`business/tasks/03-setup-cosmos-db-admin-containers.md`) [▶ in progress] [M] [M1]
+- **Task 04 — Implement Admin Azure Functions** (`business/tasks/04-implement-admin-azure-functions.md`) [☐] [L] [M1]
+- **Task 05 — Configure Unified Admin Deployment Pipeline** (`business/tasks/05-configure-admin-deploy-pipeline.md`) [☐] [M] [M1]
 
 New for this roadmap:
 - **Task 06 — Stripe Checkout + Customer Portal Integration** [M] [M1]
@@ -229,7 +229,7 @@ Task 17 (Block-add affordance)    ──┴──► 10 PAYING CLIENTS, $250 MRR
 ## 7. Next Actions (next 48 hours)
 
 1. **CEO** drafts and locks the one-page **Commercial MVP Spec** by Friday May 29, 2026. Includes: vertical commit, 3 commercial-blocker decisions, milestone dates, kill-switch criterion.
-2. **CTO** authorizes dev agents to begin writing the new task files in `tasks/06-*.md` through `tasks/17-*.md` once Friday's sign-off lands on T1 (cut-list) and the $50/mo infra ceiling.
+2. **CTO** authorizes dev agents to begin writing the new task files in `business/tasks/06-*.md` through `business/tasks/17-*.md` once Friday's sign-off lands on T1 (cut-list) and the $50/mo infra ceiling.
 3. **nextjs-frontend-developer agent** starts on **Task 09 (solo-beauty-pro starter template)** immediately — zero dependencies, validates the placeholder-substitution model, unblocks the CPO's discovery-call script.
 4. **devops agent** continues **Task 03 (Cosmos containers)** in parallel.
 5. **CPO** delivers the final 30-minute discovery call script (with explicit field mappings) by end of next week, so Task 09 placeholder copy can be locked.
