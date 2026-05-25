@@ -25,10 +25,8 @@
       "_type": "heroBlock",
       "heading": "{{businessName}}",
       "subtext": "Personalized {{primaryService}} by {{ownerFirstName}}. Look and feel your best in a calm, welcoming studio.",
-      "primaryButtonLabel": "View Services",
+      "primaryButtonLabel": "Book Now",
       "primaryButtonHref": "#services",
-      "secondaryButtonLabel": "Book Appointment",
-      "secondaryButtonHref": "#services",
       "backgroundImageUrl": "https://picsum.photos/seed/solo-beauty-hero/1600/900",
       "placeholderCopy": {
         "heading": "Primary hero headline — business name",

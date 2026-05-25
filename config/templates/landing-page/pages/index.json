@@ -12,8 +12,6 @@
       "subtext": "This template stacks hero, services, testimonials, FAQ, and contact in one scroll — swap copy and theme, then publish.",
       "primaryButtonLabel": "View services",
       "primaryButtonHref": "/",
-      "secondaryButtonLabel": "Contact us",
-      "secondaryButtonHref": "/",
       "backgroundImageUrl": "https://picsum.photos/seed/landing-hero/1600/900"
     },
     {

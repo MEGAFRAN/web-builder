@@ -4,11 +4,54 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { NavLink } from "@/components/navigation/NavLink";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
+import {
+  dispatchOpenBookingModal,
+  isBookingModalHref,
+} from "@/lib/booking-modal-events";
 
 const NAVBAR_SHADOW =
   "shadow-[0_1px_0_color-mix(in_srgb,var(--color-text)_8%,transparent)]";
 const NAVBAR_SCROLLED_SHADOW =
   "shadow-[0_4px_24px_color-mix(in_srgb,var(--color-text)_8%,transparent)]";
+
+const DESKTOP_CTA_CLASS =
+  "rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+
+const MOBILE_CTA_CLASS =
+  "mt-4 rounded-md bg-primary px-4 py-3 text-center text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+
+function NavbarCta({
+  label,
+  href,
+  className,
+  onActivate,
+}: {
+  label: string;
+  href: string;
+  className: string;
+  onActivate?: () => void;
+}) {
+  if (isBookingModalHref(href)) {
+    return (
+      <button
+        type="button"
+        className={`${className} cursor-pointer border-0`}
+        onClick={() => {
+          onActivate?.();
+          dispatchOpenBookingModal();
+        }}
+      >
+        {label}
+      </button>
+    );
+  }
+
+  return (
+    <a href={href} className={className} onClick={onActivate}>
+      {label}
+    </a>
+  );
+}
 
 export function Navbar({
   logo,
@@ -81,14 +124,13 @@ export function Navbar({
             ))}
             {ctaLabel &&
               (ctaAction ? (
-                <a
+                <NavbarCta
+                  label={ctaLabel}
                   href={ctaAction}
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                >
-                  {ctaLabel}
-                </a>
+                  className={DESKTOP_CTA_CLASS}
+                />
               ) : (
-                <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90">
+                <button className={DESKTOP_CTA_CLASS}>
                   {ctaLabel}
                 </button>
               ))}
@@ -166,13 +208,12 @@ export function Navbar({
             </a>
           ))}
           {ctaLabel && ctaAction && (
-            <a
+            <NavbarCta
+              label={ctaLabel}
               href={ctaAction}
-              onClick={() => setIsOpen(false)}
-              className="mt-4 rounded-md bg-primary px-4 py-3 text-center text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            >
-              {ctaLabel}
-            </a>
+              className={MOBILE_CTA_CLASS}
+              onActivate={() => setIsOpen(false)}
+            />
           )}
         </nav>
       </div>

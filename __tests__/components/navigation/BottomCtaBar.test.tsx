@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BottomCtaBar } from '@/components/navigation/BottomCtaBar'
+import { BOOKING_MODAL_OPEN_EVENT } from '@/lib/booking-modal-events'
 
 describe('BottomCtaBar', () => {
   afterEach(() => {
@@ -186,5 +187,25 @@ describe('BottomCtaBar', () => {
     const link = screen.getByRole('link', { name: 'Reserve' })
     expect(link).toHaveAttribute('href', '/book')
     expect(screen.queryByRole('button', { name: 'Reserve' })).not.toBeInTheDocument()
+  })
+
+  it('opens the booking modal when Book uses href #book', () => {
+    const openHandler = vi.fn()
+    window.addEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
+
+    render(
+      <BottomCtaBar
+        items={[
+          { label: 'Call', href: 'tel:+15550100200' },
+          { label: 'Book', href: '#book' },
+        ]}
+      />,
+    )
+
+    expect(screen.queryByRole('link', { name: 'Book' })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Book' }))
+    expect(openHandler).toHaveBeenCalledTimes(1)
+
+    window.removeEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
   })
 })

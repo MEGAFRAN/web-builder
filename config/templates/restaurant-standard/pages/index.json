@@ -12,8 +12,6 @@
       "subtext": "Más de 30 años llevando los sabores de la abuela a tu mesa. Ingredientes frescos, recetas de siempre y el cariño de una familia.",
       "primaryButtonLabel": "Ver el menú",
       "primaryButtonHref": "/menu",
-      "secondaryButtonLabel": "Reservar mesa",
-      "secondaryButtonHref": "/contacto",
       "backgroundImageUrl": "https://picsum.photos/seed/restaurant-hero/1600/900"
     },
     {

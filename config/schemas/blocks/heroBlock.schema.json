@@ -45,26 +45,6 @@
         }
       ]
     },
-    "secondaryButtonLabel": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "secondaryButtonHref": {
-      "oneOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
     "backgroundImageUrl": {
       "oneOf": [
         {

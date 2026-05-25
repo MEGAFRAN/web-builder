@@ -11,13 +11,12 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const BothButtons: Story = {
+export const WithPrimaryButton: Story = {
   args: {
     _type: 'heroBlock',
     heading: 'The platform your team deserves',
     subtext: 'Build, ship, and scale with confidence.',
     primaryButtonLabel: 'Start free trial',
-    secondaryButtonLabel: 'See how it works',
   },
 }
 export const PrimaryOnly: Story = {

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BOOKING_MODAL_OPEN_EVENT, type BookingModalOpenDetail } from '@/lib/booking-modal-events'
 import { groupServicesByCategory, formatListedPrice, hasServiceCategories, mapBookingServicesToCmsServices } from '@/lib/booking-catalog'
 import { useBookingServicesCatalog } from '@/lib/hooks/useBookingServicesCatalog'
 import { Button } from '@/components/inputs/Button'
@@ -796,8 +797,29 @@ export default function ServicesBlock({
   const resolvedBookCtaLabel = bookCtaLabel?.trim() || 'Reservar'
   const resolvedMoreInfoLabel = moreInfoLabel?.trim() || 'Más información'
   const resolvedClientId = clientId ?? process.env.CLIENT_ID ?? null
+  const [bookingOpen, setBookingOpen] = useState(false)
   const [bookingServiceId, setBookingServiceId] = useState<string | null>(null)
   const [infoService, setInfoService] = useState<Service | null>(null)
+
+  const openBooking = (serviceId: string | null) => {
+    setBookingServiceId(serviceId)
+    setBookingOpen(true)
+  }
+
+  const closeBooking = () => {
+    setBookingOpen(false)
+    setBookingServiceId(null)
+  }
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<BookingModalOpenDetail>).detail
+      openBooking(detail?.serviceId ?? null)
+    }
+    window.addEventListener(BOOKING_MODAL_OPEN_EVENT, handler)
+    return () => window.removeEventListener(BOOKING_MODAL_OPEN_EVENT, handler)
+  }, [])
+
   const bookingServiceName =
     bookingServiceId != null
       ? displayItems.find(item => item.bookingServiceId === bookingServiceId)?.title
@@ -823,7 +845,7 @@ export default function ServicesBlock({
                 bookingUrl={bookingUrl}
                 resolvedBookCtaLabel={resolvedBookCtaLabel}
                 resolvedMoreInfoLabel={resolvedMoreInfoLabel}
-                onBook={setBookingServiceId}
+                onBook={openBooking}
                 onOpenInfo={setInfoService}
               />
             </div>
@@ -844,7 +866,7 @@ export default function ServicesBlock({
               const serviceId = infoService.bookingServiceId
               setInfoService(null)
               if (serviceId != null) {
-                setBookingServiceId(serviceId)
+                openBooking(serviceId)
               }
             }}
           />
@@ -852,18 +874,18 @@ export default function ServicesBlock({
       </Modal>
 
       <Modal
-        isOpen={bookingServiceId != null}
-        onClose={() => setBookingServiceId(null)}
+        isOpen={bookingOpen}
+        onClose={closeBooking}
         title={bookingServiceName ?? resolvedBookCtaLabel}
         size="wide"
       >
-        {bookingServiceId != null ? (
+        {bookingOpen ? (
           <ReservationBlock
             _type="reservationBlock"
             clientId={resolvedClientId}
             confirmationMessage={reservationConfirmationMessage}
-            initialServiceId={bookingServiceId}
-            skipServiceSelection
+            initialServiceId={bookingServiceId ?? undefined}
+            skipServiceSelection={bookingServiceId != null}
             embedded
             hideHeading
           />

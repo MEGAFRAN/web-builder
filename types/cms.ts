@@ -231,8 +231,6 @@ export type HomepageHeroBlock = {
   subtext?: string | null
   primaryButtonLabel?: string | null
   primaryButtonHref?: string | null
-  secondaryButtonLabel?: string | null
-  secondaryButtonHref?: string | null
   backgroundImageUrl?: string | null
 }
 

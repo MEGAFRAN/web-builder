@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { Hero } from '@/components/sections/Hero'
+import { BOOKING_MODAL_OPEN_EVENT } from '@/lib/booking-modal-events'
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -66,6 +67,23 @@ describe('Hero', () => {
       expect(btn?.className).toContain('bg-primary')
     })
 
+    it('renders a link when ctaAction is a normal href', () => {
+      renderHero({ headline: 'H', ctaLabel: 'View Services', ctaAction: '#services' })
+      const link = screen.getByRole('link', { name: 'View Services' })
+      expect(link).toHaveAttribute('href', '#services')
+    })
+
+    it('opens the booking modal when ctaAction is #book', () => {
+      const openHandler = vi.fn()
+      window.addEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
+
+      renderHero({ headline: 'H', ctaLabel: 'Book Now', ctaAction: '#book' })
+      fireEvent.click(screen.getByRole('button', { name: 'Book Now' }))
+      expect(openHandler).toHaveBeenCalledTimes(1)
+
+      window.removeEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
+    })
+
     it('does not render a CTA button when ctaLabel is omitted', () => {
       const container = renderHero({ headline: 'H' })
       expect(container.querySelector('button')).toBeNull()
@@ -74,40 +92,6 @@ describe('Hero', () => {
     it('does not render a CTA button when ctaLabel={null}', () => {
       const container = renderHero({ headline: 'H', ctaLabel: null })
       expect(container.querySelector('button')).toBeNull()
-    })
-  })
-
-  describe('secondaryLabel prop', () => {
-    it('renders a secondary button when secondaryLabel is provided', () => {
-      renderHero({ headline: 'H', secondaryLabel: 'Learn More' })
-      expect(screen.getByRole('button', { name: 'Learn More' })).toBeInTheDocument()
-    })
-
-    it('applies border button classes to the secondary button', () => {
-      const container = renderHero({ headline: 'H', secondaryLabel: 'Learn More' })
-      const btn = container.querySelector('button')
-      expect(btn?.className).toContain('border-primary')
-    })
-
-    it('renders both CTA and secondary buttons when both labels are provided', () => {
-      renderHero({ headline: 'H', ctaLabel: 'Start', secondaryLabel: 'Learn More' })
-      expect(screen.getAllByRole('button')).toHaveLength(2)
-    })
-
-    it('does not render a secondary button when secondaryLabel is omitted', () => {
-      const container = renderHero({ headline: 'H', ctaLabel: 'Start' })
-      expect(screen.getAllByRole('button')).toHaveLength(1)
-    })
-
-    it('does not render a secondary button when secondaryLabel={null}', () => {
-      const container = renderHero({ headline: 'H', ctaLabel: 'Start', secondaryLabel: null })
-      expect(screen.getAllByRole('button')).toHaveLength(1)
-    })
-
-    it('renders no button wrapper when both ctaLabel and secondaryLabel are omitted', () => {
-      const container = renderHero({ headline: 'H' })
-      // No flex-wrap div should appear
-      expect(container.querySelector('.flex.flex-wrap')).toBeNull()
     })
   })
 
@@ -135,16 +119,15 @@ describe('Hero', () => {
   })
 
   describe('combined props', () => {
-    it('renders headline, subtext, and both buttons together', () => {
+    it('renders headline, subtext, and CTA together', () => {
       renderHero({
         headline: 'Big Headline',
         subtext: 'Some subtext',
         ctaLabel: 'Start',
-        secondaryLabel: 'Learn More',
       })
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
       expect(screen.getByText('Some subtext')).toBeInTheDocument()
-      expect(screen.getAllByRole('button')).toHaveLength(2)
+      expect(screen.getByRole('button', { name: 'Start' })).toBeInTheDocument()
     })
   })
 })

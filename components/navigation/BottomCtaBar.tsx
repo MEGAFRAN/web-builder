@@ -10,6 +10,10 @@ import {
   VendorScriptWidget,
   type VendorScriptWidgetHandle,
 } from '@/components/vendors/VendorScriptWidget'
+import {
+  dispatchOpenBookingModal,
+  isBookingModalHref,
+} from '@/lib/booking-modal-events'
 
 function isInternalAppPath(href: string): boolean {
   return href.startsWith('/') && !href.startsWith('//')
@@ -163,6 +167,7 @@ export function BottomCtaBar({ items, vendorScriptWidget }: BottomCtaBarProps) {
           {items.map((item, i) => {
             const key = `${i}-${item.action ?? 'navigate'}-${item.href}-${item.label}`
             const wantsActivate = item.action === 'activateVendorScript' && embedVendor
+            const wantsBooking = isBookingModalHref(item.href)
 
             if (wantsActivate) {
               return (
@@ -171,6 +176,19 @@ export function BottomCtaBar({ items, vendorScriptWidget }: BottomCtaBarProps) {
                   type="button"
                   className={`${itemClass} cursor-pointer border-0`}
                   onClick={() => widgetRef.current?.activate()}
+                >
+                  <CtaItemContent item={item} />
+                </button>
+              )
+            }
+
+            if (wantsBooking) {
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  className={`${itemClass} cursor-pointer border-0`}
+                  onClick={() => dispatchOpenBookingModal()}
                 >
                   <CtaItemContent item={item} />
                 </button>

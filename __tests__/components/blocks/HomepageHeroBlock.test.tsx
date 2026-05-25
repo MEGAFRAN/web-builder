@@ -39,19 +39,19 @@ describe('HomepageHeroBlock', () => {
     expect(screen.getByRole('button', { name: 'Get Started' })).toBeInTheDocument()
   })
 
-  it('renders the secondary CTA button when secondaryButtonLabel is provided', () => {
+  it('passes primaryButtonHref to the hero CTA as a link', () => {
     render(
       <HomepageHeroBlock
         _type="heroBlock"
         heading="Hello"
-        primaryButtonLabel="Get Started"
-        secondaryButtonLabel="Learn More"
-      />
+        primaryButtonLabel="View Services"
+        primaryButtonHref="#services"
+      />,
     )
-    expect(screen.getByRole('button', { name: 'Learn More' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'View Services' })).toHaveAttribute('href', '#services')
   })
 
-  it('renders no buttons when both button labels are omitted', () => {
+  it('renders no buttons when primaryButtonLabel is omitted', () => {
     render(<HomepageHeroBlock _type="heroBlock" heading="Hello" />)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })

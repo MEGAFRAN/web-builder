@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { Navbar } from '@/components/navigation/Navbar'
+import { BOOKING_MODAL_OPEN_EVENT } from '@/lib/booking-modal-events'
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -226,6 +227,38 @@ describe('Navbar', () => {
     it('mobile panel renders no CTA link when ctaAction is omitted', () => {
       const container = renderNavbar({ logo: 'Acme', ctaLabel: 'Book now' })
       expect(mobilePanel(container).querySelector('a')).toBeNull()
+    })
+
+    it('opens the booking modal when ctaAction is #book on desktop', () => {
+      const openHandler = vi.fn()
+      window.addEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
+
+      renderNavbar({ logo: 'Acme', ctaLabel: 'Book Now', ctaAction: '#book' })
+
+      expect(screen.queryByRole('link', { name: 'Book Now' })).not.toBeInTheDocument()
+      fireEvent.click(screen.getByRole('button', { name: 'Book Now' }))
+      expect(openHandler).toHaveBeenCalledTimes(1)
+
+      window.removeEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
+    })
+
+    it('opens the booking modal when ctaAction is #book in the mobile panel', () => {
+      const openHandler = vi.fn()
+      window.addEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
+
+      const container = renderNavbar({
+        logo: 'Acme',
+        ctaLabel: 'Book Now',
+        ctaAction: '#book',
+      })
+
+      fireEvent.click(container.querySelector('button[aria-label="Open menu"]')!)
+      const mobileCta = mobilePanel(container).querySelector('button')
+      expect(mobileCta).not.toBeNull()
+      fireEvent.click(mobileCta!)
+      expect(openHandler).toHaveBeenCalledTimes(1)
+
+      window.removeEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
     })
   })
 })

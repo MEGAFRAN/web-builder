@@ -20,8 +20,8 @@ export const Centered: Story = {
 export const LeftAligned: Story = {
   args: { headline: 'Your business, elevated', subtext: 'We help companies grow faster with better tools.', ctaLabel: 'Learn more', align: 'left' },
 }
-export const TwoCtas: Story = {
-  args: { headline: 'Take the next step', ctaLabel: 'Start free trial', secondaryLabel: 'See pricing', align: 'center' },
+export const WithCta: Story = {
+  args: { headline: 'Take the next step', ctaLabel: 'Start free trial', align: 'center' },
 }
 export const HeadlineOnly: Story = {
   args: { headline: 'Simple. Powerful. Fast.' },
