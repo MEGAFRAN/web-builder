@@ -1,0 +1,50 @@
+{
+  "clientId": "hair-salon",
+  "displayName": "Hair Salon",
+  "customDomain": "hair-salon.com",
+  "swaResourceName": "swa-hair-salon",
+  "template": "solo-beauty-pro",
+  "vertical": "beauty",
+  "features": {
+    "blog": false,
+    "booking": true,
+    "gallery": false,
+    "menu": false
+  },
+  "theme": {
+    "primaryColor": "#be185d",
+    "accentColor": "#c9a962",
+    "backgroundColor": "#fdf8f6",
+    "textColor": "#3d2c29",
+    "surfaceColor": "#ffffff",
+    "surfaceDark": "#831843",
+    "fontHeading": "Playfair Display",
+    "fontBody": "Lato",
+    "borderRadius": 12,
+    "pageInset": "clamp(1rem, 5vw, 2rem)",
+    "sectionSpacing": "5rem",
+    "contentGap": "1rem"
+  },
+  "siteMetadata": {
+    "siteName": "Hair Salon",
+    "titleTemplate": "%s | Hair Salon",
+    "defaultDescription": "Emma offers Haircuts & Color at 123 High Street, London. Book your appointment online — open 9:00 AM - 6:00 PM.",
+    "defaultOgImage": null
+  },
+  "bottomActionBar": {
+    "items": [
+      {
+        "label": "Call",
+        "href": "tel:+442079460958",
+        "icon": "public/call.svg",
+        "iconColor": "#ffffff"
+      },
+      {
+        "label": "Book",
+        "href": "#book",
+        "icon": "public/calendar.svg",
+        "iconColor": "#ffffff"
+      }
+    ]
+  }
+}

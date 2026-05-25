@@ -1,0 +1,50 @@
+{
+  "clientId": "{{clientId}}",
+  "displayName": "{{businessName}}",
+  "customDomain": "{{customDomain}}",
+  "swaResourceName": "swa-{{clientId}}",
+  "template": "solo-beauty-pro",
+  "vertical": "beauty",
+  "features": {
+    "blog": false,
+    "booking": true,
+    "gallery": false,
+    "menu": false
+  },
+  "theme": {
+    "primaryColor": "#be185d",
+    "accentColor": "#c9a962",
+    "backgroundColor": "#fdf8f6",
+    "textColor": "#3d2c29",
+    "surfaceColor": "#ffffff",
+    "surfaceDark": "#831843",
+    "fontHeading": "Playfair Display",
+    "fontBody": "Lato",
+    "borderRadius": 12,
+    "pageInset": "clamp(1rem, 5vw, 2rem)",
+    "sectionSpacing": "5rem",
+    "contentGap": "1rem"
+  },
+  "siteMetadata": {
+    "siteName": "{{businessName}}",
+    "titleTemplate": "%s | {{businessName}}",
+    "defaultDescription": "{{ownerFirstName}} offers {{primaryService}} at {{address}}. Book your appointment online — open {{bookingHoursWeekday}}.",
+    "defaultOgImage": null
+  },
+  "bottomActionBar": {
+    "items": [
+      {
+        "label": "Call",
+        "href": "tel:{{phone}}",
+        "icon": "public/call.svg",
+        "iconColor": "#ffffff"
+      },
+      {
+        "label": "Book",
+        "href": "#book",
+        "icon": "public/calendar.svg",
+        "iconColor": "#ffffff"
+      }
+    ]
+  }
+}

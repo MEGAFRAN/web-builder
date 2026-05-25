@@ -22,7 +22,7 @@ The template will utilize placeholder keys (e.g. `{{businessName}}`, `{{ownerFir
 
 The starter template must be placed in `config/templates/solo-beauty-pro/` and contain two files:
 1. `client.json`: The base client-level metadata and configuration.
-2. `pages/home.json`: The homepage composition using the 8 CPO-approved blocks in order:
+2. `pages/index.json`: The homepage composition using the 8 CPO-approved blocks in order (filename `index.json` maps to slug `""` and is served at `/`):
    - `navbar` (chrome)
    - `heroBlock`
    - `services`
@@ -38,7 +38,7 @@ The starter template must be placed in `config/templates/solo-beauty-pro/` and c
 
 ## Placeholders for Substitution
 
-The following placeholders must be embedded in the placeholder content within `client.json` and `pages/home.json` for variable replacement during provisioning:
+The following placeholders must be embedded in the placeholder content within `client.json` and `pages/index.json` for variable replacement during provisioning:
 - `{{businessName}}` (e.g., "Sally's Styling Studio")
 - `{{ownerFirstName}}` (e.g., "Sally")
 - `{{primaryService}}` (e.g., "Hair Styling & Coloring")
@@ -55,7 +55,7 @@ The following placeholders must be embedded in the placeholder content within `c
 - [ ] Create `config/templates/solo-beauty-pro/client.json` matching the `client.schema.json` structure.
   - Set default theme parameters optimized for beauty salons (e.g. warm, pastel, or elegant rose/gold/emerald colors).
   - Explicitly restrict/enable feature flags (e.g., `booking: true`, `blog: false`, etc.).
-- [ ] Create `config/templates/solo-beauty-pro/pages/home.json` representing the homepage block sequence.
+- [ ] Create `config/templates/solo-beauty-pro/pages/index.json` representing the homepage block sequence.
   - Correctly structure the 8 blocks with appropriate default types (`_type: "heroBlock"`, etc.).
   - Embed the placeholder double-curly-braces strings into the text fields.
 
@@ -69,7 +69,7 @@ The following placeholders must be embedded in the placeholder content within `c
 
 | Area | Paths |
 |---|---|
-| Starter Template | `config/templates/solo-beauty-pro/client.json` (new) <br> `config/templates/solo-beauty-pro/pages/home.json` (new) |
+| Starter Template | `config/templates/solo-beauty-pro/client.json` (new) <br> `config/templates/solo-beauty-pro/pages/index.json` (new) |
 
 ---
 
@@ -82,7 +82,7 @@ The following placeholders must be embedded in the placeholder content within `c
 
 ## Acceptance criteria
 
-1. The template files `config/templates/solo-beauty-pro/client.json` and `config/templates/solo-beauty-pro/pages/home.json` exist.
+1. The template files `config/templates/solo-beauty-pro/client.json` and `config/templates/solo-beauty-pro/pages/index.json` exist.
 2. Both files validate fully against `config/schemas/client.schema.json` and their respective block schemas.
-3. No block other than the 8 approved types (`navbar`, `heroBlock`, `services`, `reservationBlock`, `testimonialsBlock`, `location`, `contactInfoBlock`, `footer`) is used in `home.json`.
+3. No block other than the 8 approved types (`navbar`, `heroBlock`, `services`, `reservationBlock`, `testimonialsBlock`, `location`, `contactInfoBlock`, `footer`) is used in `index.json`.
 4. Placeholder variables are correctly set up and easy to locate for regex substitution tools.

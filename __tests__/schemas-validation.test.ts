@@ -18,6 +18,19 @@ const ROOT = path.resolve(__dirname, '..')
 const SCHEMAS_DIR = path.join(ROOT, 'config/schemas')
 const BLOCKS_DIR = path.join(SCHEMAS_DIR, 'blocks')
 const CLIENTS_DIR = path.join(ROOT, 'config/clients')
+const TEMPLATES_DIR = path.join(ROOT, 'config/templates')
+const SOLO_BEAUTY_TEMPLATE_DIR = path.join(TEMPLATES_DIR, 'solo-beauty-pro')
+
+const SOLO_BEAUTY_BLOCK_TYPES = [
+  'navbar',
+  'heroBlock',
+  'services',
+  'reservationBlock',
+  'testimonialsBlock',
+  'location',
+  'contactInfoBlock',
+  'footer',
+] as const
 
 function loadJson<T>(filePath: string): T {
   return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as T
@@ -62,6 +75,36 @@ describe('schema validation', () => {
 
     const valid = validate({ ...baseClient, vertical: 'beauty' })
     expect(valid, formatAjvErrors(validate.errors)).toBe(true)
+  })
+
+  it('validates solo-beauty-pro template client.json against client.schema.json', () => {
+    const ajv = createAjvWithBlockRefs()
+    const validate = ajv.compile(loadJson(path.join(SCHEMAS_DIR, 'client.schema.json')))
+    const client = loadJson(path.join(SOLO_BEAUTY_TEMPLATE_DIR, 'client.json'))
+
+    const valid = validate(client)
+    expect(valid, formatAjvErrors(validate.errors)).toBe(true)
+  })
+
+  it('validates solo-beauty-pro pages/index.json blocks against block schemas', () => {
+    const ajv = createAjvWithBlockRefs()
+    const indexPage = loadJson<{ blocks: Array<{ _type: string }> }>(
+      path.join(SOLO_BEAUTY_TEMPLATE_DIR, 'pages/index.json'),
+    )
+
+    expect(indexPage.blocks).toHaveLength(SOLO_BEAUTY_BLOCK_TYPES.length)
+
+    for (const block of indexPage.blocks) {
+      expect(SOLO_BEAUTY_BLOCK_TYPES).toContain(block._type)
+
+      const schemaFile = `${block._type}.schema.json`
+      const schemaPath = path.join(BLOCKS_DIR, schemaFile)
+      expect(fs.existsSync(schemaPath), `missing schema for ${block._type}`).toBe(true)
+
+      const validate = ajv.compile(loadJson(schemaPath))
+      const valid = validate(block)
+      expect(valid, `${block._type}: ${formatAjvErrors(validate.errors)}`).toBe(true)
+    }
   })
 
   it('validates blocks that specify placeholderCopy', () => {

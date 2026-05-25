@@ -31,11 +31,11 @@ Always read: `architecture.md` before executing any function.
 
 ## Functions
 
-### `create_website`
+### `create_client`
 
-`create_website(requirements: string) returns WebsiteFolder: json files for the website`
+`create_client(requirements: string) returns ClientFolder: json files for the website`
 
-Skill: `.claude/skills/frontend/create_website.md`
+Skill: `.claude/skills/frontend/create_client.md`
 
 When this function is needed, read the skill file and execute from its instructions.
 

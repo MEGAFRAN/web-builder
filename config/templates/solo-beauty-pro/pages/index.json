@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "title": "{{businessName}}",
+    "description": "Book {{primaryService}} with {{ownerFirstName}} at {{businessName}}. Visit us at {{address}} or call {{phone}}.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "navbar",
+      "logo": "{{businessName}}",
+      "links": [
+        { "label": "Services", "href": "#services" },
+        { "label": "Book", "href": "#book" },
+        { "label": "Reviews", "href": "#reviews" },
+        { "label": "Location", "href": "#location" },
+        { "label": "Contact", "href": "#contact" }
+      ],
+      "ctaLabel": "Book Now",
+      "ctaAction": "#book",
+      "placeholderCopy": {
+        "logo": "Business name shown in the navbar"
+      }
+    },
+    {
+      "_type": "heroBlock",
+      "heading": "{{businessName}}",
+      "subtext": "Personalized {{primaryService}} by {{ownerFirstName}}. Look and feel your best in a calm, welcoming studio.",
+      "primaryButtonLabel": "View Services",
+      "primaryButtonHref": "#services",
+      "secondaryButtonLabel": "Book Appointment",
+      "secondaryButtonHref": "#book",
+      "backgroundImageUrl": "https://picsum.photos/seed/solo-beauty-hero/1600/900",
+      "placeholderCopy": {
+        "heading": "Primary hero headline — business name",
+        "subtext": "Short supporting tagline with owner name and primary service"
+      }
+    },
+    {
+      "_type": "services",
+      "heading": "Services",
+      "items": [
+        {
+          "title": "{{primaryService}}",
+          "description": "Signature treatments tailored to your style, delivered with care by {{ownerFirstName}}.",
+          "price": "From consultation",
+          "imageUrl": "https://picsum.photos/seed/solo-beauty-service-primary/800/450",
+          "imageAlt": "{{primaryService}} at {{businessName}}"
+        },
+        {
+          "title": "Consultation & Styling",
+          "description": "A one-on-one session to understand your goals and recommend the right look.",
+          "price": "Complimentary with booking",
+          "imageUrl": "https://picsum.photos/seed/solo-beauty-service-consult/800/450",
+          "imageAlt": "Personal styling consultation"
+        },
+        {
+          "title": "Special Occasion",
+          "description": "Polished looks for events, photos, and celebrations — book ahead for your big day.",
+          "price": "By appointment",
+          "imageUrl": "https://picsum.photos/seed/solo-beauty-service-special/800/450",
+          "imageAlt": "Special occasion styling"
+        }
+      ],
+      "placeholderCopy": {
+        "heading": "Services section title"
+      }
+    },
+    {
+      "_type": "reservationBlock",
+      "heading": "Book with {{ownerFirstName}}",
+      "subtext": "Choose a service and time that works for you. We're open {{bookingHoursWeekday}}.",
+      "confirmationMessage": "Thank you! {{ownerFirstName}} will confirm your appointment shortly.",
+      "placeholderCopy": {
+        "heading": "Booking section headline with owner first name"
+      }
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "What Clients Say",
+      "items": [
+        {
+          "name": "Maria L.",
+          "company": null,
+          "role": null,
+          "quote": "{{ownerFirstName}} listened to exactly what I wanted and delivered beyond my expectations. I always leave feeling confident.",
+          "avatarUrl": "https://picsum.photos/seed/solo-beauty-t1/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Sofia R.",
+          "company": null,
+          "role": null,
+          "quote": "Warm, professional, and skilled. Booking online was easy and the studio feels like a little retreat.",
+          "avatarUrl": "https://picsum.photos/seed/solo-beauty-t2/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Elena M.",
+          "company": null,
+          "role": null,
+          "quote": "I've been coming to {{businessName}} for months. Consistent quality every visit — highly recommend.",
+          "avatarUrl": "https://picsum.photos/seed/solo-beauty-t3/100/100",
+          "stars": 5
+        }
+      ],
+      "placeholderCopy": {
+        "heading": "Testimonials section title"
+      }
+    },
+    {
+      "_type": "location",
+      "title": "Visit Us",
+      "showMap": false,
+      "address": "{{address}}",
+      "placeholderCopy": {
+        "address": "Studio or salon street address"
+      }
+    },
+    {
+      "_type": "contactInfoBlock",
+      "phone": "{{phone}}",
+      "address": "{{address}}",
+      "email": null,
+      "fallbackEmail": null,
+      "placeholderCopy": {
+        "phone": "Primary contact phone number",
+        "address": "Studio or salon address for contact card"
+      }
+    },
+    {
+      "_type": "footer",
+      "copyright": "© {{businessName}}. All rights reserved.",
+      "columns": [
+        {
+          "title": "Hours",
+          "links": [
+            { "label": "Weekdays: {{bookingHoursWeekday}}", "href": "#" },
+            { "label": "Weekends: By appointment", "href": "#" }
+          ]
+        },
+        {
+          "title": "Contact",
+          "links": [
+            { "label": "{{phone}}", "href": "tel:{{phone}}" },
+            { "label": "{{address}}", "href": "#location" }
+          ]
+        }
+      ],
+      "placeholderCopy": {
+        "copyright": "Footer copyright line with business name"
+      }
+    }
+  ]
+}

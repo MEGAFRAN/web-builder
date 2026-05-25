@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "title": "Hair Salon",
+    "description": "Book Haircuts & Color with Emma at Hair Salon. Visit us at 123 High Street, London or call +44 20 7946 0958.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "navbar",
+      "logo": "Hair Salon",
+      "links": [
+        { "label": "Services", "href": "#services" },
+        { "label": "Book", "href": "#book" },
+        { "label": "Reviews", "href": "#reviews" },
+        { "label": "Location", "href": "#location" },
+        { "label": "Contact", "href": "#contact" }
+      ],
+      "ctaLabel": "Book Now",
+      "ctaAction": "#book"
+    },
+    {
+      "_type": "heroBlock",
+      "heading": "Hair Salon",
+      "subtext": "Personalized Haircuts & Color by Emma. Look and feel your best in a calm, welcoming studio.",
+      "primaryButtonLabel": "View Services",
+      "primaryButtonHref": "#services",
+      "secondaryButtonLabel": "Book Appointment",
+      "secondaryButtonHref": "#book",
+      "backgroundImageUrl": "https://picsum.photos/seed/hair-salon-hero/1600/900"
+    },
+    {
+      "_type": "services",
+      "heading": "Services",
+      "items": [
+        {
+          "title": "Haircuts & Color",
+          "description": "Signature treatments tailored to your style, delivered with care by Emma.",
+          "price": "From consultation",
+          "imageUrl": "https://picsum.photos/seed/hair-salon-service-primary/800/450",
+          "imageAlt": "Haircuts & Color at Hair Salon"
+        },
+        {
+          "title": "Consultation & Styling",
+          "description": "A one-on-one session to understand your goals and recommend the right look.",
+          "price": "Complimentary with booking",
+          "imageUrl": "https://picsum.photos/seed/hair-salon-service-consult/800/450",
+          "imageAlt": "Personal styling consultation"
+        },
+        {
+          "title": "Special Occasion",
+          "description": "Polished looks for events, photos, and celebrations — book ahead for your big day.",
+          "price": "By appointment",
+          "imageUrl": "https://picsum.photos/seed/hair-salon-service-special/800/450",
+          "imageAlt": "Special occasion styling"
+        }
+      ]
+    },
+    {
+      "_type": "reservationBlock",
+      "heading": "Book with Emma",
+      "subtext": "Choose a service and time that works for you. We're open 9:00 AM - 6:00 PM.",
+      "confirmationMessage": "Thank you! Emma will confirm your appointment shortly."
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "What Clients Say",
+      "items": [
+        {
+          "name": "Maria L.",
+          "company": null,
+          "role": null,
+          "quote": "Emma listened to exactly what I wanted and delivered beyond my expectations. I always leave feeling confident.",
+          "avatarUrl": "https://picsum.photos/seed/hair-salon-t1/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Sofia R.",
+          "company": null,
+          "role": null,
+          "quote": "Warm, professional, and skilled. Booking online was easy and the studio feels like a little retreat.",
+          "avatarUrl": "https://picsum.photos/seed/hair-salon-t2/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Elena M.",
+          "company": null,
+          "role": null,
+          "quote": "I've been coming to Hair Salon for months. Consistent quality every visit — highly recommend.",
+          "avatarUrl": "https://picsum.photos/seed/hair-salon-t3/100/100",
+          "stars": 5
+        }
+      ]
+    },
+    {
+      "_type": "location",
+      "title": "Visit Us",
+      "showMap": false,
+      "address": "123 High Street, London"
+    },
+    {
+      "_type": "contactInfoBlock",
+      "phone": "+44 20 7946 0958",
+      "address": "123 High Street, London",
+      "email": null,
+      "fallbackEmail": null
+    },
+    {
+      "_type": "footer",
+      "copyright": "© Hair Salon. All rights reserved.",
+      "columns": [
+        {
+          "title": "Hours",
+          "links": [
+            { "label": "Weekdays: 9:00 AM - 6:00 PM", "href": "#" },
+            { "label": "Weekends: By appointment", "href": "#" }
+          ]
+        },
+        {
+          "title": "Contact",
+          "links": [
+            { "label": "+44 20 7946 0958", "href": "tel:+442079460958" },
+            { "label": "123 High Street, London", "href": "#location" }
+          ]
+        }
+      ]
+    }
+  ]
+}

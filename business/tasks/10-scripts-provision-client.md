@@ -37,7 +37,7 @@ node scripts/provision-client.mjs \
 
 ### Order of Operations (Idempotent Flow)
 1. **Validation**: Check that the input JSON exists and matches schemas, and all required command arguments are provided.
-2. **Templating**: Copy the files from `config/templates/{templateId}/` to `config/clients/{clientId}/`. Run a substitution pass over `client.json` and `pages/home.json` (replacing keys like `{{businessName}}` with actual user details).
+2. **Templating**: Copy the files from `config/templates/{templateId}/` to `config/clients/{clientId}/`. Run a substitution pass over `client.json` and `pages/index.json` (replacing keys like `{{businessName}}` with actual user details).
 3. **Build Static Assets**: Invoke the build script (e.g. `npm run build:client --clientId={clientId}`) to generate the isolated client SPA.
 4. **Deploy to Azure Blob**:
    - Create an Azure Storage Container named `client-{clientId}` (static site hosting `$web` feature enabled).
