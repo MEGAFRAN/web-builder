@@ -2,6 +2,16 @@ name: Deploy Admin SPA
 
 on:
   workflow_dispatch:
+    inputs:
+      adminApiUrl:
+        description: 'Azure Functions base URL (overrides ADMIN_API_URL variable)'
+        required: false
+        type: string
+      buildClientId:
+        description: 'Client ID for theme CSS at build time (overrides ADMIN_BUILD_CLIENT_ID variable)'
+        required: false
+        type: string
+        default: '1'
 
 permissions:
   contents: read
@@ -16,24 +26,32 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
+      - name: Validate deploy configuration
+        run: |
+          ADMIN_API_URL="${{ inputs.adminApiUrl || vars.ADMIN_API_URL }}"
+          if [ -z "$ADMIN_API_URL" ]; then
+            echo "::error::ADMIN_API_URL is not set. Add the ADMIN_API_URL repository variable under Settings → Secrets and variables → Actions → Variables, or pass adminApiUrl when triggering this workflow manually."
+            exit 1
+          fi
+          echo "NEXT_PUBLIC_ADMIN_API_URL=$ADMIN_API_URL" >> "$GITHUB_ENV"
+          echo "CLIENT_ID=${{ inputs.buildClientId || vars.ADMIN_BUILD_CLIENT_ID || '1' }}" >> "$GITHUB_ENV"
+          echo "CLIENT_KEY=ADMIN" >> "$GITHUB_ENV"
+
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Derive client key
-        run: echo "CLIENT_KEY=ADMIN" >> $GITHUB_ENV
-
       - name: Restore Next.js build cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .next/cache
           key: nextjs-admin-${{ hashFiles('package-lock.json') }}
@@ -41,9 +59,6 @@ jobs:
             nextjs-admin-
 
       - name: Build admin SPA
-        env:
-          NEXT_PUBLIC_ADMIN_API_URL: ${{ vars.ADMIN_API_URL }}
-          CLIENT_ID: ${{ vars.ADMIN_BUILD_CLIENT_ID }}
         run: npm run build:admin
 
       - name: Deploy to Azure Static Web Apps
