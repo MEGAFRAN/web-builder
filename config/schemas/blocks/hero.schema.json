@@ -3,24 +3,53 @@
   "title": "hero",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "title"],
+  "required": [
+    "_type",
+    "title"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "hero" },
-    "title": { "type": "string" },
-    "subtitle": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "_type": {
+      "type": "string",
+      "const": "hero"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "cta": {
       "oneOf": [
         {
           "type": "object",
           "additionalProperties": false,
-          "required": ["label", "href"],
+          "required": [
+            "label",
+            "href"
+          ],
           "properties": {
-            "label": { "type": "string" },
-            "href": { "type": "string" }
+            "label": {
+              "type": "string"
+            },
+            "href": {
+              "type": "string"
+            }
           }
         },
-        { "type": "null" }
+        {
+          "type": "null"
+        }
       ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }
   }
 }

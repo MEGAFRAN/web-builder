@@ -3,12 +3,50 @@
   "title": "location",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "showMap"],
+  "required": [
+    "_type",
+    "showMap"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "location" },
-    "title": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "showMap": { "type": "boolean" },
-    "mapEmbedSrc": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "address": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+    "_type": {
+      "type": "string",
+      "const": "location"
+    },
+    "title": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "showMap": {
+      "type": "boolean"
+    },
+    "mapEmbedSrc": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "address": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
   }
 }

@@ -3,14 +3,37 @@
   "title": "services",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "items"],
+  "required": [
+    "_type",
+    "items"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "services" },
-    "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "_type": {
+      "type": "string",
+      "const": "services"
+    },
+    "heading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "layout": {
       "oneOf": [
-        { "type": "string", "enum": ["default", "menu"] },
-        { "type": "null" }
+        {
+          "type": "string",
+          "enum": [
+            "default",
+            "menu"
+          ]
+        },
+        {
+          "type": "null"
+        }
       ]
     },
     "items": {
@@ -18,58 +41,184 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["title", "description"],
+        "required": [
+          "title",
+          "description"
+        ],
         "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "price": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-          "imageUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-          "imageAlt": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "imageUrl": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "imageAlt": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "subItems": {
             "oneOf": [
               {
                 "type": "array",
                 "items": {
                   "oneOf": [
-                    { "type": "string" },
+                    {
+                      "type": "string"
+                    },
                     {
                       "type": "object",
                       "additionalProperties": false,
-                      "required": ["label"],
+                      "required": [
+                        "label"
+                      ],
                       "properties": {
-                        "label": { "type": "string" },
-                        "price": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-                        "duration": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-                        "bookingUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                        "label": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "duration": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "bookingUrl": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
                         "pricingRows": {
                           "oneOf": [
-                            { "type": "null" },
+                            {
+                              "type": "null"
+                            },
                             {
                               "type": "array",
                               "items": {
                                 "type": "object",
                                 "additionalProperties": false,
                                 "properties": {
-                                  "price": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-                                  "duration": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-                                  "bookingUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+                                  "price": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "duration": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "bookingUrl": {
+                                    "oneOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
                                 }
                               }
                             }
                           ]
                         },
-                        "imageUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-                        "imageAlt": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+                        "imageUrl": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "imageAlt": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
                         "description": {
                           "oneOf": [
-                            { "type": "null" },
+                            {
+                              "type": "null"
+                            },
                             {
                               "type": "object",
                               "additionalProperties": false,
-                              "required": ["title", "items"],
+                              "required": [
+                                "title",
+                                "items"
+                              ],
                               "properties": {
-                                "title": { "type": "string" },
-                                "items": { "type": "array", "items": { "type": "string" } }
+                                "title": {
+                                  "type": "string"
+                                },
+                                "items": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
                               }
                             }
                           ]
@@ -79,11 +228,16 @@
                   ]
                 }
               },
-              { "type": "null" }
+              {
+                "type": "null"
+              }
             ]
           }
         }
       }
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }
   }
 }

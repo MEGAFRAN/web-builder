@@ -3,20 +3,42 @@
   "title": "breadcrumb",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "items"],
+  "required": [
+    "_type",
+    "items"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "breadcrumb" },
+    "_type": {
+      "type": "string",
+      "const": "breadcrumb"
+    },
     "items": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["label"],
+        "required": [
+          "label"
+        ],
         "properties": {
-          "label": { "type": "string" },
-          "href": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+          "label": {
+            "type": "string"
+          },
+          "href": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
         }
       }
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }
   }
 }

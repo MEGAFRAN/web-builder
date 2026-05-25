@@ -3,18 +3,59 @@
   "title": "ctaBlock",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "headline", "ctaLabel"],
+  "required": [
+    "_type",
+    "headline",
+    "ctaLabel"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "ctaBlock" },
-    "headline": { "type": "string" },
-    "subtext": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "ctaLabel": { "type": "string" },
-    "ctaHref": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "_type": {
+      "type": "string",
+      "const": "ctaBlock"
+    },
+    "headline": {
+      "type": "string"
+    },
+    "subtext": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ctaLabel": {
+      "type": "string"
+    },
+    "ctaHref": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "background": {
       "oneOf": [
-        { "type": "string", "enum": ["white", "gray", "dark"] },
-        { "type": "null" }
+        {
+          "type": "string",
+          "enum": [
+            "white",
+            "gray",
+            "dark"
+          ]
+        },
+        {
+          "type": "null"
+        }
       ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }
   }
 }

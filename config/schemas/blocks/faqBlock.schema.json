@@ -3,22 +3,56 @@
   "title": "faqBlock",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "items"],
+  "required": [
+    "_type",
+    "items"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "faqBlock" },
-    "title": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "context": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "_type": {
+      "type": "string",
+      "const": "faqBlock"
+    },
+    "title": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "context": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "items": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["question", "answer"],
+        "required": [
+          "question",
+          "answer"
+        ],
         "properties": {
-          "question": { "type": "string" },
-          "answer": { "type": "string" }
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
         }
       }
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }
   }
 }

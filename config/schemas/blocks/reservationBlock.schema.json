@@ -3,11 +3,34 @@
   "title": "reservationBlock",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type"],
+  "required": [
+    "_type"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "reservationBlock" },
-    "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "subtext": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "_type": {
+      "type": "string",
+      "const": "reservationBlock"
+    },
+    "heading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "subtext": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "services": {
       "description": "Optional CMS fallback; live admin catalog from /api/booking-services takes precedence when non-empty.",
       "oneOf": [
@@ -16,22 +39,93 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["id", "name", "durationMinutes", "price"],
+            "required": [
+              "id",
+              "name",
+              "durationMinutes",
+              "price"
+            ],
             "properties": {
-              "id": { "type": "string", "minLength": 1 },
-              "name": { "type": "string", "minLength": 1 },
-              "description": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-              "durationMinutes": { "type": "integer", "minimum": 1, "maximum": 1440 },
-              "price": { "type": "number", "minimum": 0 },
-              "currency": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] }
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "durationMinutes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1440
+              },
+              "price": {
+                "type": "number",
+                "minimum": 0
+              },
+              "currency": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
             }
           }
         },
-        { "type": "null" }
+        {
+          "type": "null"
+        }
       ]
     },
-    "confirmationMessage": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "clientId": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
-    "availabilityEndpoint": { "oneOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] }
+    "confirmationMessage": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "clientId": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "availabilityEndpoint": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
   }
 }

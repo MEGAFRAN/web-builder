@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "navbar",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_type", "logo"],
+  "properties": {
+    "_type": { "type": "string", "const": "navbar" },
+    "logo": { "type": "string" },
+    "links": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "href"],
+            "properties": {
+              "label": { "type": "string" },
+              "href": { "type": "string" }
+            }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "ctaLabel": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "ctaAction": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

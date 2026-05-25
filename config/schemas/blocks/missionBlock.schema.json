@@ -3,12 +3,44 @@
   "title": "missionBlock",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "heading", "body"],
+  "required": [
+    "_type",
+    "heading",
+    "body"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "missionBlock" },
-    "heading": { "type": "string" },
-    "body": { "type": "string" },
-    "imageUrl": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "imageAlt": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+    "_type": {
+      "type": "string",
+      "const": "missionBlock"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "imageAlt": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
   }
 }

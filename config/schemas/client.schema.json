@@ -13,6 +13,11 @@
       "type": "string",
       "description": "Name of the template this client is based on (e.g. 'restaurant-standard'). Template pages are used as defaults; client page files override by slug."
     },
+    "vertical": {
+      "type": "string",
+      "enum": ["beauty", "tutors", "repair", "yoga-pilates", "general"],
+      "description": "Specifies the business industry vertical for template organization."
+    },
     "contactEndpoint": { "type": "string" },
     "externalReviewUrl": { "type": "string" },
     "externalReviewPlatform": { "type": "string" },

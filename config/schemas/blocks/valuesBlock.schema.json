@@ -3,22 +3,56 @@
   "title": "valuesBlock",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type", "items"],
+  "required": [
+    "_type",
+    "items"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "valuesBlock" },
-    "heading": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "_type": {
+      "type": "string",
+      "const": "valuesBlock"
+    },
+    "heading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "items": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["title", "description"],
+        "required": [
+          "title",
+          "description"
+        ],
         "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "icon": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "icon": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
         }
       }
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }
   }
 }

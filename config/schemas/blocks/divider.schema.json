@@ -3,8 +3,16 @@
   "title": "divider",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type"],
+  "required": [
+    "_type"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "divider" }
+    "_type": {
+      "type": "string",
+      "const": "divider"
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
   }
 }

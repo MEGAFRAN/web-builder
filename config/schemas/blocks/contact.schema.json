@@ -3,12 +3,56 @@
   "title": "contact",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_type"],
+  "required": [
+    "_type"
+  ],
   "properties": {
-    "_type": { "type": "string", "const": "contact" },
-    "title": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "phone": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "email": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
-    "address": { "oneOf": [{ "type": "string" }, { "type": "null" }] }
+    "_type": {
+      "type": "string",
+      "const": "contact"
+    },
+    "title": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "phone": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "email": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "address": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
   }
 }
