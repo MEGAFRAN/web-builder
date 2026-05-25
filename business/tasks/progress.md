@@ -1,7 +1,8 @@
-DONE: business/tasks/01-fix-deploy-azure-static-workflow.md
-DONE: business/tasks/02-add-admin-auth-context-tests.md
-DONE: business/tasks/11-vertical-tag-placeholder-schema.md
-DONE: business/tasks/09-solo-beauty-pro-starter-template.md
+DONE: business/tasks/done/01-fix-deploy-azure-static-workflow.md
+DONE: business/tasks/done/02-add-admin-auth-context-tests.md
+DONE: business/tasks/done/11-vertical-tag-placeholder-schema.md
+DONE: business/tasks/done/09-solo-beauty-pro-starter-template.md
+DONE: business/tasks/done/18-service-duration-variations-admin
 
 TODO: business/tasks/03-setup-cosmos-db-admin-containers.md
 TODO: business/tasks/04-implement-admin-azure-functions.md

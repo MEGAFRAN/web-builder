@@ -25,14 +25,25 @@ export type ReservationRow = StoredReservation & {
   serviceName: string | null
 }
 
+export type ServiceVariation = {
+  id: string
+  /** e.g. "Short", "Standard" */
+  label?: string
+  durationMinutes: number
+  price: number
+}
+
 export type AdminBookingService = {
   id: string
   name: string
   description: string
-  durationMinutes: number
-  price: number
+  /** Fallback when `variations` is empty. */
+  durationMinutes?: number
+  /** Fallback when `variations` is empty. */
+  price?: number
   currency: string
   category?: string
+  variations?: ServiceVariation[]
 }
 
 export type DayCode = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'

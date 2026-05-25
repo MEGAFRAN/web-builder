@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert } from '@/components/content/Alert'
 import { Badge } from '@/components/content/Badge'
 import { Button } from '@/components/inputs/Button'
@@ -11,6 +11,7 @@ import { AdminModal } from '@/components/admin/AdminModal'
 import type { AdminBookingService } from '@/types/admin'
 import { adminCopy } from '@/components/admin/admin-copy'
 import { adminDataUrl, adminFetch } from '@/lib/admin-api'
+import { formatAdminVariationSummary, hasServiceVariations } from '@/lib/booking-catalog'
 
 function formatPrice(price: number, currency: string): string {
   const text = Number.isInteger(price)
@@ -207,8 +208,16 @@ function ServiceCard({
               ⋮⋮
             </span>
             <h3 className="truncate text-lg font-semibold text-foreground">{s.name}</h3>
-            <Badge label={`${s.durationMinutes} min`} variant="default" />
-            <Badge label={formatPrice(s.price, s.currency)} variant="default" />
+            {hasServiceVariations(s) ? (
+              <p className="w-full text-sm font-medium text-foreground">
+                {formatAdminVariationSummary(s.variations ?? [], s.currency)}
+              </p>
+            ) : (
+              <>
+                <Badge label={`${s.durationMinutes} min`} variant="default" />
+                <Badge label={formatPrice(s.price ?? 0, s.currency)} variant="default" />
+              </>
+            )}
           </div>
           <button
             type="button"
@@ -450,23 +459,131 @@ function ServiceFormModal({
   onClose: () => void
   onSave: (row: AdminBookingService) => Promise<void>
 }) {
+  type VariationFormRow = {
+    id: string
+    label: string
+    durationMinutes: string
+    price: string
+  }
+
+  function createVariationRow(): VariationFormRow {
+    return {
+      id: `var-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      label: '',
+      durationMinutes: '',
+      price: '',
+    }
+  }
+
+  function mapInitialVariations(service: AdminBookingService | null): VariationFormRow[] {
+    if (!service?.variations?.length) return [createVariationRow()]
+    return service.variations.map((v) => ({
+      id: v.id,
+      label: v.label ?? '',
+      durationMinutes: String(v.durationMinutes),
+      price: String(v.price),
+    }))
+  }
+
   const [name, setName] = useState(initial?.name ?? '')
   const [category, setCategory] = useState(initial?.category ?? '')
   const [description, setDescription] = useState(initial?.description ?? '')
   const [durationMinutes, setDurationMinutes] = useState(String(initial?.durationMinutes ?? 60))
   const [price, setPrice] = useState(String(initial?.price ?? 0))
   const [currency, setCurrency] = useState(initial?.currency ?? '€')
+  const [hasVariationsEnabled, setHasVariationsEnabled] = useState(
+    (initial?.variations?.length ?? 0) > 0,
+  )
+  const [variationRows, setVariationRows] = useState<VariationFormRow[]>(() =>
+    mapInitialVariations(initial),
+  )
   const [formError, setFormError] = useState('')
   const [busy, setBusy] = useState(false)
+  const focusVariationIdRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!focusVariationIdRef.current) return
+    const id = focusVariationIdRef.current
+    focusVariationIdRef.current = null
+    requestAnimationFrame(() => {
+      document.getElementById(`variation-label-${id}`)?.focus()
+    })
+  }, [variationRows])
+
+  function addVariationRow() {
+    const row = createVariationRow()
+    focusVariationIdRef.current = row.id
+    setVariationRows((rows) => [...rows, row])
+  }
+
+  function removeVariationRow(id: string) {
+    setVariationRows((rows) => rows.filter((row) => row.id !== id))
+  }
+
+  function updateVariationRow(id: string, patch: Partial<VariationFormRow>) {
+    setVariationRows((rows) => rows.map((row) => (row.id === id ? { ...row, ...patch } : row)))
+  }
 
   async function submit() {
     setFormError('')
-    const dm = Number.parseInt(durationMinutes, 10)
-    const pr = Number.parseFloat(price)
     if (!name.trim()) {
       setFormError(adminCopy.services.form.nameRequired)
       return
     }
+
+    const trimmedCategory = category.trim()
+    const baseRow = {
+      id: initial?.id ?? `svc-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      name: name.trim(),
+      description: description.trim(),
+      currency: currency.trim() || '€',
+      ...(trimmedCategory ? { category: trimmedCategory } : {}),
+    }
+
+    if (hasVariationsEnabled) {
+      if (variationRows.length === 0) {
+        setFormError(adminCopy.services.form.variationsRequired)
+        return
+      }
+
+      const parsedVariations = []
+      for (const row of variationRows) {
+        const dm = Number.parseInt(row.durationMinutes, 10)
+        const pr = Number.parseFloat(row.price)
+        if (!Number.isFinite(dm) || dm < 1 || dm > 24 * 60) {
+          setFormError(adminCopy.services.form.variationDurationInvalid)
+          return
+        }
+        if (!Number.isFinite(pr) || pr < 0) {
+          setFormError(adminCopy.services.form.variationPriceInvalid)
+          return
+        }
+        const label = row.label.trim()
+        parsedVariations.push({
+          id: row.id,
+          durationMinutes: dm,
+          price: pr,
+          ...(label ? { label } : {}),
+        })
+      }
+
+      const row: AdminBookingService = {
+        ...baseRow,
+        variations: parsedVariations,
+      }
+      setBusy(true)
+      try {
+        await onSave(row)
+      } catch (e) {
+        setFormError(e instanceof Error ? e.message : adminCopy.services.errors.saveFailed)
+      } finally {
+        setBusy(false)
+      }
+      return
+    }
+
+    const dm = Number.parseInt(durationMinutes, 10)
+    const pr = Number.parseFloat(price)
     if (!Number.isFinite(dm) || dm < 1 || dm > 24 * 60) {
       setFormError(adminCopy.services.form.durationRange)
       return
@@ -475,15 +592,10 @@ function ServiceFormModal({
       setFormError(adminCopy.services.form.priceNonNegative)
       return
     }
-    const trimmedCategory = category.trim()
     const row: AdminBookingService = {
-      id: initial?.id ?? `svc-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      name: name.trim(),
-      description: description.trim(),
+      ...baseRow,
       durationMinutes: dm,
       price: pr,
-      currency: currency.trim() || '€',
-      ...(trimmedCategory ? { category: trimmedCategory } : {}),
     }
     setBusy(true)
     try {
@@ -515,7 +627,11 @@ function ServiceFormModal({
         </>
       }
     >
-      {formError && <p className="mb-3 text-sm text-destructive">{formError}</p>}
+      {formError && (
+        <p className="mb-3 text-sm text-destructive" role="alert">
+          {formError}
+        </p>
+      )}
       <Stack gap="md">
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
           {adminCopy.services.form.name}
@@ -540,31 +656,117 @@ function ServiceFormModal({
             className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          {adminCopy.services.form.duration}
+        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground">
           <input
-            type="number"
-            min={1}
-            max={1440}
-            value={durationMinutes}
-            onChange={(e) => setDurationMinutes(e.target.value)}
-            className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+            type="checkbox"
+            checked={hasVariationsEnabled}
+            onChange={(e) => {
+              const next = e.target.checked
+              setHasVariationsEnabled(next)
+              if (next && variationRows.length === 0) {
+                addVariationRow()
+              }
+            }}
+            className="rounded border-border text-primary focus:ring-primary"
           />
-          <span className="font-normal text-xs text-muted">
-            Define la duración de cada franja que ven los clientes al elegir este servicio.
-          </span>
+          <span className="font-normal">{adminCopy.services.form.hasVariations}</span>
         </label>
-        <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
-          {adminCopy.services.form.price}
-          <input
-            type="number"
-            min={0}
-            step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-          />
-        </label>
+        {hasVariationsEnabled ? (
+          <div className="flex flex-col gap-3">
+            {variationRows.map((row, index) => (
+              <div
+                key={row.id}
+                className="flex flex-col gap-2 rounded-md border border-border bg-muted-bg/40 p-3 sm:flex-row sm:items-end"
+              >
+                <label className="flex min-w-0 flex-1 flex-col gap-1 text-sm font-medium text-foreground">
+                  {adminCopy.services.form.variationLabel}
+                  <input
+                    id={`variation-label-${row.id}`}
+                    value={row.label}
+                    onChange={(e) => updateVariationRow(row.id, { label: e.target.value })}
+                    placeholder={adminCopy.services.form.variationLabelPlaceholder}
+                    className="rounded-md border border-border bg-background px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                  />
+                </label>
+                <label className="flex w-full flex-col gap-1 text-sm font-medium text-foreground sm:w-28">
+                  {adminCopy.services.form.variationDuration}
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min={1}
+                      max={1440}
+                      value={row.durationMinutes}
+                      onChange={(e) =>
+                        updateVariationRow(row.id, { durationMinutes: e.target.value })
+                      }
+                      className="w-full rounded-md border border-border bg-background px-3 py-2 pr-10 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                    />
+                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted">
+                      min
+                    </span>
+                  </div>
+                </label>
+                <label className="flex w-full flex-col gap-1 text-sm font-medium text-foreground sm:w-28">
+                  {adminCopy.services.form.variationPrice}
+                  <div className="relative">
+                    <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-muted">
+                      {currency.trim() || '€'}
+                    </span>
+                    <input
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      value={row.price}
+                      onChange={(e) => updateVariationRow(row.id, { price: e.target.value })}
+                      className="w-full rounded-md border border-border bg-background py-2 pr-3 pl-8 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                    />
+                  </div>
+                </label>
+                <button
+                  type="button"
+                  aria-label={adminCopy.services.form.removeVariationAria(index + 1)}
+                  onClick={() => removeVariationRow(row.id)}
+                  className="rounded-md border border-border px-3 py-2 text-destructive hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            <Button
+              label={adminCopy.services.form.addVariation}
+              variant="secondary"
+              onClick={addVariationRow}
+            />
+          </div>
+        ) : (
+          <>
+            <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
+              {adminCopy.services.form.duration}
+              <input
+                type="number"
+                min={1}
+                max={1440}
+                value={durationMinutes}
+                onChange={(e) => setDurationMinutes(e.target.value)}
+                className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+              />
+              <span className="font-normal text-xs text-muted">
+                Define la duración de cada franja que ven los clientes al elegir este servicio.
+              </span>
+            </label>
+            <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
+              {adminCopy.services.form.price}
+              <input
+                type="number"
+                min={0}
+                step="0.01"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+              />
+            </label>
+          </>
+        )}
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
           {adminCopy.services.form.currency}
           <input

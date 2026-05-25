@@ -1060,6 +1060,70 @@ describe('ReservationBlock — inline field validation', () => {
   })
 })
 
+describe('ReservationBlock — service variations', () => {
+  const variationServices = [
+    {
+      id: 'swedish-massage',
+      name: 'Swedish Massage',
+      description: 'Relaxing massage.',
+      currency: '€',
+      variations: [
+        { id: 'var-30', durationMinutes: 30, price: 40 },
+        { id: 'var-60', label: 'Standard', durationMinutes: 60, price: 60 },
+      ],
+    },
+  ] satisfies NonNullable<ReservationBlockProps['services']>
+
+  it('requires a variation before showing the date picker when skipServiceSelection is set', async () => {
+    await renderReservation(
+      <ReservationBlock
+        _type="reservationBlock"
+        services={variationServices}
+        initialServiceId="swedish-massage"
+        skipServiceSelection
+        embedded
+        hideHeading
+      />,
+    )
+
+    expect(document.getElementById('res-date')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /30 minutes, €40/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Standard, 60 minutes, €60/i })).toBeInTheDocument()
+  })
+
+  it('POSTs the selected variation duration and price context in notes', async () => {
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ services: [] }))
+    fetchSpy.mockResolvedValueOnce(jsonResponse({ bookedSlots: [], outOfWindowSlots: [] }))
+    fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
+
+    await renderReservation(
+      <ReservationBlock
+        _type="reservationBlock"
+        services={variationServices}
+        initialServiceId="swedish-massage"
+        skipServiceSelection
+        embedded
+        hideHeading
+      />,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /Standard, 60 minutes, €60/i }))
+    pickDate()
+    pickSlot()
+    fillGuestDetails()
+    submitForm()
+
+    await waitFor(() => expect(fetchSpy).toHaveBeenCalled())
+    const reservationCalls = reservationPostCalls(fetchSpy)
+    const body = JSON.parse(reservationCalls[0][1].body as string)
+    expect(body).toMatchObject({
+      serviceId: 'swedish-massage',
+      durationMinutes: 60,
+      notes: 'Variante: Standard',
+    })
+  })
+})
+
 describe('ReservationBlock — accessibility', () => {
   it('associates each label with its input via matching htmlFor and id', async () => {
     await renderReservation(<ReservationBlock {...baseProps} />)

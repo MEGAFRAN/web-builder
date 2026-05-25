@@ -485,4 +485,129 @@ describe('AdminServicesPage', () => {
       )
     })
   })
+
+  it('saves a service with duration/price variations', async () => {
+    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input.toString()
+      if (url === '/api/admin/services' && init?.method === 'PUT') {
+        const body = JSON.parse(String(init.body)) as { services: AdminBookingService[] }
+        const saved = body.services.at(-1)
+        expect(saved?.name).toBe('Swedish Massage')
+        expect(saved?.variations).toEqual([
+          { id: expect.any(String), durationMinutes: 30, price: 40 },
+          { id: expect.any(String), label: 'Standard', durationMinutes: 60, price: 60 },
+        ])
+        expect(saved?.durationMinutes).toBeUndefined()
+        return Promise.resolve({ ok: true, json: async () => ({}) })
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ services: [] }),
+      })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(<AdminServicesPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText(adminCopy.services.emptyOnboarding)).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.services.addServiceButton })[0])
+
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.change(within(dialog).getByRole('textbox', { name: adminCopy.services.form.name }), {
+      target: { value: 'Swedish Massage' },
+    })
+    fireEvent.click(
+      within(dialog).getByRole('checkbox', { name: adminCopy.services.form.hasVariations }),
+    )
+
+    const rows = within(dialog).getAllByRole('textbox', {
+      name: adminCopy.services.form.variationLabel,
+    })
+    fireEvent.change(rows[0], { target: { value: 'Express' } })
+    fireEvent.change(within(dialog).getAllByRole('spinbutton')[0], { target: { value: '30' } })
+    fireEvent.change(within(dialog).getAllByRole('spinbutton')[1], { target: { value: '40' } })
+
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.services.form.addVariation }))
+
+    const updatedRows = within(dialog).getAllByRole('textbox', {
+      name: adminCopy.services.form.variationLabel,
+    })
+    fireEvent.change(updatedRows[1], { target: { value: 'Standard' } })
+    fireEvent.change(within(dialog).getAllByRole('spinbutton')[2], { target: { value: '60' } })
+    fireEvent.change(within(dialog).getAllByRole('spinbutton')[3], { target: { value: '60' } })
+
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.common.save }))
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        '/api/admin/services',
+        expect.objectContaining({ method: 'PUT' }),
+      )
+    })
+  })
+
+  it('shows variation summaries on service cards', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: async () => ({
+            services: [
+              {
+                id: 'svc-massage',
+                name: 'Swedish Massage',
+                description: 'Relaxing',
+                currency: '€',
+                variations: [
+                  { id: 'var-30', durationMinutes: 30, price: 40 },
+                  { id: 'var-60', durationMinutes: 60, price: 60 },
+                ],
+              },
+            ],
+          }),
+        }),
+      ),
+    )
+
+    render(<AdminServicesPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText('30 min (€40) · 60 min (€60)')).toBeInTheDocument()
+    })
+  })
+
+  it('validates variation rows before saving', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: async () => ({ services: [] }),
+        }),
+      ),
+    )
+
+    render(<AdminServicesPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText(adminCopy.services.emptyOnboarding)).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.services.addServiceButton })[0])
+
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.change(within(dialog).getByRole('textbox', { name: adminCopy.services.form.name }), {
+      target: { value: 'Swedish Massage' },
+    })
+    fireEvent.click(
+      within(dialog).getByRole('checkbox', { name: adminCopy.services.form.hasVariations }),
+    )
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.common.save }))
+
+    expect(await screen.findByText(adminCopy.services.form.variationDurationInvalid)).toBeInTheDocument()
+  })
 })

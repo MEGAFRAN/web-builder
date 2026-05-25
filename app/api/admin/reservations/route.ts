@@ -5,6 +5,7 @@ import {
   readReservations,
 } from '@/lib/reservations-db'
 import { readBookingServices } from '@/lib/booking-services-db'
+import { resolveServiceDuration } from '@/lib/booking-catalog'
 import type { StoredReservation } from '@/types/admin'
 
 function parseIsoDate(s: string): boolean {
@@ -102,11 +103,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unknown service.' }, { status: 422 })
   }
 
+  const durationMinutes = resolveServiceDuration(svc)
+  if (!durationMinutes) {
+    return NextResponse.json({ error: 'Service has no bookable duration.' }, { status: 422 })
+  }
+
   const record: StoredReservation = {
     id: `${clientId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     clientId,
     serviceId: svc.id,
-    durationMinutes: svc.durationMinutes,
+    durationMinutes,
     name: body.name.trim(),
     email: body.email.trim(),
     phone: body.phone.trim(),

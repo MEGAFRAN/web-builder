@@ -50,6 +50,8 @@ export const BOOKING_COPY = {
   submitError: 'Algo ha fallado. Inténtalo de nuevo o llámanos directamente.',
   slotTakenError:
     'Ese horario acaba de reservarse — elige otra hora.',
+  variationLabel: 'Duración y precio',
+  variationRequired: 'Elige una opción para continuar.',
 } as const
 
 export const BOOKING_FIELD_CLASS =

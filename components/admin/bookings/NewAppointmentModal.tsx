@@ -5,14 +5,10 @@ import { AdminModal } from '@/components/admin/AdminModal'
 import { Button } from '@/components/inputs/Button'
 import { Stack } from '@/components/layout/Stack'
 import { BOOKING_SLOT_GRID } from '@/lib/booking-slot-grid'
+import type { AdminBookingService } from '@/types/admin'
+import { resolveServiceDuration } from '@/lib/booking-catalog'
 import { adminCopy } from '@/components/admin/admin-copy'
 import { adminDataUrl, adminFetch } from '@/lib/admin-api'
-
-type Service = {
-  id: string
-  name: string
-  durationMinutes: number
-}
 
 interface NewAppointmentModalProps {
   clientId: string
@@ -27,7 +23,7 @@ export function NewAppointmentModal({
   onClose,
   onCreated,
 }: NewAppointmentModalProps) {
-  const [services, setServices] = useState<Service[]>([])
+  const [services, setServices] = useState<AdminBookingService[]>([])
   const [serviceId, setServiceId] = useState('')
   const [date, setDate] = useState(initialDate)
   const [time, setTime] = useState('')
@@ -45,7 +41,7 @@ export function NewAppointmentModal({
   useEffect(() => {
     void adminFetch(adminDataUrl('/services'))
       .then((r) => r.json())
-      .then((d: { services: Service[] }) => {
+      .then((d: { services: AdminBookingService[] }) => {
         setServices(d.services)
         if (d.services[0]) setServiceId(d.services[0].id)
       })
@@ -54,7 +50,8 @@ export function NewAppointmentModal({
 
   useEffect(() => {
     if (!selected || !date) return
-    const dur = selected.durationMinutes
+    const dur = resolveServiceDuration(selected)
+    if (!dur) return
     const url = `/api/availability?clientId=${encodeURIComponent(clientId)}&date=${encodeURIComponent(date)}&duration=${encodeURIComponent(String(dur))}`
     let cancelled = false
     void fetch(url)
@@ -137,11 +134,15 @@ export function NewAppointmentModal({
             onChange={(e) => setServiceId(e.target.value)}
             className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           >
-            {services.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name} ({s.durationMinutes} min)
-              </option>
-            ))}
+            {services.map((s) => {
+              const duration = resolveServiceDuration(s)
+              return (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                  {duration ? ` (${duration} min)` : ''}
+                </option>
+              )
+            })}
           </select>
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">

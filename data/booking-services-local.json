@@ -4,10 +4,22 @@
       "id": "svc-1779102974818-jzi3",
       "name": "blower",
       "description": "1) el mejor blower del pais, solo para las clientas mas selectas, reserva con nosotros para vivir una experiencia total, experiencia VIP donde solo se vera lo mejor de lo mejor. Preparate ya para todo. Solo aqui. 2) el mejor blower del pais, solo para las clientas mas selectas, reserva con nosotros para vivir una experiencia total, experiencia VIP donde solo se vera lo mejor de lo mejor. Preparate ya para todo. Solo aqui.",
-      "durationMinutes": 60,
-      "price": 100,
       "currency": "€",
-      "category": "cabello"
+      "category": "cabello",
+      "variations": [
+        {
+          "id": "var-1779718828384-pcdq",
+          "durationMinutes": 30,
+          "price": 30,
+          "label": "sencillo"
+        },
+        {
+          "id": "var-1779718850709-72eu",
+          "durationMinutes": 60,
+          "price": 100,
+          "label": "completo"
+        }
+      ]
     },
     {
       "id": "svc-1779102990687-xnbu",
@@ -26,6 +38,25 @@
       "price": 20,
       "currency": "€",
       "category": "uñas"
+    },
+    {
+      "id": "svc-1779717808068-ldeu",
+      "name": "masaje sueco",
+      "description": "relajate todos los dias",
+      "currency": "€",
+      "category": "masajes",
+      "variations": [
+        {
+          "id": "var-1779718781707-cp1o",
+          "durationMinutes": 30,
+          "price": 40
+        },
+        {
+          "id": "var-1779718807610-pevr",
+          "durationMinutes": 60,
+          "price": 100
+        }
+      ]
     }
   ]
 }

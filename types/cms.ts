@@ -452,15 +452,25 @@ export type TestimonialsPageBlock = {
 }
 
 // Reservation block
+export type ServiceVariation = {
+  id: string
+  label?: string
+  durationMinutes: number
+  price: number
+}
+
 export type ReservationServiceItem = {
   id: string
   name: string
   description?: string | null
-  durationMinutes: number
-  price: number
+  /** Fallback when `variations` is empty. */
+  durationMinutes?: number
+  /** Fallback when `variations` is empty. */
+  price?: number
   /** Display symbol, e.g. "€" or "$". Defaults to "€" when omitted. */
   currency?: string | null
   category?: string | null
+  variations?: ServiceVariation[]
 }
 
 export type ReservationBlock = {

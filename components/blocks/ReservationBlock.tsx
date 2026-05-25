@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { formatListedPrice } from '@/lib/booking-catalog'
+import { formatListedPrice, hasServiceVariations, resolveServiceDuration, resolveServicePrice } from '@/lib/booking-catalog'
 import { useBookingServicesCatalog } from '@/lib/hooks/useBookingServicesCatalog'
 import { Alert } from '@/components/content/Alert'
 import { Button } from '@/components/inputs/Button'
@@ -87,6 +87,7 @@ export default function ReservationBlock({
   const [selectedServiceId, setSelectedServiceId] = useState<string>(
     initialServiceId ?? '',
   )
+  const [selectedVariationId, setSelectedVariationId] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTime, setSelectedTime] = useState<string>('')
   const [fields, setFields] = useState<FormFields>({
@@ -112,6 +113,7 @@ export default function ReservationBlock({
   if (initialServiceId && initialServiceId !== prevInitialServiceId) {
     setPrevInitialServiceId(initialServiceId)
     setSelectedServiceId(initialServiceId)
+    setSelectedVariationId('')
     setSelectedDate('')
     setSelectedTime('')
     setBookedSlots([])
@@ -127,23 +129,36 @@ export default function ReservationBlock({
       ? services.find(s => s.id === selectedServiceId)
       : undefined
 
+  const serviceHasVariations = selectedService ? hasServiceVariations(selectedService) : false
+  const selectedVariation =
+    serviceHasVariations && selectedVariationId
+      ? selectedService?.variations?.find((v) => v.id === selectedVariationId)
+      : undefined
+  const effectiveDuration = selectedService
+    ? resolveServiceDuration(selectedService, selectedVariationId || null)
+    : undefined
+  const effectivePrice = selectedService
+    ? resolveServicePrice(selectedService, selectedVariationId || null)
+    : undefined
+  const variationChosen = !serviceHasVariations || selectedVariationId.length > 0
+
   const endTime =
-    selectedTime && selectedService
-      ? addMinutes(selectedTime, selectedService.durationMinutes)
+    selectedTime && effectiveDuration
+      ? addMinutes(selectedTime, effectiveDuration)
       : null
 
   const selectedStartMin =
-    selectedTime && selectedService ? timeToMinutes(selectedTime) : -1
+    selectedTime && effectiveDuration ? timeToMinutes(selectedTime) : -1
   const selectedEndMin =
-    selectedStartMin >= 0 && selectedService
-      ? selectedStartMin + selectedService.durationMinutes
+    selectedStartMin >= 0 && effectiveDuration
+      ? selectedStartMin + effectiveDuration
       : -1
 
   useEffect(() => {
-    if (!selectedDate || !clientId || !selectedService) {
+    if (!selectedDate || !clientId || !selectedService || !effectiveDuration || !variationChosen) {
       return
     }
-    const duration = selectedService.durationMinutes
+    const duration = effectiveDuration
     const base = availabilityEndpoint ?? '/api/availability'
     const url =
       `${base}?clientId=${encodeURIComponent(clientId)}` +
@@ -166,7 +181,7 @@ export default function ReservationBlock({
         setOutOfWindowSlots([])
       })
       .finally(() => setLoadingSlots(false))
-  }, [selectedDate, clientId, availabilityEndpoint, selectedService])
+  }, [selectedDate, clientId, availabilityEndpoint, selectedService, effectiveDuration, variationChosen])
 
   useEffect(() => {
     if (selectedTime) {
@@ -176,6 +191,15 @@ export default function ReservationBlock({
 
   function selectService(serviceId: string) {
     setSelectedServiceId(serviceId)
+    setSelectedVariationId('')
+    setSelectedDate('')
+    setSelectedTime('')
+    setBookedSlots([])
+    setOutOfWindowSlots([])
+  }
+
+  function selectVariation(variationId: string) {
+    setSelectedVariationId(variationId)
     setSelectedDate('')
     setSelectedTime('')
     setBookedSlots([])
@@ -202,6 +226,8 @@ export default function ReservationBlock({
 
   const canSubmit =
     !!selectedService &&
+    variationChosen &&
+    !!effectiveDuration &&
     selectedDate.length > 0 &&
     selectedTime.length > 0 &&
     nameValid &&
@@ -210,21 +236,34 @@ export default function ReservationBlock({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!canSubmit || !selectedService) return
+    if (!canSubmit || !selectedService || effectiveDuration == null) return
     setState('submitting')
     try {
+      const notesParts = [fields.notes.trim()]
+      if (selectedVariation?.label?.trim()) {
+        notesParts.unshift(`Variante: ${selectedVariation.label.trim()}`)
+      } else if (selectedVariation) {
+        notesParts.unshift(
+          `Variante: ${selectedVariation.durationMinutes} min · ${formatListedPrice(
+            selectedVariation.price,
+            selectedService.currency ?? '€',
+          )}`,
+        )
+      }
+      const notes = notesParts.filter(Boolean).join('\n') || undefined
+
       const res = await fetch('/api/reservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           serviceId: selectedService.id,
-          durationMinutes: selectedService.durationMinutes,
+          durationMinutes: effectiveDuration,
           name: fields.name.trim(),
           email: fields.email.trim(),
           phone: fields.phone.trim(),
           date: selectedDate,
           time: selectedTime,
-          notes: fields.notes.trim() || undefined,
+          notes,
         }),
       })
       if (!res.ok) {
@@ -245,7 +284,13 @@ export default function ReservationBlock({
         setState('error')
         return
       }
-      const serviceSummary = `${selectedService.name} (${selectedService.durationMinutes} min)`
+      const priceLabel =
+        effectivePrice != null
+          ? formatListedPrice(effectivePrice, selectedService.currency ?? '€')
+          : null
+      const serviceSummary = priceLabel
+        ? `${selectedService.name} (${effectiveDuration} min · ${priceLabel})`
+        : `${selectedService.name} (${effectiveDuration} min)`
       setConfirmedBooking({
         date: selectedDate,
         time: selectedTime,
@@ -264,7 +309,7 @@ export default function ReservationBlock({
       ? 4
       : selectedDate && selectedTime
         ? 3
-        : selectedServiceId
+        : selectedServiceId && variationChosen
           ? 2
           : 1
 
@@ -384,13 +429,17 @@ export default function ReservationBlock({
                 <div className="rounded-md border border-border bg-background px-3 py-3">
                   <p className="text-sm font-medium text-muted">{BOOKING_COPY.serviceLabel}</p>
                   <p className="text-base font-semibold text-foreground">{selectedService.name}</p>
-                  <p className="text-xs text-muted">
-                    {selectedService.durationMinutes} min ·{' '}
-                    {formatListedPrice(
-                      selectedService.price,
-                      selectedService.currency ?? '€',
-                    )}
-                  </p>
+                  {serviceHasVariations && !variationChosen ? (
+                    <p className="text-xs text-muted">{BOOKING_COPY.variationRequired}</p>
+                  ) : effectiveDuration != null && effectivePrice != null ? (
+                    <p className="text-xs text-muted">
+                      {effectiveDuration} min ·{' '}
+                      {formatListedPrice(
+                        effectivePrice,
+                        selectedService.currency ?? '€',
+                      )}
+                    </p>
+                  ) : null}
                 </div>
               ) : null}
               {/* Step 0 — Service */}
@@ -408,13 +457,21 @@ export default function ReservationBlock({
                   {services.map(service => {
                     const currency = service.currency ?? '€'
                     const pressed = selectedServiceId === service.id
-                    const priceLabel = formatListedPrice(service.price, currency)
+                    const priceLabel = hasServiceVariations(service)
+                      ? formatListedPrice(
+                          Math.min(...(service.variations ?? []).map((v) => v.price)),
+                          currency,
+                        )
+                      : formatListedPrice(service.price ?? 0, currency)
+                    const durationLabel = hasServiceVariations(service)
+                      ? `${Math.min(...(service.variations ?? []).map((v) => v.durationMinutes))}-${Math.max(...(service.variations ?? []).map((v) => v.durationMinutes))} min`
+                      : `${service.durationMinutes ?? 0} min`
                     return (
                       <button
                         key={service.id}
                         type="button"
                         aria-pressed={pressed}
-                        aria-label={`${service.name}, ${service.durationMinutes} minutes, ${priceLabel}`}
+                        aria-label={`${service.name}, ${durationLabel}, ${priceLabel}`}
                         onClick={() => selectService(service.id)}
                         className={[
                           'relative flex flex-col gap-1 rounded-md border px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
@@ -441,7 +498,9 @@ export default function ReservationBlock({
                           {service.name}
                         </span>
                         <span className="text-xs text-muted">
-                          {service.durationMinutes} min · {priceLabel}
+                          {hasServiceVariations(service)
+                            ? `Desde ${priceLabel} · ${durationLabel}`
+                            : `${durationLabel} · ${priceLabel}`}
                         </span>
                         {service.description ? (
                           <span className="line-clamp-2 overflow-hidden text-sm text-muted">
@@ -455,8 +514,69 @@ export default function ReservationBlock({
               </div>
               ) : null}
 
-              {/* Date — after service */}
-              {selectedServiceId && (
+              {selectedService && serviceHasVariations ? (
+                <div className="flex flex-col gap-2">
+                  <span id="res-variation-label" className="text-sm font-medium text-foreground">
+                    {BOOKING_COPY.variationLabel}{' '}
+                    <span className="text-destructive">*</span>
+                  </span>
+                  <div
+                    role="group"
+                    aria-labelledby="res-variation-label"
+                    className="grid gap-3 sm:grid-cols-2"
+                  >
+                    {(selectedService.variations ?? []).map((variation) => {
+                      const currency = selectedService.currency ?? '€'
+                      const pressed = selectedVariationId === variation.id
+                      const priceLabel = formatListedPrice(variation.price, currency)
+                      const label = variation.label?.trim()
+                      return (
+                        <button
+                          key={variation.id}
+                          type="button"
+                          aria-pressed={pressed}
+                          aria-label={
+                            label
+                              ? `${label}, ${variation.durationMinutes} minutes, ${priceLabel}`
+                              : `${variation.durationMinutes} minutes, ${priceLabel}`
+                          }
+                          onClick={() => selectVariation(variation.id)}
+                          className={[
+                            'relative flex flex-col gap-1 rounded-md border px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+                            pressed
+                              ? 'border-2 border-primary bg-muted-bg shadow-sm'
+                              : 'border border-border bg-background hover:border-primary hover:bg-muted-bg',
+                          ].join(' ')}
+                        >
+                          {pressed ? (
+                            <span
+                              aria-hidden="true"
+                              className="absolute right-2 top-2 text-primary"
+                            >
+                              ✓
+                            </span>
+                          ) : null}
+                          <span
+                            className={
+                              pressed
+                                ? 'text-base font-bold text-primary'
+                                : 'text-base font-semibold text-foreground'
+                            }
+                          >
+                            {label || `${variation.durationMinutes} min`}
+                          </span>
+                          <span className="text-xs text-muted">
+                            {variation.durationMinutes} min · {priceLabel}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Date — after service (and variation when applicable) */}
+              {selectedServiceId && variationChosen && (
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="res-date" className="text-sm font-medium text-foreground">
                     {BOOKING_COPY.dateLabel}{' '}
@@ -481,7 +601,7 @@ export default function ReservationBlock({
               )}
 
               {/* Time slot grid */}
-              {selectedServiceId && selectedDate && (
+              {selectedServiceId && variationChosen && selectedDate && (
                 <div className="flex flex-col gap-2">
                   <span id="res-time-label" className="text-sm font-medium text-foreground">
                     {BOOKING_COPY.timeLabel}{' '}
@@ -561,19 +681,19 @@ export default function ReservationBlock({
                       )
                     })}
                   </div>
-                  {endTime && selectedService && (
+                  {endTime && effectiveDuration ? (
                     <p className="text-xs text-muted">
                       {BOOKING_COPY.selectedRange}{' '}
                       <span className="font-medium text-foreground">
                         {selectedTime} – {endTime}
                       </span>{' '}
-                      ({selectedService.durationMinutes} min)
+                      ({effectiveDuration} min)
                     </p>
-                  )}
+                  ) : null}
                 </div>
               )}
 
-              {selectedServiceId && selectedDate && selectedTime && (
+              {selectedServiceId && variationChosen && selectedDate && selectedTime && (
                 <>
                   <hr className="border-border" />
 
