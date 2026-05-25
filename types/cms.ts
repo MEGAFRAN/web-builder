@@ -19,6 +19,12 @@ export type ServiceSubItem = {
   description?: ServiceSubItemDescription | null
   bookingUrl?: string | null
 }
+export type ServiceVariation = {
+  id: string
+  label?: string
+  durationMinutes: number
+  price: number
+}
 export type Service = {
   title: string
   description: string
@@ -28,6 +34,10 @@ export type Service = {
   imageAlt?: string | null
   /** Set when the card is backed by `/api/booking-services` catalog row. */
   bookingServiceId?: string | null
+  /** Catalog-backed duration/price options when the admin service has variations. */
+  bookingVariations?: ServiceVariation[] | null
+  /** Display currency for `bookingVariations` rows. Defaults to "€". */
+  bookingCurrency?: string | null
   /** Optional grouping label from the admin service catalog. */
   category?: string | null
 }
@@ -452,13 +462,6 @@ export type TestimonialsPageBlock = {
 }
 
 // Reservation block
-export type ServiceVariation = {
-  id: string
-  label?: string
-  durationMinutes: number
-  price: number
-}
-
 export type ReservationServiceItem = {
   id: string
   name: string

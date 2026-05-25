@@ -208,11 +208,15 @@ export function parseBookingCatalogRows(raw: unknown): ReservationServiceItem[] 
 
 export function mapBookingServiceToCmsService(svc: ReservationServiceItem): Service {
   const category = svc.category?.trim()
+  const currency = svc.currency?.trim() || '€'
   return {
     title: svc.name,
     description: svc.description?.trim() ?? '',
     price: formatCatalogServicePriceLabel(svc),
     bookingServiceId: svc.id,
+    ...(hasServiceVariations(svc)
+      ? { bookingVariations: svc.variations, bookingCurrency: currency }
+      : {}),
     ...(category ? { category } : {}),
   }
 }

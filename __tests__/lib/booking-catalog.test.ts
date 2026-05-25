@@ -117,6 +117,11 @@ describe('booking-catalog', () => {
       description: '',
       price: 'Desde €40 · 30-90 min',
       bookingServiceId: 'svc-massage',
+      bookingVariations: [
+        { id: 'var-30', durationMinutes: 30, price: 40 },
+        { id: 'var-90', durationMinutes: 90, price: 80 },
+      ],
+      bookingCurrency: '€',
     })
   })
 

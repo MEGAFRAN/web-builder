@@ -927,4 +927,42 @@ describe('ServicesBlock', () => {
     expect(screen.getByRole('heading', { level: 3, name: 'Color' })).toBeInTheDocument()
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2)
   })
+
+  it('stacks catalog service variations on the card instead of a single summary price', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-massage',
+                name: 'Swedish Massage',
+                description: 'Relaxing massage for every body.',
+                currency: '€',
+                variations: [
+                  { id: 'var-30', durationMinutes: 30, price: 40 },
+                  { id: 'var-60', label: 'Standard', durationMinutes: 60, price: 60 },
+                ],
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" clientId="hair-salon" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('30 min')).toBeInTheDocument()
+      expect(screen.getByText('Standard')).toBeInTheDocument()
+      expect(screen.getByText('60 min')).toBeInTheDocument()
+      expect(screen.getByText('€40')).toBeInTheDocument()
+      expect(screen.getByText('€60')).toBeInTheDocument()
+    })
+
+    expect(screen.queryByText('Desde €40 · 30-60 min')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Reservar' })).toBeInTheDocument()
+  })
 })

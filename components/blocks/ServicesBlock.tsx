@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { groupServicesByCategory, hasServiceCategories, mapBookingServicesToCmsServices } from '@/lib/booking-catalog'
+import { groupServicesByCategory, formatListedPrice, hasServiceCategories, mapBookingServicesToCmsServices } from '@/lib/booking-catalog'
 import { useBookingServicesCatalog } from '@/lib/hooks/useBookingServicesCatalog'
 import { Button } from '@/components/inputs/Button'
 import ReservationBlock from '@/components/blocks/ReservationBlock'
@@ -10,6 +10,7 @@ import type {
   ServiceSubItem,
   ServiceSubItemDescription,
   ServiceSubItemPricingRow,
+  ServiceVariation,
   ServicesBlock as ServicesBlockType,
 } from '@/types/cms'
 import { Stack } from '@/components/layout/Stack'
@@ -93,11 +94,63 @@ function subItemHasExpandableDetails(item: ServiceSubItem): boolean {
   )
 }
 
+function serviceHasBookingVariations(service: Service): boolean {
+  return (service.bookingVariations?.length ?? 0) > 0
+}
+
+function ServiceVariationStack({
+  variations,
+  currency,
+  bookCtaLabel,
+  onBook,
+  showBookCta = false,
+}: {
+  variations: ServiceVariation[]
+  currency: string
+  bookCtaLabel?: string
+  onBook?: () => void
+  showBookCta?: boolean
+}) {
+  return (
+    <div className="space-y-2">
+      {variations.map((variation) => {
+        const label = variation.label?.trim()
+        return (
+          <div
+            key={variation.id}
+            className="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1"
+          >
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+              {label ? (
+                <span className="text-sm font-medium text-foreground">{label}</span>
+              ) : null}
+              <span className="text-sm text-muted">
+                <span className="sr-only">Duration </span>
+                {variation.durationMinutes} min
+              </span>
+            </div>
+            <span className="shrink-0 text-sm font-medium text-foreground">
+              <span className="sr-only">Price </span>
+              {formatListedPrice(variation.price, currency)}
+            </span>
+          </div>
+        )
+      })}
+      {showBookCta && onBook && bookCtaLabel ? (
+        <div className="flex justify-end pt-1">
+          <Button label={bookCtaLabel} variant="primary" size="md" onClick={onBook} />
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 function serviceHasInfoModalContent(service: Service): boolean {
   return Boolean(
     service.description.trim() !== '' ||
     (service.imageUrl != null && service.imageUrl !== '') ||
     (service.price != null && service.price !== '') ||
+    serviceHasBookingVariations(service) ||
     service.bookingServiceId != null ||
     (service.subItems != null && service.subItems.length > 0),
   )
@@ -118,8 +171,10 @@ function ServiceInfoModalBody({
 }) {
   const hasImage = service.imageUrl != null && service.imageUrl !== ''
   const hasDescription = service.description.trim() !== ''
-  const hasPrice = service.price != null && service.price !== ''
+  const hasVariations = serviceHasBookingVariations(service)
+  const hasPrice = !hasVariations && service.price != null && service.price !== ''
   const hasBook = service.bookingServiceId != null
+  const currency = service.bookingCurrency?.trim() || '€'
 
   const imageSection = hasImage ? (
     <div className="relative aspect-video w-full overflow-hidden rounded-xl">
@@ -138,18 +193,29 @@ function ServiceInfoModalBody({
   ) : null
 
   const pricingSection =
-    hasPrice || hasBook ? (
+    hasVariations || hasPrice || hasBook ? (
       <div
         className={
-          hasPrice && hasBook
-            ? 'flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-md px-2 py-1.5 outline outline-1 outline-offset-0 [outline-color:color-mix(in_srgb,var(--color-text)_15%,transparent)]'
-            : 'flex w-full flex-wrap items-center justify-end gap-x-3 gap-y-2 rounded-md px-2 py-1.5 outline outline-1 outline-offset-0 [outline-color:color-mix(in_srgb,var(--color-text)_15%,transparent)]'
+          hasVariations
+            ? 'flex w-full flex-col gap-2'
+            : hasPrice && hasBook
+              ? 'flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-2'
+              : 'flex w-full flex-wrap items-center justify-end gap-x-3 gap-y-2'
         }
       >
+        {hasVariations ? (
+          <ServiceVariationStack
+            variations={service.bookingVariations ?? []}
+            currency={currency}
+            bookCtaLabel={bookCtaLabel}
+            onBook={onBook}
+            showBookCta={hasBook}
+          />
+        ) : null}
         {hasPrice ? (
           <span className="min-w-0 text-base font-medium text-foreground">{service.price}</span>
         ) : null}
-        {hasBook ? (
+        {!hasVariations && hasBook ? (
           <Button label={bookCtaLabel} variant="primary" size="md" onClick={onBook} />
         ) : null}
       </div>
@@ -482,6 +548,8 @@ function ServiceListCard({
   onOpenInfo: (service: Service) => void
 }) {
   const canOpenInfoModal = serviceHasInfoModalContent(service)
+  const hasVariations = serviceHasBookingVariations(service)
+  const currency = service.bookingCurrency?.trim() || '€'
 
   return (
     <article className="overflow-hidden rounded-lg border border-border">
@@ -509,28 +577,40 @@ function ServiceListCard({
           {service.description !== '' ? (
             <p className="line-clamp-2 overflow-hidden text-muted">{service.description}</p>
           ) : null}
-          {(service.price != null && service.price !== '') || service.bookingServiceId ? (
-            <div
-              className={
-                service.price != null &&
-                service.price !== '' &&
-                service.bookingServiceId
-                  ? 'flex flex-wrap items-center justify-between gap-x-3 gap-y-2'
-                  : 'flex flex-wrap items-center justify-end gap-x-3 gap-y-2'
-              }
-            >
-              {service.price != null && service.price !== '' ? (
-                <p className="min-w-0 text-base font-medium text-foreground">{service.price}</p>
-              ) : null}
-              {service.bookingServiceId ? (
-                <Button
-                  label={resolvedBookCtaLabel}
-                  variant="primary"
-                  size="md"
-                  onClick={() => onBook(service.bookingServiceId ?? null)}
-                />
-              ) : null}
-            </div>
+          {(hasVariations ||
+            (service.price != null && service.price !== '') ||
+            service.bookingServiceId) ? (
+            hasVariations ? (
+              <ServiceVariationStack
+                variations={service.bookingVariations ?? []}
+                currency={currency}
+                bookCtaLabel={resolvedBookCtaLabel}
+                onBook={() => onBook(service.bookingServiceId ?? null)}
+                showBookCta={service.bookingServiceId != null}
+              />
+            ) : (
+              <div
+                className={
+                  service.price != null &&
+                  service.price !== '' &&
+                  service.bookingServiceId
+                    ? 'flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-2'
+                    : 'flex w-full flex-wrap items-center justify-end gap-x-3 gap-y-2'
+                }
+              >
+                {service.price != null && service.price !== '' ? (
+                  <p className="min-w-0 text-base font-medium text-foreground">{service.price}</p>
+                ) : null}
+                {service.bookingServiceId ? (
+                  <Button
+                    label={resolvedBookCtaLabel}
+                    variant="primary"
+                    size="md"
+                    onClick={() => onBook(service.bookingServiceId ?? null)}
+                  />
+                ) : null}
+              </div>
+            )
           ) : null}
           {serviceHasInfoModalContent(service) ? (
             <button
