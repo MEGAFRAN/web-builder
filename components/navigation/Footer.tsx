@@ -7,6 +7,11 @@ const colsMap: Record<number, string> = {
   4: "grid-cols-1 sm:grid-cols-2 md:grid-cols-4",
 };
 
+function isHoursColumnTitle(title: string): boolean {
+  const t = title.toLowerCase();
+  return t.includes("hours") || t.includes("horario");
+}
+
 interface FooterProps {
   columns?: ReadonlyArray<{
     title: string;
@@ -28,7 +33,10 @@ export function Footer({ columns, copyright }: FooterProps) {
             {columns.map((col, i) => (
               <div key={i}>
                 <p className="mb-3 text-sm font-semibold text-foreground">{col.title}</p>
-                <ul className="space-y-2">
+                <ul
+                  className="space-y-2"
+                  {...(isHoursColumnTitle(col.title) ? { "data-company-hours": true } : {})}
+                >
                   {col.links?.map((link, j) => (
                     <li key={j}>
                       <a

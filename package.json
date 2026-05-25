@@ -15,7 +15,8 @@
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build -o storybook-static",
-    "rebase": "git fetch origin main && git rebase origin/main"
+    "rebase": "git fetch origin main && git rebase origin/main",
+    "validate": "npm run lint && npm run test && npx tsc --noEmit"
   },
   "dependencies": {
     "next": "16.2.2",

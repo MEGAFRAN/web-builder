@@ -1,0 +1,15 @@
+{
+  "clientId": "hair-salon",
+  "businessName": "Hair Salony",
+  "phone": "+44 207 946 0959",
+  "email": "hello222@salon.com",
+  "address": {
+    "street": "calle gascona 20",
+    "city": "oviedo",
+    "postalCode": "33002",
+    "country": "españa"
+  },
+  "hours": "Lun–Sáb 9:00–12:00",
+  "logoUrl": null,
+  "whatsapp": null
+}

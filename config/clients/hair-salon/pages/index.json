@@ -66,15 +66,9 @@
     {
       "_type": "location",
       "title": "Visit Us",
-      "showMap": false,
-      "address": "123 High Street, London"
-    },
-    {
-      "_type": "contactInfoBlock",
-      "phone": "+44 20 7946 0958",
-      "address": "123 High Street, London",
-      "email": null,
-      "fallbackEmail": null
+      "showMap": true,
+      "address": null,
+      "mapEmbedSrc": null
     },
     {
       "_type": "footer",
@@ -82,17 +76,11 @@
       "columns": [
         {
           "title": "Hours",
-          "links": [
-            { "label": "Weekdays: 9:00 AM - 6:00 PM", "href": "#" },
-            { "label": "Weekends: By appointment", "href": "#" }
-          ]
+          "links": []
         },
         {
           "title": "Contact",
-          "links": [
-            { "label": "+44 20 7946 0958", "href": "tel:+442079460958" },
-            { "label": "123 High Street, London", "href": "#location" }
-          ]
+          "links": []
         }
       ]
     }

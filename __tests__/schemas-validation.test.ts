@@ -27,7 +27,6 @@ const SOLO_BEAUTY_BLOCK_TYPES = [
   'services',
   'testimonialsBlock',
   'location',
-  'contactInfoBlock',
   'footer',
 ] as const
 

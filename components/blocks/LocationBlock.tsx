@@ -20,7 +20,7 @@ export default function LocationBlock({
   return (
     <Section paddingY="lg">
       <Container maxWidth="2xl" padding="theme">
-        <section data-component="location-block">
+        <section id="location" data-component="location-block">
           {title && (
             <h2 className="mb-8 text-3xl font-bold text-foreground">{title}</h2>
           )}

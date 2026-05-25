@@ -662,23 +662,25 @@ function DefaultServicesList({
   const groups = hasServiceCategories(items)
     ? groupServicesByCategory(items)
     : [{ category: '', items }]
-  let cardIndex = 0
+
+  const groupStartIndices = groups.map((_, groupIndex) =>
+    groups.slice(0, groupIndex).reduce((sum, g) => sum + g.items.length, 0),
+  )
 
   return (
     <>
-      {groups.map((group) => (
+      {groups.map((group, groupIndex) => (
         <div key={group.category || '__uncategorized'} className="flex flex-col gap-8">
           {group.category ? (
             <h3 className="text-2xl font-bold tracking-tight text-brand">{group.category}</h3>
           ) : null}
-          {group.items.map((service) => {
-            const index = cardIndex
-            cardIndex += 1
+          {group.items.map((service, localIndex) => {
+            const cardIndex = groupStartIndices[groupIndex] + localIndex
             return (
               <ServiceListCard
-                key={service.bookingServiceId ?? index}
+                key={service.bookingServiceId ?? cardIndex}
                 service={service}
-                cardIndex={index}
+                cardIndex={cardIndex}
                 useModal={useModal}
                 moreInfoLabel={moreInfoLabel}
                 bookingUrl={bookingUrl}

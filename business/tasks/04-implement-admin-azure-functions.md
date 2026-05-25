@@ -102,6 +102,16 @@ Validates JWT. Adds a new schedule slot/rule. Returns `{ ok: true, id }`.
 
 Validates JWT. Accepts `{ id: string }` in body. Deletes the matching slot/rule. Returns 404 if not found or `clientId` does not match. Returns `{ ok: true }`.
 
+### Company profile
+
+#### `GET /admin/company-profile`
+
+Validates JWT (or `Authorization: Bearer <COMPANY_PROFILE_BUILD_TOKEN>` with `?clientId=` for build-time reads). Returns `{ profile: CompanyProfile | null }` from the `client-profile` container.
+
+#### `PUT /admin/company-profile`
+
+Validates JWT. Accepts `{ profile: CompanyProfile }`, validates shape, upserts to `client-profile` container. Returns `{ ok: true }`.
+
 ---
 
 ## Shared utilities to implement

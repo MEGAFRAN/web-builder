@@ -13,8 +13,7 @@
         { "label": "Services", "href": "#services" },
         { "label": "Book", "href": "#services" },
         { "label": "Reviews", "href": "#reviews" },
-        { "label": "Location", "href": "#location" },
-        { "label": "Contact", "href": "#contact" }
+        { "label": "Location", "href": "#location" }
       ],
       "ctaLabel": "Book Now",
       "ctaAction": "#services",
@@ -80,21 +79,12 @@
     {
       "_type": "location",
       "title": "Visit Us",
-      "showMap": false,
+      "showMap": true,
+      "mapEmbedSrc": "https://www.google.com/maps?q={{address}}&output=embed",
       "address": "{{address}}",
       "placeholderCopy": {
-        "address": "Studio or salon street address"
-      }
-    },
-    {
-      "_type": "contactInfoBlock",
-      "phone": "{{phone}}",
-      "address": "{{address}}",
-      "email": null,
-      "fallbackEmail": null,
-      "placeholderCopy": {
-        "phone": "Primary contact phone number",
-        "address": "Studio or salon address for contact card"
+        "address": "Studio or salon street address",
+        "mapEmbedSrc": "Google Maps embed URL — {{address}} is substituted during provisioning"
       }
     },
     {
@@ -103,17 +93,11 @@
       "columns": [
         {
           "title": "Hours",
-          "links": [
-            { "label": "Weekdays: {{bookingHoursWeekday}}", "href": "#" },
-            { "label": "Weekends: By appointment", "href": "#" }
-          ]
+          "links": []
         },
         {
           "title": "Contact",
-          "links": [
-            { "label": "{{phone}}", "href": "tel:{{phone}}" },
-            { "label": "{{address}}", "href": "#location" }
-          ]
+          "links": []
         }
       ],
       "placeholderCopy": {

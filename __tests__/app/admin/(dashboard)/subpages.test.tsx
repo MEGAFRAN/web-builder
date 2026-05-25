@@ -1,7 +1,15 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import SettingsPage from '@/app/admin/(dashboard)/settings/page'
 import { adminCopy } from '@/components/admin/admin-copy'
+
+vi.mock('@/lib/admin-api', () => ({
+  adminFetch: vi.fn(),
+  adminDataUrl: (path: string) => `/api/admin${path}`,
+  isRemoteAdminApi: () => false,
+}))
+
+import { adminFetch } from '@/lib/admin-api'
 
 vi.mock('@/components/admin/AdminServicesPage', () => ({
   default: () => <div data-testid="admin-services-route-stub" />,
@@ -14,11 +22,18 @@ vi.mock('@/components/admin/AdminBookingsPage', () => ({
 }))
 
 describe('AdminSettingsRoutePage (app/admin/(dashboard)/settings/page.tsx)', () => {
-  it('renders settings introductory copy', () => {
+  beforeEach(() => {
+    vi.mocked(adminFetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ profile: null }),
+    } as Response)
+  })
+
+  it('renders settings introductory copy', async () => {
     render(<SettingsPage />)
 
     expect(screen.getByRole('heading', { name: adminCopy.settings.heading })).toBeInTheDocument()
-    expect(screen.getByText(adminCopy.settings.intro)).toBeInTheDocument()
+    expect(await screen.findByText(adminCopy.settings.intro)).toBeInTheDocument()
   })
 })
 

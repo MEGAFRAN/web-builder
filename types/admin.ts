@@ -73,3 +73,18 @@ export type SessionPayload = {
   clientId: string
   exp: number
 }
+
+export type CompanyProfile = {
+  businessName: string
+  phone: string
+  email: string
+  address: {
+    street: string
+    city: string
+    postalCode: string
+    country: string
+  }
+  hours: string
+  logoUrl: string | null
+  whatsapp: string | null
+}

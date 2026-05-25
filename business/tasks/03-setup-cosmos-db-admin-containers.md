@@ -24,6 +24,7 @@ This task covers only the **infrastructure and data seeding** side. Implementing
 | `reservations` | `/clientId` | Client booking records; replaces `lib/reservations-db.ts` |
 | `services` | `/clientId` | Client service catalogue; replaces `lib/booking-services-db.ts` |
 | `schedule` | `/clientId` | Client availability schedule |
+| `client-profile` | `/clientId` | Canonical company profile (`CompanyProfile` fields); see task 19 |
 
 All containers live in the same Cosmos DB database (e.g. `web-builder-admin`).
 

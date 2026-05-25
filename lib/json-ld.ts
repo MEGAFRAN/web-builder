@@ -13,6 +13,7 @@
  */
 
 import type { ClientConfig, ClientPage } from '@/types/cms'
+import type { CompanyProfile } from '@/types/admin'
 
 // ─── Canonical URL helper ────────────────────────────────────────────────────
 
@@ -42,6 +43,14 @@ type SchemaContactPage = {
   isPartOf: { '@type': 'WebSite'; name: string; url: string }
 }
 
+type SchemaPostalAddress = {
+  '@type': 'PostalAddress'
+  streetAddress: string
+  addressLocality: string
+  postalCode: string
+  addressCountry: string
+}
+
 type SchemaPerson = {
   '@context': 'https://schema.org'
   '@type': 'Person'
@@ -49,6 +58,9 @@ type SchemaPerson = {
   description?: string
   url: string
   sameAs?: string[]
+  telephone?: string
+  email?: string
+  address?: SchemaPostalAddress
 }
 
 type SchemaOrganization = {
@@ -58,6 +70,9 @@ type SchemaOrganization = {
   description?: string
   url: string
   sameAs?: string[]
+  telephone?: string
+  email?: string
+  address?: SchemaPostalAddress
 }
 
 export type JsonLdSchema =
@@ -87,7 +102,39 @@ function buildWebSitePartOf(
   return { '@type': 'WebSite', name: siteName, url: siteUrl }
 }
 
-function buildHomePage(config: ClientConfig, description: string | null): JsonLdSchema {
+function buildPostalAddress(profile: CompanyProfile): SchemaPostalAddress {
+  return {
+    '@type': 'PostalAddress',
+    streetAddress: profile.address.street,
+    addressLocality: profile.address.city,
+    postalCode: profile.address.postalCode,
+    addressCountry: profile.address.country,
+  }
+}
+
+function applyProfileContactFields<T extends SchemaPerson | SchemaOrganization>(
+  schema: T,
+  profile: CompanyProfile | null | undefined,
+): T {
+  if (!profile) return schema
+  if (profile.phone.trim()) schema.telephone = profile.phone.trim()
+  if (profile.email.trim()) schema.email = profile.email.trim()
+  if (
+    profile.address.street.trim() ||
+    profile.address.city.trim() ||
+    profile.address.postalCode.trim() ||
+    profile.address.country.trim()
+  ) {
+    schema.address = buildPostalAddress(profile)
+  }
+  return schema
+}
+
+function buildHomePage(
+  config: ClientConfig,
+  description: string | null,
+  profile: CompanyProfile | null | undefined,
+): JsonLdSchema {
   const siteUrl = canonicalUrl(config.customDomain, '')
   const name = config.siteMetadata?.siteName ?? config.displayName
 
@@ -99,7 +146,7 @@ function buildHomePage(config: ClientConfig, description: string | null): JsonLd
       url: siteUrl,
     }
     if (description) schema.description = description
-    return schema
+    return applyProfileContactFields(schema, profile)
   }
 
   const schema: SchemaOrganization = {
@@ -109,7 +156,7 @@ function buildHomePage(config: ClientConfig, description: string | null): JsonLd
     url: siteUrl,
   }
   if (description) schema.description = description
-  return schema
+  return applyProfileContactFields(schema, profile)
 }
 
 function buildContactPage(
@@ -167,14 +214,18 @@ function buildWebPage(
  * @param page    The ClientPage being rendered (slug + blocks + metadata).
  * @returns       A JSON-LD schema object ready to be serialized into a <script> tag.
  */
-export function buildJsonLd(config: ClientConfig, page: ClientPage): JsonLdSchema {
+export function buildJsonLd(
+  config: ClientConfig,
+  page: ClientPage,
+  profile?: CompanyProfile | null,
+): JsonLdSchema {
   const description =
     page.metadata?.description ??
     config.siteMetadata?.defaultDescription ??
     null
 
   if (page.slug === '') {
-    return buildHomePage(config, description)
+    return buildHomePage(config, description, profile)
   }
 
   if (isContactSlug(page.slug)) {

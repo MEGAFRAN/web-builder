@@ -25,10 +25,15 @@ vi.mock('@/components/navigation/BottomCtaBar', () => ({
   BottomCtaBar: () => <nav aria-label="Quick actions">bottom-cta</nav>,
 }))
 
+vi.mock('@/lib/company-profile', () => ({
+  getCompanyProfile: vi.fn().mockResolvedValue(null),
+}))
+
 import { buildThemeStyles } from '@/lib/theme-utils'
 import RootLayout from '@/app/layout'
 import SiteLayout from '@/app/(site)/layout'
 import { getClientConfig } from '@/lib/client-config'
+import { getCompanyProfile } from '@/lib/company-profile'
 import type { ThemePreset } from '@/lib/theme-presets'
 
 // ---------------------------------------------------------------------------
@@ -50,6 +55,7 @@ const resolvedTheme = {
 }
 
 const mockGetClientConfig = vi.mocked(getClientConfig)
+const mockGetCompanyProfile = vi.mocked(getCompanyProfile)
 
 const baseConfig = {
   clientId: 'restaurante-pepe',
@@ -264,7 +270,12 @@ describe('RootLayout', () => {
 // Site layout — public marketing chrome (Navbar / Footer / BottomCtaBar)
 // ---------------------------------------------------------------------------
 describe('SiteLayout (app/(site)/layout)', () => {
-  it('renders Navbar when config.header is present', () => {
+  async function renderSiteLayout(children: React.ReactNode) {
+    const ui = await SiteLayout({ children })
+    return render(ui)
+  }
+
+  it('renders Navbar when config.header is present', async () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({
       ...baseConfig,
@@ -272,29 +283,44 @@ describe('SiteLayout (app/(site)/layout)', () => {
       footer: null,
     })
 
-    const { getByTestId } = render(
-      <SiteLayout>
-        <span data-testid="child" />
-      </SiteLayout>
-    )
+    const { getByTestId } = await renderSiteLayout(<span data-testid="child" />)
 
     expect(getByTestId('navbar')).toBeTruthy()
   })
 
-  it('does not render Navbar when config.header is absent', () => {
+  it('does not render Navbar when config.header is absent', async () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({ ...baseConfig, header: null, footer: null })
 
-    const { queryByTestId } = render(
-      <SiteLayout>
-        <span />
-      </SiteLayout>
-    )
+    const { queryByTestId } = await renderSiteLayout(<span />)
 
     expect(queryByTestId('navbar')).toBeNull()
   })
 
-  it('renders Footer when config.footer is present', () => {
+  it('does not render Navbar from company profile alone when config.header is absent', async () => {
+    process.env.CLIENT_ID = 'hair-salon'
+    mockGetClientConfig.mockReturnValue({ ...baseConfig, header: null, footer: null })
+    mockGetCompanyProfile.mockResolvedValueOnce({
+      businessName: 'Hair Salon',
+      phone: '+44 207 946 0958',
+      email: 'hello@salon.com',
+      address: {
+        street: '123 High Street',
+        city: 'London',
+        postalCode: 'W1A 1AA',
+        country: 'United Kingdom',
+      },
+      hours: 'Mon–Sat 9:00–18:00',
+      logoUrl: null,
+      whatsapp: null,
+    })
+
+    const { queryByTestId } = await renderSiteLayout(<span />)
+
+    expect(queryByTestId('navbar')).toBeNull()
+  })
+
+  it('renders Footer when config.footer is present', async () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({
       ...baseConfig,
@@ -302,16 +328,12 @@ describe('SiteLayout (app/(site)/layout)', () => {
       footer: { columns: [], copyright: '© 2024 Pepe' },
     })
 
-    const { getByTestId } = render(
-      <SiteLayout>
-        <span />
-      </SiteLayout>
-    )
+    const { getByTestId } = await renderSiteLayout(<span />)
 
     expect(getByTestId('footer')).toBeTruthy()
   })
 
-  it('adds inner padding and renders BottomCtaBar when filtered action items exist', () => {
+  it('adds inner padding and renders BottomCtaBar when filtered action items exist', async () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({
       ...baseConfig,
@@ -326,18 +348,14 @@ describe('SiteLayout (app/(site)/layout)', () => {
       },
     })
 
-    const { getByTestId } = render(
-      <SiteLayout>
-        <main data-testid="main">content</main>
-      </SiteLayout>
-    )
+    const { getByTestId } = await renderSiteLayout(<main data-testid="main">content</main>)
 
     const main = getByTestId('main')
     expect(main.parentElement?.className ?? '').toMatch(/pb-\[calc/)
     expect(document.querySelector('[aria-label="Quick actions"]')).toBeInTheDocument()
   })
 
-  it('omits BottomCtaBar when no valid bottomActionBar items remain after filtering', () => {
+  it('omits BottomCtaBar when no valid bottomActionBar items remain after filtering', async () => {
     process.env.CLIENT_ID = 'restaurante-pepe'
     mockGetClientConfig.mockReturnValue({
       ...baseConfig,
@@ -348,11 +366,7 @@ describe('SiteLayout (app/(site)/layout)', () => {
       },
     })
 
-    const { getByTestId } = render(
-      <SiteLayout>
-        <main data-testid="main">content</main>
-      </SiteLayout>
-    )
+    const { getByTestId } = await renderSiteLayout(<main data-testid="main">content</main>)
 
     const main = getByTestId('main')
     expect(main.parentElement?.className ?? '').not.toMatch(/pb-\[calc/)
