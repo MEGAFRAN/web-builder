@@ -2,16 +2,24 @@
   "services": [
     {
       "id": "svc-1779102974818-jzi3",
-      "name": "degustacion total",
-      "description": "",
+      "name": "blower",
+      "description": "el mejor blower del pais",
       "durationMinutes": 60,
       "price": 100,
       "currency": "€"
     },
     {
       "id": "svc-1779102990687-xnbu",
-      "name": "buffet de perros calientes",
-      "description": "",
+      "name": "tinturado cabello",
+      "description": "lo mejor de lo mejor",
+      "durationMinutes": 30,
+      "price": 20,
+      "currency": "€"
+    },
+    {
+      "id": "svc-1779699743784-mnsp",
+      "name": "manicura sencilla",
+      "description": "saldras como nueva",
       "durationMinutes": 30,
       "price": 20,
       "currency": "€"

@@ -31,30 +31,7 @@
     },
     {
       "_type": "services",
-      "heading": "Services",
-      "items": [
-        {
-          "title": "Haircuts & Color",
-          "description": "Signature treatments tailored to your style, delivered with care by Emma.",
-          "price": "From consultation",
-          "imageUrl": "https://picsum.photos/seed/hair-salon-service-primary/800/450",
-          "imageAlt": "Haircuts & Color at Hair Salon"
-        },
-        {
-          "title": "Consultation & Styling",
-          "description": "A one-on-one session to understand your goals and recommend the right look.",
-          "price": "Complimentary with booking",
-          "imageUrl": "https://picsum.photos/seed/hair-salon-service-consult/800/450",
-          "imageAlt": "Personal styling consultation"
-        },
-        {
-          "title": "Special Occasion",
-          "description": "Polished looks for events, photos, and celebrations — book ahead for your big day.",
-          "price": "By appointment",
-          "imageUrl": "https://picsum.photos/seed/hair-salon-service-special/800/450",
-          "imageAlt": "Special occasion styling"
-        }
-      ]
+      "heading": "Services"
     },
     {
       "_type": "reservationBlock",

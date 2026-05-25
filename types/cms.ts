@@ -26,6 +26,8 @@ export type Service = {
   price?: string | null
   imageUrl?: string | null
   imageAlt?: string | null
+  /** Set when the card is backed by `/api/booking-services` catalog row. */
+  bookingServiceId?: string | null
 }
 
 // Block types — each has a unique `_type` literal for exhaustive narrowing
@@ -47,7 +49,16 @@ export type ServicesBlock = {
    * Resolution order per tier: row `bookingUrl` → sub-item `bookingUrl` → this field.
    */
   bookingUrl?: string | null
-  items: Service[]
+  /**
+   * Optional CMS fallback when the admin-managed catalog (`/api/booking-services`) is empty.
+   * When the admin catalog has entries, those are shown instead.
+   */
+  items?: Service[] | null
+  clientId?: string | null
+  /** CTA label on each catalog-backed service card. Defaults to "Reservar". */
+  bookCtaLabel?: string | null
+  /** Optional success message when booking from the services modal. */
+  reservationConfirmationMessage?: string | null
 }
 
 export type ContactBlock = {
@@ -467,6 +478,14 @@ export type ReservationBlock = {
    * When absent (local dev), falls back to the Next.js /api/availability route.
    */
   availabilityEndpoint?: string | null
+  /** Pre-select a service (e.g. opened from ServicesBlock booking CTA). Not stored in CMS JSON. */
+  initialServiceId?: string | null
+  /** Compact layout for modal embedding. Not stored in CMS JSON. */
+  embedded?: boolean | null
+  /** Hide block heading/subtext (modal supplies its own title). Not stored in CMS JSON. */
+  hideHeading?: boolean | null
+  /** Skip the service picker when `initialServiceId` is set. Not stored in CMS JSON. */
+  skipServiceSelection?: boolean | null
 }
 
 // Carousel block

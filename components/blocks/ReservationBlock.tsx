@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { formatListedPrice } from '@/lib/booking-catalog'
+import { useBookingServicesCatalog } from '@/lib/hooks/useBookingServicesCatalog'
 import { Alert } from '@/components/content/Alert'
 import { Button } from '@/components/inputs/Button'
 import { Section } from '@/components/layout/Section'
@@ -27,6 +29,29 @@ interface FormFields {
   notes: string
 }
 
+function ReservationBlockShell({
+  embedded,
+  children,
+}: {
+  embedded?: boolean | null
+  children: React.ReactNode
+}) {
+  if (embedded) {
+    return (
+      <div data-component="reservation-block" className="min-w-0">
+        {children}
+      </div>
+    )
+  }
+  return (
+    <Section paddingY="lg" dataComponent="reservation-block">
+      <Container maxWidth="xl" padding="theme">
+        {children}
+      </Container>
+    </Section>
+  )
+}
+
 function addMinutes(hhmm: string, minutes: number): string {
   const [h, m] = hhmm.split(':').map(Number)
   const total = h * 60 + m + minutes
@@ -44,56 +69,6 @@ function todayISODate(): string {
   return new Date().toISOString().split('T')[0]
 }
 
-function formatListedPrice(price: number, currencySymbol: string): string {
-  const text = Number.isInteger(price)
-    ? String(price)
-    : price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-  return `${currencySymbol}${text}`
-}
-
-/** Accepts rows persisted by `/api/admin/services` (same file as the public catalog). */
-function parseBookingCatalogRows(raw: unknown): ReservationServiceItem[] {
-  if (!Array.isArray(raw)) return []
-  const out: ReservationServiceItem[] = []
-  for (const item of raw) {
-    if (typeof item !== 'object' || item === null) continue
-    const o = item as Record<string, unknown>
-    const id = o.id
-    const name = o.name
-    const durationMinutes = o.durationMinutes
-    const price = o.price
-    if (
-      typeof id !== 'string' ||
-      id.trim().length === 0 ||
-      typeof name !== 'string' ||
-      name.trim().length === 0 ||
-      typeof durationMinutes !== 'number' ||
-      durationMinutes < 1 ||
-      durationMinutes > 24 * 60 ||
-      typeof price !== 'number' ||
-      !Number.isFinite(price) ||
-      price < 0
-    ) {
-      continue
-    }
-    let description: string | null | undefined
-    if (typeof o.description === 'string') description = o.description
-    else if (o.description === null || o.description === undefined) description = undefined
-    const currencyRaw = o.currency
-    const currency =
-      typeof currencyRaw === 'string' && currencyRaw.trim().length > 0 ? currencyRaw.trim() : null
-    out.push({
-      id: id.trim(),
-      name: name.trim(),
-      description,
-      durationMinutes,
-      price,
-      currency,
-    })
-  }
-  return out
-}
-
 export default function ReservationBlock({
   heading,
   subtext,
@@ -101,9 +76,13 @@ export default function ReservationBlock({
   confirmationMessage,
   clientId,
   availabilityEndpoint,
+  initialServiceId,
+  embedded,
+  hideHeading,
+  skipServiceSelection,
 }: ReservationBlockProps) {
   const cmsServices: ReservationServiceItem[] = servicesProp ?? []
-  const [liveCatalog, setLiveCatalog] = useState<ReservationServiceItem[] | null>(null)
+  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId)
 
   const [selectedServiceId, setSelectedServiceId] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
@@ -128,26 +107,17 @@ export default function ReservationBlock({
   } | null>(null)
 
   useEffect(() => {
-    let cancelled = false
-    const qs = clientId ? `?clientId=${encodeURIComponent(clientId)}` : ''
-    fetch(`/api/booking-services${qs}`)
-      .then(r => (r.ok ? r.json() : null))
-      .then((data: { services?: unknown } | null) => {
-        if (cancelled) return
-        const parsed = parseBookingCatalogRows(data?.services)
-        setLiveCatalog(parsed)
-      })
-      .catch(() => {
-        if (!cancelled) setLiveCatalog([])
-      })
-    return () => {
-      cancelled = true
+    if (initialServiceId) {
+      setSelectedServiceId(initialServiceId)
+      setSelectedDate('')
+      setSelectedTime('')
+      setBookedSlots([])
+      setOutOfWindowSlots([])
     }
-  }, [clientId])
+  }, [initialServiceId])
 
-  const catalogLoaded = liveCatalog !== null
   const adminPreferred =
-    catalogLoaded && liveCatalog.length > 0 ? liveCatalog : null
+    catalogLoaded && liveCatalog !== null && liveCatalog.length > 0 ? liveCatalog : null
   const services: ReservationServiceItem[] = adminPreferred ?? cmsServices
 
   const selectedService =
@@ -302,7 +272,7 @@ export default function ReservationBlock({
     'rounded-[var(--radius)] border border-border bg-surface p-6 shadow-sm md:p-8'
 
   const headingSection =
-    (heading || subtext) ? (
+    !hideHeading && (heading || subtext) ? (
       <Stack gap="sm">
         {heading && (
           <h2 className="text-center text-3xl font-bold text-foreground">{heading}</h2>
@@ -311,14 +281,15 @@ export default function ReservationBlock({
       </Stack>
     ) : null
 
+  const hideServicePicker = Boolean(skipServiceSelection && selectedServiceId)
+
   if (state === 'success') {
     return (
-      <Section paddingY="lg" dataComponent="reservation-block">
-        <Container maxWidth="xl" padding="theme">
-          <Stack gap="md">
-            {headingSection}
+      <ReservationBlockShell embedded={embedded}>
+        <Stack gap="md">
+          {headingSection}
 
-            <div className={bookingPanelClass} data-component="reservation-panel">
+          <div className={bookingPanelClass} data-component="reservation-panel">
               <Stack gap="lg">
                 {progressSection}
 
@@ -364,56 +335,64 @@ export default function ReservationBlock({
               </Stack>
             </div>
           </Stack>
-        </Container>
-      </Section>
+        </ReservationBlockShell>
     )
   }
 
   if (!catalogLoaded && cmsServices.length === 0) {
     return (
-      <Section paddingY="lg" dataComponent="reservation-block">
-        <Container maxWidth="xl" padding="theme">
-          <Stack gap="md">
-            {headingSection}
-            <p className="text-center text-sm text-muted" role="status" aria-live="polite">
-              {BOOKING_COPY.loadingServices}
-            </p>
-          </Stack>
-        </Container>
-      </Section>
+      <ReservationBlockShell embedded={embedded}>
+        <Stack gap="md">
+          {headingSection}
+          <p className="text-center text-sm text-muted" role="status" aria-live="polite">
+            {BOOKING_COPY.loadingServices}
+          </p>
+        </Stack>
+      </ReservationBlockShell>
     )
   }
 
   if (services.length === 0) {
     return (
-      <Section paddingY="lg" dataComponent="reservation-block">
-        <Container maxWidth="xl" padding="theme">
-          <Stack gap="md">
-            {headingSection}
-            <Alert
-              variant="error"
-              title={BOOKING_COPY.bookingUnavailableTitle}
-              message={BOOKING_COPY.bookingUnavailableMessage}
-            />
-          </Stack>
-        </Container>
-      </Section>
+      <ReservationBlockShell embedded={embedded}>
+        <Stack gap="md">
+          {headingSection}
+          <Alert
+            variant="error"
+            title={BOOKING_COPY.bookingUnavailableTitle}
+            message={BOOKING_COPY.bookingUnavailableMessage}
+          />
+        </Stack>
+      </ReservationBlockShell>
     )
   }
 
   return (
-    <Section paddingY="lg" dataComponent="reservation-block">
-      <Container maxWidth="xl" padding="theme">
-        <Stack gap="md">
-          {headingSection}
+    <ReservationBlockShell embedded={embedded}>
+      <Stack gap="md">
+        {headingSection}
 
-          <div className={bookingPanelClass} data-component="reservation-panel">
+        <div className={bookingPanelClass} data-component="reservation-panel">
             <Stack gap="lg">
               {progressSection}
 
               <form onSubmit={handleSubmit} noValidate>
                 <Stack gap="md">
+              {hideServicePicker && selectedService ? (
+                <div className="rounded-md border border-border bg-background px-3 py-3">
+                  <p className="text-sm font-medium text-muted">{BOOKING_COPY.serviceLabel}</p>
+                  <p className="text-base font-semibold text-foreground">{selectedService.name}</p>
+                  <p className="text-xs text-muted">
+                    {selectedService.durationMinutes} min ·{' '}
+                    {formatListedPrice(
+                      selectedService.price,
+                      selectedService.currency ?? '€',
+                    )}
+                  </p>
+                </div>
+              ) : null}
               {/* Step 0 — Service */}
+              {!hideServicePicker ? (
               <div className="flex flex-col gap-2">
                 <span id="res-service-label" className="text-sm font-medium text-foreground">
                   {BOOKING_COPY.serviceLabel}{' '}
@@ -472,6 +451,7 @@ export default function ReservationBlock({
                   })}
                 </div>
               </div>
+              ) : null}
 
               {/* Date — after service */}
               {selectedServiceId && (
@@ -731,7 +711,6 @@ export default function ReservationBlock({
             </Stack>
           </div>
         </Stack>
-      </Container>
-    </Section>
+      </ReservationBlockShell>
   )
 }

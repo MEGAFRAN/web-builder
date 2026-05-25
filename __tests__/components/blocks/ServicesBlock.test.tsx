@@ -1,6 +1,21 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen, fireEvent, within } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, screen, fireEvent, within, act, waitFor } from '@testing-library/react'
 import ServicesBlock from '@/components/blocks/ServicesBlock'
+
+function jsonResponse(data: unknown): Response {
+  return {
+    ok: true,
+    json: async () => data,
+  } as Response
+}
+
+async function renderServicesBlock(ui: Parameters<typeof render>[0]) {
+  const utils = render(ui)
+  await act(async () => {
+    await new Promise<void>(resolve => setTimeout(resolve, 0))
+  })
+  return utils
+}
 
 describe('ServicesBlock', () => {
   const items = [
@@ -8,8 +23,24 @@ describe('ServicesBlock', () => {
     { title: 'Coloración', description: 'Tintes y mechas' },
   ]
 
-  it('renders section heading when provided', () => {
-    render(
+  let fetchSpy: ReturnType<typeof vi.spyOn>
+
+  beforeEach(() => {
+    fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(jsonResponse({ services: [] }))
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+  })
+
+  afterEach(() => {
+    fetchSpy.mockRestore()
+  })
+
+  it('renders section heading when provided', async () => {
+    await renderServicesBlock(
       <ServicesBlock _type="services" heading="Our services" items={items} />,
     )
     expect(
@@ -482,5 +513,155 @@ describe('ServicesBlock', () => {
     )
     const img = screen.getByRole('img', { name: 'Cabina de spa' })
     expect(img).toHaveAttribute('src', 'https://example.com/spa.jpg')
+  })
+
+  it('prefers live admin catalog over CMS items when catalog is non-empty', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: 'Professional blow dry',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(
+      <ServicesBlock
+        _type="services"
+        heading="Services"
+        items={items}
+      />,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText('blower')).toBeInTheDocument()
+    })
+    expect(screen.getByText('Professional blow dry')).toBeInTheDocument()
+    expect(screen.getByText('60 min · €100')).toBeInTheDocument()
+    expect(screen.queryByText('Corte de pelo')).not.toBeInTheDocument()
+  })
+
+  it('falls back to CMS items when admin catalog is empty', async () => {
+    await renderServicesBlock(
+      <ServicesBlock _type="services" items={items} />,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText('Corte de pelo')).toBeInTheDocument()
+    })
+    expect(screen.getByText('Coloración')).toBeInTheDocument()
+  })
+
+  it('renders a book CTA for each catalog-backed service', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: '',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Reservar' })).toBeInTheDocument()
+    })
+  })
+
+  it('opens reservation modal with preselected service when book CTA is clicked', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: '',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" clientId="hair-salon" />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Reservar' })).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reservar' }))
+
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(document.getElementById('res-date')).toBeInTheDocument()
+    })
+
+    expect(within(dialog).getByRole('heading', { name: 'blower' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /blower, 60 minutes/i })).not.toBeInTheDocument()
+  })
+
+  it('uses custom bookCtaLabel when provided', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: '',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(
+      <ServicesBlock _type="services" bookCtaLabel="Book now" />,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Book now' })).toBeInTheDocument()
+    })
   })
 })

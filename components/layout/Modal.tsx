@@ -6,9 +6,10 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children?: ReactNode;
+  size?: "default" | "wide";
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, size = "default" }: ModalProps) {
   useEffect(() => {
     if (!isOpen) return;
     document.body.style.overflow = "hidden";
@@ -50,7 +51,8 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           /* Mobile: full screen */
           "w-full h-full",
           /* Desktop: centered card */
-          "md:h-auto md:max-h-[90vh] md:w-full md:max-w-lg md:rounded-2xl md:shadow-2xl",
+          "md:h-auto md:max-h-[90vh] md:w-full md:rounded-2xl md:shadow-2xl",
+          size === "wide" ? "md:max-w-2xl" : "md:max-w-lg",
         ].join(" ")}
       >
         {/* Sticky header */}

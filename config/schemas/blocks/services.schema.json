@@ -4,8 +4,7 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "_type",
-    "items"
+    "_type"
   ],
   "properties": {
     "_type": {
@@ -37,204 +36,246 @@
       ]
     },
     "items": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "title",
-          "description"
-        ],
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "oneOf": [
-              {
+      "description": "Optional CMS fallback; live admin catalog from /api/booking-services takes precedence when non-empty.",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "description"
+            ],
+            "properties": {
+              "title": {
                 "type": "string"
               },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "imageUrl": {
-            "oneOf": [
-              {
+              "description": {
                 "type": "string"
               },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "imageAlt": {
-            "oneOf": [
-              {
-                "type": "string"
+              "price": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "subItems": {
-            "oneOf": [
-              {
-                "type": "array",
-                "items": {
-                  "oneOf": [
-                    {
-                      "type": "string"
-                    },
-                    {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "required": [
-                        "label"
-                      ],
-                      "properties": {
-                        "label": {
+              "imageUrl": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "imageAlt": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "subItems": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
                           "type": "string"
                         },
-                        "price": {
-                          "oneOf": [
-                            {
+                        {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "label"
+                          ],
+                          "properties": {
+                            "label": {
                               "type": "string"
                             },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "duration": {
-                          "oneOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "bookingUrl": {
-                          "oneOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "pricingRows": {
-                          "oneOf": [
-                            {
-                              "type": "null"
-                            },
-                            {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "additionalProperties": false,
-                                "properties": {
-                                  "price": {
-                                    "oneOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ]
-                                  },
-                                  "duration": {
-                                    "oneOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ]
-                                  },
-                                  "bookingUrl": {
-                                    "oneOf": [
-                                      {
-                                        "type": "string"
-                                      },
-                                      {
-                                        "type": "null"
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            }
-                          ]
-                        },
-                        "imageUrl": {
-                          "oneOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "imageAlt": {
-                          "oneOf": [
-                            {
-                              "type": "string"
-                            },
-                            {
-                              "type": "null"
-                            }
-                          ]
-                        },
-                        "description": {
-                          "oneOf": [
-                            {
-                              "type": "null"
-                            },
-                            {
-                              "type": "object",
-                              "additionalProperties": false,
-                              "required": [
-                                "title",
-                                "items"
-                              ],
-                              "properties": {
-                                "title": {
+                            "price": {
+                              "oneOf": [
+                                {
                                   "type": "string"
                                 },
-                                "items": {
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "duration": {
+                              "oneOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "bookingUrl": {
+                              "oneOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "pricingRows": {
+                              "oneOf": [
+                                {
+                                  "type": "null"
+                                },
+                                {
                                   "type": "array",
                                   "items": {
-                                    "type": "string"
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "price": {
+                                        "oneOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ]
+                                      },
+                                      "duration": {
+                                        "oneOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ]
+                                      },
+                                      "bookingUrl": {
+                                        "oneOf": [
+                                          {
+                                            "type": "string"
+                                          },
+                                          {
+                                            "type": "null"
+                                          }
+                                        ]
+                                      }
+                                    }
                                   }
                                 }
-                              }
+                              ]
+                            },
+                            "imageUrl": {
+                              "oneOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "imageAlt": {
+                              "oneOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ]
+                            },
+                            "description": {
+                              "oneOf": [
+                                {
+                                  "type": "null"
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "title",
+                                    "items"
+                                  ],
+                                  "properties": {
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "items": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              ]
                             }
-                          ]
+                          }
                         }
-                      }
+                      ]
                     }
-                  ]
-                }
-              },
-              {
-                "type": "null"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
-            ]
+            }
           }
+        },
+        {
+          "type": "null"
         }
-      }
+      ]
+    },
+    "clientId": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "bookCtaLabel": {
+      "description": "CTA label on each catalog-backed service card. Defaults to \"Reservar\" when omitted.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reservationConfirmationMessage": {
+      "description": "Optional success message when booking from the services modal.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "placeholderCopy": {
       "$ref": "./_common.schema.json#/definitions/placeholderCopy"

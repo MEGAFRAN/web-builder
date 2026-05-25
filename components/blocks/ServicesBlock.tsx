@@ -1,6 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { mapBookingServicesToCmsServices } from '@/lib/booking-catalog'
+import { useBookingServicesCatalog } from '@/lib/hooks/useBookingServicesCatalog'
+import { Button } from '@/components/inputs/Button'
+import ReservationBlock from '@/components/blocks/ReservationBlock'
 import type {
   Service,
   ServiceSubItem,
@@ -439,59 +443,109 @@ export default function ServicesBlock({
   showModal,
   moreInfoLabel,
   bookingUrl,
+  clientId,
+  bookCtaLabel,
+  reservationConfirmationMessage,
 }: ServicesBlockType) {
+  const cmsItems = items ?? []
+  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId)
+  const adminPreferred =
+    catalogLoaded && liveCatalog !== null && liveCatalog.length > 0
+      ? mapBookingServicesToCmsServices(liveCatalog)
+      : null
+  const displayItems = adminPreferred ?? cmsItems
   const useModal = Boolean(showModal)
+  const resolvedBookCtaLabel = bookCtaLabel?.trim() || 'Reservar'
+  const resolvedClientId = clientId ?? process.env.CLIENT_ID ?? null
+  const [bookingServiceId, setBookingServiceId] = useState<string | null>(null)
+  const bookingServiceName =
+    bookingServiceId != null
+      ? displayItems.find(item => item.bookingServiceId === bookingServiceId)?.title
+      : undefined
 
   if (layout === 'menu') {
-    return <MenuLayout heading={heading} items={items} />
+    return <MenuLayout heading={heading} items={displayItems} />
   }
 
   return (
-    <Section paddingY="lg">
-      <Container maxWidth="2xl" padding="theme">
-        <section data-component="services-block">
-          <div className="flex flex-col gap-8">
-            {heading != null && heading !== '' && (
-              <h2 className="text-center text-3xl font-bold text-foreground">{heading}</h2>
-            )}
-            {items.map((service, i) => (
-              <article key={i} className="overflow-hidden rounded-lg border border-border">
-                {service.imageUrl && (
-                  <div className="relative aspect-[16/9] w-full">
-                    <Image
-                      src={service.imageUrl}
-                      alt={service.imageAlt ?? service.title}
-                      fill
-                      objectFit="cover"
-                      fetchPriority={i === 0 ? 'high' : 'auto'}
-                      loading={i === 0 ? 'eager' : 'lazy'}
-                    />
+    <>
+      <Section paddingY="lg">
+        <Container maxWidth="2xl" padding="theme">
+          <section data-component="services-block" id="services">
+            <div className="flex flex-col gap-8">
+              {heading != null && heading !== '' && (
+                <h2 className="text-center text-3xl font-bold text-foreground">{heading}</h2>
+              )}
+              {displayItems.map((service, i) => (
+                <article key={service.bookingServiceId ?? i} className="overflow-hidden rounded-lg border border-border">
+                  {service.imageUrl && (
+                    <div className="relative aspect-[16/9] w-full">
+                      <Image
+                        src={service.imageUrl}
+                        alt={service.imageAlt ?? service.title}
+                        fill
+                        objectFit="cover"
+                        fetchPriority={i === 0 ? 'high' : 'auto'}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <Stack gap="sm">
+                      <h3 className="text-xl font-semibold text-brand">{service.title}</h3>
+                      {service.description !== '' ? (
+                        <p className="text-muted">{service.description}</p>
+                      ) : null}
+                      {service.price != null && service.price !== '' && (
+                        <p className="text-base font-medium text-foreground">{service.price}</p>
+                      )}
+                      {service.subItems != null && service.subItems.length > 0 ? (
+                        useModal ? (
+                          <ServiceSubItemsModalList subItems={service.subItems} fallbackBookingUrl={bookingUrl} moreInfoLabel={moreInfoLabel} />
+                        ) : (
+                          <ServiceSubItemsAccordion
+                            subItems={service.subItems}
+                            fallbackBookingUrl={bookingUrl}
+                          />
+                        )
+                      ) : null}
+                      {service.bookingServiceId ? (
+                        <div className="pt-2">
+                          <Button
+                            label={resolvedBookCtaLabel}
+                            variant="primary"
+                            size="md"
+                            onClick={() => setBookingServiceId(service.bookingServiceId ?? null)}
+                          />
+                        </div>
+                      ) : null}
+                    </Stack>
                   </div>
-                )}
-                <div className="p-6">
-                  <Stack gap="sm">
-                    <h3 className="text-xl font-semibold text-brand">{service.title}</h3>
-                    <p className="text-muted">{service.description}</p>
-                    {service.price != null && service.price !== '' && (
-                      <p className="text-base font-medium text-foreground">{service.price}</p>
-                    )}
-                    {service.subItems != null && service.subItems.length > 0 ? (
-                      useModal ? (
-                        <ServiceSubItemsModalList subItems={service.subItems} fallbackBookingUrl={bookingUrl} moreInfoLabel={moreInfoLabel} />
-                      ) : (
-                        <ServiceSubItemsAccordion
-                          subItems={service.subItems}
-                          fallbackBookingUrl={bookingUrl}
-                        />
-                      )
-                    ) : null}
-                  </Stack>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      </Container>
-    </Section>
+                </article>
+              ))}
+            </div>
+          </section>
+        </Container>
+      </Section>
+
+      <Modal
+        isOpen={bookingServiceId != null}
+        onClose={() => setBookingServiceId(null)}
+        title={bookingServiceName ?? resolvedBookCtaLabel}
+        size="wide"
+      >
+        {bookingServiceId != null ? (
+          <ReservationBlock
+            _type="reservationBlock"
+            clientId={resolvedClientId}
+            confirmationMessage={reservationConfirmationMessage}
+            initialServiceId={bookingServiceId}
+            skipServiceSelection
+            embedded
+            hideHeading
+          />
+        ) : null}
+      </Modal>
+    </>
   )
 }

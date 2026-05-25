@@ -136,7 +136,7 @@ describe('schema validation', () => {
       },
       'services.schema.json': {
         _type: 'services',
-        items: [{ title: '{{primaryService}}', description: 'Service overview' }],
+        heading: 'Services',
         placeholderCopy: { heading: 'Services section title' },
       },
       'reservationBlock.schema.json': {
