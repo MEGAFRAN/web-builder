@@ -31,15 +31,20 @@ jobs:
           persist-credentials: false
 
       - name: Validate deploy configuration
+        env:
+          SWA_TOKEN: ${{ secrets.SWA_TOKEN_ADMIN }}
         run: |
           ADMIN_API_URL="${{ inputs.adminApiUrl || vars.ADMIN_API_URL }}"
           if [ -z "$ADMIN_API_URL" ]; then
             echo "::error::ADMIN_API_URL is not set. Add the ADMIN_API_URL repository variable under Settings → Secrets and variables → Actions → Variables, or pass adminApiUrl when triggering this workflow manually."
             exit 1
           fi
+          if [ -z "$SWA_TOKEN" ]; then
+            echo "::error::SWA_TOKEN_ADMIN secret is not set. In Azure Portal, open the admin Static Web App → Manage deployment token, then add the token as SWA_TOKEN_ADMIN under Settings → Secrets and variables → Actions → Secrets."
+            exit 1
+          fi
           echo "NEXT_PUBLIC_ADMIN_API_URL=$ADMIN_API_URL" >> "$GITHUB_ENV"
           echo "CLIENT_ID=${{ inputs.buildClientId || vars.ADMIN_BUILD_CLIENT_ID || '1' }}" >> "$GITHUB_ENV"
-          echo "CLIENT_KEY=ADMIN" >> "$GITHUB_ENV"
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -64,7 +69,7 @@ jobs:
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets[format('SWA_TOKEN_{0}', env.CLIENT_KEY)] }}
+          azure_static_web_apps_api_token: ${{ secrets.SWA_TOKEN_ADMIN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           app_location: /
