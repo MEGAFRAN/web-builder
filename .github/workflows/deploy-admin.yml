@@ -56,6 +56,22 @@ jobs:
       - name: Build admin SPA
         run: npm run build:admin
 
+      - name: Prepare SWA output
+        run: |
+          # SWA requires index.html at the root. Next.js exports the admin
+          # root as out/admin.html (trailingSlash is off for admin builds).
+          cp out/admin.html out/index.html
+          # Navigation fallback so SWA serves admin.html for all unmatched
+          # admin sub-routes, enabling client-side routing deep links.
+          cat > out/staticwebapp.config.json << 'EOF'
+          {
+            "navigationFallback": {
+              "rewrite": "/admin.html",
+              "exclude": ["/_next/*", "/favicon.ico", "/*.svg", "/*.png", "/*.jpg"]
+            }
+          }
+          EOF
+
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
