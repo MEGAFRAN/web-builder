@@ -15,6 +15,7 @@ describe('booking-catalog', () => {
         durationMinutes: 60,
         price: 100,
         currency: '€',
+        category: 'Styling',
       },
     ])
     expect(rows).toEqual([
@@ -25,6 +26,7 @@ describe('booking-catalog', () => {
         durationMinutes: 60,
         price: 100,
         currency: '€',
+        category: 'Styling',
       },
     ])
   })
@@ -38,7 +40,7 @@ describe('booking-catalog', () => {
     expect(formatListedPrice(100, '€')).toBe('€100')
   })
 
-  it('mapBookingServiceToCmsService maps name, description, duration, and price', () => {
+  it('mapBookingServiceToCmsService maps name, description, duration, price, and category', () => {
     expect(
       mapBookingServiceToCmsService({
         id: 'svc-1',
@@ -47,12 +49,14 @@ describe('booking-catalog', () => {
         durationMinutes: 30,
         price: 20,
         currency: '€',
+        category: 'Coloración',
       }),
     ).toEqual({
       title: 'tinturado cabello',
       description: '',
       price: '30 min · €20',
       bookingServiceId: 'svc-1',
+      category: 'Coloración',
     })
   })
 })

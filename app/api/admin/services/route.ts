@@ -16,6 +16,7 @@ function isServiceRow(x: unknown): x is AdminBookingService {
     typeof o.durationMinutes === 'number' &&
     typeof o.price === 'number' &&
     typeof o.currency === 'string' &&
+    (o.category === undefined || typeof o.category === 'string') &&
     o.id.trim().length > 0 &&
     o.name.trim().length > 0 &&
     o.durationMinutes >= 1 &&

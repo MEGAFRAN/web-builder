@@ -706,7 +706,10 @@ describe('ServicesBlock', () => {
 
     const priceRow = screen.getByText('60 min · €100').closest('div')
     const moreInfoButton = screen.getByRole('button', { name: /más información sobre blower/i })
-    expect(priceRow?.compareDocumentPosition(moreInfoButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(priceRow).not.toBeNull()
+    expect(
+      priceRow!.compareDocumentPosition(moreInfoButton) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
   })
 
   it('opens an info modal with service details and a booking CTA', async () => {
@@ -784,5 +787,144 @@ describe('ServicesBlock', () => {
     const bookingDialog = screen.getByRole('dialog')
     expect(bookingDialog).toBeInTheDocument()
     expect(within(bookingDialog).getByRole('heading', { name: 'blower' })).toBeInTheDocument()
+  })
+
+  it('opens the info modal when the service card body is clicked', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: 'el mejor blower del pais',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" clientId="hair-salon" />)
+
+    await waitFor(() => {
+      expect(screen.getByText('el mejor blower del pais')).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByText('el mejor blower del pais'))
+
+    const infoDialog = screen.getByRole('dialog')
+    expect(within(infoDialog).getByRole('heading', { name: 'blower' })).toBeInTheDocument()
+    expect(within(infoDialog).getByText('el mejor blower del pais')).toBeInTheDocument()
+  })
+
+  it('opens the booking modal directly when the card Reservar button is clicked', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: 'el mejor blower del pais',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" clientId="hair-salon" />)
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('button', { name: 'Reservar' }).length).toBeGreaterThan(0)
+    })
+
+    fireEvent.click(screen.getAllByRole('button', { name: 'Reservar' })[0])
+
+    await waitFor(() => {
+      expect(document.getElementById('res-date')).toBeInTheDocument()
+    })
+  })
+
+  it('groups catalog-backed services under category headings', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'Haircut',
+                description: 'Classic cut',
+                durationMinutes: 45,
+                price: 35,
+                currency: '€',
+                category: 'Cortes',
+              },
+              {
+                id: 'svc-2',
+                name: 'Balayage',
+                description: 'Hand-painted color',
+                durationMinutes: 120,
+                price: 120,
+                currency: '€',
+                category: 'Coloración',
+              },
+              {
+                id: 'svc-3',
+                name: 'Blow dry',
+                description: 'Volume finish',
+                durationMinutes: 30,
+                price: 25,
+                currency: '€',
+                category: 'Cortes',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { level: 3, name: 'Cortes' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 3, name: 'Coloración' })).toBeInTheDocument()
+    })
+
+    expect(screen.getByRole('heading', { level: 3, name: 'Haircut' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'Blow dry' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'Balayage' })).toBeInTheDocument()
+  })
+
+  it('renders CMS items without category headings when no categories are set', async () => {
+    await renderServicesBlock(
+      <ServicesBlock
+        _type="services"
+        items={[
+          { title: 'Cut', description: 'Basic cut' },
+          { title: 'Color', description: 'Full color' },
+        ]}
+      />,
+    )
+
+    expect(screen.getByRole('heading', { level: 3, name: 'Cut' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: 'Color' })).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2)
   })
 })

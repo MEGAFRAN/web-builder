@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import AdminServicesPage from '@/components/admin/AdminServicesPage'
 import { adminCopy } from '@/components/admin/admin-copy'
+import type { AdminBookingService } from '@/types/admin'
 
 const serviceA = {
   id: 'svc-a',
@@ -51,7 +52,7 @@ describe('AdminServicesPage', () => {
     render(<AdminServicesPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Haircut', level: 2 })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Haircut', level: 3 })).toBeInTheDocument()
     })
 
     expect(fetch).toHaveBeenCalledWith('/api/admin/services', { credentials: 'include' })
@@ -120,7 +121,7 @@ describe('AdminServicesPage', () => {
     render(<AdminServicesPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Only service', level: 2 })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Only service', level: 3 })).toBeInTheDocument()
     })
 
     fireEvent.click(screen.getAllByRole('button', { name: adminCopy.services.addServiceButton })[0])
@@ -152,6 +153,35 @@ describe('AdminServicesPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: new RegExp(adminCopy.common.showLess) }))
     expect(screen.getByRole('button', { name: new RegExp(adminCopy.common.expand) })).toBeInTheDocument()
+  })
+
+  it('groups services under category headings', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: async () => ({
+            services: [
+              { ...serviceA, category: 'Cortes' },
+              { ...serviceB, id: 'svc-c', name: 'Balayage', category: 'Coloración' },
+              { id: 'svc-d', name: 'Blow dry', description: '', durationMinutes: 30, price: 25, currency: '€', category: 'Cortes' },
+            ],
+          }),
+        }),
+      ),
+    )
+
+    render(<AdminServicesPage />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Cortes', level: 2 })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Coloración', level: 2 })).toBeInTheDocument()
+    })
+
+    expect(screen.getByRole('heading', { name: 'Alpha cut', level: 3 })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Blow dry', level: 3 })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Balayage', level: 3 })).toBeInTheDocument()
   })
 
   it('persists card order after drag-and-drop', async () => {
@@ -234,7 +264,7 @@ describe('AdminServicesPage', () => {
     render(<AdminServicesPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Alpha cut', level: 2 })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Alpha cut', level: 3 })).toBeInTheDocument()
     })
 
     fireEvent.click(screen.getByRole('button', { name: adminCopy.services.editAria('Alpha cut') }))
@@ -323,7 +353,7 @@ describe('AdminServicesPage', () => {
     render(<AdminServicesPage />)
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Alpha cut', level: 2 })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: 'Alpha cut', level: 3 })).toBeInTheDocument()
     })
 
     fireEvent.click(screen.getByRole('button', { name: adminCopy.services.deleteAria('Alpha cut') }))
@@ -335,6 +365,124 @@ describe('AdminServicesPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('cannot delete')).toBeInTheDocument()
+    })
+  })
+
+  it('shows a category select when categories already exist', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: async () => ({
+            services: [{ ...serviceA, category: 'Cortes' }],
+          }),
+        }),
+      ),
+    )
+
+    render(<AdminServicesPage />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Alpha cut', level: 3 })).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.services.addServiceButton })[0])
+
+    await waitFor(() => {
+      expect(screen.getByRole('combobox', { name: adminCopy.services.form.category })).toBeInTheDocument()
+    })
+
+    const select = screen.getByRole('combobox', { name: adminCopy.services.form.category })
+    expect(within(select).getByRole('option', { name: 'Cortes' })).toBeInTheDocument()
+    expect(within(select).getByRole('option', { name: adminCopy.services.form.newCategory })).toBeInTheDocument()
+  })
+
+  it('lets the user pick an existing category or add a new one', async () => {
+    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input.toString()
+      if (url === '/api/admin/services' && init?.method === 'PUT') {
+        const body = JSON.parse(String(init.body)) as { services: AdminBookingService[] }
+        expect(body.services.at(-1)?.category).toBe('Coloración')
+        return Promise.resolve({ ok: true, json: async () => ({}) })
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          services: [{ ...serviceA, category: 'Cortes' }],
+        }),
+      })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(<AdminServicesPage />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Alpha cut', level: 3 })).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getAllByRole('button', { name: adminCopy.services.addServiceButton })[0])
+
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.change(within(dialog).getByRole('textbox', { name: adminCopy.services.form.name }), {
+      target: { value: 'Tinte' },
+    })
+
+    const select = within(dialog).getByRole('combobox', { name: adminCopy.services.form.category })
+    fireEvent.change(select, { target: { value: '__new__' } })
+
+    fireEvent.change(
+      within(dialog).getByRole('textbox', { name: adminCopy.services.form.newCategoryPlaceholder }),
+      { target: { value: 'Coloración' } },
+    )
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.common.save }))
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        '/api/admin/services',
+        expect.objectContaining({ method: 'PUT' }),
+      )
+    })
+  })
+
+  it('lets the user remove a selected category from a service', async () => {
+    const fetchMock = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input.toString()
+      if (url === '/api/admin/services' && init?.method === 'PUT') {
+        const body = JSON.parse(String(init.body)) as { services: AdminBookingService[] }
+        expect(body.services[0]?.category).toBeUndefined()
+        return Promise.resolve({ ok: true, json: async () => ({}) })
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          services: [{ ...serviceA, category: 'Cortes' }],
+        }),
+      })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    render(<AdminServicesPage />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: 'Alpha cut', level: 3 })).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: adminCopy.services.editAria('Alpha cut') }))
+
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.click(
+      within(dialog).getByRole('button', {
+        name: adminCopy.services.form.removeCategory('Cortes'),
+      }),
+    )
+    fireEvent.click(within(dialog).getByRole('button', { name: adminCopy.common.save }))
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        '/api/admin/services',
+        expect.objectContaining({ method: 'PUT' }),
+      )
     })
   })
 })

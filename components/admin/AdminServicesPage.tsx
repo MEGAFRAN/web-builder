@@ -19,6 +19,234 @@ function formatPrice(price: number, currency: string): string {
   return `${currency}${text}`
 }
 
+type ServiceCategoryGroup = {
+  category: string
+  services: AdminBookingService[]
+}
+
+/** Preserves catalog order; first appearance of each category defines group order. */
+function groupServicesByCategory(services: AdminBookingService[]): ServiceCategoryGroup[] {
+  const groups: ServiceCategoryGroup[] = []
+  const indexByCategory = new Map<string, number>()
+
+  for (const svc of services) {
+    const category = svc.category?.trim() ?? ''
+    let ix = indexByCategory.get(category)
+    if (ix === undefined) {
+      ix = groups.length
+      indexByCategory.set(category, ix)
+      groups.push({ category, services: [] })
+    }
+    groups[ix].services.push(svc)
+  }
+
+  return groups
+}
+
+const NEW_CATEGORY_VALUE = '__new__'
+
+/** Unique non-empty categories in catalog order (first appearance). */
+function collectServiceCategories(services: AdminBookingService[]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const svc of services) {
+    const category = svc.category?.trim()
+    if (category && !seen.has(category)) {
+      seen.add(category)
+      out.push(category)
+    }
+  }
+  return out
+}
+
+function ServiceCategoryField({
+  existingCategories,
+  value,
+  onChange,
+}: {
+  existingCategories: string[]
+  value: string
+  onChange: (value: string) => void
+}) {
+  const trimmed = value.trim()
+  const hasExisting = existingCategories.length > 0
+  const isCustomCategory = trimmed.length > 0 && !existingCategories.includes(trimmed)
+  const [mode, setMode] = useState<'select' | 'new'>(() => {
+    if (!hasExisting) return 'new'
+    if (isCustomCategory) return 'new'
+    return 'select'
+  })
+
+  const selectValue =
+    mode === 'new' ? NEW_CATEGORY_VALUE : trimmed
+
+  function clearCategory() {
+    onChange('')
+    setMode('select')
+  }
+
+  if (!hasExisting) {
+    return (
+      <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
+        {adminCopy.services.form.category}
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={adminCopy.services.form.newCategoryPlaceholder}
+          className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+        />
+        <span className="font-normal text-xs text-muted">
+          {adminCopy.services.form.newCategoryHint}
+        </span>
+      </label>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-1 text-sm font-medium text-foreground">
+      <span id="svc-category-label">{adminCopy.services.form.category}</span>
+      <div className="flex flex-wrap items-center gap-2">
+        <select
+          aria-labelledby="svc-category-label"
+          value={selectValue}
+          onChange={(e) => {
+            const next = e.target.value
+            if (next === NEW_CATEGORY_VALUE) {
+              setMode('new')
+              onChange('')
+              return
+            }
+            setMode('select')
+            onChange(next)
+          }}
+          className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+        >
+          <option value="">{adminCopy.services.form.noCategory}</option>
+          {existingCategories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+          <option value={NEW_CATEGORY_VALUE}>{adminCopy.services.form.newCategory}</option>
+        </select>
+        {trimmed && mode === 'select' ? (
+          <button
+            type="button"
+            aria-label={adminCopy.services.form.removeCategory(trimmed)}
+            onClick={clearCategory}
+            className="rounded-md border border-border px-2 py-2 text-muted hover:bg-muted-bg hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          >
+            ✕
+          </button>
+        ) : null}
+      </div>
+      {mode === 'new' ? (
+        <div className="flex flex-col gap-2">
+          <input
+            aria-label={adminCopy.services.form.newCategoryPlaceholder}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={adminCopy.services.form.newCategoryPlaceholder}
+            className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              setMode('select')
+              onChange('')
+            }}
+            className="self-start text-xs font-normal text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          >
+            {adminCopy.services.form.pickExistingCategory}
+          </button>
+        </div>
+      ) : null}
+      <span className="font-normal text-xs text-muted">
+        Cada servicio puede tener como máximo una categoría. Los servicios con la misma categoría se agrupan bajo un encabezado.
+      </span>
+    </div>
+  )
+}
+
+function ServiceCard({
+  service: s,
+  dragId,
+  expandedId,
+  onDragStart,
+  onDragEnd,
+  onDrop,
+  onToggleExpanded,
+  onEdit,
+  onDelete,
+}: {
+  service: AdminBookingService
+  dragId: string | null
+  expandedId: string | null
+  onDragStart: () => void
+  onDragEnd: () => void
+  onDrop: () => void
+  onToggleExpanded: () => void
+  onEdit: () => void
+  onDelete: () => void
+}) {
+  return (
+    <article
+      draggable
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={onDrop}
+      className={`rounded-xl border border-border bg-surface p-4 shadow-sm ${
+        dragId === s.id ? 'opacity-60' : ''
+      }`}
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span aria-hidden className="cursor-grab text-muted active:cursor-grabbing">
+              ⋮⋮
+            </span>
+            <h3 className="truncate text-lg font-semibold text-foreground">{s.name}</h3>
+            <Badge label={`${s.durationMinutes} min`} variant="default" />
+            <Badge label={formatPrice(s.price, s.currency)} variant="default" />
+          </div>
+          <button
+            type="button"
+            onClick={onToggleExpanded}
+            className="mt-2 max-w-full text-left text-sm text-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+            aria-expanded={expandedId === s.id}
+          >
+            <span className={expandedId === s.id ? '' : 'line-clamp-2'}>
+              {s.description.trim() ? s.description : adminCopy.common.noDescription}
+            </span>
+            <span className="ml-1 text-primary underline">
+              {expandedId === s.id ? adminCopy.common.showLess : adminCopy.common.expand}
+            </span>
+          </button>
+        </div>
+        <div className="flex shrink-0 gap-2">
+          <button
+            type="button"
+            aria-label={adminCopy.services.editAria(s.name)}
+            onClick={onEdit}
+            className="rounded-md border border-border p-2 hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          >
+            ✎
+          </button>
+          <button
+            type="button"
+            aria-label={adminCopy.services.deleteAria(s.name)}
+            onClick={onDelete}
+            className="rounded-md border border-border p-2 text-destructive hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 export default function AdminServicesPage() {
   const [services, setServices] = useState<AdminBookingService[]>([])
   const [loading, setLoading] = useState(true)
@@ -131,74 +359,41 @@ export default function AdminServicesPage() {
             </button>
           </div>
         ) : (
-          <ul className="flex flex-col gap-3">
-            {services.map((s) => (
-              <li key={s.id}>
-                <article
-                  draggable
-                  onDragStart={() => setDragId(s.id)}
-                  onDragEnd={() => setDragId(null)}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => dragId && void handleReorder(dragId, s.id)}
-                  className={`rounded-xl border border-border bg-surface p-4 shadow-sm ${
-                    dragId === s.id ? 'opacity-60' : ''
-                  }`}
-                >
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span aria-hidden className="cursor-grab text-muted active:cursor-grabbing">
-                          ⋮⋮
-                        </span>
-                        <h2 className="truncate text-lg font-semibold text-foreground">{s.name}</h2>
-                        <Badge label={`${s.durationMinutes} min`} variant="default" />
-                        <Badge label={formatPrice(s.price, s.currency)} variant="default" />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() =>
+          <div className="flex flex-col gap-8">
+            {groupServicesByCategory(services).map((group) => (
+              <section key={group.category || '__uncategorized'}>
+                <h2 className="mb-3 text-base font-semibold text-foreground">
+                  {group.category || adminCopy.services.uncategorized}
+                </h2>
+                <ul className="flex flex-col gap-3">
+                  {group.services.map((s) => (
+                    <li key={s.id}>
+                      <ServiceCard
+                        service={s}
+                        dragId={dragId}
+                        expandedId={expandedId}
+                        onDragStart={() => setDragId(s.id)}
+                        onDragEnd={() => setDragId(null)}
+                        onDrop={() => dragId && void handleReorder(dragId, s.id)}
+                        onToggleExpanded={() =>
                           setExpandedId((id) => (id === s.id ? null : s.id))
                         }
-                        className="mt-2 max-w-full text-left text-sm text-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-                        aria-expanded={expandedId === s.id}
-                      >
-                        <span className={expandedId === s.id ? '' : 'line-clamp-2'}>
-                          {s.description.trim() ? s.description : adminCopy.common.noDescription}
-                        </span>
-                        <span className="ml-1 text-primary underline">
-                          {expandedId === s.id ? adminCopy.common.showLess : adminCopy.common.expand}
-                        </span>
-                      </button>
-                    </div>
-                    <div className="flex shrink-0 gap-2">
-                      <button
-                        type="button"
-                        aria-label={adminCopy.services.editAria(s.name)}
-                        onClick={() => openEdit(s)}
-                        className="rounded-md border border-border p-2 hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-                      >
-                        ✎
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={adminCopy.services.deleteAria(s.name)}
-                        onClick={() => setDeleteTarget(s)}
-                        className="rounded-md border border-border p-2 text-destructive hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              </li>
+                        onEdit={() => openEdit(s)}
+                        onDelete={() => setDeleteTarget(s)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </section>
             ))}
-          </ul>
+          </div>
         )}
       </Stack>
 
       {modalOpen && (
         <ServiceFormModal
           initial={editing}
+          existingCategories={collectServiceCategories(services)}
           onClose={() => setModalOpen(false)}
           onSave={async (row) => {
             const next = editing
@@ -246,14 +441,17 @@ export default function AdminServicesPage() {
 
 function ServiceFormModal({
   initial,
+  existingCategories,
   onClose,
   onSave,
 }: {
   initial: AdminBookingService | null
+  existingCategories: string[]
   onClose: () => void
   onSave: (row: AdminBookingService) => Promise<void>
 }) {
   const [name, setName] = useState(initial?.name ?? '')
+  const [category, setCategory] = useState(initial?.category ?? '')
   const [description, setDescription] = useState(initial?.description ?? '')
   const [durationMinutes, setDurationMinutes] = useState(String(initial?.durationMinutes ?? 60))
   const [price, setPrice] = useState(String(initial?.price ?? 0))
@@ -277,6 +475,7 @@ function ServiceFormModal({
       setFormError(adminCopy.services.form.priceNonNegative)
       return
     }
+    const trimmedCategory = category.trim()
     const row: AdminBookingService = {
       id: initial?.id ?? `svc-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       name: name.trim(),
@@ -284,6 +483,7 @@ function ServiceFormModal({
       durationMinutes: dm,
       price: pr,
       currency: currency.trim() || '€',
+      ...(trimmedCategory ? { category: trimmedCategory } : {}),
     }
     setBusy(true)
     try {
@@ -326,6 +526,11 @@ function ServiceFormModal({
             className="rounded-md border border-border px-3 py-2 font-normal focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
           />
         </label>
+        <ServiceCategoryField
+          existingCategories={existingCategories}
+          value={category}
+          onChange={setCategory}
+        />
         <label className="flex flex-col gap-1 text-sm font-medium text-foreground">
           {adminCopy.services.form.description}
           <textarea

@@ -1,5 +1,35 @@
 import type { ReservationServiceItem, Service } from '@/types/cms'
 
+export type ServiceCategoryGroup<T extends { category?: string | null }> = {
+  category: string
+  items: T[]
+}
+
+/** Preserves list order; first appearance of each category defines group order. */
+export function groupServicesByCategory<T extends { category?: string | null }>(
+  items: T[],
+): ServiceCategoryGroup<T>[] {
+  const groups: ServiceCategoryGroup<T>[] = []
+  const indexByCategory = new Map<string, number>()
+
+  for (const item of items) {
+    const category = item.category?.trim() ?? ''
+    let ix = indexByCategory.get(category)
+    if (ix === undefined) {
+      ix = groups.length
+      indexByCategory.set(category, ix)
+      groups.push({ category, items: [] })
+    }
+    groups[ix].items.push(item)
+  }
+
+  return groups
+}
+
+export function hasServiceCategories(items: Array<{ category?: string | null }>): boolean {
+  return items.some((item) => (item.category?.trim() ?? '') !== '')
+}
+
 export function formatListedPrice(price: number, currencySymbol: string): string {
   const text = Number.isInteger(price)
     ? String(price)
@@ -38,6 +68,9 @@ export function parseBookingCatalogRows(raw: unknown): ReservationServiceItem[] 
     const currencyRaw = o.currency
     const currency =
       typeof currencyRaw === 'string' && currencyRaw.trim().length > 0 ? currencyRaw.trim() : null
+    let category: string | null | undefined
+    if (typeof o.category === 'string') category = o.category.trim() || null
+    else if (o.category === null || o.category === undefined) category = undefined
     out.push({
       id: id.trim(),
       name: name.trim(),
@@ -45,6 +78,7 @@ export function parseBookingCatalogRows(raw: unknown): ReservationServiceItem[] 
       durationMinutes,
       price,
       currency,
+      ...(category ? { category } : {}),
     })
   }
   return out
@@ -53,11 +87,13 @@ export function parseBookingCatalogRows(raw: unknown): ReservationServiceItem[] 
 export function mapBookingServiceToCmsService(svc: ReservationServiceItem): Service {
   const currency = svc.currency?.trim() || '€'
   const priceLabel = formatListedPrice(svc.price, currency)
+  const category = svc.category?.trim()
   return {
     title: svc.name,
     description: svc.description?.trim() ?? '',
     price: `${svc.durationMinutes} min · ${priceLabel}`,
     bookingServiceId: svc.id,
+    ...(category ? { category } : {}),
   }
 }
 

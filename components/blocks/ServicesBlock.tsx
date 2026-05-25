@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { mapBookingServicesToCmsServices } from '@/lib/booking-catalog'
+import { groupServicesByCategory, hasServiceCategories, mapBookingServicesToCmsServices } from '@/lib/booking-catalog'
 import { useBookingServicesCatalog } from '@/lib/hooks/useBookingServicesCatalog'
 import { Button } from '@/components/inputs/Button'
 import ReservationBlock from '@/components/blocks/ReservationBlock'
@@ -101,6 +101,10 @@ function serviceHasInfoModalContent(service: Service): boolean {
     service.bookingServiceId != null ||
     (service.subItems != null && service.subItems.length > 0),
   )
+}
+
+function isInteractiveServiceCardTarget(target: EventTarget | null): boolean {
+  return target instanceof HTMLElement && target.closest('button, a') != null
 }
 
 function ServiceInfoModalBody({
@@ -456,6 +460,161 @@ function getSubItemSummary(item: ServiceSubItem): string | null {
   return line?.trim() ?? null
 }
 
+function ServiceListCard({
+  service,
+  cardIndex,
+  useModal,
+  moreInfoLabel,
+  bookingUrl,
+  resolvedBookCtaLabel,
+  resolvedMoreInfoLabel,
+  onBook,
+  onOpenInfo,
+}: {
+  service: Service
+  cardIndex: number
+  useModal: boolean
+  moreInfoLabel?: string | null
+  bookingUrl?: string | null
+  resolvedBookCtaLabel: string
+  resolvedMoreInfoLabel: string
+  onBook: (serviceId: string | null) => void
+  onOpenInfo: (service: Service) => void
+}) {
+  const canOpenInfoModal = serviceHasInfoModalContent(service)
+
+  return (
+    <article className="overflow-hidden rounded-lg border border-border">
+      {service.imageUrl && (
+        <div className="relative aspect-[16/9] w-full">
+          <Image
+            src={service.imageUrl}
+            alt={service.imageAlt ?? service.title}
+            fill
+            objectFit="cover"
+            fetchPriority={cardIndex === 0 ? 'high' : 'auto'}
+            loading={cardIndex === 0 ? 'eager' : 'lazy'}
+          />
+        </div>
+      )}
+      <div
+        className={canOpenInfoModal ? 'cursor-pointer p-6' : 'p-6'}
+        onClick={(e) => {
+          if (!canOpenInfoModal || isInteractiveServiceCardTarget(e.target)) return
+          onOpenInfo(service)
+        }}
+      >
+        <Stack gap="sm">
+          <h3 className="text-xl font-semibold text-brand">{service.title}</h3>
+          {service.description !== '' ? (
+            <p className="line-clamp-2 overflow-hidden text-muted">{service.description}</p>
+          ) : null}
+          {(service.price != null && service.price !== '') || service.bookingServiceId ? (
+            <div
+              className={
+                service.price != null &&
+                service.price !== '' &&
+                service.bookingServiceId
+                  ? 'flex flex-wrap items-center justify-between gap-x-3 gap-y-2'
+                  : 'flex flex-wrap items-center justify-end gap-x-3 gap-y-2'
+              }
+            >
+              {service.price != null && service.price !== '' ? (
+                <p className="min-w-0 text-base font-medium text-foreground">{service.price}</p>
+              ) : null}
+              {service.bookingServiceId ? (
+                <Button
+                  label={resolvedBookCtaLabel}
+                  variant="primary"
+                  size="md"
+                  onClick={() => onBook(service.bookingServiceId ?? null)}
+                />
+              ) : null}
+            </div>
+          ) : null}
+          {serviceHasInfoModalContent(service) ? (
+            <button
+              type="button"
+              onClick={() => onOpenInfo(service)}
+              className="self-start text-xs text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+              aria-haspopup="dialog"
+              aria-label={`${resolvedMoreInfoLabel} sobre ${service.title}`}
+            >
+              {resolvedMoreInfoLabel}
+            </button>
+          ) : null}
+          {service.subItems != null && service.subItems.length > 0 ? (
+            useModal ? (
+              <ServiceSubItemsModalList
+                subItems={service.subItems}
+                fallbackBookingUrl={bookingUrl}
+                moreInfoLabel={moreInfoLabel}
+              />
+            ) : (
+              <ServiceSubItemsAccordion subItems={service.subItems} fallbackBookingUrl={bookingUrl} />
+            )
+          ) : null}
+        </Stack>
+      </div>
+    </article>
+  )
+}
+
+function DefaultServicesList({
+  items,
+  useModal,
+  moreInfoLabel,
+  bookingUrl,
+  resolvedBookCtaLabel,
+  resolvedMoreInfoLabel,
+  onBook,
+  onOpenInfo,
+}: {
+  items: Service[]
+  useModal: boolean
+  moreInfoLabel?: string | null
+  bookingUrl?: string | null
+  resolvedBookCtaLabel: string
+  resolvedMoreInfoLabel: string
+  onBook: (serviceId: string | null) => void
+  onOpenInfo: (service: Service) => void
+}) {
+  const groups = hasServiceCategories(items)
+    ? groupServicesByCategory(items)
+    : [{ category: '', items }]
+  let cardIndex = 0
+
+  return (
+    <>
+      {groups.map((group) => (
+        <div key={group.category || '__uncategorized'} className="flex flex-col gap-8">
+          {group.category ? (
+            <h3 className="text-2xl font-bold tracking-tight text-brand">{group.category}</h3>
+          ) : null}
+          {group.items.map((service) => {
+            const index = cardIndex
+            cardIndex += 1
+            return (
+              <ServiceListCard
+                key={service.bookingServiceId ?? index}
+                service={service}
+                cardIndex={index}
+                useModal={useModal}
+                moreInfoLabel={moreInfoLabel}
+                bookingUrl={bookingUrl}
+                resolvedBookCtaLabel={resolvedBookCtaLabel}
+                resolvedMoreInfoLabel={resolvedMoreInfoLabel}
+                onBook={onBook}
+                onOpenInfo={onOpenInfo}
+              />
+            )
+          })}
+        </div>
+      ))}
+    </>
+  )
+}
+
 function MenuLayout({
   heading,
   items,
@@ -463,6 +622,10 @@ function MenuLayout({
   heading?: string | null
   items: Service[]
 }) {
+  const groups = hasServiceCategories(items)
+    ? groupServicesByCategory(items)
+    : [{ category: '', items }]
+
   return (
     <Section paddingY="lg">
       <Container maxWidth="2xl" padding="theme">
@@ -473,50 +636,53 @@ function MenuLayout({
                 {heading}
               </h2>
             )}
-            {items.map((service, i) => (
-              <div key={i}>
-                <h2 className="text-3xl font-bold tracking-tight text-brand">
-                  {service.title}
-                </h2>
-                {service.imageUrl != null && service.imageUrl !== '' && (
-                  <div className="relative mt-4 aspect-[16/9] w-full overflow-hidden rounded-[var(--radius)]">
-                    <Image
-                      src={service.imageUrl}
-                      fill
-                      objectFit="cover"
-                      alt={service.title}
-                    />
-                  </div>
-                )}
-                <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 items-stretch">
-                  {(service.subItems ?? []).map((raw, j) => {
-                    const item = normalizeSubItem(raw)
-                    const rows = getSubItemPricingRows(item)
-                    const price = rows[0]?.price ?? item.price
-                    const summary = getSubItemSummary(item)
+            {groups.map((group) => (
+              <div key={group.category || '__uncategorized'} className="flex flex-col gap-12">
+                {group.category ? (
+                  <h2 className="text-3xl font-bold tracking-tight text-brand">{group.category}</h2>
+                ) : null}
+                {group.items.map((service, i) => (
+                  <div key={service.bookingServiceId ?? i}>
+                    <h3 className="text-2xl font-bold tracking-tight text-brand">{service.title}</h3>
+                    {service.imageUrl != null && service.imageUrl !== '' && (
+                      <div className="relative mt-4 aspect-[16/9] w-full overflow-hidden rounded-[var(--radius)]">
+                        <Image
+                          src={service.imageUrl}
+                          fill
+                          objectFit="cover"
+                          alt={service.title}
+                        />
+                      </div>
+                    )}
+                    <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 items-stretch">
+                      {(service.subItems ?? []).map((raw, j) => {
+                        const item = normalizeSubItem(raw)
+                        const rows = getSubItemPricingRows(item)
+                        const price = rows[0]?.price ?? item.price
+                        const summary = getSubItemSummary(item)
 
-                    return (
-                      <article
-                        key={j}
-                        className="flex flex-col h-full rounded-[var(--radius)] bg-surface shadow-sm p-5"
-                      >
-                        <div className="min-h-[3.5rem]">
-                          <h3 className="text-lg font-semibold text-foreground">
-                            {item.label}
-                          </h3>
-                        </div>
-                        {summary ? (
-                          <p className="mt-2 text-base text-muted">{summary}</p>
-                        ) : null}
-                        {price != null && price !== '' ? (
-                          <p className="mt-auto text-right text-sm font-medium text-foreground">
-                            {price}
-                          </p>
-                        ) : null}
-                      </article>
-                    )
-                  })}
-                </div>
+                        return (
+                          <article
+                            key={j}
+                            className="flex flex-col h-full rounded-[var(--radius)] bg-surface shadow-sm p-5"
+                          >
+                            <div className="min-h-[3.5rem]">
+                              <h4 className="text-lg font-semibold text-foreground">{item.label}</h4>
+                            </div>
+                            {summary ? (
+                              <p className="mt-2 text-base text-muted">{summary}</p>
+                            ) : null}
+                            {price != null && price !== '' ? (
+                              <p className="mt-auto text-right text-sm font-medium text-foreground">
+                                {price}
+                              </p>
+                            ) : null}
+                          </article>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </Stack>
@@ -568,76 +734,16 @@ export default function ServicesBlock({
               {heading != null && heading !== '' && (
                 <h2 className="text-center text-3xl font-bold text-foreground">{heading}</h2>
               )}
-              {displayItems.map((service, i) => (
-                <article key={service.bookingServiceId ?? i} className="overflow-hidden rounded-lg border border-border">
-                  {service.imageUrl && (
-                    <div className="relative aspect-[16/9] w-full">
-                      <Image
-                        src={service.imageUrl}
-                        alt={service.imageAlt ?? service.title}
-                        fill
-                        objectFit="cover"
-                        fetchPriority={i === 0 ? 'high' : 'auto'}
-                        loading={i === 0 ? 'eager' : 'lazy'}
-                      />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <Stack gap="sm">
-                      <h3 className="text-xl font-semibold text-brand">{service.title}</h3>
-                      {service.description !== '' ? (
-                        <p className="line-clamp-2 overflow-hidden text-muted">{service.description}</p>
-                      ) : null}
-                      {(service.price != null && service.price !== '') || service.bookingServiceId ? (
-                        <div
-                          className={
-                            service.price != null &&
-                            service.price !== '' &&
-                            service.bookingServiceId
-                              ? 'flex flex-wrap items-center justify-between gap-x-3 gap-y-2'
-                              : 'flex flex-wrap items-center justify-end gap-x-3 gap-y-2'
-                          }
-                        >
-                          {service.price != null && service.price !== '' ? (
-                            <p className="min-w-0 text-base font-medium text-foreground">
-                              {service.price}
-                            </p>
-                          ) : null}
-                          {service.bookingServiceId ? (
-                            <Button
-                              label={resolvedBookCtaLabel}
-                              variant="primary"
-                              size="md"
-                              onClick={() => setBookingServiceId(service.bookingServiceId ?? null)}
-                            />
-                          ) : null}
-                        </div>
-                      ) : null}
-                      {serviceHasInfoModalContent(service) ? (
-                        <button
-                          type="button"
-                          onClick={() => setInfoService(service)}
-                          className="self-start text-xs text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
-                          aria-haspopup="dialog"
-                          aria-label={`${resolvedMoreInfoLabel} sobre ${service.title}`}
-                        >
-                          {resolvedMoreInfoLabel}
-                        </button>
-                      ) : null}
-                      {service.subItems != null && service.subItems.length > 0 ? (
-                        useModal ? (
-                          <ServiceSubItemsModalList subItems={service.subItems} fallbackBookingUrl={bookingUrl} moreInfoLabel={moreInfoLabel} />
-                        ) : (
-                          <ServiceSubItemsAccordion
-                            subItems={service.subItems}
-                            fallbackBookingUrl={bookingUrl}
-                          />
-                        )
-                      ) : null}
-                    </Stack>
-                  </div>
-                </article>
-              ))}
+              <DefaultServicesList
+                items={displayItems}
+                useModal={useModal}
+                moreInfoLabel={moreInfoLabel}
+                bookingUrl={bookingUrl}
+                resolvedBookCtaLabel={resolvedBookCtaLabel}
+                resolvedMoreInfoLabel={resolvedMoreInfoLabel}
+                onBook={setBookingServiceId}
+                onOpenInfo={setInfoService}
+              />
             </div>
           </section>
         </Container>

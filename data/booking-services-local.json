@@ -6,7 +6,8 @@
       "description": "1) el mejor blower del pais, solo para las clientas mas selectas, reserva con nosotros para vivir una experiencia total, experiencia VIP donde solo se vera lo mejor de lo mejor. Preparate ya para todo. Solo aqui. 2) el mejor blower del pais, solo para las clientas mas selectas, reserva con nosotros para vivir una experiencia total, experiencia VIP donde solo se vera lo mejor de lo mejor. Preparate ya para todo. Solo aqui.",
       "durationMinutes": 60,
       "price": 100,
-      "currency": "€"
+      "currency": "€",
+      "category": "cabello"
     },
     {
       "id": "svc-1779102990687-xnbu",
@@ -14,7 +15,8 @@
       "description": "lo mejor de lo mejor",
       "durationMinutes": 30,
       "price": 20,
-      "currency": "€"
+      "currency": "€",
+      "category": "cabello"
     },
     {
       "id": "svc-1779699743784-mnsp",
@@ -22,7 +24,8 @@
       "description": "saldras como nueva",
       "durationMinutes": 30,
       "price": 20,
-      "currency": "€"
+      "currency": "€",
+      "category": "uñas"
     }
   ]
 }

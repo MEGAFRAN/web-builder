@@ -28,6 +28,8 @@ export type Service = {
   imageAlt?: string | null
   /** Set when the card is backed by `/api/booking-services` catalog row. */
   bookingServiceId?: string | null
+  /** Optional grouping label from the admin service catalog. */
+  category?: string | null
 }
 
 // Block types — each has a unique `_type` literal for exhaustive narrowing
@@ -458,6 +460,7 @@ export type ReservationServiceItem = {
   price: number
   /** Display symbol, e.g. "€" or "$". Defaults to "€" when omitted. */
   currency?: string | null
+  category?: string | null
 }
 
 export type ReservationBlock = {

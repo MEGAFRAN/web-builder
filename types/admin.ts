@@ -32,6 +32,7 @@ export type AdminBookingService = {
   durationMinutes: number
   price: number
   currency: string
+  category?: string
 }
 
 export type DayCode = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
