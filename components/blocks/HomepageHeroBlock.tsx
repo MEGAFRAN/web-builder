@@ -6,6 +6,7 @@ export default function HomepageHeroBlock({
   subtext,
   primaryButtonLabel,
   primaryButtonHref,
+  backgroundImageUrl,
 }: HomepageHeroBlockType) {
   return (
     <div data-component="homepage-hero-block">
@@ -14,6 +15,9 @@ export default function HomepageHeroBlock({
         subtext={subtext}
         ctaLabel={primaryButtonLabel}
         ctaAction={primaryButtonHref}
+        backgroundImageUrl={backgroundImageUrl}
+        gradientFallback
+        fullViewportHeightMobile
       />
     </div>
   )

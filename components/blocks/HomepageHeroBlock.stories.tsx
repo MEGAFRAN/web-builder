@@ -19,6 +19,16 @@ export const WithPrimaryButton: Story = {
     primaryButtonLabel: 'Start free trial',
   },
 }
+export const WithBackgroundImage: Story = {
+  args: {
+    _type: 'heroBlock',
+    heading: 'Hair Salon',
+    subtext: 'Personalized haircuts and color in a calm, welcoming studio.',
+    primaryButtonLabel: 'Book Now',
+    primaryButtonHref: '#book',
+    backgroundImageUrl: 'https://picsum.photos/seed/hair-salon-hero/1600/900',
+  },
+}
 export const PrimaryOnly: Story = {
   args: {
     _type: 'heroBlock',

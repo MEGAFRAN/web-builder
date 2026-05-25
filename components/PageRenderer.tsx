@@ -45,7 +45,7 @@ export default function PageRenderer({ blocks, companyProfile = null }: PageRend
         const key = (mergedBlock as BlockWithKey)._key || i
         const content = <Component {...mergedBlock} />
 
-        if (i === 0) {
+        if (i < 2) {
           return <div key={key}>{content}</div>
         }
 

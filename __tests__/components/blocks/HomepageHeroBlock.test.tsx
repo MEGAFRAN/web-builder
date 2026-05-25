@@ -64,4 +64,29 @@ describe('HomepageHeroBlock', () => {
       container.querySelector('[data-component="homepage-hero-block"]')
     ).toBeInTheDocument()
   })
+
+  it('renders a background image when backgroundImageUrl is provided', () => {
+    const { container } = render(
+      <HomepageHeroBlock
+        _type="heroBlock"
+        heading="Hello"
+        backgroundImageUrl="https://example.com/hero.jpg"
+      />
+    )
+    const img = container.querySelector('img[data-component="image"]') as HTMLImageElement
+    expect(img).not.toBeNull()
+    expect(img.src).toContain('/images/hero.webp')
+  })
+
+  it('uses gradient fallback when no background image is configured', () => {
+    const { container } = render(
+      <HomepageHeroBlock _type="heroBlock" heading="Hello" />
+    )
+    expect(container.querySelector('[data-component="section"]')?.className).toContain(
+      'hero-bg-gradient'
+    )
+    expect(
+      container.querySelector('[data-component="hero"]')?.getAttribute('data-hero-bg')
+    ).toBe('gradient')
+  })
 })

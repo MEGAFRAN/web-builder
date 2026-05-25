@@ -40,7 +40,6 @@
           "company": null,
           "role": null,
           "quote": "Emma listened to exactly what I wanted and delivered beyond my expectations. I always leave feeling confident.",
-          "avatarUrl": "https://picsum.photos/seed/hair-salon-t1/100/100",
           "stars": 5
         },
         {
@@ -48,7 +47,6 @@
           "company": null,
           "role": null,
           "quote": "Warm, professional, and skilled. Booking online was easy and the studio feels like a little retreat.",
-          "avatarUrl": "https://picsum.photos/seed/hair-salon-t2/100/100",
           "stars": 5
         },
         {
@@ -56,7 +54,6 @@
           "company": null,
           "role": null,
           "quote": "I've been coming to Hair Salon for months. Consistent quality every visit — highly recommend.",
-          "avatarUrl": "https://picsum.photos/seed/hair-salon-t3/100/100",
           "stars": 5
         }
       ]

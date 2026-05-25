@@ -2,8 +2,10 @@ import { createJSONCMSClient } from '@/lib/json-cms'
 import { getClientConfig } from '@/lib/client-config'
 import { getCompanyProfile } from '@/lib/company-profile'
 import { buildJsonLd } from '@/lib/json-ld'
+import { findHomepageHeroBackgroundImageUrl } from '@/lib/page-hero-preload'
 import PageRenderer from '@/components/PageRenderer'
 import { JsonLdScript } from '@/components/seo/JsonLdScript'
+import { HeroImagePreload } from '@/components/seo/HeroImagePreload'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
@@ -68,9 +70,11 @@ export default async function Page({ params }: PageProps) {
 
   const profile = await getCompanyProfile(clientId)
   const schema = buildJsonLd(config, page, profile)
+  const heroBackgroundImageUrl = findHomepageHeroBackgroundImageUrl(page.blocks)
 
   return (
     <>
+      {heroBackgroundImageUrl && <HeroImagePreload href={heroBackgroundImageUrl} />}
       <JsonLdScript schema={schema} />
       <main>
         <PageRenderer blocks={page.blocks} companyProfile={profile} />

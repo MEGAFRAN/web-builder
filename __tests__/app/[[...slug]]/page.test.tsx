@@ -20,6 +20,17 @@ vi.mock('@/lib/client-config', () => ({
   getClientConfig: vi.fn(),
 }))
 
+const mockFindHomepageHeroBackgroundImageUrl = vi.hoisted(() => vi.fn())
+const mockPreload = vi.hoisted(() => vi.fn())
+
+vi.mock('@/lib/page-hero-preload', () => ({
+  findHomepageHeroBackgroundImageUrl: mockFindHomepageHeroBackgroundImageUrl,
+}))
+
+vi.mock('react-dom', () => ({
+  default: { preload: mockPreload },
+}))
+
 vi.mock('@/components/PageRenderer', () => ({
   default: ({ blocks }: { blocks: unknown[] }) => (
     <div data-testid="page-renderer" data-blocks={JSON.stringify(blocks)} />
@@ -76,6 +87,9 @@ beforeEach(() => {
   vi.clearAllMocks()
   mockGetPages.mockReset()
   mockGetPage.mockReset()
+  mockFindHomepageHeroBackgroundImageUrl.mockReset()
+  mockFindHomepageHeroBackgroundImageUrl.mockReturnValue(null)
+  mockPreload.mockReset()
 
   // Set up a fresh client stub for every test
   mockedGetClientConfig.mockReturnValue(baseConfig as ReturnType<typeof getClientConfig>)
@@ -346,5 +360,37 @@ describe('Page (default export)', () => {
 
     await Page({ params: Promise.resolve({ slug: ['blog', 'post-1'] }) })
     expect(mockGetPage).toHaveBeenCalledWith('blog/post-1')
+  })
+
+  it('preloads the homepage hero background image when configured', async () => {
+    const blocks = [
+      {
+        _type: 'heroBlock' as const,
+        heading: 'Welcome',
+        backgroundImageUrl: 'https://example.com/hero.jpg',
+      },
+    ]
+    mockGetPage.mockResolvedValue({ slug: '', blocks })
+    mockFindHomepageHeroBackgroundImageUrl.mockReturnValue('/images/hero.webp')
+
+    const jsx = await Page({ params: Promise.resolve({ slug: undefined }) })
+    render(jsx as React.ReactElement)
+
+    expect(mockFindHomepageHeroBackgroundImageUrl).toHaveBeenCalledWith(blocks)
+    expect(mockPreload).toHaveBeenCalledWith('/images/hero.webp', {
+      as: 'image',
+      fetchPriority: 'high',
+    })
+  })
+
+  it('does not preload a hero image when backgroundImageUrl is absent', async () => {
+    const blocks = [{ _type: 'heroBlock' as const, heading: 'Welcome' }]
+    mockGetPage.mockResolvedValue({ slug: '', blocks })
+    mockFindHomepageHeroBackgroundImageUrl.mockReturnValue(null)
+
+    const jsx = await Page({ params: Promise.resolve({ slug: undefined }) })
+    render(jsx as React.ReactElement)
+
+    expect(mockPreload).not.toHaveBeenCalled()
   })
 })

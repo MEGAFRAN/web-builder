@@ -35,6 +35,8 @@ export function Section({
   paddingY = "lg",
   fullBleed = false,
   dataComponent = "section",
+  className,
+  visualBg = false,
 }: {
   children?: ReactNode;
   background?: keyof typeof bgMap | null;
@@ -42,6 +44,9 @@ export function Section({
   fullBleed?: boolean;
   /** Overrides the root `data-component` attribute (e.g. block-level integration tests). */
   dataComponent?: string;
+  className?: string;
+  /** Opts out of scroll-reveal alternating section background overrides. */
+  visualBg?: boolean;
 }) {
   const py = pyScale[paddingY ?? "lg"]
   const sectionStyle: CSSProperties = { paddingBlock: py === 0 ? 0 : py }
@@ -51,7 +56,8 @@ export function Section({
       data-component={dataComponent}
       data-bg={background ?? "white"}
       data-full-bleed={fullBleed ? "true" : undefined}
-      className={`w-full ${bgMap[background ?? "white"]}`}
+      data-visual-bg={visualBg ? "true" : undefined}
+      className={["w-full", bgMap[background ?? "white"], className].filter(Boolean).join(" ")}
       style={sectionStyle}
     >
       {children}

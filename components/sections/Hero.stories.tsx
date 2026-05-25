@@ -26,3 +26,22 @@ export const WithCta: Story = {
 export const HeadlineOnly: Story = {
   args: { headline: 'Simple. Powerful. Fast.' },
 }
+export const WithBackgroundImage: Story = {
+  args: {
+    headline: 'Hair Salon',
+    subtext: 'Personalized haircuts and color in a calm, welcoming studio.',
+    ctaLabel: 'Book Now',
+    ctaAction: '#book',
+    backgroundImageUrl: 'https://picsum.photos/seed/hero-photo/1600/900',
+    fullViewportHeightMobile: true,
+  },
+}
+export const WithGradientFallback: Story = {
+  args: {
+    headline: 'Your business, elevated',
+    subtext: 'Theme-driven gradient when no photo is configured.',
+    ctaLabel: 'Get started',
+    gradientFallback: true,
+    fullViewportHeightMobile: true,
+  },
+}
