@@ -93,6 +93,96 @@ function subItemHasExpandableDetails(item: ServiceSubItem): boolean {
   )
 }
 
+function serviceHasInfoModalContent(service: Service): boolean {
+  return Boolean(
+    service.description.trim() !== '' ||
+    (service.imageUrl != null && service.imageUrl !== '') ||
+    (service.price != null && service.price !== '') ||
+    service.bookingServiceId != null ||
+    (service.subItems != null && service.subItems.length > 0),
+  )
+}
+
+function ServiceInfoModalBody({
+  service,
+  bookCtaLabel,
+  onBook,
+}: {
+  service: Service
+  bookCtaLabel: string
+  onBook: () => void
+}) {
+  const hasImage = service.imageUrl != null && service.imageUrl !== ''
+  const hasDescription = service.description.trim() !== ''
+  const hasPrice = service.price != null && service.price !== ''
+  const hasBook = service.bookingServiceId != null
+
+  const imageSection = hasImage ? (
+    <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+      <Image
+        src={service.imageUrl!.trim()}
+        alt={(service.imageAlt != null && service.imageAlt.trim() !== '' ? service.imageAlt : service.title).trim()}
+        fill
+        objectFit="cover"
+        loading="lazy"
+      />
+    </div>
+  ) : null
+
+  const descriptionSection = hasDescription ? (
+    <p className="text-sm text-muted">{service.description}</p>
+  ) : null
+
+  const pricingSection =
+    hasPrice || hasBook ? (
+      <div
+        className={
+          hasPrice && hasBook
+            ? 'flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-md px-2 py-1.5 outline outline-1 outline-offset-0 [outline-color:color-mix(in_srgb,var(--color-text)_15%,transparent)]'
+            : 'flex w-full flex-wrap items-center justify-end gap-x-3 gap-y-2 rounded-md px-2 py-1.5 outline outline-1 outline-offset-0 [outline-color:color-mix(in_srgb,var(--color-text)_15%,transparent)]'
+        }
+      >
+        {hasPrice ? (
+          <span className="min-w-0 text-base font-medium text-foreground">{service.price}</span>
+        ) : null}
+        {hasBook ? (
+          <Button label={bookCtaLabel} variant="primary" size="md" onClick={onBook} />
+        ) : null}
+      </div>
+    ) : null
+
+  const usePinnedFooterLayout =
+    pricingSection != null && (descriptionSection != null || imageSection != null)
+
+  if (usePinnedFooterLayout) {
+    return (
+      <div className="flex flex-col gap-4 md:gap-6">
+        {imageSection}
+        <div className="text-sm text-muted">
+          <div className="flex min-h-[min(calc(100dvh-7rem),34rem)] flex-col gap-6 pb-[calc(100px+5.5rem)] md:min-h-0 md:pb-[calc(100px+4.5rem)]">
+            {descriptionSection != null ? (
+              <div className="min-h-0 flex-1">{descriptionSection}</div>
+            ) : imageSection != null ? (
+              <div className="min-h-0 flex-1" aria-hidden />
+            ) : null}
+            <div className="sticky bottom-[100px] z-[11] shrink-0 border-t border-border bg-background/95 pt-3 supports-[backdrop-filter]:bg-background/80 supports-[backdrop-filter]:backdrop-blur-sm">
+              {pricingSection}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      {imageSection}
+      {descriptionSection}
+      {pricingSection}
+    </div>
+  )
+}
+
 function SubItemDetailsBody({
   item,
   servicesBlockBookingUrl,
@@ -456,8 +546,10 @@ export default function ServicesBlock({
   const displayItems = adminPreferred ?? cmsItems
   const useModal = Boolean(showModal)
   const resolvedBookCtaLabel = bookCtaLabel?.trim() || 'Reservar'
+  const resolvedMoreInfoLabel = moreInfoLabel?.trim() || 'Más información'
   const resolvedClientId = clientId ?? process.env.CLIENT_ID ?? null
   const [bookingServiceId, setBookingServiceId] = useState<string | null>(null)
+  const [infoService, setInfoService] = useState<Service | null>(null)
   const bookingServiceName =
     bookingServiceId != null
       ? displayItems.find(item => item.bookingServiceId === bookingServiceId)?.title
@@ -494,11 +586,44 @@ export default function ServicesBlock({
                     <Stack gap="sm">
                       <h3 className="text-xl font-semibold text-brand">{service.title}</h3>
                       {service.description !== '' ? (
-                        <p className="text-muted">{service.description}</p>
+                        <p className="line-clamp-2 overflow-hidden text-muted">{service.description}</p>
                       ) : null}
-                      {service.price != null && service.price !== '' && (
-                        <p className="text-base font-medium text-foreground">{service.price}</p>
-                      )}
+                      {(service.price != null && service.price !== '') || service.bookingServiceId ? (
+                        <div
+                          className={
+                            service.price != null &&
+                            service.price !== '' &&
+                            service.bookingServiceId
+                              ? 'flex flex-wrap items-center justify-between gap-x-3 gap-y-2'
+                              : 'flex flex-wrap items-center justify-end gap-x-3 gap-y-2'
+                          }
+                        >
+                          {service.price != null && service.price !== '' ? (
+                            <p className="min-w-0 text-base font-medium text-foreground">
+                              {service.price}
+                            </p>
+                          ) : null}
+                          {service.bookingServiceId ? (
+                            <Button
+                              label={resolvedBookCtaLabel}
+                              variant="primary"
+                              size="md"
+                              onClick={() => setBookingServiceId(service.bookingServiceId ?? null)}
+                            />
+                          ) : null}
+                        </div>
+                      ) : null}
+                      {serviceHasInfoModalContent(service) ? (
+                        <button
+                          type="button"
+                          onClick={() => setInfoService(service)}
+                          className="self-start text-xs text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                          aria-haspopup="dialog"
+                          aria-label={`${resolvedMoreInfoLabel} sobre ${service.title}`}
+                        >
+                          {resolvedMoreInfoLabel}
+                        </button>
+                      ) : null}
                       {service.subItems != null && service.subItems.length > 0 ? (
                         useModal ? (
                           <ServiceSubItemsModalList subItems={service.subItems} fallbackBookingUrl={bookingUrl} moreInfoLabel={moreInfoLabel} />
@@ -509,16 +634,6 @@ export default function ServicesBlock({
                           />
                         )
                       ) : null}
-                      {service.bookingServiceId ? (
-                        <div className="pt-2">
-                          <Button
-                            label={resolvedBookCtaLabel}
-                            variant="primary"
-                            size="md"
-                            onClick={() => setBookingServiceId(service.bookingServiceId ?? null)}
-                          />
-                        </div>
-                      ) : null}
                     </Stack>
                   </div>
                 </article>
@@ -527,6 +642,26 @@ export default function ServicesBlock({
           </section>
         </Container>
       </Section>
+
+      <Modal
+        isOpen={infoService != null}
+        onClose={() => setInfoService(null)}
+        title={infoService?.title}
+      >
+        {infoService ? (
+          <ServiceInfoModalBody
+            service={infoService}
+            bookCtaLabel={resolvedBookCtaLabel}
+            onBook={() => {
+              const serviceId = infoService.bookingServiceId
+              setInfoService(null)
+              if (serviceId != null) {
+                setBookingServiceId(serviceId)
+              }
+            }}
+          />
+        ) : null}
+      </Modal>
 
       <Modal
         isOpen={bookingServiceId != null}

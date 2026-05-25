@@ -1,5 +1,6 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,6 +11,8 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children, size = "default" }: ModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!isOpen) return;
     document.body.style.overflow = "hidden";
@@ -17,6 +20,17 @@ export function Modal({ isOpen, onClose, title, children, size = "default" }: Mo
       document.body.style.overflow = "";
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    if (typeof panel.scrollTo === "function") {
+      panel.scrollTo(0, 0);
+    } else {
+      panel.scrollTop = 0;
+    }
+  }, [isOpen, title]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -29,12 +43,12 @@ export function Modal({ isOpen, onClose, title, children, size = "default" }: Mo
 
   if (!isOpen) return null;
 
-  return (
+  const modal = (
     <div
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-50 flex items-end md:items-center justify-center"
+      className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4"
     >
       {/* Desktop backdrop */}
       <div
@@ -45,6 +59,7 @@ export function Modal({ isOpen, onClose, title, children, size = "default" }: Mo
 
       {/* Modal panel */}
       <div
+        ref={panelRef}
         data-component="modal"
         className={[
           "relative z-10 bg-background overflow-y-auto",
@@ -115,4 +130,7 @@ export function Modal({ isOpen, onClose, title, children, size = "default" }: Mo
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modal, document.body);
 }

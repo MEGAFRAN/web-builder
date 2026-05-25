@@ -25,7 +25,6 @@ const SOLO_BEAUTY_BLOCK_TYPES = [
   'navbar',
   'heroBlock',
   'services',
-  'reservationBlock',
   'testimonialsBlock',
   'location',
   'contactInfoBlock',

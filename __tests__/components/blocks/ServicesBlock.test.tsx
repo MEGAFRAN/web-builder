@@ -9,14 +9,6 @@ function jsonResponse(data: unknown): Response {
   } as Response
 }
 
-async function renderServicesBlock(ui: Parameters<typeof render>[0]) {
-  const utils = render(ui)
-  await act(async () => {
-    await new Promise<void>(resolve => setTimeout(resolve, 0))
-  })
-  return utils
-}
-
 describe('ServicesBlock', () => {
   const items = [
     { title: 'Corte de pelo', description: 'Corte clásico o moderno' },
@@ -24,6 +16,25 @@ describe('ServicesBlock', () => {
   ]
 
   let fetchSpy: ReturnType<typeof vi.spyOn>
+
+  async function flushServicesBlockCatalog() {
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalled()
+    })
+    await act(async () => {
+      const pendingFetch = fetchSpy.mock.results.at(-1)?.value
+      if (pendingFetch instanceof Promise) {
+        await pendingFetch
+      }
+      await new Promise<void>(resolve => setTimeout(resolve, 0))
+    })
+  }
+
+  async function renderServicesBlock(ui: Parameters<typeof render>[0]) {
+    const utils = render(ui)
+    await flushServicesBlockCatalog()
+    return utils
+  }
 
   beforeEach(() => {
     fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
@@ -48,25 +59,25 @@ describe('ServicesBlock', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders all service cards', () => {
-    render(<ServicesBlock _type="services" items={items} />)
+  it('renders all service cards', async () => {
+    await renderServicesBlock(<ServicesBlock _type="services" items={items} />)
     expect(screen.getByText('Corte de pelo')).toBeInTheDocument()
     expect(screen.getByText('Coloración')).toBeInTheDocument()
   })
 
-  it('renders descriptions for each service', () => {
-    render(<ServicesBlock _type="services" items={items} />)
+  it('renders descriptions for each service', async () => {
+    await renderServicesBlock(<ServicesBlock _type="services" items={items} />)
     expect(screen.getByText('Corte clásico o moderno')).toBeInTheDocument()
     expect(screen.getByText('Tintes y mechas')).toBeInTheDocument()
   })
 
-  it('renders empty state when items array is empty', () => {
-    render(<ServicesBlock _type="services" items={[]} />)
+  it('renders empty state when items array is empty', async () => {
+    await renderServicesBlock(<ServicesBlock _type="services" items={[]} />)
     expect(screen.queryByRole('article')).not.toBeInTheDocument()
   })
 
-  it('renders price as free-form string', () => {
-    render(
+  it('renders price as free-form string', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         items={[
@@ -81,8 +92,8 @@ describe('ServicesBlock', () => {
     expect(screen.getByText('desde 50 euros')).toBeInTheDocument()
   })
 
-  it('renders subItems as an accordion with expandable details', () => {
-    render(
+  it('renders subItems as an accordion with expandable details', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         items={[
@@ -129,8 +140,8 @@ describe('ServicesBlock', () => {
     expect(firstBtn).toHaveAttribute('aria-expanded', 'false')
   })
 
-  it('opens a modal with subItem details when showModal is true', () => {
-    render(
+  it('opens a modal with subItem details when showModal is true', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -168,8 +179,8 @@ describe('ServicesBlock', () => {
     expect(detailsBtn).not.toHaveAttribute('aria-expanded')
   })
 
-  it('renders subItem imageUrl inside the modal body above details', () => {
-    render(
+  it('renders subItem imageUrl inside the modal body above details', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -205,8 +216,8 @@ describe('ServicesBlock', () => {
     expect(screen.getByText('Enfoque en tensiones profundas.')).toBeInTheDocument()
   })
 
-  it('shows "Más información" cta below label when item has description', () => {
-    render(
+  it('shows "Más información" cta below label when item has description', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -232,8 +243,8 @@ describe('ServicesBlock', () => {
     expect(screen.queryByRole('button', { name: /más información sobre sin detalles/i })).not.toBeInTheDocument()
   })
 
-  it('uses moreInfoLabel prop as the cta text instead of the default', () => {
-    render(
+  it('uses moreInfoLabel prop as the cta text instead of the default', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -257,8 +268,8 @@ describe('ServicesBlock', () => {
     expect(screen.queryByText('Más información')).not.toBeInTheDocument()
   })
 
-  it('stacks duration, price and Reservar below the label and more-info CTA in modal list', () => {
-    render(
+  it('stacks duration, price and Reservar below the label and more-info CTA in modal list', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -283,8 +294,8 @@ describe('ServicesBlock', () => {
     expect(screen.getByText('30 min')).toBeInTheDocument()
   })
 
-  it('renders multiple stacked pricing rows when pricingRows is set', () => {
-    render(
+  it('renders multiple stacked pricing rows when pricingRows is set', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -319,8 +330,8 @@ describe('ServicesBlock', () => {
     )
   })
 
-  it('uses services block bookingUrl for a pricing row when row omits bookingUrl', () => {
-    render(
+  it('uses services block bookingUrl for a pricing row when row omits bookingUrl', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -353,8 +364,8 @@ describe('ServicesBlock', () => {
     expect(links[1]).toHaveAttribute('href', 'https://booksy.com/default')
   })
 
-  it('renders a Reservar link when bookingUrl is provided', () => {
-    render(
+  it('renders a Reservar link when bookingUrl is provided', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -383,8 +394,8 @@ describe('ServicesBlock', () => {
     expect(screen.queryByRole('button', { name: /ver detalles/i })).not.toBeInTheDocument()
   })
 
-  it('does not render Reservar link when bookingUrl is absent', () => {
-    render(
+  it('does not render Reservar link when bookingUrl is absent', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -401,8 +412,8 @@ describe('ServicesBlock', () => {
     expect(screen.queryByRole('link', { name: 'Reservar' })).not.toBeInTheDocument()
   })
 
-  it('uses block-level bookingUrl as fallback for all sub-item rows', () => {
-    render(
+  it('uses block-level bookingUrl as fallback for all sub-item rows', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -425,8 +436,8 @@ describe('ServicesBlock', () => {
     links.forEach((link) => expect(link).toHaveAttribute('href', 'https://booksy.com/test'))
   })
 
-  it('item-level bookingUrl takes priority over block-level bookingUrl', () => {
-    render(
+  it('item-level bookingUrl takes priority over block-level bookingUrl', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         showModal
@@ -451,8 +462,8 @@ describe('ServicesBlock', () => {
     expect(link).toHaveAttribute('href', 'https://booksy.com/item-specific')
   })
 
-  it('expands subItem with description title only (no items array)', () => {
-    render(
+  it('expands subItem with description title only (no items array)', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         items={[
@@ -478,8 +489,8 @@ describe('ServicesBlock', () => {
     expect(screen.getByText('Solo párrafo introductorio, sin lista.')).toBeInTheDocument()
   })
 
-  it('supports legacy string subItems as accordion labels', () => {
-    render(
+  it('supports legacy string subItems as accordion labels', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         items={[
@@ -497,8 +508,8 @@ describe('ServicesBlock', () => {
     expect(screen.getByRole('button', { name: /relajante/i })).toBeInTheDocument()
   })
 
-  it('renders service image with alt text', () => {
-    render(
+  it('renders service image with alt text', async () => {
+    await renderServicesBlock(
       <ServicesBlock
         _type="services"
         items={[
@@ -663,5 +674,115 @@ describe('ServicesBlock', () => {
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Book now' })).toBeInTheDocument()
     })
+  })
+
+  it('shows "Más información" below the price row for catalog-backed services', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: 'el mejor blower del pais',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" clientId="hair-salon" />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /más información sobre blower/i })).toBeInTheDocument()
+    })
+
+    const priceRow = screen.getByText('60 min · €100').closest('div')
+    const moreInfoButton = screen.getByRole('button', { name: /más información sobre blower/i })
+    expect(priceRow?.compareDocumentPosition(moreInfoButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('opens an info modal with service details and a booking CTA', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: 'el mejor blower del pais',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" clientId="hair-salon" />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /más información sobre blower/i })).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /más información sobre blower/i }))
+
+    const infoDialog = screen.getByRole('dialog')
+    expect(within(infoDialog).getByRole('heading', { name: 'blower' })).toBeInTheDocument()
+    expect(within(infoDialog).getByText('el mejor blower del pais')).toBeInTheDocument()
+    expect(within(infoDialog).getByText('60 min · €100')).toBeInTheDocument()
+    expect(within(infoDialog).getAllByRole('button', { name: 'Reservar' })).toHaveLength(1)
+  })
+
+  it('opens the booking modal when Reservar is clicked inside the info modal', async () => {
+    fetchSpy.mockImplementation((input: Parameters<typeof fetch>[0]) => {
+      const url = typeof input === 'string' ? input : input instanceof Request ? input.url : input.href
+      if (url.includes('/api/booking-services')) {
+        return Promise.resolve(
+          jsonResponse({
+            services: [
+              {
+                id: 'svc-1',
+                name: 'blower',
+                description: 'el mejor blower del pais',
+                durationMinutes: 60,
+                price: 100,
+                currency: '€',
+              },
+            ],
+          }),
+        )
+      }
+      return Promise.reject(new Error(`Unexpected fetch: ${url}`))
+    })
+
+    await renderServicesBlock(<ServicesBlock _type="services" heading="Services" clientId="hair-salon" />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /más información sobre blower/i })).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /más información sobre blower/i }))
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Reservar' }))
+
+    await waitFor(() => {
+      expect(document.getElementById('res-date')).toBeInTheDocument()
+    })
+
+    const bookingDialog = screen.getByRole('dialog')
+    expect(bookingDialog).toBeInTheDocument()
+    expect(within(bookingDialog).getByRole('heading', { name: 'blower' })).toBeInTheDocument()
   })
 })

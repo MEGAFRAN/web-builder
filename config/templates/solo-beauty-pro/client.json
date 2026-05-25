@@ -41,7 +41,7 @@
       },
       {
         "label": "Book",
-        "href": "#book",
+        "href": "#services",
         "icon": "public/calendar.svg",
         "iconColor": "#ffffff"
       }

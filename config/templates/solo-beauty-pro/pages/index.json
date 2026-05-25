@@ -11,13 +11,13 @@
       "logo": "{{businessName}}",
       "links": [
         { "label": "Services", "href": "#services" },
-        { "label": "Book", "href": "#book" },
+        { "label": "Book", "href": "#services" },
         { "label": "Reviews", "href": "#reviews" },
         { "label": "Location", "href": "#location" },
         { "label": "Contact", "href": "#contact" }
       ],
       "ctaLabel": "Book Now",
-      "ctaAction": "#book",
+      "ctaAction": "#services",
       "placeholderCopy": {
         "logo": "Business name shown in the navbar"
       }
@@ -29,7 +29,7 @@
       "primaryButtonLabel": "View Services",
       "primaryButtonHref": "#services",
       "secondaryButtonLabel": "Book Appointment",
-      "secondaryButtonHref": "#book",
+      "secondaryButtonHref": "#services",
       "backgroundImageUrl": "https://picsum.photos/seed/solo-beauty-hero/1600/900",
       "placeholderCopy": {
         "heading": "Primary hero headline — business name",
@@ -39,17 +39,9 @@
     {
       "_type": "services",
       "heading": "Services",
+      "reservationConfirmationMessage": "Thank you! {{ownerFirstName}} will confirm your appointment shortly.",
       "placeholderCopy": {
         "heading": "Services section title"
-      }
-    },
-    {
-      "_type": "reservationBlock",
-      "heading": "Book with {{ownerFirstName}}",
-      "subtext": "Choose a service and time that works for you. We're open {{bookingHoursWeekday}}.",
-      "confirmationMessage": "Thank you! {{ownerFirstName}} will confirm your appointment shortly.",
-      "placeholderCopy": {
-        "heading": "Booking section headline with owner first name"
       }
     },
     {

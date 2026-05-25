@@ -84,7 +84,9 @@ export default function ReservationBlock({
   const cmsServices: ReservationServiceItem[] = servicesProp ?? []
   const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId)
 
-  const [selectedServiceId, setSelectedServiceId] = useState<string>('')
+  const [selectedServiceId, setSelectedServiceId] = useState<string>(
+    initialServiceId ?? '',
+  )
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTime, setSelectedTime] = useState<string>('')
   const [fields, setFields] = useState<FormFields>({
@@ -105,16 +107,16 @@ export default function ReservationBlock({
     email: string
     serviceSummary: string
   } | null>(null)
+  const [prevInitialServiceId, setPrevInitialServiceId] = useState(initialServiceId)
 
-  useEffect(() => {
-    if (initialServiceId) {
-      setSelectedServiceId(initialServiceId)
-      setSelectedDate('')
-      setSelectedTime('')
-      setBookedSlots([])
-      setOutOfWindowSlots([])
-    }
-  }, [initialServiceId])
+  if (initialServiceId && initialServiceId !== prevInitialServiceId) {
+    setPrevInitialServiceId(initialServiceId)
+    setSelectedServiceId(initialServiceId)
+    setSelectedDate('')
+    setSelectedTime('')
+    setBookedSlots([])
+    setOutOfWindowSlots([])
+  }
 
   const adminPreferred =
     catalogLoaded && liveCatalog !== null && liveCatalog.length > 0 ? liveCatalog : null

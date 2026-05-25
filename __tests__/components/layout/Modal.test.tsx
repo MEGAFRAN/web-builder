@@ -51,6 +51,7 @@ describe('Modal', () => {
 
       const dialogEl = screen.getByRole('dialog')
       expect(dialogEl).toBeInTheDocument()
+      expect(dialogEl.parentElement).toBe(document.body)
       expect(dialogEl.firstElementChild).not.toHaveAttribute(
         'data-component',
       )

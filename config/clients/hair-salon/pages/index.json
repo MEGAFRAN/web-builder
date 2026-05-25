@@ -34,12 +34,6 @@
       "heading": "Services"
     },
     {
-      "_type": "reservationBlock",
-      "heading": "Book with Emma",
-      "subtext": "Choose a service and time that works for you. We're open 9:00 AM - 6:00 PM.",
-      "confirmationMessage": "Thank you! Emma will confirm your appointment shortly."
-    },
-    {
       "_type": "testimonialsBlock",
       "heading": "What Clients Say",
       "items": [
