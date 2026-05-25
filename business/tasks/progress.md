@@ -4,8 +4,8 @@ DONE: business/tasks/done/11-vertical-tag-placeholder-schema.md
 DONE: business/tasks/done/09-solo-beauty-pro-starter-template.md
 DONE: business/tasks/done/18-service-duration-variations-admin
 DONE: business/tasks/done/19-company-profile-settings.
+TODO: business/tasks/done/03-setup-cosmos-db-admin-containers.md
 
-TODO: business/tasks/03-setup-cosmos-db-admin-containers.md
 TODO: business/tasks/04-implement-admin-azure-functions.md
 TODO: business/tasks/05-configure-admin-deploy-pipeline.md
 TODO: business/tasks/06-stripe-checkout-customer-portal-integration.md
