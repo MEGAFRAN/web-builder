@@ -2,16 +2,6 @@ name: Deploy Admin SPA
 
 on:
   workflow_dispatch:
-    inputs:
-      adminApiUrl:
-        description: 'Azure Functions base URL (overrides ADMIN_API_URL variable)'
-        required: false
-        type: string
-      buildClientId:
-        description: 'Client ID for theme CSS at build time (overrides ADMIN_BUILD_CLIENT_ID variable)'
-        required: false
-        type: string
-        default: '1'
 
 permissions:
   contents: read
@@ -34,9 +24,9 @@ jobs:
         env:
           SWA_TOKEN: ${{ secrets.SWA_TOKEN_ADMIN }}
         run: |
-          ADMIN_API_URL="${{ inputs.adminApiUrl || vars.ADMIN_API_URL }}"
+          ADMIN_API_URL="${{ vars.ADMIN_API_URL }}"
           if [ -z "$ADMIN_API_URL" ]; then
-            echo "::error::ADMIN_API_URL is not set. Add the ADMIN_API_URL repository variable under Settings → Secrets and variables → Actions → Variables, or pass adminApiUrl when triggering this workflow manually."
+            echo "::error::ADMIN_API_URL is not set. Add the ADMIN_API_URL repository variable under Settings → Secrets and variables → Actions → Variables."
             exit 1
           fi
           if [ -z "$SWA_TOKEN" ]; then
@@ -44,7 +34,7 @@ jobs:
             exit 1
           fi
           echo "NEXT_PUBLIC_ADMIN_API_URL=$ADMIN_API_URL" >> "$GITHUB_ENV"
-          echo "CLIENT_ID=${{ inputs.buildClientId || vars.ADMIN_BUILD_CLIENT_ID || '1' }}" >> "$GITHUB_ENV"
+          echo "CLIENT_ID=${{ vars.ADMIN_BUILD_CLIENT_ID || '1' }}" >> "$GITHUB_ENV"
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
