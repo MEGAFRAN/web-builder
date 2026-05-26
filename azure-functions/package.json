@@ -8,7 +8,8 @@
     "watch": "tsc --watch",
     "start": "func start",
     "dev": "npm run build && func start",
-    "test": "npm run build && node --test dist/src/__tests__/*.test.js"
+    "test": "npm run build && node --test dist/src/__tests__/*.test.js",
+    "deploy": "func azure functionapp publish web-builder-api"
   },
   "dependencies": {
     "@azure/cosmos": "^4.1.1",

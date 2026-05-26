@@ -63,13 +63,13 @@ async function handler(
 
     return jsonResponse(200, origin, methods, { ok: true, reservation: updated })
   } catch (err) {
-    return handleHttpError(err, origin, methods, 'admin/reservations/:id', context)
+    return handleHttpError(err, origin, methods, 'mgmt/reservations/:id', context)
   }
 }
 
 app.http('adminReservationById', {
   methods: ['PATCH', 'OPTIONS'],
   authLevel: 'anonymous',
-  route: 'admin/reservations/{id}',
+  route: 'mgmt/reservations/{id}',
   handler,
 })

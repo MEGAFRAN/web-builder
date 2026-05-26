@@ -32,7 +32,7 @@ export function adminAuthUrl(action: 'login' | 'logout' | 'me'): string {
 /** @param path Admin resource path starting with `/`, e.g. `/reservations` or `/schedule?id=x`. */
 export function adminDataUrl(path: string): string {
   if (REMOTE_BASE) {
-    return `${REMOTE_BASE}/admin${path}`
+    return `${REMOTE_BASE}/mgmt${path}`
   }
   return `/api/admin${path}`
 }

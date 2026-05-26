@@ -43,7 +43,7 @@ async function fetchRemoteCompanyProfile(clientId: string): Promise<CompanyProfi
 
   try {
     const res = await fetch(
-      `${remoteBase}/admin/company-profile?clientId=${encodeURIComponent(clientId)}`,
+      `${remoteBase}/mgmt/company-profile?clientId=${encodeURIComponent(clientId)}`,
       {
         headers: { Authorization: `Bearer ${token}` },
         cache: 'no-store',

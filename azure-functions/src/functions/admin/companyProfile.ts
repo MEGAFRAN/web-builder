@@ -185,7 +185,7 @@ async function handler(
         jsonBody: { error: err.message },
       }
     }
-    context.error('[admin/company-profile] request failed:', err)
+    context.error('[mgmt/company-profile] request failed:', err)
     return {
       status: 500,
       headers: corsHeaders(origin),
@@ -197,6 +197,6 @@ async function handler(
 app.http('adminCompanyProfile', {
   methods: ['GET', 'PUT', 'OPTIONS'],
   authLevel: 'anonymous',
-  route: 'admin/company-profile',
+  route: 'mgmt/company-profile',
   handler,
 })

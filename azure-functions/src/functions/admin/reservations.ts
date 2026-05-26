@@ -136,13 +136,13 @@ async function handler(
 
     return jsonResponse(405, origin, methods, { error: 'Method not allowed.' })
   } catch (err) {
-    return handleHttpError(err, origin, methods, 'admin/reservations', context)
+    return handleHttpError(err, origin, methods, 'mgmt/reservations', context)
   }
 }
 
 app.http('adminReservations', {
   methods: ['GET', 'POST', 'OPTIONS'],
   authLevel: 'anonymous',
-  route: 'admin/reservations',
+  route: 'mgmt/reservations',
   handler,
 })

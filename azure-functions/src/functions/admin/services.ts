@@ -47,13 +47,13 @@ async function handler(
 
     return jsonResponse(405, origin, methods, { error: 'Method not allowed.' })
   } catch (err) {
-    return handleHttpError(err, origin, methods, 'admin/services', context)
+    return handleHttpError(err, origin, methods, 'mgmt/services', context)
   }
 }
 
 app.http('adminServices', {
   methods: ['GET', 'PUT', 'OPTIONS'],
   authLevel: 'anonymous',
-  route: 'admin/services',
+  route: 'mgmt/services',
   handler,
 })

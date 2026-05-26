@@ -114,7 +114,7 @@ describe('getCompanyProfile', () => {
 
     await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
     expect(fetch).toHaveBeenCalledWith(
-      'https://fn.example.com/admin/company-profile?clientId=hair-salon',
+      'https://fn.example.com/mgmt/company-profile?clientId=hair-salon',
       {
         headers: { Authorization: 'Bearer build-token' },
         cache: 'no-store',

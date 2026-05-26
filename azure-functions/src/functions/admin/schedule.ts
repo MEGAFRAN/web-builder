@@ -163,13 +163,13 @@ async function handler(
 
     return jsonResponse(405, origin, methods, { error: 'Method not allowed.' })
   } catch (err) {
-    return handleHttpError(err, origin, methods, 'admin/schedule', context)
+    return handleHttpError(err, origin, methods, 'mgmt/schedule', context)
   }
 }
 
 app.http('adminSchedule', {
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   authLevel: 'anonymous',
-  route: 'admin/schedule',
+  route: 'mgmt/schedule',
   handler,
 })

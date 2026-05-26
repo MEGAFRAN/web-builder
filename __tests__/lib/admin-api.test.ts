@@ -71,7 +71,7 @@ describe('admin-api', () => {
       vi.stubEnv('NEXT_PUBLIC_ADMIN_API_URL', 'https://fn.example.com')
       const { adminDataUrl } = await import('@/lib/admin-api')
 
-      expect(adminDataUrl('/schedule?id=x')).toBe('https://fn.example.com/admin/schedule?id=x')
+      expect(adminDataUrl('/schedule?id=x')).toBe('https://fn.example.com/mgmt/schedule?id=x')
     })
   })
 
