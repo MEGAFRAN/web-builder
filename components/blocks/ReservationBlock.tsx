@@ -76,13 +76,14 @@ export default function ReservationBlock({
   confirmationMessage,
   clientId,
   availabilityEndpoint,
+  servicesEndpoint,
   initialServiceId,
   embedded,
   hideHeading,
   skipServiceSelection,
 }: ReservationBlockProps) {
   const cmsServices: ReservationServiceItem[] = servicesProp ?? []
-  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId)
+  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId, servicesEndpoint)
 
   const [selectedServiceId, setSelectedServiceId] = useState<string>(
     initialServiceId ?? '',

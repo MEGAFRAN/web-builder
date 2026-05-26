@@ -124,6 +124,17 @@
         }
       ]
     },
+    "servicesEndpoint": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "placeholderCopy": {
       "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }

@@ -11,7 +11,7 @@ const HERO_CTA_CLASS =
   "rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 const MOBILE_FULL_VIEWPORT_SECTION_CLASS =
-  "max-md:min-h-[calc(100dvh-7rem)] max-md:flex max-md:flex-col max-md:justify-center";
+  "max-md:min-h-[calc(100svh-7rem)] max-md:flex max-md:flex-col max-md:justify-center";
 
 const HERO_VISUAL_BG_SECTION_CLASS = "relative isolate overflow-hidden";
 

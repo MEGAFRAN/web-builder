@@ -122,7 +122,7 @@ describe('Hero', () => {
     it('applies mobile full-viewport classes to the section when enabled', () => {
       const container = renderHero({ headline: 'H', fullViewportHeightMobile: true })
       const section = container.querySelector('[data-component="section"]')
-      expect(section?.className).toContain('max-md:min-h-[calc(100dvh-7rem)]')
+      expect(section?.className).toContain('max-md:min-h-[calc(100svh-7rem)]')
       expect(section?.className).toContain('max-md:flex')
       expect(section?.className).toContain('max-md:justify-center')
     })
@@ -130,7 +130,7 @@ describe('Hero', () => {
     it('does not apply mobile full-viewport classes by default', () => {
       const container = renderHero({ headline: 'H' })
       const section = container.querySelector('[data-component="section"]')
-      expect(section?.className).not.toContain('max-md:min-h-[calc(100dvh-7rem)]')
+      expect(section?.className).not.toContain('max-md:min-h-[calc(100svh-7rem)]')
     })
   })
 

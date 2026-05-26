@@ -249,7 +249,9 @@ For deployed environments, dynamic behavior is handled by Azure Functions config
 | Mechanism | Purpose |
 |-----------|---------|
 | `client.json` → `reservationEndpoint` | POST target for reservation submissions. If unset, the booking widget calls the local Route Handler (dev only). |
+| `client.json` → `bookingServicesEndpoint` | Optional full URL override for the services catalog. If unset, deploy uses `ADMIN_API_URL` + `/booking-services`. |
 | `reservationBlock` → `availabilityEndpoint` | GET target for booked-slot queries. If unset, calls local `/api/availability` (dev only). |
+| `NEXT_PUBLIC_BOOKING_API_URL` | Azure Functions base URL for the public services catalog, baked into client site bundles at blob build time. |
 | `reservationBlock` → `clientId` | Scopes availability and reservation records to this tenant. |
 | `NEXT_PUBLIC_ADMIN_API_URL` | Azure Functions base URL for the admin SPA. If unset, admin SPA calls local Route Handlers (dev only). |
 

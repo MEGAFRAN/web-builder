@@ -785,9 +785,10 @@ export default function ServicesBlock({
   clientId,
   bookCtaLabel,
   reservationConfirmationMessage,
+  servicesEndpoint,
 }: ServicesBlockType) {
   const cmsItems = items ?? []
-  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId)
+  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId, servicesEndpoint)
   const adminPreferred =
     catalogLoaded && liveCatalog !== null && liveCatalog.length > 0
       ? mapBookingServicesToCmsServices(liveCatalog)

@@ -19,6 +19,10 @@
       "description": "Specifies the business industry vertical for template organization."
     },
     "contactEndpoint": { "type": "string" },
+    "bookingServicesEndpoint": {
+      "type": "string",
+      "description": "Optional full URL for the public services catalog. When omitted, deploy uses ADMIN_API_URL + /booking-services."
+    },
     "externalReviewUrl": { "type": "string" },
     "externalReviewPlatform": { "type": "string" },
     "features": {

@@ -254,6 +254,17 @@
         }
       ]
     },
+    "servicesEndpoint": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "bookCtaLabel": {
       "description": "CTA label on each catalog-backed service card. Defaults to \"Reservar\" when omitted.",
       "oneOf": [

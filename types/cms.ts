@@ -67,6 +67,12 @@ export type ServicesBlock = {
    */
   items?: Service[] | null
   clientId?: string | null
+  /**
+   * URL of the services catalog endpoint.
+   * When set (production), called directly from the browser (e.g. Azure Function URL).
+   * When absent, uses NEXT_PUBLIC_BOOKING_API_URL or local /api/booking-services.
+   */
+  servicesEndpoint?: string | null
   /** CTA label on each catalog-backed service card. Defaults to "Reservar". */
   bookCtaLabel?: string | null
   /** Optional success message when booking from the services modal. */
@@ -492,6 +498,12 @@ export type ReservationBlock = {
    * When absent (local dev), falls back to the Next.js /api/availability route.
    */
   availabilityEndpoint?: string | null
+  /**
+   * URL of the services catalog endpoint.
+   * When set (production), called directly from the browser (e.g. Azure Function URL).
+   * When absent, uses NEXT_PUBLIC_BOOKING_API_URL or local /api/booking-services.
+   */
+  servicesEndpoint?: string | null
   /** Pre-select a service (e.g. opened from ServicesBlock booking CTA). Not stored in CMS JSON. */
   initialServiceId?: string | null
   /** Compact layout for modal embedding. Not stored in CMS JSON. */
@@ -637,6 +649,7 @@ export type ClientConfig = {
   siteMetadata?: SiteMetadata | null
   contactEndpoint?: string
   reservationEndpoint?: string
+  bookingServicesEndpoint?: string
   externalReviewUrl?: string
   externalReviewPlatform?: string
 }

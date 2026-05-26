@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       clientId:
-        description: 'Client ID to rebuild (e.g. internal-portfolio-francisco)'
+        description: 'Client ID to rebuild (example: test)'
         required: true
         type: string
 
@@ -44,8 +44,32 @@ jobs:
             nextjs-${{ github.event.inputs.clientId }}-
 
       - name: Build static site
+        env:
+          BOOKING_API_URL: ${{ vars.ADMIN_API_URL }}
         run: |
-          echo "CLIENT_ID=${{ github.event.inputs.clientId }}" > .env.local
+          CLIENT_ID="${{ github.event.inputs.clientId }}"
+          if [ -z "$BOOKING_API_URL" ]; then
+            echo "::error::ADMIN_API_URL repository variable is not set. Add it under Settings → Secrets and variables → Actions → Variables (same Azure Functions base URL used by deploy-admin.yml)."
+            exit 1
+          fi
+          BOOKING_SERVICES_ENDPOINT=$(node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const file = path.join('config', 'clients', process.argv[1], 'client.json');
+            try {
+              const cfg = JSON.parse(fs.readFileSync(file, 'utf8'));
+              process.stdout.write(typeof cfg.bookingServicesEndpoint === 'string' ? cfg.bookingServicesEndpoint : '');
+            } catch {
+              process.stdout.write('');
+            }
+          " "$CLIENT_ID")
+          {
+            echo "CLIENT_ID=$CLIENT_ID"
+            echo "NEXT_PUBLIC_BOOKING_API_URL=$BOOKING_API_URL"
+            if [ -n "$BOOKING_SERVICES_ENDPOINT" ]; then
+              echo "NEXT_PUBLIC_BOOKING_SERVICES_ENDPOINT=$BOOKING_SERVICES_ENDPOINT"
+            fi
+          } > .env.local
           npm run build:blob
 
       - name: Azure Login

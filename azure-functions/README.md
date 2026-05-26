@@ -8,6 +8,7 @@ Node.js/TypeScript Azure Functions v4 that power the public booking widget and t
 
 | Method | Route | Description |
 |--------|-------|-------------|
+| GET | `/booking-services?clientId=` | Return the bookable services catalog for a client |
 | POST | `/reservations` | Create a reservation |
 | GET | `/availability?clientId=&date=YYYY-MM-DD` | Return booked time slots for a date |
 
@@ -117,10 +118,13 @@ In `config/clients/{clientId}/client.json`:
 ```json
 {
   "features": { "booking": true },
-  "reservationEndpoint": "https://<function-app>.azurewebsites.net/api/reservations"
+  "reservationEndpoint": "https://<function-app>.azurewebsites.net/api/reservations",
+  "bookingServicesEndpoint": "https://<function-app>.azurewebsites.net/api/booking-services"
 }
 ```
 
 For the admin SPA, set `NEXT_PUBLIC_ADMIN_API_URL` to the Function App base URL in the deployed environment.
+
+For client site blob builds, set the repository variable `ADMIN_API_URL` to the same Function App base URL (including `/api` if that is your Functions route prefix). The deploy workflow bakes it into the static bundle as `NEXT_PUBLIC_BOOKING_API_URL`. Omit `bookingServicesEndpoint` in `client.json` to use `{ADMIN_API_URL}/booking-services` automatically.
 
 Then add a page using the `reservationBlock` type (or inherit from `restaurant-standard` template which includes `/reservas`).
