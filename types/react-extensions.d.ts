@@ -4,6 +4,8 @@
 import 'react'
 
 declare module 'react' {
+  // Generic parameter required to match HTMLAttributes; not referenced in augmentation.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface HTMLAttributes<T> {
     inert?: '' | undefined
   }

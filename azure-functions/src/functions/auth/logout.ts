@@ -4,8 +4,9 @@ import { corsHeaders } from '../../http/responseHelpers'
 
 async function handler(
   request: HttpRequest,
-  _context: InvocationContext,
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
+  void context
   const origin = request.headers.get('origin')
 
   if (request.method === 'OPTIONS') {

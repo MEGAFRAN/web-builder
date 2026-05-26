@@ -1,8 +1,8 @@
 import { describe, it, afterEach } from 'node:test'
 import assert from 'node:assert/strict'
-import { buildSetCookieHeader, useCrossSiteAdminCookie } from '../auth/setCookie'
+import { buildSetCookieHeader, isCrossSiteAdminCookieEnabled } from '../auth/setCookie'
 
-describe('useCrossSiteAdminCookie', () => {
+describe('isCrossSiteAdminCookieEnabled', () => {
   const prev = {
     NODE_ENV: process.env.NODE_ENV,
     WEBSITE_SITE_NAME: process.env.WEBSITE_SITE_NAME,
@@ -19,14 +19,14 @@ describe('useCrossSiteAdminCookie', () => {
     delete process.env.NODE_ENV
     delete process.env.ADMIN_COOKIE_CROSS_SITE
     process.env.WEBSITE_SITE_NAME = 'my-function-app'
-    assert.equal(useCrossSiteAdminCookie(), true)
+    assert.equal(isCrossSiteAdminCookieEnabled(), true)
   })
 
   it('returns false in plain local dev without overrides', () => {
     delete process.env.NODE_ENV
     delete process.env.WEBSITE_SITE_NAME
     delete process.env.ADMIN_COOKIE_CROSS_SITE
-    assert.equal(useCrossSiteAdminCookie(), false)
+    assert.equal(isCrossSiteAdminCookieEnabled(), false)
   })
 })
 

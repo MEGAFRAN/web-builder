@@ -74,9 +74,9 @@ describe('/api/admin/services', () => {
     })
 
     it.each([
-      [{ services: haircut }, 'non-array envelope'],
-      [
-        {
+      { body: { services: haircut }, label: 'non-array envelope' },
+      {
+        body: {
           services: [
             {
               ...haircut,
@@ -84,10 +84,10 @@ describe('/api/admin/services', () => {
             },
           ],
         },
-        'non-finite price',
-      ],
-      [
-        {
+        label: 'non-finite price',
+      },
+      {
+        body: {
           services: [
             {
               ...haircut,
@@ -95,9 +95,9 @@ describe('/api/admin/services', () => {
             },
           ],
         },
-        'durationMinutes below minimum',
-      ],
-    ])('returns 422 when %s (#%#)', async (body, _label) => {
+        label: 'durationMinutes below minimum',
+      },
+    ])('returns 422 when $label (#%#)', async ({ body }) => {
       const res = await PUT(put(body))
       expect(res.status).toBe(422)
       expect(writeBookingServices).not.toHaveBeenCalled()

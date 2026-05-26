@@ -121,7 +121,6 @@ export function Carousel({
   title,
   items,
   mode,
-  slidesVisible = 1,
   aspectRatio,
   imageFit,
   autoPlay = false,
@@ -135,7 +134,6 @@ export function Carousel({
 }: CarouselBlock) {
   const safeItems = items ?? []
   const count = safeItems.length
-  const visCount = Math.max(1, slidesVisible ?? 1) as 1 | 2 | 3
   const safeInterval = Math.max(2000, autoPlayInterval ?? 4000)
   const transitionType: TransitionType = transition ?? 'slide'
   const isLoop = loop ?? false

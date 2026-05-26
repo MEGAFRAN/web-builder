@@ -5,7 +5,7 @@ import { Image } from '@/components/content/Image'
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
 function renderImage(props: React.ComponentProps<typeof Image>) {
-  const { container } = render(<Image {...props} />)
+  const { container } = render(<Image {...props} alt={props.alt ?? ''} />)
   return container
 }
 

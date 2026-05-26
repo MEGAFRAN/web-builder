@@ -56,6 +56,15 @@ function postRequest(body: unknown) {
   })
 }
 
+function omitField<T extends Record<string, unknown>, K extends keyof T>(
+  body: T,
+  field: K,
+): Omit<T, K> {
+  const rest = { ...body }
+  delete rest[field]
+  return rest
+}
+
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
 describe('POST /api/reservation — input validation', () => {
@@ -93,44 +102,37 @@ describe('POST /api/reservation — input validation', () => {
   })
 
   it('returns 422 when name is missing', async () => {
-    const { name: _, ...rest } = VALID_BODY
-    const res = await POST(postRequest(rest))
+    const res = await POST(postRequest(omitField(VALID_BODY, 'name')))
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when email is missing', async () => {
-    const { email: _, ...rest } = VALID_BODY
-    const res = await POST(postRequest(rest))
+    const res = await POST(postRequest(omitField(VALID_BODY, 'email')))
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when phone is missing', async () => {
-    const { phone: _, ...rest } = VALID_BODY
-    const res = await POST(postRequest(rest))
+    const res = await POST(postRequest(omitField(VALID_BODY, 'phone')))
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when date is missing', async () => {
-    const { date: _, ...rest } = VALID_BODY
-    const res = await POST(postRequest(rest))
+    const res = await POST(postRequest(omitField(VALID_BODY, 'date')))
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when time is missing', async () => {
-    const { time: _, ...rest } = VALID_BODY
-    const res = await POST(postRequest(rest))
+    const res = await POST(postRequest(omitField(VALID_BODY, 'time')))
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when serviceId is missing', async () => {
-    const { serviceId: _, ...rest } = VALID_BODY
-    const res = await POST(postRequest(rest))
+    const res = await POST(postRequest(omitField(VALID_BODY, 'serviceId')))
     expect(res.status).toBe(422)
   })
 
   it('returns 422 when durationMinutes is missing', async () => {
-    const { durationMinutes: _, ...rest } = VALID_BODY
-    const res = await POST(postRequest(rest))
+    const res = await POST(postRequest(omitField(VALID_BODY, 'durationMinutes')))
     expect(res.status).toBe(422)
   })
 
@@ -281,8 +283,7 @@ describe('POST /api/reservation — forwarding to reservationEndpoint', () => {
   it('does not call fetch when the payload is invalid', async () => {
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)
-    const { name: _, ...incomplete } = VALID_BODY
-    await POST(postRequest(incomplete))
+    await POST(postRequest(omitField(VALID_BODY, 'name')))
     expect(fetchMock).not.toHaveBeenCalled()
   })
 

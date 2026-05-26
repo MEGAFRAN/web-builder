@@ -40,7 +40,7 @@ export function useSwipe(
     setSwipeDirection(null)
   }, [])
 
-  const onPointerMove = useCallback((_e: React.PointerEvent) => {
+  const onPointerMove = useCallback(() => {
     // No-op during move — gesture is resolved on pointer up
   }, [])
 

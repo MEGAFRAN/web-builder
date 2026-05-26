@@ -34,10 +34,10 @@ describe('booking-schedule-window', () => {
     })
 
     it.each([
-      [{ from: 'bad', to: '15:00' }, 'bad from'],
-      [{ from: '11:00', to: 'bad' }, 'bad to'],
-      [{ from: '15:00', to: '11:00' }, 'to <= from'],
-    ] as const)('returns null when exception window invalid (%s)', (patch, _why) => {
+      { patch: { from: 'bad', to: '15:00' }, label: 'bad from' },
+      { patch: { from: '11:00', to: 'bad' }, label: 'bad to' },
+      { patch: { from: '15:00', to: '11:00' }, label: 'to <= from' },
+    ])('returns null when exception window invalid ($label)', ({ patch }) => {
       const ex: ScheduleException = {
         id: 'x',
         date: '2026-05-18',

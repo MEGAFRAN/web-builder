@@ -1,4 +1,4 @@
-import type { Block, ClientPage } from '@/types/cms'
+import type { ClientPage } from '@/types/cms'
 
 export function createJSONCMSClient(pages: ClientPage[]) {
   return {

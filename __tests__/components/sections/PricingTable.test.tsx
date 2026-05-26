@@ -172,7 +172,7 @@ describe('PricingTable', () => {
     })
 
     it('applies border-border to the CTA button of a non-highlighted tier', () => {
-      const container = renderPricingTable({ tiers: [TIER_BASIC] })
+      renderPricingTable({ tiers: [TIER_BASIC] })
       const btn = screen.getByRole('button', { name: 'Get Starter' })
       expect(btn.className).toContain('border-border')
     })

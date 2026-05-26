@@ -60,6 +60,7 @@ function CtaFileIcon({
     )
   }
 
+  // eslint-disable-next-line @next/next/no-img-element -- CMS-provided icon URL
   return <img src={src} alt="" aria-hidden width={22} height={22} className="shrink-0" />
 }
 
