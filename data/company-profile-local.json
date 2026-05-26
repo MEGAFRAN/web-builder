@@ -1,15 +1,15 @@
 {
-  "clientId": "hair-salon",
-  "businessName": "Hair Salony",
-  "phone": "+44 207 946 0980",
-  "email": "hello222@salon.com",
+  "clientId": "test",
+  "businessName": "hair salon",
+  "phone": "77738836",
+  "email": "hair22@gmail.com",
   "address": {
-    "street": "calle gascona 20",
+    "street": "calle general elorza 70",
     "city": "oviedo",
     "postalCode": "33002",
     "country": "españa"
   },
-  "hours": "Lun–Sáb 9:00–12:00",
+  "hours": "lunes a viernes: 08:00 a 18:00",
   "logoUrl": null,
   "whatsapp": null
 }

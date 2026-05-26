@@ -14,21 +14,21 @@
     },
     {
       "day": "wed",
-      "open": false,
+      "open": true,
       "from": "09:00",
-      "to": "21:00"
+      "to": "14:00"
     },
     {
       "day": "thu",
-      "open": false,
+      "open": true,
       "from": "09:00",
-      "to": "21:00"
+      "to": "14:00"
     },
     {
       "day": "fri",
-      "open": false,
+      "open": true,
       "from": "09:00",
-      "to": "21:00"
+      "to": "14:00"
     },
     {
       "day": "sat",
