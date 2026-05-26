@@ -6,8 +6,16 @@ import type { Block } from '@/types/cms'
 vi.mock('@/components/componentRegistry', () => ({
   default: {
     hero: ({ title }: { title: string }) => <div data-testid="hero-stub">{title}</div>,
-    services: ({ items }: { items: Array<{ title: string; description: string }> }) => (
-      <div data-testid="services-stub">{items.map(i => i.title).join(', ')}</div>
+    services: ({
+      items,
+      clientId,
+    }: {
+      items: Array<{ title: string; description: string }>
+      clientId?: string | null
+    }) => (
+      <div data-testid="services-stub" data-client-id={clientId ?? ''}>
+        {items.map(i => i.title).join(', ')}
+      </div>
     ),
   },
 }))
@@ -104,5 +112,17 @@ describe('PageRenderer', () => {
     expect(stubs).toHaveLength(2)
     expect(stubs[0]).toHaveTextContent('Alpha')
     expect(stubs[1]).toHaveTextContent('Beta')
+  })
+
+  it('injects clientId into services blocks when omitted from page JSON', () => {
+    const blocks: Block[] = [
+      {
+        _type: 'services',
+        heading: 'Services',
+        items: [{ title: 'Cut', description: 'Haircut' }],
+      },
+    ]
+    render(<PageRenderer blocks={blocks} clientId="test" />)
+    expect(screen.getByTestId('services-stub')).toHaveAttribute('data-client-id', 'test')
   })
 })

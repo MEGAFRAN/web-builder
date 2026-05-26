@@ -12,6 +12,8 @@ import {
 interface PageRendererProps {
   blocks: Block[]
   companyProfile?: CompanyProfile | null
+  /** Deployment tenant id; injected into booking blocks when page JSON omits clientId. */
+  clientId?: string
 }
 
 type BlockWithKey = Block & { _key?: string }
@@ -32,11 +34,26 @@ function mergeBlockWithProfile(block: Block, companyProfile: CompanyProfile | nu
   }
 }
 
-export default function PageRenderer({ blocks, companyProfile = null }: PageRendererProps) {
+function mergeBlockWithClientContext(block: Block, clientId: string): Block {
+  switch (block._type) {
+    case 'services':
+    case 'reservationBlock':
+      return block.clientId ? block : { ...block, clientId }
+    default:
+      return block
+  }
+}
+
+export default function PageRenderer({
+  blocks,
+  companyProfile = null,
+  clientId,
+}: PageRendererProps) {
   return (
     <div>
       {blocks.map((block, i) => {
-        const mergedBlock = mergeBlockWithProfile(block, companyProfile)
+        const withClient = clientId ? mergeBlockWithClientContext(block, clientId) : block
+        const mergedBlock = mergeBlockWithProfile(withClient, companyProfile)
         const Component = componentRegistry[mergedBlock._type]
         if (!Component) {
           console.warn(`PageRenderer: unknown block type "${mergedBlock._type}"`)

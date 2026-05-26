@@ -14,7 +14,7 @@ describe('booking-api', () => {
     it('returns the local Next.js route when no remote env is set', async () => {
       vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')
       vi.stubEnv('NEXT_PUBLIC_BOOKING_SERVICES_ENDPOINT', '')
-      vi.stubEnv('CLIENT_ID', 'test')
+      vi.stubEnv('NEXT_PUBLIC_CLIENT_ID', 'test')
       const { bookingServicesUrl } = await import('@/lib/booking-api')
 
       expect(bookingServicesUrl()).toBe('/api/booking-services?clientId=test')
@@ -66,6 +66,7 @@ describe('booking-api', () => {
 
     it('omits clientId query when no clientId is available', async () => {
       vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')
+      vi.stubEnv('NEXT_PUBLIC_CLIENT_ID', '')
       delete process.env.CLIENT_ID
       const { bookingServicesUrl } = await import('@/lib/booking-api')
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { resolveBuildClientId } from '@/lib/client-id'
 import { BOOKING_MODAL_OPEN_EVENT, type BookingModalOpenDetail } from '@/lib/booking-modal-events'
 import { groupServicesByCategory, formatListedPrice, hasServiceCategories, mapBookingServicesToCmsServices } from '@/lib/booking-catalog'
 import { useBookingServicesCatalog } from '@/lib/hooks/useBookingServicesCatalog'
@@ -797,7 +798,7 @@ export default function ServicesBlock({
   const useModal = Boolean(showModal)
   const resolvedBookCtaLabel = bookCtaLabel?.trim() || 'Reservar'
   const resolvedMoreInfoLabel = moreInfoLabel?.trim() || 'Más información'
-  const resolvedClientId = clientId ?? process.env.CLIENT_ID ?? null
+  const resolvedClientId = resolveBuildClientId(clientId)
   const [bookingOpen, setBookingOpen] = useState(false)
   const [bookingServiceId, setBookingServiceId] = useState<string | null>(null)
   const [infoService, setInfoService] = useState<Service | null>(null)

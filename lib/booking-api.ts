@@ -1,3 +1,5 @@
+import { resolveBuildClientId } from '@/lib/client-id'
+
 /** Azure Functions base URL for public booking APIs; empty uses local Next.js Route Handlers in dev. */
 const REMOTE_BASE = process.env.NEXT_PUBLIC_BOOKING_API_URL?.replace(/\/$/, '') ?? ''
 
@@ -19,7 +21,7 @@ export function bookingServicesUrl(
   clientId?: string | null,
   override?: string | null,
 ): string {
-  const resolvedClientId = clientId?.trim() || process.env.CLIENT_ID?.trim() || null
+  const resolvedClientId = resolveBuildClientId(clientId)
   const explicit = override?.trim() || BAKED_SERVICES_ENDPOINT
   if (explicit) {
     return appendClientIdQuery(explicit, resolvedClientId)

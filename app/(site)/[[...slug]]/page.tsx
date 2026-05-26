@@ -77,7 +77,7 @@ export default async function Page({ params }: PageProps) {
       {heroBackgroundImageUrl && <HeroImagePreload href={heroBackgroundImageUrl} />}
       <JsonLdScript schema={schema} />
       <main>
-        <PageRenderer blocks={page.blocks} companyProfile={profile} />
+        <PageRenderer blocks={page.blocks} companyProfile={profile} clientId={clientId} />
       </main>
     </>
   )

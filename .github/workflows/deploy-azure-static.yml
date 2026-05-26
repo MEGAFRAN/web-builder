@@ -64,6 +64,7 @@ jobs:
           " "$CLIENT_ID")
           {
             echo "CLIENT_ID=$CLIENT_ID"
+            echo "NEXT_PUBLIC_CLIENT_ID=$CLIENT_ID"
             echo "NEXT_PUBLIC_BOOKING_API_URL=$BOOKING_API_URL"
             if [ -n "$BOOKING_SERVICES_ENDPOINT" ]; then
               echo "NEXT_PUBLIC_BOOKING_SERVICES_ENDPOINT=$BOOKING_SERVICES_ENDPOINT"
