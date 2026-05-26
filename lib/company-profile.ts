@@ -67,7 +67,7 @@ async function fetchRemoteCompanyProfile(clientId: string): Promise<CompanyProfi
   try {
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
-      cache: 'no-store',
+      cache: 'force-cache',
     })
     if (!res.ok) {
       const body = await res.text().catch(() => '')

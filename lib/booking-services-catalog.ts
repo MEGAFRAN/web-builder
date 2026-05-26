@@ -31,7 +31,7 @@ async function fetchRemoteBookingCatalog(clientId: string): Promise<ReservationS
   console.log(`[build] booking-services fetch → ${url}`)
 
   try {
-    const res = await fetch(url, { cache: 'no-store' })
+    const res = await fetch(url, { cache: 'force-cache' })
     if (!res.ok) {
       console.warn(`[build] booking-services fetch failed: HTTP ${res.status} from ${url}`)
       return null

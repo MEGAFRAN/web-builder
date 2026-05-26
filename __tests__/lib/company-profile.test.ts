@@ -118,7 +118,7 @@ describe('getCompanyProfile', () => {
       'https://fn.example.com/mgmt/company-profile?clientId=hair-salon',
       {
         headers: { Authorization: 'Bearer build-token' },
-        cache: 'no-store',
+        cache: 'force-cache',
       },
     )
     expect(readCompanyProfileMock).not.toHaveBeenCalled()
@@ -134,7 +134,7 @@ describe('getCompanyProfile', () => {
       'https://fn.example.com/api/mgmt/company-profile?clientId=hair-salon',
       {
         headers: { Authorization: 'Bearer build-token' },
-        cache: 'no-store',
+        cache: 'force-cache',
       },
     )
     expect(readCompanyProfileMock).not.toHaveBeenCalled()

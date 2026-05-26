@@ -90,7 +90,7 @@ describe('getBookingServicesCatalog', () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       'https://fn.example.com/api/booking-services?clientId=remote-client',
-      { cache: 'no-store' },
+      { cache: 'force-cache' },
     )
     expect(catalog).toEqual([
       expect.objectContaining({ id: 'remote-1', name: 'Remote service' }),
