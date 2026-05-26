@@ -1,6 +1,6 @@
 {
   "clientId": "test",
-  "displayName": "Hair Salon",
+  "displayName": "Peluquería",
   "customDomain": "hair-salon.com",
   "swaResourceName": "swa-hair-salon",
   "template": "solo-beauty-pro",
@@ -26,21 +26,21 @@
     "contentGap": "1rem"
   },
   "siteMetadata": {
-    "siteName": "Hair Salon",
-    "titleTemplate": "%s | Hair Salon",
-    "defaultDescription": "Emma offers Haircuts & Color at 123 High Street, London. Book your appointment online — open 9:00 AM - 6:00 PM.",
+    "siteName": "Peluquería",
+    "titleTemplate": "%s | Peluquería",
+    "defaultDescription": "Maria ofrece cortes y color en 123 High Street, London. Reserva tu cita en línea; abierto de 9:00 a 18:00.",
     "defaultOgImage": null
   },
   "bottomActionBar": {
     "items": [
       {
-        "label": "Call",
+        "label": "Llamar",
         "href": "tel:+442079460958",
         "icon": "public/call.svg",
         "iconColor": "#ffffff"
       },
       {
-        "label": "Book",
+        "label": "Reservar",
         "href": "#book",
         "icon": "public/calendar.svg",
         "iconColor": "#ffffff"

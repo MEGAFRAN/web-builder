@@ -575,7 +575,7 @@ function ServiceListCard({
         }}
       >
         <Stack gap="sm">
-          <h3 className="text-xl font-semibold text-brand">{service.title}</h3>
+          <h3 className="text-xl font-semibold capitalize text-brand">{service.title}</h3>
           {service.description !== '' ? (
             <p className="line-clamp-2 overflow-hidden text-muted">{service.description}</p>
           ) : null}
@@ -674,7 +674,7 @@ function DefaultServicesList({
       {groups.map((group, groupIndex) => (
         <div key={group.category || '__uncategorized'} className="flex flex-col gap-8">
           {group.category ? (
-            <h3 className="text-2xl font-bold tracking-tight text-brand">{group.category}</h3>
+            <h3 className="text-2xl font-bold tracking-tight uppercase text-brand">{group.category}</h3>
           ) : null}
           {group.items.map((service, localIndex) => {
             const cardIndex = groupStartIndices[groupIndex] + localIndex

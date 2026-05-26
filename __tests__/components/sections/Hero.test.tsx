@@ -161,12 +161,14 @@ describe('Hero', () => {
       expect(subtext.className).not.toContain('text-primary-fg-muted')
     })
 
-    it('adds a dark content panel behind text on photo backgrounds', () => {
+    it('adds a full-bleed dark overlay on photo backgrounds', () => {
       const container = renderHero({
         headline: 'H',
         backgroundImageUrl: 'https://example.com/hero.jpg',
       })
-      expect(getRoot(container).className).toContain('hero-photo-content-panel')
+      const overlay = container.querySelector('[data-component="hero-photo-overlay"]')
+      expect(overlay?.className).toContain('hero-photo-overlay')
+      expect(getRoot(container).className).not.toContain('hero-photo-content-panel')
     })
 
     it('marks the hero as photo mode', () => {
@@ -207,6 +209,7 @@ describe('Hero', () => {
     it('does not add a content panel on gradient fallback', () => {
       const container = renderHero({ headline: 'H', gradientFallback: true })
       expect(getRoot(container).className).not.toContain('hero-photo-content-panel')
+      expect(container.querySelector('[data-component="hero-photo-overlay"]')).toBeNull()
     })
 
     it('prefers photo mode over gradient fallback when both are available', () => {

@@ -67,4 +67,9 @@ describe('FooterBlock', () => {
       container.querySelector('[data-component="footer-block"]')
     ).toBeInTheDocument()
   })
+
+  it('exposes id="contact" for navbar hash links', () => {
+    const { container } = render(<FooterBlock _type="footer" />)
+    expect(container.querySelector('#contact')).toBeInTheDocument()
+  })
 })

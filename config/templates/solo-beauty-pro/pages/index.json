@@ -11,9 +11,7 @@
       "logo": "{{businessName}}",
       "links": [
         { "label": "Services", "href": "#services" },
-        { "label": "Book", "href": "#services" },
-        { "label": "Reviews", "href": "#reviews" },
-        { "label": "Location", "href": "#location" }
+        { "label": "Contact", "href": "#contact" }
       ],
       "ctaLabel": "Book Now",
       "ctaAction": "#services",

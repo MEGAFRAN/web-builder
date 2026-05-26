@@ -1,80 +1,77 @@
 {
   "metadata": {
-    "title": "Hair Salon",
-    "description": "Book Haircuts & Color with Emma at Hair Salon. Visit us at 123 High Street, London or call +44 20 7946 0958.",
+    "title": "Peluquería",
+    "description": "Reserva cortes y color con Maria en la peluquería. Visítanos en 123 High Street, London o llama al +44 20 7946 0958.",
     "ogImage": null,
     "noIndex": false
   },
   "blocks": [
     {
       "_type": "navbar",
-      "logo": "Hair Salon",
+      "logo": "Peluquería",
       "links": [
-        { "label": "Services", "href": "#services" },
-        { "label": "Book", "href": "#book" },
-        { "label": "Reviews", "href": "#reviews" },
-        { "label": "Location", "href": "#location" },
-        { "label": "Contact", "href": "#contact" }
+        { "label": "Servicios", "href": "#services" },
+        { "label": "Contacto", "href": "#contact" }
       ],
-      "ctaLabel": "Book Now",
+      "ctaLabel": "Reservar ahora",
       "ctaAction": "#book"
     },
     {
       "_type": "heroBlock",
-      "heading": "Hair Salon",
-      "subtext": "Personalized Haircuts & Color by Emma. Look and feel your best in a calm, welcoming studio.",
-      "primaryButtonLabel": "Book Now",
+      "heading": "Peluquería",
+      "subtext": "Cortes y color personalizados con Maria. Luce y siéntete lo mejor en un estudio tranquilo y acogedor.",
+      "primaryButtonLabel": "Reservar ahora",
       "primaryButtonHref": "#book",
       "backgroundImageUrl": "/images/hero.webp"
     },
     {
       "_type": "services",
-      "heading": "Services"
+      "heading": "Servicios"
     },
     {
       "_type": "testimonialsBlock",
-      "heading": "What Clients Say",
+      "heading": "Opiniones de clientes",
       "items": [
         {
           "name": "Maria L.",
           "company": null,
           "role": null,
-          "quote": "Emma listened to exactly what I wanted and delivered beyond my expectations. I always leave feeling confident.",
+          "quote": "Maria escuchó exactamente lo que quería y superó mis expectativas. Siempre salgo sintiéndome segura de mí misma.",
           "stars": 5
         },
         {
           "name": "Sofia R.",
           "company": null,
           "role": null,
-          "quote": "Warm, professional, and skilled. Booking online was easy and the studio feels like a little retreat.",
+          "quote": "Cálida, profesional y muy hábil. Reservar en línea fue fácil y el estudio es como un pequeño refugio.",
           "stars": 5
         },
         {
           "name": "Elena M.",
           "company": null,
           "role": null,
-          "quote": "I've been coming to Hair Salon for months. Consistent quality every visit — highly recommend.",
+          "quote": "Llevo meses viniendo a la peluquería. Calidad constante en cada visita; la recomiendo mucho.",
           "stars": 5
         }
       ]
     },
     {
       "_type": "location",
-      "title": "Visit Us",
+      "title": "Visítanos",
       "showMap": true,
       "address": null,
       "mapEmbedSrc": null
     },
     {
       "_type": "footer",
-      "copyright": "© Hair Salon. All rights reserved.",
+      "copyright": "© Peluquería. Todos los derechos reservados.",
       "columns": [
         {
-          "title": "Hours",
+          "title": "Horario",
           "links": []
         },
         {
-          "title": "Contact",
+          "title": "Contacto",
           "links": []
         }
       ]

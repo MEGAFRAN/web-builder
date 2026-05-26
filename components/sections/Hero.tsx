@@ -16,7 +16,7 @@ const MOBILE_FULL_VIEWPORT_SECTION_CLASS =
 const HERO_VISUAL_BG_SECTION_CLASS = "relative isolate overflow-hidden";
 
 const HERO_PHOTO_OVERLAY_CLASS =
-  "pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/55 via-black/45 to-black/50";
+  "pointer-events-none absolute inset-0 z-[1] hero-photo-overlay";
 
 function HeroCta({
   label,
@@ -92,7 +92,6 @@ export function Hero({
   const hasPhotoBackground = Boolean(photoBackgroundSrc);
   const hasGradientFallback = gradientFallback && !hasPhotoBackground;
   const hasVisualBackground = hasPhotoBackground || hasGradientFallback;
-  const showPhotoContentPanel = hasPhotoBackground;
   const textAlign = align === "left" ? "text-left items-start" : "text-center items-center";
   const headlineClass = hasPhotoBackground
     ? "text-5xl font-bold leading-tight tracking-tight text-white md:text-6xl"
@@ -103,9 +102,9 @@ export function Hero({
   const heroContentClass = [
     "relative z-[2] flex flex-col gap-6",
     textAlign,
-    showPhotoContentPanel ? "hero-photo-content-panel w-full max-w-2xl" : null,
-    showPhotoContentPanel && align === "left" ? "self-start" : null,
-    showPhotoContentPanel && align !== "left" ? "mx-auto" : null,
+    hasPhotoBackground ? "w-full max-w-2xl" : null,
+    hasPhotoBackground && align === "left" ? "self-start" : null,
+    hasPhotoBackground && align !== "left" ? "mx-auto" : null,
   ]
     .filter(Boolean)
     .join(" ");
