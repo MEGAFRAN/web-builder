@@ -4,7 +4,7 @@
 **Priority:** High — commercial blocker for M1  
 **Owner:** DevOps / Next.js Frontend Developer  
 **Estimated scope:** Medium — Azure Functions + Stripe SDK + seeding script  
-**Depends on:** `business/tasks/03-setup-cosmos-db-admin-containers.md` and `business/tasks/04-implement-admin-azure-functions.md`
+**Depends on:** `business/tasks/done/03-setup-cosmos-db-admin-containers.md` and `business/tasks/done/04-implement-admin-azure-functions.md`
 
 ---
 

@@ -41,7 +41,7 @@ function isManualPayload(body: unknown): body is ManualPayload {
 }
 
 export async function GET(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   const clientId = process.env.CLIENT_ID!
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   const clientId = process.env.CLIENT_ID!

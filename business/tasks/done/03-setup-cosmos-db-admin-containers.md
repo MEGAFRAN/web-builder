@@ -75,7 +75,7 @@ Each document in the `admin-users` container represents one admin user for one c
 
 ### 4. Connection string / config
 
-- [ ] `COSMOS_DB_ENDPOINT` and `COSMOS_DB_KEY` (or managed identity equivalent) are documented in `.env.local.example` under an `# Azure Functions local dev` section
+- [ ] `COSMOS_ENDPOINT` and `COSMOS_KEY` (or managed identity equivalent) are documented in `.env.local.example` under an `# Azure Functions local dev` section
 - [ ] These values are added to the Azure Functions app settings (for deployed Functions) — documented in `azure-functions/README.md`
 
 ---
@@ -86,7 +86,7 @@ Each document in the `admin-users` container represents one admin user for one c
 |---|---|
 | Seeding script | `scripts/seed-admin-user.mjs` (new) |
 | Docs | `azure-functions/README.md` — add container setup + seeding instructions |
-| Env example | `.env.local.example` — add `COSMOS_DB_ENDPOINT`, `COSMOS_DB_KEY` |
+| Env example | `.env.local.example` — add `COSMOS_ENDPOINT`, `COSMOS_KEY`, `ADMIN_JWT_SECRET` |
 
 ---
 

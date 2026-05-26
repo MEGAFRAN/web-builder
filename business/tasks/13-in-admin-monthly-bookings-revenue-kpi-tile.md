@@ -4,7 +4,7 @@
 **Priority:** Low — scheduled for M2 (retention polish)  
 **Owner:** Next.js Frontend Developer  
 **Estimated scope:** Small — dashboard widget + backend aggregation API  
-**Depends on:** `business/tasks/04-implement-admin-azure-functions.md` and `business/tasks/12-today-card-stack-bookings-entry-view.md`
+**Depends on:** `business/tasks/done/04-implement-admin-azure-functions.md` and `business/tasks/12-today-card-stack-bookings-entry-view.md`
 
 ---
 

@@ -1,8 +1,9 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
 import * as bcrypt from 'bcryptjs'
 import { findAdminUser, clientExists } from '../../cosmos/adminUsersContainer'
-import { signAdminSession, buildSetCookieHeader } from '../../auth/signAdminSession'
-import { HttpError } from '../../auth/validateAdminSession'
+import { signAdminJwt } from '../../auth/signAdminJwt'
+import { buildSetCookieHeader } from '../../auth/setCookie'
+import { HttpError } from '../../errors/HttpError'
 
 function corsHeaders(origin: string | null): Record<string, string> {
   return {
@@ -13,7 +14,7 @@ function corsHeaders(origin: string | null): Record<string, string> {
   }
 }
 
-async function handler(
+export async function authLoginHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
@@ -89,7 +90,7 @@ async function handler(
       }
     }
 
-    const token = signAdminSession(user.email, user.clientId)
+    const token = await signAdminJwt(user.email, user.clientId)
     const setCookie = buildSetCookieHeader(token)
 
     return {
@@ -123,5 +124,5 @@ app.http('authLogin', {
   methods: ['POST', 'OPTIONS'],
   authLevel: 'anonymous',
   route: 'auth/login',
-  handler,
+  handler: authLoginHandler,
 })

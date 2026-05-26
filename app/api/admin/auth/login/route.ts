@@ -6,7 +6,7 @@ import {
 } from '@/lib/admin-session'
 
 export async function POST(req: NextRequest) {
-  const secret = process.env.ADMIN_SESSION_SECRET
+  const secret = process.env.ADMIN_JWT_SECRET
   const emailEnv = process.env.ADMIN_EMAIL
   const passwordEnv = process.env.ADMIN_PASSWORD
   const clientId = process.env.CLIENT_ID
@@ -42,9 +42,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Incorrect email or password' }, { status: 401 })
   }
 
-  const exp = Date.now() + 7 * 24 * 60 * 60 * 1000
   const sessionEmail = emailEnv.trim()
-  const token = signSession({ email: sessionEmail, clientId, exp }, secret)
+  const token = await signSession({ email: sessionEmail, clientId }, secret)
   const res = NextResponse.json({ ok: true, email: sessionEmail, clientId })
   res.cookies.set(ADMIN_SESSION_COOKIE, token, {
     httpOnly: true,

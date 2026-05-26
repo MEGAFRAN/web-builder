@@ -40,7 +40,7 @@ export const adminCopy = {
     defaultError: 'Correo o contraseña incorrectos',
     misconfiguredTitle: 'Inicio de sesión no disponible',
     misconfiguredMessage:
-      'Faltan variables de entorno de autenticación de administración. Configure ADMIN_EMAIL, ADMIN_PASSWORD y ADMIN_SESSION_SECRET en el servidor.',
+      'Faltan variables de entorno de autenticación de administración. Configure ADMIN_EMAIL, ADMIN_PASSWORD y ADMIN_JWT_SECRET en el servidor.',
   },
   settings: {
     heading: 'Ajustes',

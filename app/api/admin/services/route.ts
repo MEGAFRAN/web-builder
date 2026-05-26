@@ -37,7 +37,7 @@ function isServiceRow(x: unknown): x is AdminBookingService {
 }
 
 export async function GET(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   const services = await readBookingServices()
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   let body: unknown

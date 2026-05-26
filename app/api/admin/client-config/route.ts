@@ -4,7 +4,7 @@ import { getClientConfig } from '@/lib/client-config'
 import { requireAdminSession } from '@/lib/require-admin'
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminSession(req)
+  const auth = await requireAdminSession(req)
   if (auth instanceof NextResponse) return auth
   const config = getClientConfig(auth.clientId)
   return NextResponse.json({

@@ -4,7 +4,7 @@
 **Priority:** High — commercial blocker for M1  
 **Owner:** DevOps / Next.js Frontend Developer  
 **Estimated scope:** Small — Resend API integration + React Email templates  
-**Depends on:** `business/tasks/04-implement-admin-azure-functions.md`
+**Depends on:** `business/tasks/done/04-implement-admin-azure-functions.md`
 
 ---
 

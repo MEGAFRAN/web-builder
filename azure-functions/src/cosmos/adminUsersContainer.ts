@@ -24,6 +24,8 @@ export type AdminUserDocument = {
   clientId: string
   email: string
   passwordHash: string
+  displayName?: string
+  logoUrl?: string | null
 }
 
 export async function findAdminUser(

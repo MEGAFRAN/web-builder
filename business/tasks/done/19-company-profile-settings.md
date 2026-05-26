@@ -4,7 +4,7 @@
 **Priority:** High — foundational data that drives navbar, footer, SEO metadata, and contact blocks across all client sites  
 **Owner:** Next.js Frontend Developer + Backend  
 **Estimated scope:** Medium — new data model, dual-path persistence, admin UI form, and public site read integration  
-**Depends on:** None (self-contained; Cosmos path builds on `03-setup-cosmos-db-admin-containers`)
+**Depends on:** None (self-contained; Cosmos path builds on `done/03-setup-cosmos-db-admin-containers`)
 
 ---
 
@@ -109,7 +109,7 @@ Document shape in Cosmos:
 }
 ```
 
-Add the `client-profile` container to `business/tasks/03-setup-cosmos-db-admin-containers.md` as an amendment.
+Add the `client-profile` container to `business/tasks/done/03-setup-cosmos-db-admin-containers.md` as an amendment.
 
 ---
 
@@ -121,7 +121,7 @@ Follow the same auth + response pattern as `app/api/admin/services/route.ts`.
 
 **`GET /api/admin/company-profile`**
 
-- Validate `admin-session` JWT with `requireAdminSession(req)`
+- Validate `admin-session` JWT with `await requireAdminSession(req)` (HS256, `ADMIN_JWT_SECRET`, `jose`)
 - Return `{ profile: CompanyProfile | null }` — `null` when no data exists yet (first-time setup)
 - Never return 404; an empty profile is a valid state
 
@@ -142,7 +142,7 @@ Add two new Functions to `azure-functions/src/functions/admin/`:
 - `GET /admin/company-profile` — reads from `client-profile` Cosmos container
 - `PUT /admin/company-profile` — validates + upserts to `client-profile` Cosmos container
 
-These mirror the local route handlers 1:1. Auth follows the same `validateAdminJwt(req)` helper from task 04. Add to the endpoint list in `business/tasks/04-implement-admin-azure-functions.md` as an amendment.
+These mirror the local route handlers 1:1. Auth follows the same `validateAdminJwt(req)` helper from task 04 (HS256 JWT in the `admin-session` cookie, verified with `ADMIN_JWT_SECRET` via `jose`). See `business/tasks/done/04-implement-admin-azure-functions.md`.
 
 ---
 
@@ -320,7 +320,7 @@ Static builds are point-in-time snapshots. After saving a company profile in the
 4. Reloading `/admin/settings` after a save shows the previously saved values in all fields
 5. In local dev: refreshing any public site page after a save reflects the updated `businessName` in the navbar logo (if it was previously null/placeholder) and `phone` in the footer contact column
 6. `GET /api/admin/company-profile` returns `{ profile: null }` when `data/company-profile-local.json` does not exist (no crash)
-7. `PUT /api/admin/company-profile` without a valid `admin-session` cookie returns `401`
+7. `PUT /api/admin/company-profile` without a valid `admin-session` JWT cookie returns `401`
 8. `PUT /api/admin/company-profile` with a missing required field returns `422` with a descriptive error message
 9. All form inputs have visible labels that match their accessible names (WCAG 2.5.3) — verified by inspecting the DOM
 10. `npm run build` for the public site exits 0 with the new `getCompanyProfile` integration in place

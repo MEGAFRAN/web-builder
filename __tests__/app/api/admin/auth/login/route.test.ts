@@ -15,14 +15,14 @@ function post(body: unknown) {
 
 describe('POST /api/admin/auth/login', () => {
   const env = {
-    ADMIN_SESSION_SECRET: process.env.ADMIN_SESSION_SECRET,
+    ADMIN_JWT_SECRET: process.env.ADMIN_JWT_SECRET,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     CLIENT_ID: process.env.CLIENT_ID,
   }
 
   beforeEach(() => {
-    process.env.ADMIN_SESSION_SECRET = 'test-secret-at-least-32-chars-ok!'
+    process.env.ADMIN_JWT_SECRET = 'test-secret-at-least-32-chars-ok!'
     process.env.ADMIN_EMAIL = 'Admin@Example.com '
     process.env.ADMIN_PASSWORD = 'hunter2'
     process.env.CLIENT_ID = 'client-x'
@@ -30,7 +30,7 @@ describe('POST /api/admin/auth/login', () => {
   })
 
   afterEach(() => {
-    process.env.ADMIN_SESSION_SECRET = env.ADMIN_SESSION_SECRET
+    process.env.ADMIN_JWT_SECRET = env.ADMIN_JWT_SECRET
     process.env.ADMIN_EMAIL = env.ADMIN_EMAIL
     process.env.ADMIN_PASSWORD = env.ADMIN_PASSWORD
     process.env.CLIENT_ID = env.CLIENT_ID
@@ -39,7 +39,7 @@ describe('POST /api/admin/auth/login', () => {
   })
 
   it('returns 503 when any auth env binding is missing', async () => {
-    delete process.env.ADMIN_SESSION_SECRET
+    delete process.env.ADMIN_JWT_SECRET
     const res = await POST(post({ email: 'Admin@Example.com', password: 'hunter2' }))
     expect(res.status).toBe(503)
     expect(await res.json()).toMatchObject({
@@ -109,9 +109,10 @@ describe('POST /api/admin/auth/login', () => {
     })
     const token = res.cookies.get(ADMIN_SESSION_COOKIE)?.value
     expect(token).toBeDefined()
-    const payload = verifySessionToken(token!, process.env.ADMIN_SESSION_SECRET!)
+    expect(token!.split('.')).toHaveLength(3)
+    const payload = await verifySessionToken(token!, process.env.ADMIN_JWT_SECRET!)
     expect(payload).toMatchObject({ email: 'Admin@Example.com', clientId: 'client-x' })
-    expect(payload!.exp).toBeGreaterThan(Date.now())
+    expect(payload!.exp).toBeGreaterThan(Math.floor(Date.now() / 1000))
   })
 
   it('sets Secure on the cookie in production', async () => {

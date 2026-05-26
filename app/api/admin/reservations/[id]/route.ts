@@ -11,7 +11,7 @@ export async function PATCH(
   req: NextRequest,
   ctx: { params: Promise<{ id: string }> },
 ) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   const clientId = process.env.CLIENT_ID!

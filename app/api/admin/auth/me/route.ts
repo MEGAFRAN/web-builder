@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import { requireAdminSession } from '@/lib/require-admin'
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminSession(req)
+  const auth = await requireAdminSession(req)
   if (auth instanceof NextResponse) return auth
   return NextResponse.json({ email: auth.email, clientId: auth.clientId })
 }

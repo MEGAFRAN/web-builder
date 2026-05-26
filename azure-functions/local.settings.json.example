@@ -1,0 +1,26 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+
+    "ADMIN_JWT_SECRET": "local-dev-secret-at-least-32-characters-long",
+
+    "COSMOS_ENDPOINT": "https://<account>.documents.azure.com:443/",
+    "COSMOS_KEY": "<primary-key>",
+    "COSMOS_ADMIN_DATABASE": "web-builder-admin",
+
+    "COSMOS_DATABASE": "reservations",
+    "COSMOS_CONTAINER": "bookings",
+
+    "COSMOS_CLIENT_PROFILE_CONTAINER": "client-profile",
+    "COMPANY_PROFILE_BUILD_TOKEN": "",
+
+    "NOTIFICATION_EMAIL_FROM": "",
+    "SENDGRID_API_KEY": ""
+  },
+  "Host": {
+    "CORS": "*",
+    "CORSCredentials": true
+  }
+}

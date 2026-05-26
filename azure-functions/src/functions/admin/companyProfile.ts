@@ -1,9 +1,9 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
+import { HttpError } from '../../errors/HttpError'
 import {
-  HttpError,
-  validateAdminSession,
+  validateAdminJwt,
   validateBuildToken,
-} from '../../auth/validateAdminSession'
+} from '../../auth/validateAdminJwt'
 import { getClientProfileContainer } from '../../cosmos/clientProfileContainer'
 
 type CompanyProfile = {
@@ -133,7 +133,7 @@ async function handler(
   try {
     if (request.method === 'GET') {
       const buildClientId = validateBuildToken(request)
-      const clientId = buildClientId ?? validateAdminSession(request).clientId
+      const clientId = buildClientId ?? (await validateAdminJwt(request)).clientId
       const profile = await readProfile(clientId)
       return {
         status: 200,
@@ -143,7 +143,7 @@ async function handler(
     }
 
     if (request.method === 'PUT') {
-      const session = validateAdminSession(request)
+      const session = await validateAdminJwt(request)
       let body: unknown
       try {
         body = await request.json()

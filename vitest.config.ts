@@ -8,6 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
+    exclude: ['**/node_modules/**', 'azure-functions/**'],
     coverage: {
       provider: 'v8',
       enabled: true,

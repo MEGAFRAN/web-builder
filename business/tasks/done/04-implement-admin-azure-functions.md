@@ -1,6 +1,6 @@
 # Task: Implement admin Azure Functions
 
-**Status:** Ready for development  
+**Status:** Done  
 **Priority:** High — blocks the admin SPA from working in any deployed environment  
 **Owner:** Backend  
 **Estimated scope:** Large — 10 endpoints, JWT auth, Cosmos DB integration  
@@ -12,7 +12,9 @@
 
 The admin SPA (`app/admin/`) calls its backend via `lib/admin-api.ts`. When `NEXT_PUBLIC_ADMIN_API_URL` is set (all deployed environments), every call goes to Azure Functions. When it is not set (local dev), calls fall back to the local Next.js Route Handlers in `app/api/admin/`.
 
-The Azure Functions project lives in `azure-functions/`. It currently contains only the public booking endpoints (`getAvailability`, `createReservation`). The entire admin surface is missing.
+The Azure Functions project lives in `azure-functions/`. It serves public booking endpoints (`getAvailability`, `createReservation`) and the full admin API surface implemented in this task.
+
+**Local dev parity:** Next.js route handlers and Azure Functions use the same JWT auth model — cookie `admin-session`, env var `ADMIN_JWT_SECRET`, HS256 signing via the `jose` library (`lib/admin-session.ts` locally; `azure-functions/src/auth/signAdminJwt.ts` / `validateAdminJwt.ts` in Functions). Edge route protection in `proxy.ts` also verifies the same JWT.
 
 ---
 
@@ -24,11 +26,13 @@ All admin Functions use **JWT in an `httpOnly` cookie** (`admin-session`). The J
 { "email": "admin@example.com", "clientId": "1", "exp": 1234567890 }
 ```
 
+- `exp` is a standard JWT claim: **Unix timestamp in seconds** (not milliseconds)
+- Algorithm: **HS256**, signed/verified with the [`jose`](https://github.com/panva/jose) library
 - `auth/login` issues the cookie; `auth/logout` clears it; all other Functions validate it
 - `clientId` is **always** read from the validated JWT — never from query params or the request body
-- A shared `validateAdminJwt(req)` helper returns `{ email, clientId }` or throws 401
+- A shared `validateAdminJwt(req)` helper returns `{ email, clientId, exp }` or throws `HttpError(401)`
 
-**JWT signing key:** `ADMIN_JWT_SECRET` environment variable (min 32 chars). Must be set in the Azure Functions app settings and in `local.settings.json` for local dev.
+**JWT signing key:** `ADMIN_JWT_SECRET` environment variable (min 32 chars). Must be set in the Azure Functions app settings, in `local.settings.json` for local Functions dev, and in the Next.js env for local route handlers (`ADMIN_JWT_SECRET`).
 
 ---
 
@@ -42,7 +46,7 @@ Request body: `{ email: string, password: string, clientId: string }`
 
 1. Look up the document in `admin-users` where `clientId` matches and `email` matches (case-insensitive)
 2. Use timing-safe comparison for email; verify password against `passwordHash` using bcrypt
-3. On success: sign a JWT `{ email, clientId, exp: now + 7d }` with `ADMIN_JWT_SECRET`; set as `httpOnly`, `SameSite=Lax`, `Secure` cookie named `admin-session`; return `{ ok: true, email, clientId }`
+3. On success: sign an HS256 JWT `{ email, clientId, exp: now + 7d }` with `ADMIN_JWT_SECRET`; set as `httpOnly`, `SameSite=Lax`, `Secure` (production only in local Next.js) cookie named `admin-session`; return `{ ok: true, email, clientId }`
 4. On failure: return 401 `{ error: 'Incorrect email or password' }` (same message regardless of which field was wrong — no user enumeration)
 5. If `clientId` is not provided or not found: return 503 `{ error: 'Admin login is not configured.' }`
 
@@ -72,7 +76,7 @@ Validates JWT. Accepts the same `ManualPayload` shape as the existing local Rout
 
 #### `PATCH /admin/reservations/:id`
 
-Validates JWT. Accepts `{ status: 'confirmed' | 'cancelled' | 'no-show' }`. Updates the document in `reservations` container. Returns 404 if not found or `clientId` does not match. Returns `{ ok: true }`.
+Validates JWT. Accepts `{ action: 'cancel' | 'no-show', reason?: string }` (matches the admin SPA). Updates the document in `reservations` container. Returns 404 if not found or `clientId` does not match. Returns `{ ok: true, reservation }`.
 
 ### Services
 
@@ -92,15 +96,15 @@ Validates JWT. Returns the schedule document for `jwt.clientId` from `schedule` 
 
 #### `PUT /admin/schedule`
 
-Validates JWT. Replaces the schedule document. Returns `{ ok: true }`.
+Validates JWT. Replaces weekly hours (`{ weekly: WeeklyHoursRow[] }`). Returns `{ ok: true, schedule }`.
 
 #### `POST /admin/schedule`
 
-Validates JWT. Adds a new schedule slot/rule. Returns `{ ok: true, id }`.
+Validates JWT. Adds a schedule exception (closed day or custom hours). Returns `{ ok: true, schedule }`.
 
 #### `DELETE /admin/schedule`
 
-Validates JWT. Accepts `{ id: string }` in body. Deletes the matching slot/rule. Returns 404 if not found or `clientId` does not match. Returns `{ ok: true }`.
+Validates JWT. Accepts exception id via query param `?id=` (admin SPA) or `{ id: string }` in body. Deletes the matching exception. Returns 404 if not found. Returns `{ ok: true, schedule }`.
 
 ### Company profile
 
@@ -114,29 +118,31 @@ Validates JWT. Accepts `{ profile: CompanyProfile }`, validates shape, upserts t
 
 ---
 
-## Shared utilities to implement
+## Shared utilities
 
 | File | Purpose |
 |---|---|
-| `azure-functions/src/auth/validateAdminJwt.ts` | Parse + verify `admin-session` cookie; return `{ email, clientId }` or throw `HttpError(401)` |
-| `azure-functions/src/auth/signAdminJwt.ts` | Sign a JWT with `ADMIN_JWT_SECRET` and return the signed string |
+| `azure-functions/src/auth/constants.ts` | Cookie name (`admin-session`) and session TTL constants |
+| `azure-functions/src/auth/validateAdminJwt.ts` | Parse + verify `admin-session` cookie JWT; return `{ email, clientId, exp }` or throw `HttpError(401)` |
+| `azure-functions/src/auth/signAdminJwt.ts` | Sign an HS256 JWT with `ADMIN_JWT_SECRET` |
 | `azure-functions/src/auth/setCookie.ts` | Build `Set-Cookie` header string for the `admin-session` cookie |
-| `azure-functions/src/cosmos/adminDb.ts` | Typed Cosmos DB client helpers: `getAdminUser`, `getServices`, `getReservations`, etc. |
+| `azure-functions/src/cosmos/adminDb.ts` | Typed Cosmos DB client helpers: reservations, services, schedule, client config |
 | `azure-functions/src/errors/HttpError.ts` | `class HttpError extends Error { constructor(status, message) }` for unified error handling |
+| `lib/admin-session.ts` | Same JWT sign/verify for local Next.js route handlers and tests |
 
 ---
 
 ## Requirements
 
-- [ ] All 10 endpoints implemented and callable from the admin SPA
-- [ ] JWT validation is performed in every protected endpoint; 401 is returned for missing, expired, or tampered tokens
-- [ ] `clientId` is always sourced from the JWT, never from URL params or body for data scoping
-- [ ] A `GET /clients/:clientId/config` request with a mismatched `clientId` in the JWT returns 403
-- [ ] Local dev: `local.settings.json` includes `ADMIN_JWT_SECRET`, `COSMOS_DB_ENDPOINT`, `COSMOS_DB_KEY`
-- [ ] All endpoints return `Content-Type: application/json`
-- [ ] CORS headers allow the admin SPA domain (see `configure-admin-deploy-pipeline` task for the exact origin)
-- [ ] `npm run build` inside `azure-functions/` exits 0
-- [ ] At least the `auth/login` and `auth/me` endpoints have unit tests under `azure-functions/src/__tests__/`
+- [x] All admin endpoints implemented and callable from the admin SPA
+- [x] JWT validation is performed in every protected endpoint; 401 is returned for missing, expired, or tampered tokens
+- [x] `clientId` is always sourced from the JWT, never from URL params or body for data scoping
+- [x] A `GET /clients/:clientId/config` request with a mismatched `clientId` in the JWT returns 403
+- [x] Local dev: `local.settings.json.example` includes `ADMIN_JWT_SECRET`, `COSMOS_ENDPOINT`, `COSMOS_KEY`
+- [x] All endpoints return `Content-Type: application/json`
+- [ ] CORS headers allow the admin SPA domain (see `configure-admin-deploy-pipeline` task for the exact origin) — per-handler `origin ?? '*'` today; production SWA origin to be locked in deploy pipeline task
+- [x] `npm run build` inside `azure-functions/` exits 0
+- [x] At least the `auth/login` and `auth/me` endpoints have unit tests under `azure-functions/src/__tests__/`
 
 ---
 

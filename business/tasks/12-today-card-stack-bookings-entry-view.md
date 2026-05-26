@@ -4,7 +4,7 @@
 **Priority:** Medium — scheduled for M2 (activation & mobile UX polish)  
 **Owner:** Next.js Frontend Developer / UX-UI Designer  
 **Estimated scope:** Medium — frontend UI redesign on mobile screens, retaining the existing data path  
-**Depends on:** `business/tasks/04-implement-admin-azure-functions.md` (Assumes admin API endpoints for reservations are stable)
+**Depends on:** `business/tasks/done/04-implement-admin-azure-functions.md` (Assumes admin API endpoints for reservations are stable)
 
 ---
 

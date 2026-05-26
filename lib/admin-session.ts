@@ -1,47 +1,45 @@
-import { createHmac, timingSafeEqual } from 'crypto'
+import { SignJWT, jwtVerify } from 'jose'
+import { timingSafeEqual } from 'crypto'
 import type { SessionPayload } from '@/types/admin'
 
 export { ADMIN_SESSION_COOKIE } from '@/lib/admin-session-constants'
 
-/** Signed cookie value: base64url(JSON payload).hex_hmac */
-export function signSession(payload: SessionPayload, secret: string): string {
-  const payloadJson = JSON.stringify(payload)
-  const sig = createHmac('sha256', secret).update(payloadJson).digest('hex')
-  const b64 = Buffer.from(payloadJson, 'utf8').toString('base64url')
-  return `${b64}.${sig}`
+const JWT_ALG = 'HS256'
+const SESSION_TTL = '7d'
+
+function secretKey(secret: string): Uint8Array {
+  return new TextEncoder().encode(secret)
 }
 
-export function verifySessionToken(token: string, secret: string): SessionPayload | null {
-  const dot = token.lastIndexOf('.')
-  if (dot === -1) return null
-  const payloadB64 = token.slice(0, dot)
-  const sigHex = token.slice(dot + 1)
-  if (!/^[0-9a-f]+$/i.test(sigHex) || sigHex.length % 2 !== 0) return null
-  let payloadJson: string
+export async function signSession(
+  payload: Pick<SessionPayload, 'email' | 'clientId'>,
+  secret: string,
+): Promise<string> {
+  return new SignJWT({ email: payload.email, clientId: payload.clientId })
+    .setProtectedHeader({ alg: JWT_ALG })
+    .setIssuedAt()
+    .setExpirationTime(SESSION_TTL)
+    .sign(secretKey(secret))
+}
+
+export async function verifySessionToken(
+  token: string,
+  secret: string,
+): Promise<SessionPayload | null> {
   try {
-    payloadJson = Buffer.from(payloadB64, 'base64url').toString('utf8')
+    const { payload } = await jwtVerify(token, secretKey(secret), {
+      algorithms: [JWT_ALG],
+    })
+    const email = payload.email
+    const clientId = payload.clientId
+    const exp = payload.exp
+    if (typeof email !== 'string' || typeof clientId !== 'string' || typeof exp !== 'number') {
+      return null
+    }
+    return { email, clientId, exp }
   } catch {
     return null
   }
-  const expected = createHmac('sha256', secret).update(payloadJson).digest('hex')
-  const a = Buffer.from(expected, 'hex')
-  const b = Buffer.from(sigHex, 'hex')
-  if (a.length !== b.length || !timingSafeEqual(a, b)) return null
-  let payload: SessionPayload
-  try {
-    payload = JSON.parse(payloadJson) as SessionPayload
-  } catch {
-    return null
-  }
-  if (
-    typeof payload.email !== 'string' ||
-    typeof payload.clientId !== 'string' ||
-    typeof payload.exp !== 'number'
-  ) {
-    return null
-  }
-  if (payload.exp <= Date.now()) return null
-  return payload
 }
 
 export function timingSafeEqualStr(a: string, b: string): boolean {

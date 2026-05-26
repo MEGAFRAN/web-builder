@@ -328,7 +328,7 @@ Triggered on push to `main` when admin-related files change, or via manual dispa
 | Variable | Required for |
 |----------|-------------|
 | `CLIENT_ID` | Every build and `npm run dev` |
-| `ADMIN_SESSION_SECRET` | Local admin login and session validation |
+| `ADMIN_JWT_SECRET` | Local admin login and session validation |
 | `ADMIN_EMAIL` | Local admin login |
 | `ADMIN_PASSWORD` | Local admin login |
 

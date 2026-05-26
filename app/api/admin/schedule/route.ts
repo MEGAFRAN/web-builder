@@ -35,7 +35,7 @@ function isValidDateYmd(s: string): boolean {
 }
 
 export async function GET(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   const schedule = await readBookingSchedule()
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   let body: unknown
@@ -100,7 +100,7 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   let body: unknown
@@ -160,7 +160,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   const id = req.nextUrl.searchParams.get('id')

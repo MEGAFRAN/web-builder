@@ -4,7 +4,7 @@
 **Priority:** Medium — required to go live; not blocking local dev or Functions testing  
 **Owner:** DevOps  
 **Estimated scope:** Small — Azure portal clicks + GitHub secrets, no code  
-**Depends on:** `implement-admin-azure-functions` (Functions must be deployed before the admin SPA is useful)
+**Depends on:** `04-implement-admin-azure-functions` (done — Functions must be deployed before the admin SPA is useful)
 
 ---
 
@@ -67,7 +67,9 @@ In the Azure portal → **Functions App → CORS**:
 - Add the admin SWA domain to the allowed origins list, e.g.:  
   `https://your-admin-spa.azurestaticapps.net`
 - If using a custom domain for the admin SPA, add that domain instead (or in addition)
-- Do **not** use `*` as the allowed origin in production — the `admin-session` cookie requires `credentials: 'include'`, and a wildcard origin is incompatible with credentialed requests
+- Do **not** use `*` as the allowed origin in production — the `admin-session` JWT cookie requires `credentials: 'include'`, and a wildcard origin is incompatible with credentialed requests
+
+Ensure the Azure Functions app settings include `ADMIN_JWT_SECRET` (min 32 chars, same value used to sign admin JWTs) alongside Cosmos connection settings.
 
 The `adminFetch()` helper in `lib/admin-api.ts` already passes `credentials: 'include'` on every request.
 

@@ -162,7 +162,7 @@ Next.js 16 **proxy** (formerly middleware) still protects admin pages and APIs f
 - Pages: `/admin`, `/admin/bookings`, `/admin/services`, `/admin/availability`, `/admin/settings`
 - APIs: `/api/admin/*` except `/api/admin/auth/*`
 
-Unauthenticated browser requests redirect to `/admin/login?redirect=…`. API requests return `401`. Missing `ADMIN_SESSION_SECRET` or `CLIENT_ID` redirects with `?error=misconfigured`.
+Unauthenticated browser requests redirect to `/admin/login?redirect=…`. API requests return `401`. Missing `ADMIN_JWT_SECRET` or `CLIENT_ID` redirects with `?error=misconfigured`.
 
 The proxy is not present in static export builds. Client-side auth guards in the dashboard layout handle route protection in the deployed admin SPA.
 
@@ -171,9 +171,9 @@ The proxy is not present in static export builds. Client-side auth guards in the
 | Item | Detail |
 |------|--------|
 | Login | `POST /api/admin/auth/login` — body `{ email, password }` |
-| Env | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`, `CLIENT_ID` |
-| Cookie | `bp_admin_session` (`ADMIN_SESSION_COOKIE`), httpOnly, 7-day maxAge |
-| Token | `base64url(JSON).hex_hmac_sha256` — see `lib/admin-session.ts` |
+| Env | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_JWT_SECRET`, `CLIENT_ID` |
+| Cookie | `admin-session` (`ADMIN_SESSION_COOKIE`), httpOnly JWT, 7-day maxAge |
+| Token | HS256 JWT — see `lib/admin-session.ts` |
 | Payload | `{ email, clientId, exp }` — clientId sourced from `CLIENT_ID` env var |
 | API guard | `requireAdminSession()` in each `/api/admin/*` route handler |
 
@@ -381,7 +381,7 @@ Admin calendar timeline uses `resolveDayMinutesWindow` for vertical scale (pixel
 | Variable | Used by | Required for |
 |----------|---------|----------------|
 | `CLIENT_ID` | Build, all public booking APIs, local admin session binding | Every deployment |
-| `ADMIN_SESSION_SECRET` | Login, proxy, `requireAdminSession` | Local dev admin portal |
+| `ADMIN_JWT_SECRET` | Login, proxy, `requireAdminSession` | Local dev admin portal |
 | `ADMIN_EMAIL` | Login (local) | Local dev admin portal |
 | `ADMIN_PASSWORD` | Login (local) | Local dev admin portal |
 | `NEXT_PUBLIC_ADMIN_API_URL` | `lib/admin-api.ts` URL switching | Deployed admin SPA — baked into bundle at build time |
@@ -442,7 +442,7 @@ components/
 lib/
   admin-api.ts                      # URL helpers + adminFetch (dual-mode)
   admin-auth-context.tsx            # AdminAuthProvider + useAdminAuth()
-  admin-session.ts                  # HMAC sign/verify (local dev)
+  admin-session.ts                  # JWT sign/verify (local dev)
   admin-session-constants.ts
   require-admin.ts                  # requireAdminSession() for Route Handlers
   booking-services-db.ts            # local dev: read/write services JSON

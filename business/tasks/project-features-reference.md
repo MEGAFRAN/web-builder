@@ -194,8 +194,8 @@ The administrative client surface is structured under `app/admin/` and compiled 
 
 #### A. Core Auth & Security Framework
 * **`AdminAuthContext` (`lib/admin-auth-context.tsx`):** Maintains reactive session state in `sessionStorage` (protecting against tab persistence leaks). Boots on reload by sending a validation ping to `/auth/me`.
-* **Cookie-Based Security:** Session-level JWTs are written into `httpOnly` secure cookies, eliminating access to session tokens via browser scripts and neutralizing XSS vulnerabilities.
-* **Route Protection:** Deployed SPA routes utilize NextJS Client Router Guards to force-redirect unauthenticated users back to `/admin/login`, whereas Local Dev mounts an Edge Middleware proxy (`proxy.ts`) to intercept unauthorized page and API requests.
+* **Cookie-Based Security:** HS256 JWTs (`jose`) are written into an `httpOnly` cookie named `admin-session`, signed with `ADMIN_JWT_SECRET` (min 32 chars). This eliminates access to session tokens via browser scripts and neutralizes XSS vulnerabilities.
+* **Route Protection:** Deployed SPA routes utilize NextJS Client Router Guards to force-redirect unauthenticated users back to `/admin/login`, whereas Local Dev mounts an Edge Middleware proxy (`proxy.ts`) that verifies the same JWT on protected page and API requests.
 
 #### B. Administrative Route Mapping
 
@@ -255,9 +255,9 @@ Our pipeline uses a progressive rollout. The current status of development tasks
      - Establish multi-tenant databases in Cosmos DB for administrative tasks.
      - Schema seed setups for `admin-users`, `booking-services`, `booking-schedules`, and `reservations`.
 
- [ ] Task 04: Implement Admin Azure Functions (BACKLOG)
-     - Move admin API calls from mock JSON route files to production Serverless endpoints.
-     - Port JWT validation helpers, user validation crypts, and Cosmos database connectors.
+ [✓] Task 04: Implement Admin Azure Functions (STABLE)
+     - Admin API moved to Azure Functions with Cosmos DB persistence.
+     - HS256 JWT auth (`admin-session` cookie, `ADMIN_JWT_SECRET`, `jose`) shared with local Next.js route handlers.
 
  [ ] Task 05: Configure Unified Admin Deployment Pipeline (BACKLOG)
      - Connect the Static Web Apps build with live multi-tenant Azure Function routing.

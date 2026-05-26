@@ -73,7 +73,7 @@ function normalizeProfile(raw: CompanyProfile): CompanyProfile {
 }
 
 export async function GET(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   const profile = await readCompanyProfile()
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  const gate = requireAdminSession(req)
+  const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
   let body: unknown

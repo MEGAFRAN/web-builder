@@ -1,7 +1,3 @@
-/** Admin portal & persisted booking catalog types */
-
-export type ReservationDisplayStatus = 'confirmed' | 'cancelled' | 'no-show'
-
 export type StoredReservation = {
   id: string
   clientId: string
@@ -13,21 +9,14 @@ export type StoredReservation = {
   date: string
   time: string
   notes?: string | null
-  /** Widget submissions may use `pending`; admin calendar uses a yellow card border until confirmed. */
   status: string
   createdAt: string
   partySize?: number
   cancelReason?: string | null
 }
 
-/** StoredReservation enriched with the resolved service display name from the API. */
-export type ReservationRow = StoredReservation & {
-  serviceName: string | null
-}
-
 export type ServiceVariation = {
   id: string
-  /** e.g. "Short", "Standard" */
   label?: string
   durationMinutes: number
   price: number
@@ -37,9 +26,7 @@ export type AdminBookingService = {
   id: string
   name: string
   description: string
-  /** Fallback when `variations` is empty. */
   durationMinutes?: number
-  /** Fallback when `variations` is empty. */
   price?: number
   currency: string
   category?: string
@@ -66,26 +53,4 @@ export type ScheduleException = {
 export type BookingScheduleFile = {
   weekly: WeeklyHoursRow[]
   exceptions: ScheduleException[]
-}
-
-export type SessionPayload = {
-  email: string
-  clientId: string
-  /** JWT `exp` claim — Unix timestamp in seconds. */
-  exp: number
-}
-
-export type CompanyProfile = {
-  businessName: string
-  phone: string
-  email: string
-  address: {
-    street: string
-    city: string
-    postalCode: string
-    country: string
-  }
-  hours: string
-  logoUrl: string | null
-  whatsapp: string | null
 }
