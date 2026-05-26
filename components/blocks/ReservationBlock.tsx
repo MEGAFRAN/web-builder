@@ -81,9 +81,14 @@ export default function ReservationBlock({
   embedded,
   hideHeading,
   skipServiceSelection,
+  buildTimeCatalog,
 }: ReservationBlockProps) {
   const cmsServices: ReservationServiceItem[] = servicesProp ?? []
-  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId, servicesEndpoint)
+  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(
+    clientId,
+    servicesEndpoint,
+    buildTimeCatalog,
+  )
 
   const [selectedServiceId, setSelectedServiceId] = useState<string>(
     initialServiceId ?? '',

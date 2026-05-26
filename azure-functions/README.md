@@ -125,6 +125,6 @@ In `config/clients/{clientId}/client.json`:
 
 For the admin SPA, set `NEXT_PUBLIC_ADMIN_API_URL` to the Function App base URL in the deployed environment.
 
-For client site blob builds, set the repository variable `ADMIN_API_URL` to the same Function App base URL (including `/api` if that is your Functions route prefix). The deploy workflow bakes it into the static bundle as `NEXT_PUBLIC_BOOKING_API_URL`. Omit `bookingServicesEndpoint` in `client.json` to use `{ADMIN_API_URL}/booking-services` automatically.
+For client site blob builds, set the repository variable `ADMIN_API_URL` to the same Function App base URL (including `/api` if that is your Functions route prefix). The deploy workflow bakes it into the static bundle as `NEXT_PUBLIC_BOOKING_API_URL` and uses it for build-time company profile reads. Add GitHub secret `COMPANY_PROFILE_BUILD_TOKEN` matching the Function App setting of the same name.
 
 Then add a page using the `reservationBlock` type (or inherit from `restaurant-standard` template which includes `/reservas`).

@@ -8,10 +8,16 @@ import type { ReservationServiceItem } from '@/types/cms'
 export function useBookingServicesCatalog(
   clientId?: string | null,
   servicesEndpoint?: string | null,
+  buildTimeCatalog?: ReservationServiceItem[],
 ) {
-  const [liveCatalog, setLiveCatalog] = useState<ReservationServiceItem[] | null>(null)
+  const hasBuildTimeCatalog = buildTimeCatalog !== undefined
+  const [liveCatalog, setLiveCatalog] = useState<ReservationServiceItem[] | null>(
+    hasBuildTimeCatalog ? buildTimeCatalog : null,
+  )
 
   useEffect(() => {
+    if (hasBuildTimeCatalog) return
+
     let cancelled = false
     const url = bookingServicesUrl(clientId, servicesEndpoint)
     fetch(url)
@@ -26,10 +32,10 @@ export function useBookingServicesCatalog(
     return () => {
       cancelled = true
     }
-  }, [clientId, servicesEndpoint])
+  }, [clientId, servicesEndpoint, hasBuildTimeCatalog])
 
   return {
-    liveCatalog,
-    catalogLoaded: liveCatalog !== null,
+    liveCatalog: hasBuildTimeCatalog ? buildTimeCatalog : liveCatalog,
+    catalogLoaded: hasBuildTimeCatalog || liveCatalog !== null,
   }
 }

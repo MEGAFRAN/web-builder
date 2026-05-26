@@ -45,10 +45,15 @@ jobs:
       - name: Build static site
         env:
           BOOKING_API_URL: ${{ vars.ADMIN_API_URL }}
+          COMPANY_PROFILE_BUILD_TOKEN: ${{ secrets.COMPANY_PROFILE_BUILD_TOKEN }}
         run: |
           CLIENT_ID="${{ github.event.inputs.clientId }}"
           if [ -z "$BOOKING_API_URL" ]; then
             echo "::error::ADMIN_API_URL repository variable is not set. Add it under Settings → Secrets and variables → Actions → Variables (same Azure Functions base URL used by deploy-admin.yml)."
+            exit 1
+          fi
+          if [ -z "$COMPANY_PROFILE_BUILD_TOKEN" ]; then
+            echo "::error::COMPANY_PROFILE_BUILD_TOKEN secret is not set. Add the same bearer token configured on the Azure Function App (COMPANY_PROFILE_BUILD_TOKEN) under Settings → Secrets and variables → Actions → Secrets."
             exit 1
           fi
           BOOKING_SERVICES_ENDPOINT=$(node -e "
@@ -66,6 +71,7 @@ jobs:
             echo "CLIENT_ID=$CLIENT_ID"
             echo "NEXT_PUBLIC_CLIENT_ID=$CLIENT_ID"
             echo "NEXT_PUBLIC_BOOKING_API_URL=$BOOKING_API_URL"
+            echo "COMPANY_PROFILE_BUILD_TOKEN=$COMPANY_PROFILE_BUILD_TOKEN"
             if [ -n "$BOOKING_SERVICES_ENDPOINT" ]; then
               echo "NEXT_PUBLIC_BOOKING_SERVICES_ENDPOINT=$BOOKING_SERVICES_ENDPOINT"
             fi

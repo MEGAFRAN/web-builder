@@ -2,6 +2,12 @@ import { readCompanyProfile } from '@/lib/company-profile-db'
 import type { CompanyProfile } from '@/types/admin'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const profileCache = new Map<string, CompanyProfile | null>()
+
+/** Test helper — profile cache persists across imports within one build/test run. */
+export function clearCompanyProfileCache(): void {
+  profileCache.clear()
+}
 
 export function isCompanyProfile(x: unknown): x is CompanyProfile {
   if (typeof x !== 'object' || x === null) return false
@@ -34,12 +40,26 @@ export function isCompanyProfile(x: unknown): x is CompanyProfile {
   )
 }
 
-async function fetchRemoteCompanyProfile(clientId: string): Promise<CompanyProfile | null> {
-  const remoteBase = process.env.NEXT_PUBLIC_ADMIN_API_URL?.replace(/\/$/, '') ?? ''
-  if (!remoteBase) return null
+function companyProfileRemoteBase(): string {
+  return (
+    process.env.NEXT_PUBLIC_ADMIN_API_URL?.replace(/\/$/, '') ||
+    process.env.NEXT_PUBLIC_BOOKING_API_URL?.replace(/\/$/, '') ||
+    ''
+  )
+}
 
-  const token = process.env.COMPANY_PROFILE_BUILD_TOKEN?.trim()
-  if (!token) return null
+function companyProfileBuildToken(): string {
+  return process.env.COMPANY_PROFILE_BUILD_TOKEN?.trim() ?? ''
+}
+
+export function isRemoteCompanyProfileConfigured(): boolean {
+  return companyProfileRemoteBase().length > 0 && companyProfileBuildToken().length > 0
+}
+
+async function fetchRemoteCompanyProfile(clientId: string): Promise<CompanyProfile | null> {
+  const remoteBase = companyProfileRemoteBase()
+  const token = companyProfileBuildToken()
+  if (!remoteBase || !token) return null
 
   try {
     const res = await fetch(
@@ -57,14 +77,30 @@ async function fetchRemoteCompanyProfile(clientId: string): Promise<CompanyProfi
   }
 }
 
+/**
+ * Load company profile at SSG build time (cached per client; used by layout footer, blocks, JSON-LD).
+ * Production deploys fetch from Azure Functions once per build when remote API + build token are set.
+ */
 export async function getCompanyProfile(clientId: string): Promise<CompanyProfile | null> {
-  const remoteBase = process.env.NEXT_PUBLIC_ADMIN_API_URL?.replace(/\/$/, '') ?? ''
-  if (remoteBase) {
+  if (profileCache.has(clientId)) {
+    return profileCache.get(clientId) ?? null
+  }
+
+  if (isRemoteCompanyProfileConfigured()) {
     const remote = await fetchRemoteCompanyProfile(clientId)
-    if (remote) return remote
+    if (remote) {
+      profileCache.set(clientId, remote)
+      return remote
+    }
   }
 
   const envClientId = process.env.CLIENT_ID
-  if (envClientId && envClientId !== clientId) return null
-  return readCompanyProfile()
+  if (envClientId && envClientId !== clientId) {
+    profileCache.set(clientId, null)
+    return null
+  }
+
+  const local = await readCompanyProfile()
+  profileCache.set(clientId, local)
+  return local
 }

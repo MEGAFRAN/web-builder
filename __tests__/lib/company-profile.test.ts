@@ -8,7 +8,7 @@ vi.mock('@/lib/company-profile-db', () => ({
   readCompanyProfile: readCompanyProfileMock,
 }))
 
-import { getCompanyProfile, isCompanyProfile } from '@/lib/company-profile'
+import { getCompanyProfile, isCompanyProfile, clearCompanyProfileCache } from '@/lib/company-profile'
 
 const validProfile: CompanyProfile = {
   businessName: 'Acme Spa',
@@ -81,6 +81,7 @@ describe('isCompanyProfile', () => {
 
 describe('getCompanyProfile', () => {
   beforeEach(() => {
+    clearCompanyProfileCache()
     readCompanyProfileMock.mockReset()
     vi.stubGlobal('fetch', vi.fn())
     vi.unstubAllEnvs()
@@ -121,6 +122,33 @@ describe('getCompanyProfile', () => {
       },
     )
     expect(readCompanyProfileMock).not.toHaveBeenCalled()
+  })
+
+  it('uses NEXT_PUBLIC_BOOKING_API_URL when admin API URL is unset', async () => {
+    vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', 'https://fn.example.com/api')
+    vi.stubEnv('COMPANY_PROFILE_BUILD_TOKEN', 'build-token')
+    vi.mocked(fetch).mockResolvedValueOnce(jsonResponse({ profile: validProfile }))
+
+    await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
+    expect(fetch).toHaveBeenCalledWith(
+      'https://fn.example.com/api/mgmt/company-profile?clientId=hair-salon',
+      {
+        headers: { Authorization: 'Bearer build-token' },
+        cache: 'no-store',
+      },
+    )
+    expect(readCompanyProfileMock).not.toHaveBeenCalled()
+  })
+
+  it('caches the profile for repeated calls within one build', async () => {
+    vi.stubEnv('NEXT_PUBLIC_ADMIN_API_URL', 'https://fn.example.com')
+    vi.stubEnv('COMPANY_PROFILE_BUILD_TOKEN', 'build-token')
+    vi.mocked(fetch).mockResolvedValueOnce(jsonResponse({ profile: validProfile }))
+
+    await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
+    await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
+
+    expect(fetch).toHaveBeenCalledOnce()
   })
 
   it('falls back to local read when remote URL is set but build token is missing', async () => {

@@ -9,12 +9,18 @@ vi.mock('@/components/componentRegistry', () => ({
     services: ({
       items,
       clientId,
+      buildTimeCatalog,
     }: {
-      items: Array<{ title: string; description: string }>
+      items?: Array<{ title: string; description: string }>
       clientId?: string | null
+      buildTimeCatalog?: Array<{ name: string }>
     }) => (
-      <div data-testid="services-stub" data-client-id={clientId ?? ''}>
-        {items.map(i => i.title).join(', ')}
+      <div
+        data-testid="services-stub"
+        data-client-id={clientId ?? ''}
+        data-build-time-catalog={buildTimeCatalog?.map((item) => item.name).join(', ') ?? ''}
+      >
+        {(items ?? []).map(i => i.title).join(', ')}
       </div>
     ),
   },
@@ -124,5 +130,29 @@ describe('PageRenderer', () => {
     ]
     render(<PageRenderer blocks={blocks} clientId="test" />)
     expect(screen.getByTestId('services-stub')).toHaveAttribute('data-client-id', 'test')
+  })
+
+  it('injects buildTimeCatalog into services blocks', () => {
+    const blocks: Block[] = [{ _type: 'services', heading: 'Services' }]
+    render(
+      <PageRenderer
+        blocks={blocks}
+        clientId="test"
+        bookingCatalog={[
+          {
+            id: 'svc-1',
+            name: 'Cut',
+            description: 'Haircut',
+            durationMinutes: 30,
+            price: 20,
+            currency: '€',
+          },
+        ]}
+      />,
+    )
+    expect(screen.getByTestId('services-stub')).toHaveAttribute(
+      'data-build-time-catalog',
+      'Cut',
+    )
   })
 })

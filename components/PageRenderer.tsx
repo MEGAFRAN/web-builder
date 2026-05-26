@@ -1,4 +1,4 @@
-import type { Block } from '@/types/cms'
+import type { Block, ReservationServiceItem } from '@/types/cms'
 import type { CompanyProfile } from '@/types/admin'
 import componentRegistry from '@/components/componentRegistry'
 import { ScrollReveal } from '@/components/motion/ScrollReveal'
@@ -14,6 +14,8 @@ interface PageRendererProps {
   companyProfile?: CompanyProfile | null
   /** Deployment tenant id; injected into booking blocks when page JSON omits clientId. */
   clientId?: string
+  /** Services catalog fetched once at SSG build time for this page's booking blocks. */
+  bookingCatalog?: ReservationServiceItem[]
 }
 
 type BlockWithKey = Block & { _key?: string }
@@ -34,11 +36,19 @@ function mergeBlockWithProfile(block: Block, companyProfile: CompanyProfile | nu
   }
 }
 
-function mergeBlockWithClientContext(block: Block, clientId: string): Block {
+function mergeBlockWithBuildContext(
+  block: Block,
+  clientId: string,
+  bookingCatalog?: ReservationServiceItem[],
+): Block {
   switch (block._type) {
     case 'services':
     case 'reservationBlock':
-      return block.clientId ? block : { ...block, clientId }
+      return {
+        ...block,
+        clientId: block.clientId ?? clientId,
+        ...(bookingCatalog !== undefined ? { buildTimeCatalog: bookingCatalog } : {}),
+      }
     default:
       return block
   }
@@ -48,11 +58,15 @@ export default function PageRenderer({
   blocks,
   companyProfile = null,
   clientId,
+  bookingCatalog,
 }: PageRendererProps) {
   return (
     <div>
       {blocks.map((block, i) => {
-        const withClient = clientId ? mergeBlockWithClientContext(block, clientId) : block
+        const withClient =
+          clientId != null
+            ? mergeBlockWithBuildContext(block, clientId, bookingCatalog)
+            : block
         const mergedBlock = mergeBlockWithProfile(withClient, companyProfile)
         const Component = componentRegistry[mergedBlock._type]
         if (!Component) {

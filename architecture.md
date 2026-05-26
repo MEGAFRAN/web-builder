@@ -251,7 +251,8 @@ For deployed environments, dynamic behavior is handled by Azure Functions config
 | `client.json` → `reservationEndpoint` | POST target for reservation submissions. If unset, the booking widget calls the local Route Handler (dev only). |
 | `client.json` → `bookingServicesEndpoint` | Optional full URL override for the services catalog. If unset, deploy uses `ADMIN_API_URL` + `/booking-services`. |
 | `reservationBlock` → `availabilityEndpoint` | GET target for booked-slot queries. If unset, calls local `/api/availability` (dev only). |
-| `NEXT_PUBLIC_BOOKING_API_URL` | Azure Functions base URL for the public services catalog, baked into client site bundles at blob build time. |
+| `NEXT_PUBLIC_BOOKING_API_URL` | Azure Functions base URL for the public services catalog, baked into client site bundles at blob build time. Also used for build-time company profile reads when `NEXT_PUBLIC_ADMIN_API_URL` is unset. |
+| `COMPANY_PROFILE_BUILD_TOKEN` | Bearer token for SSG build-time `GET /mgmt/company-profile` (footer, navbar, location, JSON-LD). Set in GitHub Actions secrets for website deploys. |
 | `reservationBlock` → `clientId` | Scopes availability and reservation records to this tenant. |
 | `NEXT_PUBLIC_ADMIN_API_URL` | Azure Functions base URL for the admin SPA. If unset, admin SPA calls local Route Handlers (dev only). |
 
@@ -263,7 +264,7 @@ Used by site blocks and forms during local development. In production, the equiv
 
 | Route | Role |
 |-------|------|
-| `GET /api/booking-services` | Read-only service catalog for the booking widget. |
+| `GET /api/booking-services` | Read-only service catalog for the booking widget. Baked into static pages at build time when `NEXT_PUBLIC_BOOKING_API_URL` is set; client-side fetch is skipped. |
 | `POST /api/reservation` | Accepts widget submissions; forwards to `reservationEndpoint` when configured, otherwise local JSON append. |
 | `GET /api/availability` | Returns booked time slots for a date + duration. |
 | `POST /api/contact` | Contact form; forwards to `client.json` → `contactEndpoint` when set, otherwise logs server-side. |
@@ -304,6 +305,11 @@ Manual dispatch workflow; one run per client:
 | `clientId` | `restaurante-pepe` |
 
 The workflow runs `npm run build:blob`, which excludes server-only routes via `scripts/prepare-static-export.mjs`, then syncs `/out` to the client's Azure Blob Storage `$web` container using `az storage blob sync`.
+
+| Secret / Variable | Purpose |
+|--------|---------|
+| `ADMIN_API_URL` (variable) | Azure Functions base URL; baked as `NEXT_PUBLIC_BOOKING_API_URL` for build-time services catalog + company profile fetches |
+| `COMPANY_PROFILE_BUILD_TOKEN` (secret) | Bearer token for build-time `GET /mgmt/company-profile` |
 
 Azure resources are discovered by tag (`client_id` or `team_id` on the storage account) — no per-client secret needed beyond Azure OIDC credentials.
 

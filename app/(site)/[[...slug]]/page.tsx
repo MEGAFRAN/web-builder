@@ -1,5 +1,6 @@
 import { createJSONCMSClient } from '@/lib/json-cms'
 import { getClientConfig } from '@/lib/client-config'
+import { getBookingServicesCatalog, pageUsesBookingCatalog } from '@/lib/booking-services-catalog'
 import { getCompanyProfile } from '@/lib/company-profile'
 import { buildJsonLd } from '@/lib/json-ld'
 import { findHomepageHeroBackgroundImageUrl } from '@/lib/page-hero-preload'
@@ -69,6 +70,9 @@ export default async function Page({ params }: PageProps) {
   }
 
   const profile = await getCompanyProfile(clientId)
+  const bookingCatalog = pageUsesBookingCatalog(page.blocks)
+    ? await getBookingServicesCatalog(clientId)
+    : undefined
   const schema = buildJsonLd(config, page, profile)
   const heroBackgroundImageUrl = findHomepageHeroBackgroundImageUrl(page.blocks)
 
@@ -77,7 +81,12 @@ export default async function Page({ params }: PageProps) {
       {heroBackgroundImageUrl && <HeroImagePreload href={heroBackgroundImageUrl} />}
       <JsonLdScript schema={schema} />
       <main>
-        <PageRenderer blocks={page.blocks} companyProfile={profile} clientId={clientId} />
+        <PageRenderer
+          blocks={page.blocks}
+          companyProfile={profile}
+          clientId={clientId}
+          bookingCatalog={bookingCatalog}
+        />
       </main>
     </>
   )

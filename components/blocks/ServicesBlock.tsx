@@ -787,9 +787,14 @@ export default function ServicesBlock({
   bookCtaLabel,
   reservationConfirmationMessage,
   servicesEndpoint,
+  buildTimeCatalog,
 }: ServicesBlockType) {
   const cmsItems = items ?? []
-  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(clientId, servicesEndpoint)
+  const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(
+    clientId,
+    servicesEndpoint,
+    buildTimeCatalog,
+  )
   const adminPreferred =
     catalogLoaded && liveCatalog !== null && liveCatalog.length > 0
       ? mapBookingServicesToCmsServices(liveCatalog)
@@ -885,6 +890,7 @@ export default function ServicesBlock({
           <ReservationBlock
             _type="reservationBlock"
             clientId={resolvedClientId}
+            buildTimeCatalog={buildTimeCatalog}
             confirmationMessage={reservationConfirmationMessage}
             initialServiceId={bookingServiceId ?? undefined}
             skipServiceSelection={bookingServiceId != null}

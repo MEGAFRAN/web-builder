@@ -77,6 +77,8 @@ export type ServicesBlock = {
   bookCtaLabel?: string | null
   /** Optional success message when booking from the services modal. */
   reservationConfirmationMessage?: string | null
+  /** Admin catalog fetched at SSG build time. Not stored in CMS JSON. */
+  buildTimeCatalog?: ReservationServiceItem[]
 }
 
 export type ContactBlock = {
@@ -512,6 +514,8 @@ export type ReservationBlock = {
   hideHeading?: boolean | null
   /** Skip the service picker when `initialServiceId` is set. Not stored in CMS JSON. */
   skipServiceSelection?: boolean | null
+  /** Admin catalog fetched at SSG build time. Not stored in CMS JSON. */
+  buildTimeCatalog?: ReservationServiceItem[]
 }
 
 // Carousel block
