@@ -35,6 +35,9 @@
 *.pem
 .claude/tasks
 
+# local-dev operational data (not committed — treated as per-clone state)
+/data/*.json
+
 # debug
 npm-debug.log*
 yarn-debug.log*

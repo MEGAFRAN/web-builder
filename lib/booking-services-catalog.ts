@@ -27,20 +27,28 @@ async function fetchRemoteBookingCatalog(clientId: string): Promise<ReservationS
     servicesEndpoint = undefined
   }
 
+  const url = bookingServicesUrl(clientId, servicesEndpoint)
+  console.log(`[build] booking-services fetch → ${url}`)
+
   try {
-    const url = bookingServicesUrl(clientId, servicesEndpoint)
     const res = await fetch(url, { cache: 'no-store' })
-    if (!res.ok) return null
+    if (!res.ok) {
+      console.warn(`[build] booking-services fetch failed: HTTP ${res.status} from ${url}`)
+      return null
+    }
     const data = (await res.json()) as { services?: unknown }
-    return parseBookingCatalogRows(data?.services)
-  } catch {
+    const rows = parseBookingCatalogRows(data?.services)
+    console.log(`[build] booking-services: loaded ${rows.length} service(s) for "${clientId}"`)
+    return rows
+  } catch (err) {
+    console.warn(`[build] booking-services fetch threw for ${url}:`, err)
     return null
   }
 }
 
 /**
  * Load the admin-managed services catalog at SSG build time (one fetch per deploy, cached per client).
- * Falls back to local JSON when no remote booking API is configured.
+ * Falls back to local JSON when no remote booking API is configured or the fetch fails.
  */
 export async function getBookingServicesCatalog(
   clientId: string,
@@ -60,6 +68,7 @@ export async function getBookingServicesCatalog(
     return []
   }
 
+  console.log(`[build] booking-services: using local JSON fallback for "${clientId}"`)
   const localServices = await readBookingServices()
   const catalog = parseBookingCatalogRows(localServices)
   catalogCache.set(clientId, catalog)

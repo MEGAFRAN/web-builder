@@ -4,7 +4,7 @@ import type { CompanyProfile } from '@/types/admin'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const profileCache = new Map<string, CompanyProfile | null>()
 
-/** Test helper — profile cache persists across imports within one build/test run. */
+/** Test helper — module cache persists across imports within one build/test run. */
 export function clearCompanyProfileCache(): void {
   profileCache.clear()
 }
@@ -61,18 +61,35 @@ async function fetchRemoteCompanyProfile(clientId: string): Promise<CompanyProfi
   const token = companyProfileBuildToken()
   if (!remoteBase || !token) return null
 
+  const url = `${remoteBase}/mgmt/company-profile?clientId=${encodeURIComponent(clientId)}`
+  console.log(`[build] company-profile fetch → ${url}`)
+
   try {
-    const res = await fetch(
-      `${remoteBase}/mgmt/company-profile?clientId=${encodeURIComponent(clientId)}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-      },
-    )
-    if (!res.ok) return null
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    })
+    if (!res.ok) {
+      const body = await res.text().catch(() => '')
+      console.warn(
+        `[build] company-profile fetch failed: HTTP ${res.status} from ${url}` +
+        (body ? ` — ${body.slice(0, 200)}` : ''),
+      )
+      return null
+    }
     const data = (await res.json()) as { profile?: unknown }
-    return isCompanyProfile(data.profile) ? data.profile : null
-  } catch {
+    const profile = isCompanyProfile(data.profile) ? data.profile : null
+    if (profile) {
+      console.log(`[build] company-profile: loaded "${profile.businessName}" for "${clientId}"`)
+    } else {
+      console.warn(
+        `[build] company-profile: response did not contain a valid profile for "${clientId}"`,
+        JSON.stringify(data).slice(0, 300),
+      )
+    }
+    return profile
+  } catch (err) {
+    console.warn(`[build] company-profile fetch threw for ${url}:`, err)
     return null
   }
 }
@@ -86,12 +103,21 @@ export async function getCompanyProfile(clientId: string): Promise<CompanyProfil
     return profileCache.get(clientId) ?? null
   }
 
+  if (!isRemoteCompanyProfileConfigured()) {
+    console.log(
+      `[build] company-profile: remote not configured for "${clientId}"` +
+      ` (NEXT_PUBLIC_BOOKING_API_URL=${process.env.NEXT_PUBLIC_BOOKING_API_URL ?? 'unset'},` +
+      ` COMPANY_PROFILE_BUILD_TOKEN=${process.env.COMPANY_PROFILE_BUILD_TOKEN ? 'set' : 'unset'})`,
+    )
+  }
+
   if (isRemoteCompanyProfileConfigured()) {
     const remote = await fetchRemoteCompanyProfile(clientId)
     if (remote) {
       profileCache.set(clientId, remote)
       return remote
     }
+    console.warn(`[build] company-profile: remote fetch failed, falling back to local for "${clientId}"`)
   }
 
   const envClientId = process.env.CLIENT_ID
