@@ -142,7 +142,7 @@ describe('Hero', () => {
       })
       const img = container.querySelector('img[data-component="image"]') as HTMLImageElement
       expect(img).not.toBeNull()
-      expect(img.src).toContain('/images/hero.webp')
+      expect(img.src).toContain('https://example.com/hero.jpg')
       expect(img.getAttribute('fetchpriority')).toBe('high')
       expect(img.getAttribute('loading')).toBe('eager')
       expect(container.querySelector('[data-component="hero-photo-overlay"]')).not.toBeNull()

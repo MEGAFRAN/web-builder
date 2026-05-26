@@ -371,13 +371,13 @@ describe('Page (default export)', () => {
       },
     ]
     mockGetPage.mockResolvedValue({ slug: '', blocks })
-    mockFindHomepageHeroBackgroundImageUrl.mockReturnValue('/images/hero.webp')
+    mockFindHomepageHeroBackgroundImageUrl.mockReturnValue('https://example.com/hero.jpg')
 
     const jsx = await Page({ params: Promise.resolve({ slug: undefined }) })
     render(jsx as React.ReactElement)
 
     expect(mockFindHomepageHeroBackgroundImageUrl).toHaveBeenCalledWith(blocks)
-    expect(mockPreload).toHaveBeenCalledWith('/images/hero.webp', {
+    expect(mockPreload).toHaveBeenCalledWith('https://example.com/hero.jpg', {
       as: 'image',
       fetchPriority: 'high',
     })

@@ -75,7 +75,7 @@ describe('HomepageHeroBlock', () => {
     )
     const img = container.querySelector('img[data-component="image"]') as HTMLImageElement
     expect(img).not.toBeNull()
-    expect(img.src).toContain('/images/hero.webp')
+    expect(img.src).toContain('https://example.com/hero.jpg')
   })
 
   it('uses gradient fallback when no background image is configured', () => {

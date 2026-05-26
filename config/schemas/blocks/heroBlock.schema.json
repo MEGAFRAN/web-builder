@@ -46,9 +46,11 @@
       ]
     },
     "backgroundImageUrl": {
+      "description": "Hero background image src. Use a same-origin blob path (e.g. /images/hero.webp) in production, or an absolute https URL for templates and dev. Omit or set null for gradient fallback.",
       "oneOf": [
         {
-          "type": "string"
+          "type": "string",
+          "pattern": "^(/images/|https://)"
         },
         {
           "type": "null"

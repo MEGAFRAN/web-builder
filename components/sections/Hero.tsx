@@ -2,7 +2,6 @@
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Image } from "@/components/content/Image";
-import { HERO_BACKGROUND_IMAGE_PATH } from "@/lib/page-hero-preload";
 import {
   dispatchOpenBookingModal,
   isBookingModalHref,
@@ -89,7 +88,8 @@ export function Hero({
   /** Applies a theme gradient when no background image is configured. */
   gradientFallback?: boolean;
 }) {
-  const hasPhotoBackground = Boolean(backgroundImageUrl?.trim());
+  const photoBackgroundSrc = backgroundImageUrl?.trim() ?? "";
+  const hasPhotoBackground = Boolean(photoBackgroundSrc);
   const hasGradientFallback = gradientFallback && !hasPhotoBackground;
   const hasVisualBackground = hasPhotoBackground || hasGradientFallback;
   const showPhotoContentPanel = hasPhotoBackground;
@@ -123,7 +123,7 @@ export function Hero({
       {hasPhotoBackground && (
         <>
           <Image
-            src={HERO_BACKGROUND_IMAGE_PATH}
+            src={photoBackgroundSrc}
             alt=""
             fill
             fetchPriority="high"

@@ -25,7 +25,7 @@
       "subtext": "Personalized Haircuts & Color by Emma. Look and feel your best in a calm, welcoming studio.",
       "primaryButtonLabel": "Book Now",
       "primaryButtonHref": "#book",
-      "backgroundImageUrl": "https://picsum.photos/seed/hair-salon-hero/1600/900"
+      "backgroundImageUrl": "/images/hero.webp"
     },
     {
       "_type": "services",
