@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import {
   adminAuthUrl,
   adminFetch,
+  clearAdminToken,
   setAdminUnauthorizedHandler,
   type AdminSessionInfo,
 } from '@/lib/admin-api'
@@ -75,6 +76,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   }, [router])
 
   const signOut = useCallback(async () => {
+    clearAdminToken()
     await adminFetch(adminAuthUrl('logout'), { method: 'POST' })
     setSession(null)
     router.push('/admin/login')

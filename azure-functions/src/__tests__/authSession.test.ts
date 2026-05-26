@@ -12,12 +12,16 @@ function mockRequest(
   init: {
     method?: string
     cookie?: string
+    bearerToken?: string
     params?: Record<string, string>
   } = {},
 ): HttpRequest {
   const headers = new Map<string, string>()
   if (init.cookie) {
     headers.set('cookie', `${ADMIN_SESSION_COOKIE}=${encodeURIComponent(init.cookie)}`)
+  }
+  if (init.bearerToken) {
+    headers.set('authorization', `Bearer ${init.bearerToken}`)
   }
   return {
     method: init.method ?? 'GET',
@@ -49,6 +53,20 @@ describe('admin JWT auth', () => {
     assert.equal(session.email, 'admin@example.com')
     assert.equal(session.clientId, '1')
     assert.ok(session.exp > Math.floor(Date.now() / 1000))
+  })
+
+  it('accepts a valid Bearer token in the Authorization header', async () => {
+    const token = await signAdminJwt('admin@example.com', '1')
+    const session = await validateAdminJwt(mockRequest({ bearerToken: token }))
+    assert.equal(session.email, 'admin@example.com')
+    assert.equal(session.clientId, '1')
+  })
+
+  it('prefers Bearer header over cookie when both are present', async () => {
+    const cookieToken = await signAdminJwt('cookie@example.com', 'c1')
+    const bearerToken = await signAdminJwt('bearer@example.com', 'b1')
+    const session = await validateAdminJwt(mockRequest({ cookie: cookieToken, bearerToken }))
+    assert.equal(session.email, 'bearer@example.com')
   })
 
   it('rejects a missing cookie with 401', async () => {

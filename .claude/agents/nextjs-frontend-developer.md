@@ -51,6 +51,16 @@ When this function is needed, read the skill file and execute from its instructi
 
 ---
 
+### `create_or_update_azure_function`
+
+`create_or_update_azure_function(requirements: string) returns UpdatedAzureFunction`
+
+Documentation: `azure-functions/README.md`
+
+When this function is needed, read the documentation.
+
+---
+
 ## Use Cases
 
 1. Do you need to create or update components? If No, continue to use case 2, if yes read the following files: components/registry.ts

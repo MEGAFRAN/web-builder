@@ -47,6 +47,13 @@ export async function verifyAdminJwt(token: string): Promise<AdminJwtPayload> {
 }
 
 export async function validateAdminJwt(req: HttpRequest): Promise<AdminJwtPayload> {
+  // SWA free tier cannot proxy to Functions, so cross-origin cookies are blocked by
+  // browsers. Accept Authorization: Bearer <token> first (cross-origin SPA), then
+  // fall back to the httpOnly cookie (local dev / same-origin).
+  const authHeader = req.headers.get('authorization')?.trim()
+  if (authHeader?.toLowerCase().startsWith('bearer ')) {
+    return verifyAdminJwt(authHeader.slice(7).trim())
+  }
   const cookies = parseCookieHeader(req.headers.get('cookie'))
   const raw = cookies[ADMIN_SESSION_COOKIE]
   if (!raw) {

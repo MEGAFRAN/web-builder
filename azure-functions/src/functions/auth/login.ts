@@ -101,7 +101,10 @@ export async function authLoginHandler(
         'Set-Cookie': setCookie,
         'Cache-Control': 'no-store',
       },
-      jsonBody: { ok: true, email: user.email, clientId: user.clientId },
+      // token is also returned in the body so cross-origin SPAs (e.g. SWA free
+      // tier where third-party cookies are blocked) can store it in sessionStorage
+      // and send it as Authorization: Bearer on subsequent requests.
+      jsonBody: { ok: true, email: user.email, clientId: user.clientId, token },
     }
   } catch (err) {
     if (err instanceof HttpError) {

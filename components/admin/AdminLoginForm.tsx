@@ -7,7 +7,7 @@ import { Stack } from '@/components/layout/Stack'
 import { Section } from '@/components/layout/Section'
 import { adminCopy } from '@/components/admin/admin-copy'
 import { useAdminAuth } from '@/lib/admin-auth-context'
-import { adminAuthUrl, adminFetch, type AdminLoginResponse } from '@/lib/admin-api'
+import { adminAuthUrl, adminFetch, setAdminToken, type AdminLoginResponse } from '@/lib/admin-api'
 
 export default function AdminLoginForm({
   misconfigured,
@@ -44,6 +44,9 @@ export default function AdminLoginForm({
         setError(adminCopy.login.defaultError)
         return
       }
+      // Store the bearer token so adminFetch can send Authorization: Bearer on
+      // cross-origin requests (SWA free tier blocks third-party cookies).
+      if (typeof data.token === 'string') setAdminToken(data.token)
       setSession({ email: data.email, clientId: data.clientId })
       router.push(redirectTo.startsWith('/admin') ? redirectTo : '/admin/bookings')
     } finally {

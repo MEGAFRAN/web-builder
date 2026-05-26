@@ -41,6 +41,7 @@ All admin endpoints (except login/logout) require an `httpOnly` JWT cookie named
 ## Auth model
 
 - JWTs are signed with `HS256` and stored in the `admin-session` cookie (7-day TTL).
+- Production cookies use `SameSite=None; Secure` so the admin SPA (Static Web Apps) can send the session on cross-origin requests to this Function App. Detected automatically when `WEBSITE_SITE_NAME` is set (Azure) or `NODE_ENV=production`. Override with `ADMIN_COOKIE_CROSS_SITE=true|false`. Local dev uses `SameSite=Lax` without `Secure`.
 - `clientId` is always read from the validated JWT — never from query params or request body for data scoping.
 - Signing key: `ADMIN_JWT_SECRET` (min 32 characters).
 
