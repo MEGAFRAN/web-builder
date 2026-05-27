@@ -17,6 +17,7 @@ import {
 } from '@/lib/booking-public-copy'
 import {
   availabilityUrl,
+  bookingSettingsUrl,
   isRemoteBookingApi,
   reservationPostHeaders,
   reservationUrl,
@@ -28,6 +29,7 @@ import ReservationCardCapture, {
 } from '@/components/blocks/ReservationCardCapture'
 import { ReservationProgress } from '@/components/blocks/ReservationProgress'
 import type {
+  BookingSettings,
   ReservationBlock as ReservationBlockProps,
   ReservationServiceItem,
 } from '@/types/cms'
@@ -96,14 +98,36 @@ export default function ReservationBlock({
   buildTimeCatalog,
   bookingSettings,
 }: ReservationBlockProps) {
-  const guaranteeRequired = isGuaranteeRequired(bookingSettings)
   const resolvedClientId = resolveBuildClientId(clientId)
+  const [liveSettings, setLiveSettings] = useState<BookingSettings | null | undefined>(undefined)
+  const effectiveSettings: BookingSettings | null | undefined =
+    liveSettings !== undefined ? (liveSettings ?? bookingSettings ?? null) : bookingSettings
+  const guaranteeRequired = isGuaranteeRequired(effectiveSettings)
   const cmsServices: ReservationServiceItem[] = servicesProp ?? []
   const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(
     clientId,
     servicesEndpoint,
     buildTimeCatalog,
   )
+
+  useEffect(() => {
+    if (!isRemoteBookingApi() || !resolvedClientId) return
+    const signal = { cancelled: false }
+    queueMicrotask(() => {
+      void fetch(bookingSettingsUrl(resolvedClientId))
+        .then(r => (r.ok ? r.json() : null))
+        .then((data: { bookingSettings?: BookingSettings | null } | null) => {
+          if (signal.cancelled) return
+          setLiveSettings(data?.bookingSettings ?? null)
+        })
+        .catch(() => {
+          if (!signal.cancelled) setLiveSettings(null)
+        })
+    })
+    return () => {
+      signal.cancelled = true
+    }
+  }, [resolvedClientId])
 
   const [selectedServiceId, setSelectedServiceId] = useState<string>(
     initialServiceId ?? '',
@@ -866,11 +890,11 @@ export default function ReservationBlock({
                     />
                   </div>
 
-                  {guaranteeRequired && bookingSettings && resolvedClientId ? (
+                  {guaranteeRequired && effectiveSettings && resolvedClientId ? (
                     <ReservationCardCapture
                       clientId={resolvedClientId}
                       email={fields.email}
-                      bookingSettings={bookingSettings}
+                      bookingSettings={effectiveSettings}
                       servicePrice={effectivePrice ?? null}
                       onHandlersChange={setCardHandlers}
                     />

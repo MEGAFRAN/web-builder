@@ -81,3 +81,13 @@ export function setupIntentUrl(clientId?: string | null): string {
   }
   return appendClientIdQuery('/api/setup-intent', resolvedClientId)
 }
+
+/** Tenant booking policy (no-show guarantee) for the booking widget. */
+export function bookingSettingsUrl(clientId?: string | null): string {
+  const resolvedClientId = resolveBuildClientId(clientId)
+  const base = remoteBase()
+  if (base) {
+    return appendClientIdQuery(`${base}/booking-settings`, resolvedClientId)
+  }
+  return appendClientIdQuery('/api/booking-settings', resolvedClientId)
+}

@@ -148,6 +148,25 @@ describe('booking-api', () => {
     })
   })
 
+  describe('bookingSettingsUrl', () => {
+    it('returns the local route when no remote env is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')
+      vi.stubEnv('NEXT_PUBLIC_CLIENT_ID', 'test')
+      const { bookingSettingsUrl } = await import('@/lib/booking-api')
+
+      expect(bookingSettingsUrl()).toBe('/api/booking-settings?clientId=test')
+    })
+
+    it('returns the remote Azure Functions URL when NEXT_PUBLIC_BOOKING_API_URL is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', 'https://fn.example.com/api')
+      const { bookingSettingsUrl } = await import('@/lib/booking-api')
+
+      expect(bookingSettingsUrl('tenant-one')).toBe(
+        'https://fn.example.com/api/booking-settings?clientId=tenant-one',
+      )
+    })
+  })
+
   describe('setupIntentUrl', () => {
     it('returns the local route when no remote env is set', async () => {
       vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')

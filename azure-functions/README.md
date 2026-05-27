@@ -9,6 +9,7 @@ Node.js/TypeScript Azure Functions v4 that power the public booking widget and t
 | Method | Route | Description |
 |--------|-------|-------------|
 | GET | `/booking-services?clientId=` | Return the bookable services catalog for a client |
+| GET | `/booking-settings?clientId=` | Return tenant no-show policy (`bookingSettings`) |
 | POST | `/reservations` | Create a reservation |
 | GET | `/availability?clientId=&date=YYYY-MM-DD` | Return booked time slots for a date |
 

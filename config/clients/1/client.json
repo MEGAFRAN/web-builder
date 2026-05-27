@@ -10,6 +10,11 @@
     "gallery": false,
     "menu": false
   },
+  "bookingSettings": {
+    "enforceGuarantee": true,
+    "cancellationFeePercent": 50,
+    "currency": "EUR"
+  },
   "theme": {
     "primaryColor": "#0d9488",
     "accentColor": "#14b8a6",
