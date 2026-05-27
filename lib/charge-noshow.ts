@@ -1,6 +1,8 @@
+import Stripe from 'stripe'
 import type { BookingSettings } from '@/types/cms'
 import type { AdminBookingService, StoredReservation } from '@/types/admin'
 import { resolveNoShowCharge } from '@/lib/no-show-penalty'
+import { toStripeCurrency } from '@/lib/stripe-currency'
 import { readStripeAccountId } from '@/lib/stripe-connect-db'
 import { isStripeServerConfigured } from '@/lib/setup-intent'
 
@@ -29,17 +31,24 @@ export async function chargeNoShowStripe(params: {
     return chargeNoShowLocal(params.amount)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const StripeSdk = require('stripe') as typeof import('stripe').default
-  const stripe = new StripeSdk(process.env.STRIPE_SECRET_KEY!.trim())
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!.trim())
 
   try {
+    if (!customerId?.trim()) {
+      return {
+        ok: false,
+        status: 'cancelled_charge_failed',
+        error:
+          'This reservation is missing the Stripe customer ID. The guest must re-book with a card on file.',
+      }
+    }
+
     await stripe.paymentIntents.create(
       {
         amount: Math.round(params.amount * 100),
-        currency: params.currency.toLowerCase(),
+        currency: toStripeCurrency(params.currency),
         payment_method: paymentMethodId,
-        ...(customerId ? { customer: customerId } : {}),
+        customer: customerId.trim(),
         off_session: true,
         confirm: true,
         metadata: {
@@ -51,7 +60,10 @@ export async function chargeNoShowStripe(params: {
     )
     return { ok: true, status: 'cancelled_and_charged', amount: params.amount }
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Charge failed.'
+    const message =
+      err && typeof err === 'object' && 'message' in err && typeof err.message === 'string'
+        ? err.message
+        : 'Charge failed.'
     return { ok: false, status: 'cancelled_charge_failed', error: message }
   }
 }

@@ -74,7 +74,7 @@ When this function is needed, read the documentation.
 After writing files, run a TypeScript type check and lint to catch errors early and check if tests are failing:
 
 ```bash
-npx tsc --noEmit 2>&1 | head -40 && npm run lint && npm run test
+npm run validate:quick
 ```
 
 If type errors are present, fix them before reporting completion.

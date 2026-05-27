@@ -54,6 +54,15 @@ describe('no-show penalty', () => {
       services,
       settings: { enforceGuarantee: true, currency: 'EUR' },
     })
-    expect(result).toEqual({ amount: 50, currency: 'EUR', servicePrice: 100 })
+    expect(result).toEqual({ amount: 50, currency: 'eur', servicePrice: 100 })
+  })
+
+  it('resolveNoShowCharge maps display currency symbols to Stripe ISO codes', () => {
+    const result = resolveNoShowCharge({
+      reservation: { serviceId: 'cut', durationMinutes: 60 },
+      services: [{ ...services[0], currency: '€' }],
+      settings: { enforceGuarantee: true, currency: 'EUR' },
+    })
+    expect(result).toEqual({ amount: 50, currency: 'eur', servicePrice: 100 })
   })
 })

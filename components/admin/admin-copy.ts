@@ -109,6 +109,7 @@ export const adminCopy = {
     markNoShow: 'Marcar como ausencia',
     markNoShowAndCharge: 'Marcar no-show y cobrar',
     chargeFailedAlert: 'No se pudo cobrar la penalización. El cliente puede tener fondos insuficientes.',
+    chargeFailureReason: 'Motivo del fallo de cobro',
     cardOnFile: 'Tarjeta guardada',
     cancelModalTitle: '¿Cancelar esta cita?',
     confirmCancel: 'Confirmar cancelación',

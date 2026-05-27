@@ -1,8 +1,20 @@
 import Stripe from 'stripe'
+import { toStripeCurrency } from './stripeCurrency'
 
 export type ChargeNoShowResult =
   | { ok: true; status: 'cancelled_and_charged' }
   | { ok: false; status: 'cancelled_charge_failed'; error: string }
+
+function stripeErrorMessage(err: unknown): string {
+  if (err instanceof Stripe.errors.StripeError) {
+    const decline =
+      'decline_code' in err && typeof err.decline_code === 'string'
+        ? ` (${err.decline_code})`
+        : ''
+    return `${err.message}${decline}`
+  }
+  return err instanceof Error ? err.message : 'Charge failed.'
+}
 
 function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY?.trim()
@@ -24,7 +36,7 @@ export async function chargeNoShowStripe(params: {
     await stripe.paymentIntents.create(
       {
         amount: Math.round(params.amount * 100),
-        currency: params.currency.toLowerCase(),
+        currency: toStripeCurrency(params.currency),
         payment_method: params.paymentMethodId,
         ...(params.customerId ? { customer: params.customerId } : {}),
         off_session: true,
@@ -38,7 +50,6 @@ export async function chargeNoShowStripe(params: {
     )
     return { ok: true, status: 'cancelled_and_charged' }
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Charge failed.'
-    return { ok: false, status: 'cancelled_charge_failed', error: message }
+    return { ok: false, status: 'cancelled_charge_failed', error: stripeErrorMessage(err) }
   }
 }

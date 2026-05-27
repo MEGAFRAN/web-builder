@@ -49,6 +49,11 @@ type TestReservation = {
   status: string
   createdAt: string
   serviceName: string | null
+  guarantee?: {
+    paymentMethodId: string
+    customerId?: string
+    status: 'vaulted'
+  } | null
 }
 
 function reservation(overrides: Partial<TestReservation> = {}): TestReservation {
@@ -547,6 +552,75 @@ describe('AdminBookingsPage', () => {
       email: 'n@e.co',
       time: '09:00',
       serviceId: 's1',
+    })
+  })
+
+  it('surfaces charge failures from the no-show endpoint without throwing', async () => {
+    const schedule = makeSchedule()
+    const row = reservation({
+      guarantee: {
+        paymentMethodId: 'pm_123',
+        customerId: 'cus_123',
+        status: 'vaulted',
+      },
+    })
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+        const url = typeof input === 'string' ? input : input.toString()
+        if (url.includes('/api/admin/booking-settings')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              bookingSettings: { enforceGuarantee: true, cancellationFeePercent: 50, currency: 'EUR' },
+            }),
+          } as Response)
+        }
+        if (url.includes('/api/admin/charge-noshow') && init?.method === 'POST') {
+          return Promise.resolve({
+            ok: false,
+            status: 402,
+            json: async () => ({
+              error: 'Invalid currency: €.',
+              reservation: {
+                ...row,
+                status: 'cancelled_charge_failed',
+                cancelReason: 'Invalid currency: €.',
+              },
+            }),
+          } as Response)
+        }
+        if (url.includes('/api/admin/reservations?')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ reservations: [row] }),
+          } as Response)
+        }
+        if (url.includes('/api/admin/schedule')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => schedule,
+          } as Response)
+        }
+        return Promise.reject(new Error(`unexpected fetch ${url}`))
+      }),
+    )
+
+    render(<AdminBookingsPage />)
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /pat guest/i })).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: /pat guest/i }))
+    await screen.findByRole('heading', { name: adminCopy.bookings.appointment })
+
+    fireEvent.click(
+      screen.getByRole('button', { name: adminCopy.bookings.markNoShowAndCharge }),
+    )
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('Invalid currency: €.')
     })
   })
 })

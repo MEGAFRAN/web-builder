@@ -101,4 +101,26 @@ describe('BookingDetailDrawer', () => {
     expect(screen.getByRole('button', { name: adminCopy.bookings.markNoShow })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: adminCopy.bookings.markNoShowAndCharge })).not.toBeInTheDocument()
   })
+
+  it('shows the charge failure reason when present on the reservation', () => {
+    const row = mockReservation({
+      status: 'cancelled_charge_failed',
+      cancelReason: 'Invalid currency: €.',
+      guarantee: { paymentMethodId: 'pm_mock_local_12345', status: 'vaulted' },
+    })
+
+    render(
+      <BookingDetailDrawer
+        row={row}
+        guaranteeEnabled
+        onNoShowCharge={vi.fn()}
+        onClose={vi.fn()}
+        onCancel={vi.fn()}
+        onNoShow={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByText(adminCopy.bookings.chargeFailureReason)).toBeInTheDocument()
+    expect(screen.getByText('Invalid currency: €.')).toBeInTheDocument()
+  })
 })

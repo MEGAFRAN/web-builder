@@ -1,4 +1,5 @@
 import type { AdminBookingService, StoredReservation } from '../types/admin'
+import { toStripeCurrency } from './stripeCurrency'
 
 export type TenantBookingSettings = {
   enforceGuarantee: boolean
@@ -49,7 +50,7 @@ export function resolveNoShowCharge(params: {
   settings?: TenantBookingSettings | null
 }): { amount: number; currency: string } | { error: string } {
   const svc = params.services.find((s) => s.id === params.reservation.serviceId)
-  const currency = (svc?.currency ?? params.settings?.currency ?? 'EUR').trim() || 'EUR'
+  const currency = toStripeCurrency(svc?.currency ?? params.settings?.currency ?? 'EUR')
   const servicePrice = resolveBookedServicePrice(params.reservation, params.services)
   if (servicePrice == null || servicePrice <= 0) {
     return { error: 'Could not resolve the booked service price.' }

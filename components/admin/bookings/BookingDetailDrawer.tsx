@@ -103,6 +103,12 @@ export function BookingDetailDrawer({
                 <dd className="text-foreground text-xs">{row.guarantee.paymentMethodId}</dd>
               </div>
             ) : null}
+            {row.cancelReason?.trim() ? (
+              <div>
+                <dt className="font-medium text-muted">{adminCopy.bookings.chargeFailureReason}</dt>
+                <dd className="text-destructive text-xs">{row.cancelReason}</dd>
+              </div>
+            ) : null}
           </dl>
 
           <div className="mt-8 flex flex-col gap-2">

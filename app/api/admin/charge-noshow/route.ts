@@ -53,6 +53,15 @@ export async function POST(req: NextRequest) {
       { status: 422 },
     )
   }
+  if (!reservation.guarantee.customerId?.trim()) {
+    return NextResponse.json(
+      {
+        error:
+          'This reservation is missing the Stripe customer ID. The guest must re-book with a card on file.',
+      },
+      { status: 422 },
+    )
+  }
 
   const services = await readBookingServices()
   const charge = await chargeNoShowForClient({

@@ -16,7 +16,7 @@ function corsHeaders(origin: string | null): Record<string, string> {
   }
 }
 
-async function handler(
+export async function chargeNoShowHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
@@ -104,6 +104,18 @@ async function handler(
       }
     }
 
+    const customerId = existing.guarantee?.customerId?.trim()
+    if (!customerId) {
+      return {
+        status: 422,
+        headers: corsHeaders(origin),
+        jsonBody: {
+          error:
+            'This reservation is missing the Stripe customer ID. The guest must re-book with a card on file.',
+        },
+      }
+    }
+
     const services = await getServices(session.clientId)
     const resolved = resolveNoShowCharge({
       reservation: existing,
@@ -120,7 +132,7 @@ async function handler(
 
     const charge = await chargeNoShowStripe({
       paymentMethodId,
-      customerId: existing.guarantee?.customerId,
+      customerId,
       stripeAccountId,
       amount: resolved.amount,
       currency: resolved.currency,
@@ -168,5 +180,5 @@ app.http('adminChargeNoShow', {
   methods: ['POST', 'OPTIONS'],
   authLevel: 'anonymous',
   route: 'mgmt/charge-noshow',
-  handler,
+  handler: chargeNoShowHandler,
 })

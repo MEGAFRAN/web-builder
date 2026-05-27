@@ -165,6 +165,21 @@ describe('POST /api/admin/charge-noshow', () => {
     expect(await res.json()).toEqual({ error: 'This reservation has no card on file.' })
   })
 
+  it('returns 422 when the reservation is missing customerId', async () => {
+    vi.mocked(readReservations).mockResolvedValueOnce([
+      {
+        ...reservation,
+        guarantee: { paymentMethodId: 'pm_123', status: 'vaulted' },
+      },
+    ])
+    const res = await POST(post({ reservationId: 'res-1' }))
+    expect(res.status).toBe(422)
+    expect(await res.json()).toEqual({
+      error:
+        'This reservation is missing the Stripe customer ID. The guest must re-book with a card on file.',
+    })
+  })
+
   it('charges the no-show fee and persists the updated reservation', async () => {
     const res = await POST(post({ reservationId: 'res-1' }))
     expect(res.status).toBe(200)

@@ -111,14 +111,23 @@ export default function AdminBookingsPage() {
     dayWindow !== null ? Math.max((dayWindow.closeMin - dayWindow.openMin) * ppm, 120) : 0
 
   async function chargeNoShow(id: string) {
+    setError('')
     const res = await adminFetch(adminChargeNoShowUrl(), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ reservationId: id }),
     })
+    const j = (await res.json().catch(() => ({}))) as {
+      error?: string
+      reservation?: ReservationRow
+    }
     if (!res.ok) {
-      const j = (await res.json().catch(() => ({}))) as { error?: string }
-      throw new Error(j.error ?? adminCopy.bookings.chargeFailedAlert)
+      if (j.reservation) {
+        setDetail(j.reservation)
+        setRows((prev) => prev.map((r) => (r.id === id ? j.reservation! : r)))
+      }
+      setError(j.error ?? adminCopy.bookings.chargeFailedAlert)
+      return
     }
     setDetail(null)
     refreshRange()
