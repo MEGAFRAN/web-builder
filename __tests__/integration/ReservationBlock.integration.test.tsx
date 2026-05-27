@@ -72,14 +72,13 @@ function fetchInputUrl(input: Parameters<typeof fetch>[0]): string {
 }
 
 function reservationPostCalls(fetchSpy: { mock: { calls: unknown[][] } }): [string, RequestInit][] {
-  return fetchSpy.mock.calls.filter(
-    (c): c is [string, RequestInit] =>
-      Array.isArray(c) &&
-      typeof c[0] === 'string' &&
-      c[0] === '/api/reservation' &&
-      typeof c[1] === 'object' &&
-      c[1] !== null,
-  )
+  return fetchSpy.mock.calls.filter((c): c is [string, RequestInit] => {
+    if (!Array.isArray(c) || typeof c[0] !== 'string' || !c[0].includes('reservation')) {
+      return false
+    }
+    const init = c[1]
+    return typeof init === 'object' && init !== null && (init as RequestInit).method === 'POST'
+  })
 }
 
 /** Mount resolves `/api/booking-services` in an effect; flush past the microtask chain so setState runs inside act. */

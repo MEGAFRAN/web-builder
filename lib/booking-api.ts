@@ -38,6 +38,27 @@ export function isRemoteBookingApi(): boolean {
   return remoteBase().length > 0 || bakedServicesEndpoint().length > 0
 }
 
+/** Availability slots endpoint for the booking widget. */
+export function availabilityUrl(
+  clientId?: string | null,
+  override?: string | null,
+): string {
+  const explicit = override?.trim()
+  if (explicit) return explicit
+  const base = remoteBase()
+  if (base) return `${base}/availability`
+  return '/api/availability'
+}
+
+/** Reservation submit endpoint for the booking widget. */
+export function reservationUrl(override?: string | null): string {
+  const explicit = override?.trim()
+  if (explicit) return explicit
+  const base = remoteBase()
+  if (base) return `${base}/reservations`
+  return '/api/reservation'
+}
+
 /** SetupIntent endpoint for card-on-file (no-show guarantee). */
 export function setupIntentUrl(clientId?: string | null): string {
   const resolvedClientId = resolveBuildClientId(clientId)

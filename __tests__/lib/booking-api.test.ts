@@ -90,4 +90,55 @@ describe('booking-api', () => {
       expect(isRemoteBookingApi()).toBe(true)
     })
   })
+
+  describe('availabilityUrl', () => {
+    it('returns the local route when no remote env is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')
+      const { availabilityUrl } = await import('@/lib/booking-api')
+
+      expect(availabilityUrl()).toBe('/api/availability')
+    })
+
+    it('returns the remote Azure Functions URL when NEXT_PUBLIC_BOOKING_API_URL is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', 'https://fn.example.com/api')
+      const { availabilityUrl } = await import('@/lib/booking-api')
+
+      expect(availabilityUrl()).toBe('https://fn.example.com/api/availability')
+    })
+
+    it('prefers block override over remote env', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', 'https://fn.example.com/api')
+      const { availabilityUrl } = await import('@/lib/booking-api')
+
+      expect(availabilityUrl('test', 'https://override.example.com/slots')).toBe(
+        'https://override.example.com/slots',
+      )
+    })
+  })
+
+  describe('reservationUrl', () => {
+    it('returns the local route when no remote env is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')
+      const { reservationUrl } = await import('@/lib/booking-api')
+
+      expect(reservationUrl()).toBe('/api/reservation')
+    })
+
+    it('returns the remote Azure Functions URL when NEXT_PUBLIC_BOOKING_API_URL is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', 'https://fn.example.com/api')
+      const { reservationUrl } = await import('@/lib/booking-api')
+
+      expect(reservationUrl()).toBe('https://fn.example.com/api/reservations')
+    })
+  })
+
+  describe('setupIntentUrl', () => {
+    it('returns the local route when no remote env is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')
+      vi.stubEnv('NEXT_PUBLIC_CLIENT_ID', 'test')
+      const { setupIntentUrl } = await import('@/lib/booking-api')
+
+      expect(setupIntentUrl()).toBe('/api/setup-intent?clientId=test')
+    })
+  })
 })

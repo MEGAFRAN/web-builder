@@ -15,6 +15,11 @@ import {
   BOOKING_STEPS_WITH_CARD,
   formatBookingDate,
 } from '@/lib/booking-public-copy'
+import {
+  availabilityUrl,
+  isRemoteBookingApi,
+  reservationUrl,
+} from '@/lib/booking-api'
 import { isGuaranteeRequired } from '@/lib/booking-guarantee'
 import { resolveBuildClientId } from '@/lib/client-id'
 import ReservationCardCapture, {
@@ -175,7 +180,7 @@ export default function ReservationBlock({
       return
     }
     const duration = effectiveDuration
-    const base = availabilityEndpoint ?? '/api/availability'
+    const base = availabilityUrl(clientId, availabilityEndpoint)
     const url =
       `${base}?clientId=${encodeURIComponent(clientId)}` +
       `&date=${encodeURIComponent(selectedDate)}` +
@@ -284,22 +289,27 @@ export default function ReservationBlock({
         customerId = card.customerId ?? undefined
       }
 
-      const res = await fetch('/api/reservation', {
+      const payload = {
+        serviceId: selectedService.id,
+        durationMinutes: effectiveDuration,
+        name: fields.name.trim(),
+        email: fields.email.trim(),
+        phone: fields.phone.trim(),
+        date: selectedDate,
+        time: selectedTime,
+        notes,
+        ...(paymentMethodId
+          ? { paymentMethodId, ...(customerId ? { customerId } : {}) }
+          : {}),
+      }
+      const res = await fetch(reservationUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          serviceId: selectedService.id,
-          durationMinutes: effectiveDuration,
-          name: fields.name.trim(),
-          email: fields.email.trim(),
-          phone: fields.phone.trim(),
-          date: selectedDate,
-          time: selectedTime,
-          notes,
-          ...(paymentMethodId
-            ? { paymentMethodId, ...(customerId ? { customerId } : {}) }
-            : {}),
-        }),
+        body: JSON.stringify(
+          isRemoteBookingApi()
+            ? { clientId: resolvedClientId, ...payload }
+            : payload,
+        ),
       })
       if (!res.ok) {
         let msg: string = BOOKING_COPY.submitError
