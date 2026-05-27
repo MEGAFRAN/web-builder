@@ -38,7 +38,7 @@ The prepare scripts temporarily move excluded directories outside `app/` before 
 ### Public client site (blob deploy)
 
 ```
-GitHub Actions — deploy-websites.yml (manual dispatch, input: clientId)
+GitHub Actions — deploy-blob-storage.yml (manual dispatch, input: clientId)
         │
         ▼
 echo CLIENT_ID={clientId} > .env.local
@@ -68,7 +68,7 @@ Azure Blob Storage — $web container (synced via az storage blob sync)
 ### Admin SPA (single shared deployment)
 
 ```
-GitHub Actions — deploy-admin.yml (triggers on push to main / manual)
+GitHub Actions — deploy-admin-swa.yml (triggers on push to main / manual)
         │
         ▼
 npm run build:admin
@@ -271,7 +271,7 @@ Used by site blocks and forms during local development. In production, the equiv
 
 ### Admin portal
 
-Routes under `/admin` are a **client-side SPA** — all pages are `"use client"` with no server rendering. The admin surface is excluded from public blob builds and deployed independently via `deploy-admin.yml` to a shared Azure Static Web Apps instance.
+Routes under `/admin` are a **client-side SPA** — all pages are `"use client"` with no server rendering. The admin surface is excluded from public blob builds and deployed independently via `deploy-admin-swa.yml` to a shared Azure Static Web Apps instance.
 
 - One admin SPA deployment serves all clients.
 - The active tenant is identified from the JWT issued at login (`{ email, clientId, exp }`), not from `CLIENT_ID`.
@@ -296,7 +296,7 @@ These files are **per deployment / per clone**, not shared across clients in Git
 
 ## Deployment & Secrets
 
-### Client sites — `deploy-websites.yml` (blob)
+### Client sites — `deploy-blob-storage.yml` (blob)
 
 Manual dispatch workflow; one run per client:
 
@@ -313,7 +313,7 @@ The workflow runs `npm run build:blob`, which excludes server-only routes via `s
 
 Azure resources are discovered by tag (`client_id` or `team_id` on the storage account) — no per-client secret needed beyond Azure OIDC credentials.
 
-### Client sites — `deploy-azure-static.yml` (SWA, legacy)
+### Client sites — `deploy-swa.yml` (SWA, legacy)
 
 Alternative deploy target using Azure Static Web Apps. Runs `npm run build:blob`. Requires a per-client deploy token:
 
@@ -321,7 +321,7 @@ Alternative deploy target using Azure Static Web Apps. Runs `npm run build:blob`
 |--------|---------|
 | `SWA_TOKEN_{CLIENT_KEY}` | Hyphens in `clientId` replaced with underscores |
 
-### Admin SPA — `deploy-admin.yml`
+### Admin SPA — `deploy-admin-swa.yml`
 
 Triggered on push to `main` when admin-related files change, or via manual dispatch. Runs `npm run build:admin`.
 

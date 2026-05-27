@@ -1,5 +1,5 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
-import { readTenantBookingSettings } from '../cosmos/tenantSettingsStore'
+import { resolveTenantBookingSettings } from '../cosmos/tenantSettingsStore'
 import {
   handleHttpError,
   handleOptions,
@@ -29,7 +29,7 @@ async function handler(
   }
 
   try {
-    const bookingSettings = await readTenantBookingSettings(clientId)
+    const bookingSettings = await resolveTenantBookingSettings(clientId)
     context.log(
       `[booking-settings] ${clientId}: enforceGuarantee=${bookingSettings?.enforceGuarantee ?? false}`,
     )

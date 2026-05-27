@@ -1,13 +1,17 @@
 ---
 name: test-runner
-description: Use this agent when the user wants to run tests, check test coverage, debug failing tests. Examples: "run all tests", "run unit tests for the Button component", "run the integration tests", "why are my tests failing", "run tests and show me the failures".
+description: Use this agent when the user wants to run tests, check test coverage, debug failing tests, or create/update tests for the Next.js app or Azure Functions. Examples: "run all tests", "run unit tests for the Button component", "add tests for tenantSettingsStore", "why are my azure-functions tests failing", "run tests and show me the failures".
 tools: Bash, Read, Glob, Grep, Write, Edit
 model: sonnet
 color: yellow
-version: 1.2.0
+version: 1.3.0
 created: 2026-03-29
 updated: 2026-05-27
 changelog:
+  - version: 1.3.0
+    date: 2026-05-27
+    change: Add azure_functions_tests function referencing .claude/skills/qa/azure_functions_tests.md
+    reason: Azure tests use a dual-runner layout (node:test vs Vitest) that must be documented separately from Next.js tests
   - version: 1.2.0
     date: 2026-05-27
     change: Document debounced effects, fake-timer pitfalls, suite timeouts, and third-party SDK mocking
@@ -29,11 +33,33 @@ You are a test execution and diagnosis agent.
 
 `test-runner(requirements: string, context: string) returns testFiles: .test files`
 
+---
+
+## Functions
+
+---
+
+### `vitest_react_tests`
+
+`vitest_react_tests(requirements: string) returns TestFiles: tests under __tests__/`
+
+Skill: `.claude/skills/qa/vitest_react_tests.md`
+
+When this function is needed, read the skill file and execute from its instructions.
+
+---
+
+### `azure_functions_tests`
+
+`azure_functions_tests(scope: string) returns TestFiles: tests under azure-functions/src/__tests__/`
+
+Skill: `.claude/skills/qa/azure_functions_tests.md`
+
+When this function is needed, read the skill file and execute from its instructions.
 
 ## Step 1 — Confirm the Test Environment
 
-folder: `__tests__`
-
+folder: `__tests__` or `azure-functions/src/__tests__/`
 
 ## Step 2 — Classify the Request
 
@@ -268,3 +294,5 @@ Before declaring a test “stuck”, walk through:
 - **React act warnings on admin shell / fetch-on-mount components**: Apply the flush helper pattern above; see `__tests__/components/admin/AdminShell.test.tsx` as the reference implementation
 - **Debounced input / setup-intent / payment capture components**: Use real-timer flush helper + raised `describe` timeout; scope fake timers to debounce-only tests — see `__tests__/components/blocks/ReservationCardCapture.test.tsx`
 - **Tests timeout at 5000ms with no clear assertion failure**: Check debounce delay + `waitFor` budget before debugging fetch mocks or Stripe
+- **Azure test in wrong folder or wrong runner**: Read `.claude/skills/qa/azure_functions_tests.md` — colocate under `azure-functions/src/__tests__/`, update `vitest.config.ts` include + `azure-functions/tsconfig.json` exclude for new Vitest files
+- **`node --test` fails after adding Azure test**: File likely uses Vitest but compiled to `dist/` — exclude from azure `tsc` or convert to `node:test` pattern

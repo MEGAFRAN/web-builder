@@ -8,7 +8,12 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
-    exclude: ['**/node_modules/**', 'azure-functions/**'],
+    include: [
+      '__tests__/**/*.{test,spec}.{ts,tsx}',
+      'azure-functions/src/__tests__/tenantSettingsStore.test.ts',
+      'azure-functions/src/__tests__/createReservation.test.ts',
+    ],
+    exclude: ['**/node_modules/**'],
     coverage: {
       provider: 'v8',
       enabled: true,
@@ -32,6 +37,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, '.'),
+      '@azure/functions': resolve(__dirname, 'azure-functions/node_modules/@azure/functions'),
     },
   },
 })

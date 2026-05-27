@@ -1,5 +1,9 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
 import { createReservation as createAdminReservation } from '../cosmos/adminDb'
+import {
+  DEFAULT_TENANT_BOOKING_SETTINGS,
+  ensureTenantBookingSettings,
+} from '../cosmos/tenantSettingsStore'
 import { handleOptions, jsonResponse } from '../http/responseHelpers'
 
 interface ReservationGuarantee {
@@ -55,7 +59,7 @@ function isValidPayload(body: unknown): body is ReservationPayload {
   )
 }
 
-async function handler(
+export async function createReservationHandler(
   request: HttpRequest,
   context: InvocationContext,
 ): Promise<HttpResponseInit> {
@@ -97,6 +101,9 @@ async function handler(
   }
 
   try {
+    if (guarantee) {
+      await ensureTenantBookingSettings(body.clientId, DEFAULT_TENANT_BOOKING_SETTINGS)
+    }
     await createAdminReservation(record)
     context.log(`[reservation] Created ${reservationId} for client ${body.clientId}`)
   } catch (err) {
@@ -152,5 +159,5 @@ app.http('createReservation', {
   methods: ['POST', 'OPTIONS'],
   authLevel: 'anonymous',
   route: 'reservations',
-  handler,
+  handler: createReservationHandler,
 })

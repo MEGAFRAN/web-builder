@@ -90,7 +90,7 @@ All public booking fetches from the browser go through URL helpers in `lib/booki
 
 **Remote reservation POST:** when `isRemoteBookingApi()` is true, `ReservationBlock` includes `clientId` in the JSON body (the Azure Function requires it). Local `/api/reservation` injects `clientId` server-side from `CLIENT_ID` env.
 
-**Build-time env (public blob deploy):** GitHub Actions sets `NEXT_PUBLIC_BOOKING_API_URL` from the repo variable `ADMIN_API_URL` (same Function App base URL as the admin SPA, including `/api` prefix if used). See `.github/workflows/deploy-azure-static.yml`.
+**Build-time env (public blob deploy):** GitHub Actions sets `NEXT_PUBLIC_BOOKING_API_URL` from the repo variable `ADMIN_API_URL` (same Function App base URL as the admin SPA, including `/api` prefix if used). See `.github/workflows/deploy-blob-storage.yml`.
 
 ---
 

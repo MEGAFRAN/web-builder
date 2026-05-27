@@ -3,7 +3,7 @@ import { HttpError } from '../../errors/HttpError'
 import { validateAdminJwt } from '../../auth/validateAdminJwt'
 import { getReservationById, getServices, updateReservationById } from '../../cosmos/adminDb'
 import { readStripeAccountId } from '../../cosmos/stripeConnectStore'
-import { readTenantBookingSettings } from '../../cosmos/tenantSettingsStore'
+import { resolveTenantBookingSettings } from '../../cosmos/tenantSettingsStore'
 import { chargeNoShowStripe } from '../../lib/chargeNoShow'
 import { resolveNoShowCharge } from '../../lib/noShowPenalty'
 
@@ -68,7 +68,7 @@ async function handler(
       }
     }
 
-    const settings = await readTenantBookingSettings(session.clientId)
+    const settings = await resolveTenantBookingSettings(session.clientId)
     if (!settings?.enforceGuarantee) {
       return {
         status: 422,

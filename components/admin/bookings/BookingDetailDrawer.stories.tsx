@@ -53,3 +53,34 @@ export const NoShow: Story = {
     onNoShow: noop,
   },
 }
+
+/** Card on file + guarantee enabled → shows "Marcar no-show y cobrar" (primary button). */
+export const WithGuaranteeCharge: Story = {
+  args: {
+    row: mockReservation({
+      id: 'res-g',
+      guarantee: { paymentMethodId: 'pm_mock_local_12345', status: 'vaulted' },
+    }),
+    guaranteeEnabled: true,
+    onNoShowCharge: noop,
+    onClose: noop,
+    onCancel: noop,
+    onNoShow: noop,
+  },
+}
+
+export const ChargeFailed: Story = {
+  args: {
+    row: mockReservation({
+      id: 'res-f',
+      status: 'cancelled_charge_failed',
+      cancelReason: 'Your card was declined.',
+      guarantee: { paymentMethodId: 'pm_mock_local_12345', status: 'vaulted' },
+    }),
+    guaranteeEnabled: true,
+    onNoShowCharge: noop,
+    onClose: noop,
+    onCancel: noop,
+    onNoShow: noop,
+  },
+}

@@ -57,4 +57,48 @@ describe('BookingDetailDrawer', () => {
       else expect(btn).not.toBeDisabled()
     })
   })
+
+  it('shows the charge button when guarantee is enabled and a card is on file', () => {
+    const onNoShowCharge = vi.fn()
+    const row = mockReservation({
+      guarantee: { paymentMethodId: 'pm_mock_local_12345', status: 'vaulted' },
+    })
+
+    render(
+      <BookingDetailDrawer
+        row={row}
+        guaranteeEnabled
+        onNoShowCharge={onNoShowCharge}
+        onClose={vi.fn()}
+        onCancel={vi.fn()}
+        onNoShow={vi.fn()}
+      />,
+    )
+
+    const chargeButton = screen.getByRole('button', { name: adminCopy.bookings.markNoShowAndCharge })
+    expect(chargeButton).not.toBeDisabled()
+    fireEvent.click(chargeButton)
+    expect(onNoShowCharge).toHaveBeenCalledTimes(1)
+    expect(screen.queryByRole('button', { name: adminCopy.bookings.markNoShow })).not.toBeInTheDocument()
+  })
+
+  it('falls back to mark-no-show when guarantee is disabled even with a card on file', () => {
+    const row = mockReservation({
+      guarantee: { paymentMethodId: 'pm_mock_local_12345', status: 'vaulted' },
+    })
+
+    render(
+      <BookingDetailDrawer
+        row={row}
+        guaranteeEnabled={false}
+        onNoShowCharge={vi.fn()}
+        onClose={vi.fn()}
+        onCancel={vi.fn()}
+        onNoShow={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByRole('button', { name: adminCopy.bookings.markNoShow })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: adminCopy.bookings.markNoShowAndCharge })).not.toBeInTheDocument()
+  })
 })

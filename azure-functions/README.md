@@ -70,7 +70,9 @@ Set these in Azure Portal → Function App → Configuration, or copy `local.set
 | `ADMIN_STRIPE_RETURN_URL` | No | Return URL after Stripe onboarding (defaults to request `Origin` + `/admin/settings/`) |
 | `STRIPE_PUBLISHABLE_KEY` | No | Publishable key returned to the browser for SetupIntent (Functions) |
 
-Seed tenant booking settings for charge-no-show: `CLIENT_ID=test node scripts/seed-tenant-booking-settings.mjs` (requires Cosmos env vars).
+Seed tenant booking settings for charge-no-show: `CLIENT_ID=test node scripts/seed-tenant-booking-settings.mjs` (requires Cosmos env vars). Client deploy workflows also run this automatically when `COSMOS_ENDPOINT` and `COSMOS_KEY` GitHub secrets are set.
+
+At runtime, `GET /mgmt/booking-settings` and `GET /booking-settings` call `resolveTenantBookingSettings`, which backfills Cosmos from `client.json` defaults when a tenant already has card-on-file reservations but no `{clientId}-settings` document. New guaranteed bookings call `ensureTenantBookingSettings` on create.
 
 ## Cosmos DB setup
 
@@ -146,8 +148,16 @@ curl -b "admin-session=<token>" \
 
 ### Tests
 
+**In this package** (`node:test` — auth and HTTP helpers):
+
 ```bash
 npm test
+```
+
+**Vitest** (Cosmos store + reservation handler mocks) lives alongside them in `src/__tests__/` but is excluded from this package's `tsc` build. Run from the repo root:
+
+```bash
+npm run test -- azure-functions/src/__tests__/tenantSettingsStore.test.ts azure-functions/src/__tests__/createReservation.test.ts
 ```
 
 ## Connecting a client

@@ -1,6 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
 import { validateAdminJwt } from '../../auth/validateAdminJwt'
-import { readTenantBookingSettings } from '../../cosmos/tenantSettingsStore'
+import { resolveTenantBookingSettings } from '../../cosmos/tenantSettingsStore'
 import {
   handleHttpError,
   handleOptions,
@@ -19,7 +19,7 @@ async function handler(
 
   try {
     const session = await validateAdminJwt(request)
-    const bookingSettings = await readTenantBookingSettings(session.clientId)
+    const bookingSettings = await resolveTenantBookingSettings(session.clientId)
     return jsonResponse(200, origin, methods, { bookingSettings })
   } catch (err) {
     return handleHttpError(err, origin, methods, 'mgmt/booking-settings', context)
