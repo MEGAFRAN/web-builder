@@ -1,10 +1,6 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
 import { createReservation as createAdminReservation } from '../cosmos/adminDb'
-import {
-  handleHttpError,
-  handleOptions,
-  jsonResponse,
-} from '../http/responseHelpers'
+import { handleOptions, jsonResponse } from '../http/responseHelpers'
 
 interface ReservationGuarantee {
   paymentMethodId: string

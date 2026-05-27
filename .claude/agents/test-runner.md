@@ -4,10 +4,14 @@ description: Use this agent when the user wants to run tests, check test coverag
 tools: Bash, Read, Glob, Grep, Write, Edit
 model: sonnet
 color: yellow
-version: 1.1.0
+version: 1.2.0
 created: 2026-03-29
-updated: 2026-05-23
+updated: 2026-05-27
 changelog:
+  - version: 1.2.0
+    date: 2026-05-27
+    change: Document debounced effects, fake-timer pitfalls, suite timeouts, and third-party SDK mocking
+    reason: ReservationCardCapture tests failed with 5s timeouts until debounce + waitFor interaction was understood
   - version: 1.1.0
     date: 2026-05-23
     change: Document React act(...) stderr warnings and async useEffect flush pattern
@@ -129,6 +133,121 @@ async function renderAdminShell(children: React.ReactNode) {
 
 Implement the flush/wait pattern in the test file. That is a legitimate test fix — not a weakened assertion.
 
+### Debounced effects, fake timers, and false timeouts
+
+Components that delay work with `setTimeout` / debounce (e.g. `ReservationCardCapture` waits 400ms after a valid email before `fetch`) are a common source of **mysterious 5000ms test timeouts** that look like hung `waitFor` calls.
+
+**Symptom**
+
+```
+Error: Test timed out in 5000ms.
+```
+
+The test file may show the timeout on `waitFor`, `flushDebounceAndFetch`, or the first `it()` in an async block — even though the real failure is **budget exhaustion**, not a missing assertion.
+
+**Root cause (two traps)**
+
+1. **Default Vitest timeout (5000ms) is too low** when the test does `setTimeout(450)` (or similar) **and then** `waitFor` (which can poll for up to ~5000ms). Total wall time can exceed 5000ms even when the component behaves correctly.
+2. **Global `vi.useFakeTimers()` breaks `waitFor`** unless timers are advanced explicitly. `waitFor` keeps polling but time never moves, so the test hangs until the suite timeout.
+
+**Diagnosis checklist**
+
+1. Read the component for `setTimeout`, debounce constants, and chained effects (`debounce → fetch → setState`).
+2. Check whether the test enables fake timers globally in `beforeEach`.
+3. If failures are exactly ~5000ms, suspect timeout budget first — re-run one test with a longer limit:
+   ```bash
+   npm run test -- __tests__/path/to/Component.test.tsx -t "test name" --testTimeout=15000
+   ```
+4. If that passes quickly (~1–3s), the component logic is fine; fix the test harness, not the production code.
+
+**Fix patterns (preferred order)**
+
+1. **Raise suite timeout** for files that intentionally wait on real debounce:
+   ```tsx
+   describe('MyComponent', { timeout: 15_000 }, () => { ... })
+   ```
+2. **Prefer real timers + a small flush helper** over global fake timers when the debounce delay is short (≤500ms):
+   ```tsx
+   async function flushDebounce(ms = 450) {
+     await act(async () => {
+       await new Promise<void>(resolve => setTimeout(resolve, ms))
+     })
+   }
+   ```
+   Then assert on `fetch` / DOM **after** the flush, not only inside an unbounded `waitFor`.
+3. **Scope fake timers to one test** when you must prove “fetch not called before N ms”. Use `try/finally` and always restore:
+   ```tsx
+   it('debounces before fetch', async () => {
+     vi.useFakeTimers()
+     try {
+       render(<Component email="a@b.com" />)
+       await act(async () => { vi.advanceTimersByTime(200) })
+       expect(fetchSpy).not.toHaveBeenCalled()
+       await act(async () => {
+         vi.advanceTimersByTime(200)
+         await Promise.resolve()
+       })
+       expect(fetchSpy).toHaveBeenCalled()
+     } finally {
+       vi.useRealTimers()
+     }
+   })
+   ```
+4. If you must combine fake timers with `waitFor`, pass `advanceTimers` (RTL ≥ 14) or avoid `waitFor` and assert synchronously after `advanceTimersByTime` + `Promise.resolve()` flushes.
+5. **Do not** enable fake timers globally “to speed up debounce” unless every async test in the file is updated to advance timers — it will break unrelated `waitFor` / `fetch` tests.
+
+**Effects that use `queueMicrotask`**
+
+Some components schedule async work via `queueMicrotask(() => { void (async () => { ... fetch ... })() })` (see `ReservationCardCapture`). After advancing debounce timers, flush microtasks and promises:
+
+```tsx
+await act(async () => {
+  vi.advanceTimersByTime(400) // if using fake timers
+  await Promise.resolve()
+  await Promise.resolve()
+})
+```
+
+**Synchronous vs async handler registration**
+
+If a `useEffect` registers callbacks synchronously on mount (e.g. mock Stripe mode calling `onHandlersChange({ ready: true })`), assert **immediately after `render()`** — do not wrap in `waitFor`. Using `waitFor` under fake timers for sync effects causes false timeouts.
+
+**Reference implementation:** `__tests__/components/blocks/ReservationCardCapture.test.tsx`
+
+### Mocking third-party SDKs (Stripe, maps, etc.)
+
+Heavy client SDKs should be mocked at the module boundary so tests stay fast and offline.
+
+**Pattern**
+
+1. Create **hoisted** mock fns so `vi.mock` factories can reference them:
+   ```tsx
+   const mockLoadStripe = vi.hoisted(() => vi.fn())
+   const mockUseStripe = vi.hoisted(() => vi.fn())
+   vi.mock('@stripe/stripe-js', () => ({
+     loadStripe: (...args: unknown[]) => mockLoadStripe(...args),
+   }))
+   ```
+2. Import the component under test **after** `vi.mock` declarations.
+3. Reset mock implementations in `beforeEach` (return shapes, resolved promises).
+4. Stub child UI with minimal DOM (`data-testid`) — do not pull in real Stripe.js.
+5. Toggle feature flags via mocked module helpers (e.g. `isMockBookingStripe`) rather than mutating env mid-test when the helper is already injected.
+
+**Common mistake:** mocking only `@stripe/react-stripe-js` but not `@stripe/stripe-js` — `loadStripe` still runs and may cause flaky or slow tests.
+
+### Writing new component tests (checklist)
+
+Before declaring a test “stuck”, walk through:
+
+| Signal | Likely issue | Action |
+|--------|----------------|--------|
+| Fails at exactly 5000ms | Debounce + `waitFor` exceeds default timeout | `describe(..., { timeout: 15_000 })` or shorten flush path |
+| Passes with `--testTimeout=15000` only | Same as above | Fix timeout in file, not production |
+| Hangs only when fake timers on | `waitFor` not advancing time | Scoped fake timers or real timers + flush helper |
+| `fetch` never called | Mock mode flag, invalid input, or debounce not flushed | Read component guards; call flush helper |
+| `act(...)` stderr | Async `setState` after render | `waitFor` / flush helper (see above) |
+| Wrong URL asserted | `NEXT_PUBLIC_*` env in CI | `vi.stubEnv` in `beforeEach` or match actual `setupIntentUrl()` output |
+
 ## Constraints
 
 - Never run tests with `--forceExit` or flags that hide real errors
@@ -147,3 +266,5 @@ Implement the flush/wait pattern in the test file. That is a legitimate test fix
 - **TypeScript compilation errors in tests**: Report the tsc error separately from the test failure; they have different fixes
 - **Passing tests with stderr warnings**: Report them under Warnings; scan full output because Vitest may hide stderr in the one-line summary
 - **React act warnings on admin shell / fetch-on-mount components**: Apply the flush helper pattern above; see `__tests__/components/admin/AdminShell.test.tsx` as the reference implementation
+- **Debounced input / setup-intent / payment capture components**: Use real-timer flush helper + raised `describe` timeout; scope fake timers to debounce-only tests — see `__tests__/components/blocks/ReservationCardCapture.test.tsx`
+- **Tests timeout at 5000ms with no clear assertion failure**: Check debounce delay + `waitFor` budget before debugging fetch mocks or Stripe

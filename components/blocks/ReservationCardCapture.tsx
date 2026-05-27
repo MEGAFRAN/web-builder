@@ -14,6 +14,13 @@ import {
   isMockBookingStripe,
 } from '@/lib/booking-stripe'
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const SETUP_INTENT_DEBOUNCE_MS = 400
+
+function isValidBookingEmail(value: string): boolean {
+  return EMAIL_RE.test(value.trim())
+}
+
 export type CardCaptureHandlers = {
   ready: boolean
   customerId: string | null
@@ -90,8 +97,22 @@ export default function ReservationCardCapture({
   const [loadError, setLoadError] = useState('')
   const [loading, setLoading] = useState(false)
   const [intent, setIntent] = useState<SetupIntentResponse | null>(null)
+  const [intentEmail, setIntentEmail] = useState<string | null>(null)
+  const [debouncedEmail, setDebouncedEmail] = useState('')
   const mockMode = isMockBookingStripe()
   const feeLabel = guaranteePenaltyLabel(bookingSettings, servicePrice)
+  const trimmedEmail = email.trim()
+  const isValidEmail = isValidBookingEmail(trimmedEmail)
+  const effectiveDebouncedEmail = isValidEmail ? debouncedEmail : ''
+  const shouldFetchIntent = !mockMode && effectiveDebouncedEmail.length > 0
+
+  useEffect(() => {
+    if (!isValidEmail) return
+    const timer = window.setTimeout(() => {
+      setDebouncedEmail(trimmedEmail)
+    }, SETUP_INTENT_DEBOUNCE_MS)
+    return () => window.clearTimeout(timer)
+  }, [email, isValidEmail, trimmedEmail])
 
   useEffect(() => {
     if (mockMode) {
@@ -109,17 +130,17 @@ export default function ReservationCardCapture({
   }, [mockMode, onHandlersChange])
 
   useEffect(() => {
-    if (mockMode || !email.trim()) {
-      return
-    }
+    if (!shouldFetchIntent) return
 
     const signal = { cancelled: false }
     queueMicrotask(() => {
       void (async () => {
         setLoading(true)
         setLoadError('')
+        setIntent(null)
+        setIntentEmail(null)
         try {
-          const url = `${setupIntentUrl(clientId)}&email=${encodeURIComponent(email.trim())}`
+          const url = `${setupIntentUrl(clientId)}&email=${encodeURIComponent(effectiveDebouncedEmail)}`
           const res = await fetch(url)
           if (!res.ok) {
             const j = (await res.json().catch(() => ({}))) as { error?: string }
@@ -128,10 +149,12 @@ export default function ReservationCardCapture({
           const data = (await res.json()) as SetupIntentResponse
           if (signal.cancelled) return
           setIntent(data)
+          setIntentEmail(effectiveDebouncedEmail)
         } catch (e) {
           if (signal.cancelled) return
           setLoadError(e instanceof Error ? e.message : BOOKING_COPY.cardError)
           setIntent(null)
+          setIntentEmail(null)
         } finally {
           if (!signal.cancelled) setLoading(false)
         }
@@ -141,9 +164,10 @@ export default function ReservationCardCapture({
     return () => {
       signal.cancelled = true
     }
-  }, [mockMode, clientId, email])
+  }, [shouldFetchIntent, clientId, effectiveDebouncedEmail])
 
-  const activeIntent = mockMode || !email.trim() ? null : intent
+  const activeIntent =
+    mockMode || !effectiveDebouncedEmail || intentEmail !== effectiveDebouncedEmail ? null : intent
 
   const stripePromise =
     activeIntent?.publishableKey && activeIntent.clientSecret
@@ -161,6 +185,8 @@ export default function ReservationCardCapture({
 
       {mockMode ? (
         <p className="text-xs text-muted">{BOOKING_COPY.cardMockNote}</p>
+      ) : !shouldFetchIntent ? (
+        <p className="text-xs text-muted">{BOOKING_COPY.cardRequired}</p>
       ) : loading ? (
         <p className="text-xs text-muted">{BOOKING_COPY.cardLoading}</p>
       ) : loadError ? (
