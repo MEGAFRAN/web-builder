@@ -1,5 +1,12 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
 import { getContainer } from '../cosmosClient'
+import { createReservation as createAdminReservation } from '../cosmos/adminDb'
+
+interface ReservationGuarantee {
+  paymentMethodId: string
+  customerId?: string | null
+  status: 'vaulted'
+}
 
 interface ReservationPayload {
   clientId: string
@@ -11,6 +18,17 @@ interface ReservationPayload {
   date: string
   time: string
   notes?: string
+  paymentMethodId?: string
+  customerId?: string
+}
+
+function parseGuarantee(body: ReservationPayload): ReservationGuarantee | null {
+  const pm = body.paymentMethodId?.trim()
+  if (!pm) return null
+  const guarantee: ReservationGuarantee = { paymentMethodId: pm, status: 'vaulted' }
+  const customerId = body.customerId?.trim()
+  if (customerId) guarantee.customerId = customerId
+  return guarantee
 }
 
 function isValidPayload(body: unknown): body is ReservationPayload {
@@ -77,6 +95,8 @@ async function handler(
 
   const reservationId = `${body.clientId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 
+  const guarantee = parseGuarantee(body)
+
   const record = {
     id: reservationId,
     clientId: body.clientId,
@@ -90,11 +110,13 @@ async function handler(
     notes: body.notes?.trim() ?? null,
     status: 'pending',
     createdAt: new Date().toISOString(),
+    ...(guarantee ? { guarantee } : {}),
   }
 
   try {
     const container = getContainer()
     await container.items.create(record)
+    await createAdminReservation(record)
     context.log(`[reservation] Created ${reservationId} for client ${body.clientId}`)
   } catch (err) {
     context.error('[reservation] Cosmos DB write failed:', err)

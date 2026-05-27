@@ -79,6 +79,8 @@ export type ServicesBlock = {
   reservationConfirmationMessage?: string | null
   /** Admin catalog fetched at SSG build time. Not stored in CMS JSON. */
   buildTimeCatalog?: ReservationServiceItem[]
+  /** Tenant no-show policy from client.json (SSG build-time injection). */
+  bookingSettings?: BookingSettings | null
 }
 
 export type ContactBlock = {
@@ -516,6 +518,8 @@ export type ReservationBlock = {
   skipServiceSelection?: boolean | null
   /** Admin catalog fetched at SSG build time. Not stored in CMS JSON. */
   buildTimeCatalog?: ReservationServiceItem[]
+  /** Tenant no-show policy from client.json (SSG build-time injection). */
+  bookingSettings?: BookingSettings | null
 }
 
 // Carousel block
@@ -640,7 +644,8 @@ export type ClientBottomActionBar = {
 
 export type BookingSettings = {
   enforceGuarantee: boolean
-  cancellationFeeAmount?: number
+  /** Percent of booked service price charged on no-show (default 50). */
+  cancellationFeePercent?: number
   currency?: 'USD' | 'EUR' | 'GBP'
 }
 

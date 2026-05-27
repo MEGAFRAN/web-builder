@@ -12,8 +12,14 @@ import { BOOKING_SLOT_GRID } from '@/lib/booking-slot-grid'
 import {
   BOOKING_COPY,
   BOOKING_FIELD_CLASS,
+  BOOKING_STEPS_WITH_CARD,
   formatBookingDate,
 } from '@/lib/booking-public-copy'
+import { isGuaranteeRequired } from '@/lib/booking-guarantee'
+import { resolveBuildClientId } from '@/lib/client-id'
+import ReservationCardCapture, {
+  type CardCaptureHandlers,
+} from '@/components/blocks/ReservationCardCapture'
 import { ReservationProgress } from '@/components/blocks/ReservationProgress'
 import type {
   ReservationBlock as ReservationBlockProps,
@@ -82,7 +88,10 @@ export default function ReservationBlock({
   hideHeading,
   skipServiceSelection,
   buildTimeCatalog,
+  bookingSettings,
 }: ReservationBlockProps) {
+  const guaranteeRequired = isGuaranteeRequired(bookingSettings)
+  const resolvedClientId = resolveBuildClientId(clientId)
   const cmsServices: ReservationServiceItem[] = servicesProp ?? []
   const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(
     clientId,
@@ -108,6 +117,7 @@ export default function ReservationBlock({
   const [outOfWindowSlots, setOutOfWindowSlots] = useState<string[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [cardHandlers, setCardHandlers] = useState<CardCaptureHandlers | null>(null)
   const [confirmedBooking, setConfirmedBooking] = useState<{
     date: string
     time: string
@@ -230,6 +240,8 @@ export default function ReservationBlock({
     phone: !phoneValid ? BOOKING_COPY.phoneError : undefined,
   }
 
+  const cardReady = !guaranteeRequired || cardHandlers?.ready === true
+
   const canSubmit =
     !!selectedService &&
     variationChosen &&
@@ -238,7 +250,8 @@ export default function ReservationBlock({
     selectedTime.length > 0 &&
     nameValid &&
     emailValid &&
-    phoneValid
+    phoneValid &&
+    cardReady
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -258,6 +271,19 @@ export default function ReservationBlock({
       }
       const notes = notesParts.filter(Boolean).join('\n') || undefined
 
+      let paymentMethodId: string | undefined
+      let customerId: string | undefined
+      if (guaranteeRequired) {
+        if (!cardHandlers) {
+          setErrorMessage(BOOKING_COPY.cardRequired)
+          setState('error')
+          return
+        }
+        const card = await cardHandlers.confirmSetup()
+        paymentMethodId = card.paymentMethodId
+        customerId = card.customerId ?? undefined
+      }
+
       const res = await fetch('/api/reservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -270,6 +296,9 @@ export default function ReservationBlock({
           date: selectedDate,
           time: selectedTime,
           notes,
+          ...(paymentMethodId
+            ? { paymentMethodId, ...(customerId ? { customerId } : {}) }
+            : {}),
         }),
       })
       if (!res.ok) {
@@ -310,16 +339,24 @@ export default function ReservationBlock({
     }
   }
 
+  const progressSteps = guaranteeRequired ? BOOKING_STEPS_WITH_CARD : undefined
+  const successStep = guaranteeRequired ? 5 : 4
+  const contactStep = guaranteeRequired ? 3 : 3
+
   const currentStep =
     state === 'success'
-      ? 4
+      ? successStep
       : selectedDate && selectedTime
-        ? 3
+        ? cardHandlers?.ready && guaranteeRequired
+          ? 4
+          : contactStep
         : selectedServiceId && variationChosen
           ? 2
           : 1
 
-  const progressSection = <ReservationProgress currentStep={currentStep} />
+  const progressSection = (
+    <ReservationProgress currentStep={currentStep} steps={progressSteps} />
+  )
 
   const bookingPanelClass =
     'rounded-[var(--radius)] border border-border bg-surface p-6 shadow-sm md:p-8'
@@ -817,6 +854,16 @@ export default function ReservationBlock({
                       className="resize-none rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground placeholder-muted focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     />
                   </div>
+
+                  {guaranteeRequired && bookingSettings && resolvedClientId ? (
+                    <ReservationCardCapture
+                      clientId={resolvedClientId}
+                      email={fields.email}
+                      bookingSettings={bookingSettings}
+                      servicePrice={effectivePrice ?? null}
+                      onHandlersChange={setCardHandlers}
+                    />
+                  ) : null}
 
                   <Button
                     label={

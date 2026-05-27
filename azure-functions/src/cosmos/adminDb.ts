@@ -74,6 +74,22 @@ export async function createReservation(record: StoredReservation): Promise<void
   await container.items.create(record)
 }
 
+export async function getReservationById(
+  id: string,
+  clientId: string,
+): Promise<StoredReservation | null> {
+  const container = getReservationsContainer()
+  try {
+    const { resource } = await container.item(id, clientId).read<StoredReservation>()
+    if (!resource || resource.clientId !== clientId) return null
+    return resource
+  } catch (err) {
+    const code = (err as { code?: number }).code
+    if (code === 404) return null
+    throw err
+  }
+}
+
 export async function updateReservationById(
   id: string,
   clientId: string,

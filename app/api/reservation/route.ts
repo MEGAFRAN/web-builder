@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { getClientConfig } from '@/lib/client-config'
+import { isGuaranteeRequired } from '@/lib/booking-guarantee'
+import { parseGuaranteePayload } from '@/lib/reservation-guarantee'
 
 const LOCAL_DB_PATH = path.join(process.cwd(), 'data', 'reservations-local.json')
 
@@ -24,6 +26,8 @@ interface ReservationPayload {
   date: string
   time: string
   notes?: string
+  paymentMethodId?: string
+  customerId?: string
 }
 
 function isValidPayload(body: unknown): body is ReservationPayload {
@@ -72,11 +76,21 @@ export async function POST(req: NextRequest) {
   }
 
   let reservationEndpoint: string | undefined
+  let config
   try {
-    const config = getClientConfig(clientId)
+    config = getClientConfig(clientId)
     reservationEndpoint = config.reservationEndpoint
   } catch {
     // Config read failure is non-fatal — fall through to local handler
+  }
+
+  const guaranteeRequired = config ? isGuaranteeRequired(config.bookingSettings) : false
+  const guarantee = parseGuaranteePayload(body as unknown as Record<string, unknown>)
+  if (guaranteeRequired && !guarantee) {
+    return NextResponse.json(
+      { error: 'paymentMethodId is required when card guarantee is enabled.' },
+      { status: 422 },
+    )
   }
 
   if (reservationEndpoint) {
@@ -84,7 +98,11 @@ export async function POST(req: NextRequest) {
       const upstream = await fetch(reservationEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientId, ...body }),
+        body: JSON.stringify({
+          clientId,
+          ...body,
+          ...(guarantee ? { paymentMethodId: guarantee.paymentMethodId, customerId: guarantee.customerId } : {}),
+        }),
       })
       if (!upstream.ok) {
         return NextResponse.json(
@@ -116,6 +134,7 @@ export async function POST(req: NextRequest) {
     notes: body.notes?.trim() ?? null,
     status: 'confirmed',
     createdAt: new Date().toISOString(),
+    ...(guarantee ? { guarantee } : {}),
   }
 
   try {

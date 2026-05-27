@@ -41,7 +41,11 @@ export function BookingCard({ row, onClick, variant, endLabel, className = '' }:
   }
 
   if (variant === 'timeline') {
-    const dimmed = row.status === 'cancelled' || row.status === 'no-show'
+    const dimmed =
+      row.status === 'cancelled' ||
+      row.status === 'no-show' ||
+      row.status === 'cancelled_and_charged' ||
+      row.status === 'cancelled_charge_failed'
     return (
       <button
         type="button"

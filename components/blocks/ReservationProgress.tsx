@@ -1,12 +1,20 @@
 import { BOOKING_STEPS } from '@/lib/booking-public-copy'
 
-export function ReservationProgress({ currentStep }: { currentStep: number }) {
+type StepDef = { label: string; step: number }
+
+export function ReservationProgress({
+  currentStep,
+  steps = BOOKING_STEPS,
+}: {
+  currentStep: number
+  steps?: readonly StepDef[]
+}) {
   return (
     <ol
       aria-label="Progreso de la reserva"
       className="flex list-none flex-wrap items-center justify-between gap-4 pl-0"
     >
-      {BOOKING_STEPS.map(({ label, step }) => {
+      {steps.map(({ label, step }) => {
         const isComplete = currentStep > step
         const isActive = currentStep === step
 

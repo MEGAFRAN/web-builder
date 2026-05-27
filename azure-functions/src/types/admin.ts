@@ -1,3 +1,9 @@
+export type ReservationGuarantee = {
+  paymentMethodId: string
+  customerId?: string | null
+  status: 'vaulted'
+}
+
 export type StoredReservation = {
   id: string
   clientId: string
@@ -13,6 +19,7 @@ export type StoredReservation = {
   createdAt: string
   partySize?: number
   cancelReason?: string | null
+  guarantee?: ReservationGuarantee | null
 }
 
 export type ServiceVariation = {

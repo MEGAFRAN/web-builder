@@ -1,4 +1,4 @@
-import type { Block, ReservationServiceItem } from '@/types/cms'
+import type { Block, BookingSettings, ReservationServiceItem } from '@/types/cms'
 import type { CompanyProfile } from '@/types/admin'
 import componentRegistry from '@/components/componentRegistry'
 import { ScrollReveal } from '@/components/motion/ScrollReveal'
@@ -16,6 +16,8 @@ interface PageRendererProps {
   clientId?: string
   /** Services catalog fetched once at SSG build time for this page's booking blocks. */
   bookingCatalog?: ReservationServiceItem[]
+  /** No-show guarantee settings from client.json (SSG build-time). */
+  bookingSettings?: BookingSettings | null
 }
 
 type BlockWithKey = Block & { _key?: string }
@@ -40,6 +42,7 @@ function mergeBlockWithBuildContext(
   block: Block,
   clientId: string,
   bookingCatalog?: ReservationServiceItem[],
+  bookingSettings?: BookingSettings | null,
 ): Block {
   switch (block._type) {
     case 'services':
@@ -48,6 +51,7 @@ function mergeBlockWithBuildContext(
         ...block,
         clientId: block.clientId ?? clientId,
         ...(bookingCatalog !== undefined ? { buildTimeCatalog: bookingCatalog } : {}),
+        ...(bookingSettings !== undefined ? { bookingSettings } : {}),
       }
     default:
       return block
@@ -59,13 +63,14 @@ export default function PageRenderer({
   companyProfile = null,
   clientId,
   bookingCatalog,
+  bookingSettings,
 }: PageRendererProps) {
   return (
     <div>
       {blocks.map((block, i) => {
         const withClient =
           clientId != null
-            ? mergeBlockWithBuildContext(block, clientId, bookingCatalog)
+            ? mergeBlockWithBuildContext(block, clientId, bookingCatalog, bookingSettings)
             : block
         const mergedBlock = mergeBlockWithProfile(withClient, companyProfile)
         const Component = componentRegistry[mergedBlock._type]

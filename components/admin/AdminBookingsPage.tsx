@@ -19,7 +19,9 @@ import { resolveDayMinutesWindow } from '@/lib/booking-schedule-window'
 import type { BookingScheduleFile, ReservationRow } from '@/types/admin'
 import { SimpleDayList } from '@/components/admin/bookings/SimpleDayList'
 import { useAdminAuth } from '@/lib/admin-auth-context'
-import { adminDataUrl, adminFetch } from '@/lib/admin-api'
+import { adminChargeNoShowUrl, adminDataUrl, adminFetch } from '@/lib/admin-api'
+import { isGuaranteeRequired } from '@/lib/booking-guarantee'
+import type { BookingSettings } from '@/types/cms'
 
 export default function AdminBookingsPage() {
   const { session } = useAdminAuth()
@@ -35,9 +37,20 @@ export default function AdminBookingsPage() {
   const [cancelOpen, setCancelOpen] = useState(false)
   const [cancelReason, setCancelReason] = useState('')
   const [createOpen, setCreateOpen] = useState(false)
+  const [bookingSettings, setBookingSettings] = useState<BookingSettings | null>(null)
+  const guaranteeEnabled = isGuaranteeRequired(bookingSettings)
 
   const weekStart = useMemo(() => mondayOfWeek(selectedYmd), [selectedYmd])
   const weekEnd = useMemo(() => addDaysYmd(weekStart, 6), [weekStart])
+
+  useEffect(() => {
+    void adminFetch(adminDataUrl('/booking-settings'))
+      .then(async (r) => (r.ok ? r.json() : { bookingSettings: null }))
+      .then((data: { bookingSettings?: BookingSettings | null }) => {
+        setBookingSettings(data.bookingSettings ?? null)
+      })
+      .catch(() => setBookingSettings(null))
+  }, [])
 
   const fetchRange = useCallback(async (start: string, end: string, signal?: { cancelled: boolean }) => {
     try {
@@ -96,6 +109,20 @@ export default function AdminBookingsPage() {
     schedule !== null ? resolveDayMinutesWindow(schedule, selectedYmd) : null
   const timelineHeight =
     dayWindow !== null ? Math.max((dayWindow.closeMin - dayWindow.openMin) * ppm, 120) : 0
+
+  async function chargeNoShow(id: string) {
+    const res = await adminFetch(adminChargeNoShowUrl(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reservationId: id }),
+    })
+    if (!res.ok) {
+      const j = (await res.json().catch(() => ({}))) as { error?: string }
+      throw new Error(j.error ?? adminCopy.bookings.chargeFailedAlert)
+    }
+    setDetail(null)
+    refreshRange()
+  }
 
   async function patchReservation(id: string, action: 'cancel' | 'no-show', reason?: string) {
     const res = await adminFetch(adminDataUrl(`/reservations/${encodeURIComponent(id)}`), {
@@ -183,6 +210,8 @@ export default function AdminBookingsPage() {
           onClose={() => setDetail(null)}
           onCancel={() => setCancelOpen(true)}
           onNoShow={() => void patchReservation(detail.id, 'no-show')}
+          onNoShowCharge={() => void chargeNoShow(detail.id)}
+          guaranteeEnabled={guaranteeEnabled}
         />
       )}
 

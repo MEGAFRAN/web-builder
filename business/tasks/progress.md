@@ -8,6 +8,7 @@ DONE: business/tasks/done/04-implement-admin-azure-functions.md
 DONE: business/tasks/done/03-setup-cosmos-db-admin-containers.md
 DONE: business/tasks/done/05-configure-admin-deploy-pipeline.md
 DONE: business/tasks/done/20-fix-admin-azure-functions-reserved-route.md
+DONE: business/tasks/done/21-stripe-no-show.md
 
 TODO: business/tasks/06-stripe-checkout-customer-portal-integration.md
 TODO: business/tasks/07-resend-transactional-email-integration.md

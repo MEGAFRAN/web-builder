@@ -5,6 +5,14 @@ export const BOOKING_STEPS = [
   { label: '4 · Confirmado', step: 4 },
 ] as const
 
+export const BOOKING_STEPS_WITH_CARD = [
+  { label: '1 · Servicio', step: 1 },
+  { label: '2 · Fecha y hora', step: 2 },
+  { label: '3 · Tus datos', step: 3 },
+  { label: '4 · Tarjeta', step: 4 },
+  { label: '5 · Confirmado', step: 5 },
+] as const
+
 export const BOOKING_COPY = {
   progressAriaLabel: 'Progreso de la reserva',
   serviceLabel: 'Servicio',
@@ -17,6 +25,14 @@ export const BOOKING_COPY = {
   optional: '(opcional)',
   confirmReservation: 'Confirmar reserva',
   confirming: 'Confirmando…',
+  cardGuaranteeTitle: 'Garantía de reserva',
+  cardGuaranteeIntro:
+    'Guardamos tu tarjeta de forma segura. Solo se cobrará la penalización si no asistes o cancelas fuera de plazo.',
+  cardGuaranteeFee: (fee: string) => fee,
+  cardMockNote: 'Modo local: tarjeta simulada (sin Stripe).',
+  cardLoading: 'Preparando formulario de pago…',
+  cardError: 'No se pudo cargar el formulario de pago. Inténtalo de nuevo.',
+  cardRequired: 'Introduce tus datos y confirma la tarjeta para continuar.',
   loadingServices: 'Cargando servicios…',
   checkingAvailability: 'Comprobando disponibilidad…',
   selectedRange: 'Seleccionado:',

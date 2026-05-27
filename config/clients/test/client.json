@@ -13,7 +13,7 @@
   },
   "bookingSettings": {
     "enforceGuarantee": true,
-    "cancellationFeeAmount": 20,
+    "cancellationFeePercent": 50,
     "currency": "EUR"
   },
   "theme": {

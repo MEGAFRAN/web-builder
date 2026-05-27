@@ -40,6 +40,9 @@ All admin endpoints (except login/logout) require an `httpOnly` JWT cookie named
 | PUT | `/admin/company-profile` | Upsert company profile |
 | GET | `/mgmt/stripe-connect` | Stripe Connect status for the session client |
 | POST | `/mgmt/stripe-connect` | Create or resume Stripe Connect Express onboarding |
+| GET | `/setup-intent?clientId=&email=` | Create SetupIntent on connected account (card-on-file) |
+| GET | `/mgmt/booking-settings` | Tenant `bookingSettings` from Cosmos (`{clientId}-settings`) |
+| POST | `/mgmt/charge-noshow` | Charge no-show fee (`{ reservationId }`) |
 
 ## Auth model
 
@@ -66,6 +69,9 @@ Set these in Azure Portal → Function App → Configuration, or copy `local.set
 | `SENDGRID_API_KEY` | No | SendGrid API key — emails are skipped if absent |
 | `STRIPE_SECRET_KEY` | No | Stripe secret key for Connect onboarding (`POST /mgmt/stripe-connect`) |
 | `ADMIN_STRIPE_RETURN_URL` | No | Return URL after Stripe onboarding (defaults to request `Origin` + `/admin/settings/`) |
+| `STRIPE_PUBLISHABLE_KEY` | No | Publishable key returned to the browser for SetupIntent (Functions) |
+
+Seed tenant booking settings for charge-no-show: `CLIENT_ID=test node scripts/seed-tenant-booking-settings.mjs` (requires Cosmos env vars).
 
 ## Cosmos DB setup
 

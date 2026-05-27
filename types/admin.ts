@@ -1,6 +1,18 @@
 /** Admin portal & persisted booking catalog types */
 
-export type ReservationDisplayStatus = 'confirmed' | 'cancelled' | 'no-show'
+export type ReservationDisplayStatus =
+  | 'confirmed'
+  | 'cancelled'
+  | 'no-show'
+  | 'pending'
+  | 'cancelled_and_charged'
+  | 'cancelled_charge_failed'
+
+export type ReservationGuarantee = {
+  paymentMethodId: string
+  customerId?: string | null
+  status: 'vaulted'
+}
 
 export type StoredReservation = {
   id: string
@@ -18,6 +30,7 @@ export type StoredReservation = {
   createdAt: string
   partySize?: number
   cancelReason?: string | null
+  guarantee?: ReservationGuarantee | null
 }
 
 /** StoredReservation enriched with the resolved service display name from the API. */

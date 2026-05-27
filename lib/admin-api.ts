@@ -37,6 +37,13 @@ export function adminDataUrl(path: string): string {
   return `/api/admin${path}`
 }
 
+export function adminChargeNoShowUrl(): string {
+  if (REMOTE_BASE) {
+    return `${REMOTE_BASE}/mgmt/charge-noshow`
+  }
+  return '/api/admin/charge-noshow'
+}
+
 export function adminClientConfigUrl(clientId: string): string {
   if (REMOTE_BASE) {
     return `${REMOTE_BASE}/clients/${encodeURIComponent(clientId)}/config`

@@ -86,6 +86,7 @@ export default async function Page({ params }: PageProps) {
           companyProfile={profile}
           clientId={clientId}
           bookingCatalog={bookingCatalog}
+          bookingSettings={config.bookingSettings ?? null}
         />
       </main>
     </>

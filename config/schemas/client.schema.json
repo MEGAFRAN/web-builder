@@ -30,7 +30,12 @@
       "additionalProperties": false,
       "properties": {
         "enforceGuarantee": { "type": "boolean" },
-        "cancellationFeeAmount": { "type": "number", "minimum": 0 },
+        "cancellationFeePercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Percent of the booked service price charged as no-show penalty (default 50)."
+        },
         "currency": { "type": "string", "enum": ["USD", "EUR", "GBP"] }
       },
       "required": ["enforceGuarantee"]

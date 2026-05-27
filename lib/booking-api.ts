@@ -37,3 +37,13 @@ export function bookingServicesUrl(
 export function isRemoteBookingApi(): boolean {
   return remoteBase().length > 0 || bakedServicesEndpoint().length > 0
 }
+
+/** SetupIntent endpoint for card-on-file (no-show guarantee). */
+export function setupIntentUrl(clientId?: string | null): string {
+  const resolvedClientId = resolveBuildClientId(clientId)
+  const base = remoteBase()
+  if (base) {
+    return appendClientIdQuery(`${base}/setup-intent`, resolvedClientId)
+  }
+  return appendClientIdQuery('/api/setup-intent', resolvedClientId)
+}

@@ -10,13 +10,22 @@ interface BookingDetailDrawerProps {
   onClose: () => void
   onCancel: () => void
   onNoShow: () => void
+  onNoShowCharge?: () => void
+  guaranteeEnabled?: boolean
 }
 
 function fmt(m: number): string {
   return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
 }
 
-export function BookingDetailDrawer({ row, onClose, onCancel, onNoShow }: BookingDetailDrawerProps) {
+export function BookingDetailDrawer({
+  row,
+  onClose,
+  onCancel,
+  onNoShow,
+  onNoShowCharge,
+  guaranteeEnabled = false,
+}: BookingDetailDrawerProps) {
   const dur = bookingDurationMinutes(row)
   const start = timeToMinutes(row.time)
   const endMin = start + dur
@@ -88,6 +97,12 @@ export function BookingDetailDrawer({ row, onClose, onCancel, onNoShow }: Bookin
                 <Badge label={stLabel} variant={variant} />
               </dd>
             </div>
+            {row.guarantee?.paymentMethodId ? (
+              <div>
+                <dt className="font-medium text-muted">{adminCopy.bookings.cardOnFile}</dt>
+                <dd className="text-foreground text-xs">{row.guarantee.paymentMethodId}</dd>
+              </div>
+            ) : null}
           </dl>
 
           <div className="mt-8 flex flex-col gap-2">
@@ -99,14 +114,37 @@ export function BookingDetailDrawer({ row, onClose, onCancel, onNoShow }: Bookin
             >
               {adminCopy.bookings.cancelAppointment}
             </button>
-            <button
-              type="button"
-              disabled={row.status === 'no-show' || row.status === 'cancelled'}
-              className="rounded-md bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-900 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-              onClick={onNoShow}
-            >
-              {adminCopy.bookings.markNoShow}
-            </button>
+            {guaranteeEnabled &&
+            row.guarantee?.paymentMethodId &&
+            onNoShowCharge &&
+            row.status !== 'cancelled_and_charged' &&
+            row.status !== 'cancelled_charge_failed' ? (
+              <button
+                type="button"
+                disabled={
+                  row.status === 'cancelled' ||
+                  row.status === 'no-show' ||
+                  row.status === 'cancelled_and_charged'
+                }
+                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                onClick={onNoShowCharge}
+              >
+                {adminCopy.bookings.markNoShowAndCharge}
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={
+                  row.status === 'no-show' ||
+                  row.status === 'cancelled' ||
+                  row.status === 'cancelled_and_charged'
+                }
+                className="rounded-md bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-900 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                onClick={onNoShow}
+              >
+                {adminCopy.bookings.markNoShow}
+              </button>
+            )}
           </div>
         </div>
       </aside>

@@ -788,6 +788,7 @@ export default function ServicesBlock({
   reservationConfirmationMessage,
   servicesEndpoint,
   buildTimeCatalog,
+  bookingSettings,
 }: ServicesBlockType) {
   const cmsItems = items ?? []
   const { liveCatalog, catalogLoaded } = useBookingServicesCatalog(
@@ -891,6 +892,7 @@ export default function ServicesBlock({
             _type="reservationBlock"
             clientId={resolvedClientId}
             buildTimeCatalog={buildTimeCatalog}
+            bookingSettings={bookingSettings}
             confirmationMessage={reservationConfirmationMessage}
             initialServiceId={bookingServiceId ?? undefined}
             skipServiceSelection={bookingServiceId != null}

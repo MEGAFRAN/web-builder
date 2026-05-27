@@ -107,6 +107,9 @@ export const adminCopy = {
     appointment: 'Cita',
     cancelAppointment: 'Cancelar cita…',
     markNoShow: 'Marcar como ausencia',
+    markNoShowAndCharge: 'Marcar no-show y cobrar',
+    chargeFailedAlert: 'No se pudo cobrar la penalización. El cliente puede tener fondos insuficientes.',
+    cardOnFile: 'Tarjeta guardada',
     cancelModalTitle: '¿Cancelar esta cita?',
     confirmCancel: 'Confirmar cancelación',
     emptyDay: 'No hay citas este día',
@@ -266,6 +269,8 @@ export function reservationStatusDisplay(status: string): {
 } {
   if (status === 'cancelled') return { label: 'Cancelada', variant: 'error' }
   if (status === 'no-show') return { label: 'No asistió', variant: 'warning' }
+  if (status === 'cancelled_and_charged') return { label: 'No-show cobrado', variant: 'success' }
+  if (status === 'cancelled_charge_failed') return { label: 'Cobro fallido', variant: 'error' }
   if (status === 'pending') return { label: 'Pendiente de confirmación', variant: 'warning' }
   return { label: 'Confirmada', variant: 'success' }
 }
