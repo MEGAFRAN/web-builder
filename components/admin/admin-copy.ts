@@ -46,6 +46,28 @@ export const adminCopy = {
     heading: 'Ajustes',
     intro: 'Gestiona la información pública de tu negocio: nombre, contacto y horario.',
   },
+  stripeConnect: {
+    heading: 'Garantía de no-show (Stripe)',
+    intro:
+      'Conecta tu cuenta de Stripe para cobrar tarifas de cancelación cuando un cliente no se presenta. Los pagos van directamente a tu cuenta.',
+    connectButton: 'Conectar con Stripe',
+    countryModalTitle: 'País de tu negocio',
+    countryModalIntro:
+      'Selecciona el país donde está legalmente establecido tu negocio. Stripe lo necesita para crear tu cuenta.',
+    acceptPaymentsButton: 'Aceptar pagos',
+    notConnected: 'Aún no has vinculado una cuenta de Stripe.',
+    connectedTitle: 'Stripe conectado',
+    connectedMessage:
+      'Tu cuenta está lista para guardar tarjetas en las reservas y cobrar penalizaciones por no-show.',
+    pendingTitle: 'Completa el registro en Stripe',
+    pendingMessage:
+      'Tu cuenta de Stripe está creada pero falta terminar el onboarding. Pulsa el botón para continuar.',
+    accountLabel: 'ID de cuenta',
+    localDevNote:
+      'Modo local: se simula la conexión sin llamar a la API de Stripe. En producción se abrirá el flujo real de Stripe Connect.',
+    loadError: 'No se pudo cargar el estado de Stripe.',
+    connectError: 'No se pudo iniciar la conexión con Stripe.',
+  },
   companyProfile: {
     heading: 'Información del negocio',
     intro:

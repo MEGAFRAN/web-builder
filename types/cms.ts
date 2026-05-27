@@ -638,6 +638,12 @@ export type ClientBottomActionBar = {
   vendorScriptWidget?: BottomActionBarVendorScriptWidget | null
 }
 
+export type BookingSettings = {
+  enforceGuarantee: boolean
+  cancellationFeeAmount?: number
+  currency?: 'USD' | 'EUR' | 'GBP'
+}
+
 export type ClientConfig = {
   clientId: string
   displayName: string
@@ -656,4 +662,5 @@ export type ClientConfig = {
   bookingServicesEndpoint?: string
   externalReviewUrl?: string
   externalReviewPlatform?: string
+  bookingSettings?: BookingSettings
 }

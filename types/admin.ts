@@ -89,3 +89,15 @@ export type CompanyProfile = {
   logoUrl: string | null
   whatsapp: string | null
 }
+
+export type StripeConnectStatus = {
+  accountId: string | null
+  status: 'not_connected' | 'existing' | 'created' | 'mock'
+  chargesEnabled: boolean
+  detailsSubmitted: boolean
+  capabilities: Record<string, string> | null
+}
+
+export type StripeConnectResponse = StripeConnectStatus & {
+  onboardingUrl?: string | null
+}

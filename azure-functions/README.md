@@ -38,6 +38,8 @@ All admin endpoints (except login/logout) require an `httpOnly` JWT cookie named
 | DELETE | `/admin/schedule?id=` | Delete a schedule exception |
 | GET | `/admin/company-profile` | Get company profile (JWT or build token) |
 | PUT | `/admin/company-profile` | Upsert company profile |
+| GET | `/mgmt/stripe-connect` | Stripe Connect status for the session client |
+| POST | `/mgmt/stripe-connect` | Create or resume Stripe Connect Express onboarding |
 
 ## Auth model
 
@@ -62,6 +64,8 @@ Set these in Azure Portal → Function App → Configuration, or copy `local.set
 | `COMPANY_PROFILE_BUILD_TOKEN` | No | Bearer token for build-time profile reads |
 | `NOTIFICATION_EMAIL_FROM` | No | Sender address for confirmation emails |
 | `SENDGRID_API_KEY` | No | SendGrid API key — emails are skipped if absent |
+| `STRIPE_SECRET_KEY` | No | Stripe secret key for Connect onboarding (`POST /mgmt/stripe-connect`) |
+| `ADMIN_STRIPE_RETURN_URL` | No | Return URL after Stripe onboarding (defaults to request `Origin` + `/admin/settings/`) |
 
 ## Cosmos DB setup
 

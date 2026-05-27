@@ -18,7 +18,10 @@
     "COMPANY_PROFILE_BUILD_TOKEN": "",
 
     "NOTIFICATION_EMAIL_FROM": "",
-    "SENDGRID_API_KEY": ""
+    "SENDGRID_API_KEY": "",
+
+    "STRIPE_SECRET_KEY": "",
+    "ADMIN_STRIPE_RETURN_URL": "http://localhost:3000/admin/settings/"
   },
   "Host": {
     "CORS": "*",

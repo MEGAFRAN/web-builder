@@ -25,6 +25,16 @@
     },
     "externalReviewUrl": { "type": "string" },
     "externalReviewPlatform": { "type": "string" },
+    "bookingSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enforceGuarantee": { "type": "boolean" },
+        "cancellationFeeAmount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "enum": ["USD", "EUR", "GBP"] }
+      },
+      "required": ["enforceGuarantee"]
+    },
     "features": {
       "type": "object",
       "additionalProperties": false,

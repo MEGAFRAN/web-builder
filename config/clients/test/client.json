@@ -11,6 +11,11 @@
     "gallery": false,
     "menu": false
   },
+  "bookingSettings": {
+    "enforceGuarantee": true,
+    "cancellationFeeAmount": 20,
+    "currency": "EUR"
+  },
   "theme": {
     "primaryColor": "#be185d",
     "accentColor": "#c9a962",
