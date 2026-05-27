@@ -85,7 +85,7 @@ export async function connectStripeAccount(params: {
     controller: {
       fees: { payer: 'account' },
       losses: { payments: 'stripe' },
-      stripe_dashboard: { type: 'express' },
+      stripe_dashboard: { type: 'full' },
     },
     metadata: {
       onboarding_type: 'deferred',
