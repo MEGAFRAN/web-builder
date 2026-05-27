@@ -18,6 +18,7 @@ import {
 import {
   availabilityUrl,
   isRemoteBookingApi,
+  reservationPostHeaders,
   reservationUrl,
 } from '@/lib/booking-api'
 import { isGuaranteeRequired } from '@/lib/booking-guarantee'
@@ -304,7 +305,7 @@ export default function ReservationBlock({
       }
       const res = await fetch(reservationUrl(), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: reservationPostHeaders(),
         body: JSON.stringify(
           isRemoteBookingApi()
             ? { clientId: resolvedClientId, ...payload }

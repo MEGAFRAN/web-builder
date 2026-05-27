@@ -1,6 +1,10 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
-import { getContainer } from '../cosmosClient'
 import { createReservation as createAdminReservation } from '../cosmos/adminDb'
+import {
+  handleHttpError,
+  handleOptions,
+  jsonResponse,
+} from '../http/responseHelpers'
 
 interface ReservationGuarantee {
   paymentMethodId: string
@@ -55,42 +59,25 @@ function isValidPayload(body: unknown): body is ReservationPayload {
   )
 }
 
-function corsHeaders(origin: string | null): Record<string, string> {
-  // In production, validate origin against a list of known client domains
-  return {
-    'Access-Control-Allow-Origin': origin ?? '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  }
-}
-
 async function handler(
   request: HttpRequest,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
   const origin = request.headers.get('origin')
+  const methods = 'POST, OPTIONS'
 
-  if (request.method === 'OPTIONS') {
-    return { status: 204, headers: corsHeaders(origin) }
-  }
+  const options = handleOptions(request, methods)
+  if (options) return options
 
   let body: unknown
   try {
     body = await request.json()
   } catch {
-    return {
-      status: 400,
-      headers: corsHeaders(origin),
-      jsonBody: { error: 'Invalid JSON' },
-    }
+    return jsonResponse(400, origin, methods, { error: 'Invalid JSON' })
   }
 
   if (!isValidPayload(body)) {
-    return {
-      status: 422,
-      headers: corsHeaders(origin),
-      jsonBody: { error: 'Missing or invalid fields.' },
-    }
+    return jsonResponse(422, origin, methods, { error: 'Missing or invalid fields.' })
   }
 
   const reservationId = `${body.clientId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
@@ -114,20 +101,15 @@ async function handler(
   }
 
   try {
-    const container = getContainer()
-    await container.items.create(record)
     await createAdminReservation(record)
     context.log(`[reservation] Created ${reservationId} for client ${body.clientId}`)
   } catch (err) {
     context.error('[reservation] Cosmos DB write failed:', err)
-    return {
-      status: 500,
-      headers: corsHeaders(origin),
-      jsonBody: { error: 'Failed to save reservation. Please try again.' },
-    }
+    return jsonResponse(500, origin, methods, {
+      error: 'Failed to save reservation. Please try again.',
+    })
   }
 
-  // Send confirmation email if SendGrid is configured
   const sendGridKey = process.env.SENDGRID_API_KEY
   const fromEmail = process.env.NOTIFICATION_EMAIL_FROM
   if (sendGridKey && fromEmail) {
@@ -155,22 +137,19 @@ async function handler(
                 record.notes ? `  Notes: ${record.notes}` : '',
                 '',
                 `We'll confirm within 2 hours.`,
-              ].filter(l => l !== undefined).join('\n'),
+              ]
+                .filter(l => l !== undefined)
+                .join('\n'),
             },
           ],
         }),
       })
     } catch (err) {
-      // Email failure is non-fatal — reservation is already saved
       context.warn('[reservation] SendGrid notification failed:', err)
     }
   }
 
-  return {
-    status: 201,
-    headers: corsHeaders(origin),
-    jsonBody: { ok: true, reservationId },
-  }
+  return jsonResponse(201, origin, methods, { ok: true, reservationId })
 }
 
 app.http('createReservation', {

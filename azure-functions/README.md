@@ -39,7 +39,7 @@ All admin endpoints (except login/logout) require an `httpOnly` JWT cookie named
 | GET | `/admin/company-profile` | Get company profile (JWT or build token) |
 | PUT | `/admin/company-profile` | Upsert company profile |
 | GET | `/mgmt/stripe-connect` | Stripe Connect status for the session client |
-| POST | `/mgmt/stripe-connect` | Create or resume Stripe Connect Express onboarding |
+| POST | `/mgmt/stripe-connect` | Create or resume Stripe Connect Standard onboarding |
 | GET | `/setup-intent?clientId=&email=` | Create SetupIntent on connected account (card-on-file) |
 | GET | `/mgmt/booking-settings` | Tenant `bookingSettings` from Cosmos (`{clientId}-settings`) |
 | POST | `/mgmt/charge-noshow` | Charge no-show fee (`{ reservationId }`) |
@@ -61,8 +61,6 @@ Set these in Azure Portal → Function App → Configuration, or copy `local.set
 | `COSMOS_ENDPOINT` | Yes | Azure Cosmos DB account endpoint URL |
 | `COSMOS_KEY` | Yes | Cosmos DB primary key |
 | `COSMOS_ADMIN_DATABASE` | No | Admin database name (default: `web-builder-admin`) |
-| `COSMOS_DATABASE` | No | Public bookings database (default: `reservations`) |
-| `COSMOS_CONTAINER` | No | Public bookings container (default: `bookings`) |
 | `COSMOS_CLIENT_PROFILE_CONTAINER` | No | Company profile container (default: `client-profile`) |
 | `COMPANY_PROFILE_BUILD_TOKEN` | No | Bearer token for build-time profile reads |
 | `NOTIFICATION_EMAIL_FROM` | No | Sender address for confirmation emails |
@@ -83,11 +81,41 @@ Create database `web-builder-admin` with these containers (partition key `/clien
 | `reservations` | Client booking records |
 | `services` | One document per client (`{ id, clientId, services[] }`) |
 | `schedule` | One document per client (`{ id, clientId, weekly, exceptions }`) |
-| `client-profile` | Company profile for SSG |
+| `client-profile` | Company profile + Stripe account id (`{clientId}-profile`, `{clientId}-stripe`) |
 
-Public booking uses a separate database (default `reservations`) with container `bookings`.
+All public booking endpoints (`/availability`, `/reservations`, `/booking-services`) read and write the **`reservations`** container in this database.
 
 Seed the first admin user with `node scripts/seed-admin-user.mjs` (see repo root).
+
+## CORS (required for cross-origin booking)
+
+Client static sites (Azure blob / SWA) call this Function App from the browser on a **different origin**. `GET` requests work without a preflight, but `POST /reservations` triggers an **OPTIONS preflight**.
+
+Azure may intercept OPTIONS at the **platform layer** before your function runs. If the Function App **CORS** blade has a restricted allow-list, only those origins receive preflight headers — other client sites fail with a browser CORS error even though the function code reflects `Origin` correctly on `POST`.
+
+**Recommended for multi-tenant (100+ client sites):**
+
+- **Public booking:** the static widget posts reservations with `Content-Type: text/plain` (JSON body) to avoid OPTIONS preflight, so client blob origins do not need to be listed here.
+- **Admin SPA:** cross-origin admin calls use `Authorization` and `credentials: 'include'`, which always preflight. Either:
+  1. Add the admin SWA origin (e.g. `https://<admin-swa>.azurestaticapps.net`) to Allowed Origins and enable credentials, **or**
+  2. Remove all Allowed Origins so function code handles preflight for every origin.
+
+**Do not** rely on `https://portal.azure.com` — remove it; it is not your app.
+
+Keep `http://localhost:3000` only if local dev calls the deployed Function App.
+
+Local dev: `local.settings.json.example` sets `"Host": { "CORS": "*" }` so Core Tools behaves like an open CORS policy.
+
+Verify preflight after changes:
+
+```bash
+curl -i -X OPTIONS "https://<app>.azurewebsites.net/api/reservations" \
+  -H "Origin: https://<client-static-site>" \
+  -H "Access-Control-Request-Method: POST" \
+  -H "Access-Control-Request-Headers: content-type"
+```
+
+Expect `Access-Control-Allow-Origin: https://<client-static-site>` in the response.
 
 ## Local development
 

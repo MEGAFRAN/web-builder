@@ -130,6 +130,22 @@ describe('booking-api', () => {
 
       expect(reservationUrl()).toBe('https://fn.example.com/api/reservations')
     })
+
+    it('uses text/plain for remote reservation POST to skip CORS preflight', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', 'https://fn.example.com/api')
+      const { reservationPostHeaders } = await import('@/lib/booking-api')
+
+      expect(reservationPostHeaders()).toEqual({
+        'Content-Type': 'text/plain;charset=UTF-8',
+      })
+    })
+
+    it('uses application/json for local reservation POST', async () => {
+      vi.stubEnv('NEXT_PUBLIC_BOOKING_API_URL', '')
+      const { reservationPostHeaders } = await import('@/lib/booking-api')
+
+      expect(reservationPostHeaders()).toEqual({ 'Content-Type': 'application/json' })
+    })
   })
 
   describe('setupIntentUrl', () => {

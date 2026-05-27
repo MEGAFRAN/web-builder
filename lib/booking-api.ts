@@ -59,6 +59,19 @@ export function reservationUrl(override?: string | null): string {
   return '/api/reservation'
 }
 
+/**
+ * POST headers for reservation submit.
+ * Remote calls use text/plain so the browser sends a "simple" cross-origin POST
+ * (no OPTIONS preflight). Azure Portal CORS allow-lists only cover admin/dev
+ * origins; client static sites vary per tenant.
+ */
+export function reservationPostHeaders(): Record<string, string> {
+  if (isRemoteBookingApi()) {
+    return { 'Content-Type': 'text/plain;charset=UTF-8' }
+  }
+  return { 'Content-Type': 'application/json' }
+}
+
 /** SetupIntent endpoint for card-on-file (no-show guarantee). */
 export function setupIntentUrl(clientId?: string | null): string {
   const resolvedClientId = resolveBuildClientId(clientId)

@@ -10,6 +10,8 @@ export function corsHeaders(
     'Access-Control-Allow-Methods': methods,
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Max-Age': '86400',
+    Vary: 'Origin',
   }
 }
 

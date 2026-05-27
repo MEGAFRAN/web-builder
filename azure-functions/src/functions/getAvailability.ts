@@ -1,5 +1,10 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions'
-import { getContainer } from '../cosmosClient'
+import { getReservationsContainer } from '../cosmos/adminDb'
+import {
+  handleHttpError,
+  handleOptions,
+  jsonResponse,
+} from '../http/responseHelpers'
 
 /** Slot starts aligned with ReservationBlock grid */
 const SLOT_GRID = [
@@ -7,14 +12,6 @@ const SLOT_GRID = [
   '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
   '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00',
 ] as const
-
-function corsHeaders(origin: string | null): Record<string, string> {
-  return {
-    'Access-Control-Allow-Origin': origin ?? '*',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  }
-}
 
 function parseDurationMinutes(raw: string | null): number | null {
   if (raw === null || raw === '') {
@@ -76,49 +73,43 @@ function slotConflictsWithBookings(
  */
 async function handler(
   request: HttpRequest,
-  context: InvocationContext
+  context: InvocationContext,
 ): Promise<HttpResponseInit> {
   const origin = request.headers.get('origin')
+  const methods = 'GET, OPTIONS'
 
-  if (request.method === 'OPTIONS') {
-    return { status: 204, headers: corsHeaders(origin) }
-  }
+  const options = handleOptions(request, methods)
+  if (options) return options
 
   const clientId = request.query.get('clientId')
   const date = request.query.get('date')
   const durationRaw = request.query.get('duration')
 
   if (!clientId || !date) {
-    return {
-      status: 400,
-      headers: corsHeaders(origin),
-      jsonBody: { error: 'clientId and date query parameters are required.' },
-    }
+    return jsonResponse(400, origin, methods, {
+      error: 'clientId and date query parameters are required.',
+    })
   }
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    return {
-      status: 400,
-      headers: corsHeaders(origin),
-      jsonBody: { error: 'date must be in YYYY-MM-DD format.' },
-    }
+    return jsonResponse(400, origin, methods, {
+      error: 'date must be in YYYY-MM-DD format.',
+    })
   }
 
   const requestedDuration = parseDurationMinutes(durationRaw)
   if (requestedDuration === null) {
-    return {
-      status: 400,
-      headers: corsHeaders(origin),
-      jsonBody: { error: 'duration must be a positive integer (minutes), at most 1440.' },
-    }
+    return jsonResponse(400, origin, methods, {
+      error: 'duration must be a positive integer (minutes), at most 1440.',
+    })
   }
 
   try {
-    const container = getContainer()
+    const container = getReservationsContainer()
     const { resources } = await container.items
       .query<BookingRow>({
         query:
-          'SELECT c.time, c.durationMinutes FROM c WHERE c.clientId = @clientId AND c.date = @date AND c.status != "cancelled"',
+          'SELECT c.time, c.durationMinutes FROM c WHERE c.clientId = @clientId AND c.date = @date AND c.status != "cancelled" AND c.status != "no-show"',
         parameters: [
           { name: '@clientId', value: clientId },
           { name: '@date', value: date },
@@ -131,21 +122,9 @@ async function handler(
     )
     context.log(`[availability] ${clientId} on ${date}: ${bookedSlots.length} unavailable slot(s)`)
 
-    return {
-      status: 200,
-      headers: {
-        ...corsHeaders(origin),
-        'Cache-Control': 'no-store',
-      },
-      jsonBody: { bookedSlots },
-    }
+    return jsonResponse(200, origin, methods, { bookedSlots }, { 'Cache-Control': 'no-store' })
   } catch (err) {
-    context.error('[availability] Cosmos DB query failed:', err)
-    return {
-      status: 500,
-      headers: corsHeaders(origin),
-      jsonBody: { error: 'Failed to fetch availability.' },
-    }
+    return handleHttpError(err, origin, methods, 'availability', context)
   }
 }
 
