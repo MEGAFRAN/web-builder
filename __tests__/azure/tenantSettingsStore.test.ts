@@ -4,14 +4,14 @@ const profileReadMock = vi.hoisted(() => vi.fn())
 const profileUpsertMock = vi.hoisted(() => vi.fn())
 const reservationsQueryMock = vi.hoisted(() => vi.fn())
 
-vi.mock('../cosmos/clientProfileContainer', () => ({
+vi.mock('../../azure-functions/src/cosmos/clientProfileContainer', () => ({
   getClientProfileContainer: () => ({
     item: () => ({ read: profileReadMock }),
     items: { upsert: profileUpsertMock },
   }),
 }))
 
-vi.mock('../cosmos/adminDb', () => ({
+vi.mock('../../azure-functions/src/cosmos/adminDb', () => ({
   getReservationsContainer: () => ({
     items: {
       query: () => ({ fetchAll: reservationsQueryMock }),
@@ -24,7 +24,7 @@ import {
   ensureTenantBookingSettings,
   readTenantBookingSettings,
   resolveTenantBookingSettings,
-} from '../cosmos/tenantSettingsStore'
+} from '../../azure-functions/src/cosmos/tenantSettingsStore'
 
 describe('tenantSettingsStore', () => {
   beforeEach(() => {

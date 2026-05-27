@@ -4,7 +4,7 @@ import type { HttpRequest, InvocationContext } from '@azure/functions'
 const ensureTenantBookingSettingsMock = vi.hoisted(() => vi.fn())
 const createAdminReservationMock = vi.hoisted(() => vi.fn())
 
-vi.mock('../cosmos/tenantSettingsStore', () => ({
+vi.mock('../../azure-functions/src/cosmos/tenantSettingsStore', () => ({
   DEFAULT_TENANT_BOOKING_SETTINGS: {
     enforceGuarantee: true,
     cancellationFeePercent: 50,
@@ -13,11 +13,11 @@ vi.mock('../cosmos/tenantSettingsStore', () => ({
   ensureTenantBookingSettings: ensureTenantBookingSettingsMock,
 }))
 
-vi.mock('../cosmos/adminDb', () => ({
+vi.mock('../../azure-functions/src/cosmos/adminDb', () => ({
   createReservation: createAdminReservationMock,
 }))
 
-import { createReservationHandler } from '../functions/createReservation'
+import { createReservationHandler } from '../../azure-functions/src/functions/createReservation'
 
 function postRequest(body: unknown): HttpRequest {
   return {

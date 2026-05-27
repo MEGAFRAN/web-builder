@@ -154,10 +154,10 @@ curl -b "admin-session=<token>" \
 npm test
 ```
 
-**Vitest** (Cosmos store + reservation handler mocks) lives alongside them in `src/__tests__/` but is excluded from this package's `tsc` build. Run from the repo root:
+**Vitest** (Cosmos store + reservation handler mocks) lives in root `__tests__/azure/`. Run from the repo root:
 
 ```bash
-npm run test -- azure-functions/src/__tests__/tenantSettingsStore.test.ts azure-functions/src/__tests__/createReservation.test.ts
+npm run test -- __tests__/azure/
 ```
 
 ## Connecting a client

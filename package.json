@@ -28,6 +28,8 @@
     "stripe": "^17.7.0"
   },
   "devDependencies": {
+    "@azure/cosmos": "^4.9.3",
+    "@azure/functions": "^4.16.0",
     "@storybook/addon-a11y": "^10.4.0",
     "@storybook/react": "^10.4.0",
     "@storybook/react-vite": "^10.4.0",

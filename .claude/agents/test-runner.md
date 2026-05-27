@@ -294,5 +294,5 @@ Before declaring a test “stuck”, walk through:
 - **React act warnings on admin shell / fetch-on-mount components**: Apply the flush helper pattern above; see `__tests__/components/admin/AdminShell.test.tsx` as the reference implementation
 - **Debounced input / setup-intent / payment capture components**: Use real-timer flush helper + raised `describe` timeout; scope fake timers to debounce-only tests — see `__tests__/components/blocks/ReservationCardCapture.test.tsx`
 - **Tests timeout at 5000ms with no clear assertion failure**: Check debounce delay + `waitFor` budget before debugging fetch mocks or Stripe
-- **Azure test in wrong folder or wrong runner**: Read `.claude/skills/qa/azure_functions_tests.md` — colocate under `azure-functions/src/__tests__/`, update `vitest.config.ts` include + `azure-functions/tsconfig.json` exclude for new Vitest files
+- **Azure test in wrong folder or wrong runner**: Read `.claude/skills/qa/azure_functions_tests.md` — Vitest tests go in `__tests__/azure/`; `node:test` tests stay in `azure-functions/src/__tests__/`
 - **`node --test` fails after adding Azure test**: File likely uses Vitest but compiled to `dist/` — exclude from azure `tsc` or convert to `node:test` pattern
