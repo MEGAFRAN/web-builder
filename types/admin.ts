@@ -5,6 +5,7 @@ export type ReservationDisplayStatus =
   | 'cancelled'
   | 'no-show'
   | 'pending'
+  | 'completed'
   | 'cancelled_and_charged'
   | 'cancelled_charge_failed'
 

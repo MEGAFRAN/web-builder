@@ -10,12 +10,13 @@ DONE: business/tasks/done/05-configure-admin-deploy-pipeline.md
 DONE: business/tasks/done/20-fix-admin-azure-functions-reserved-route.md
 DONE: business/tasks/done/21-stripe-no-show-part1.md
 DONE: business/tasks/done/22-stripe-no-show-part2.md
+DONE: business/tasks/done/08-cloudflare-azure-blob-custom-domain.md
+DONE: business/tasks/done/12-today-card-stack-bookings-entry-view.md
+DONE: business/tasks/done/23-unify-booking-appointment-actions.md
 
-IN-PROGRESS: TODO: business/tasks/08-cloudflare-azure-blob-custom-domain.md
 
 TODO: business/tasks/07-resend-transactional-email-integration.md
 TODO: business/tasks/10-scripts-provision-client.md
-TODO: business/tasks/12-today-card-stack-bookings-entry-view.md
 TODO: business/tasks/13-in-admin-monthly-bookings-revenue-kpi-tile.md
 TODO: business/tasks/14-14-day-trial-auto-charge-billing-flow.md
 TODO: business/tasks/15-cold-dm-outreach-tracking.md

@@ -18,10 +18,13 @@ import { adminCopy, formatPrettyDateEs } from '@/components/admin/admin-copy'
 import { resolveDayMinutesWindow } from '@/lib/booking-schedule-window'
 import type { BookingScheduleFile, ReservationRow } from '@/types/admin'
 import { SimpleDayList } from '@/components/admin/bookings/SimpleDayList'
+import { TodayCardStack } from '@/components/admin/TodayCardStack'
 import { useAdminAuth } from '@/lib/admin-auth-context'
 import { adminChargeNoShowUrl, adminDataUrl, adminFetch } from '@/lib/admin-api'
 import { isGuaranteeRequired } from '@/lib/booking-guarantee'
+import { useMinWidth } from '@/lib/hooks/useMinWidth'
 import type { BookingSettings } from '@/types/cms'
+import type { AdminBookingService } from '@/types/admin'
 
 export default function AdminBookingsPage() {
   const { session } = useAdminAuth()
@@ -38,7 +41,9 @@ export default function AdminBookingsPage() {
   const [cancelReason, setCancelReason] = useState('')
   const [createOpen, setCreateOpen] = useState(false)
   const [bookingSettings, setBookingSettings] = useState<BookingSettings | null>(null)
+  const [services, setServices] = useState<AdminBookingService[]>([])
   const guaranteeEnabled = isGuaranteeRequired(bookingSettings)
+  const isDesktop = useMinWidth(768)
 
   const weekStart = useMemo(() => mondayOfWeek(selectedYmd), [selectedYmd])
   const weekEnd = useMemo(() => addDaysYmd(weekStart, 6), [weekStart])
@@ -50,6 +55,15 @@ export default function AdminBookingsPage() {
         setBookingSettings(data.bookingSettings ?? null)
       })
       .catch(() => setBookingSettings(null))
+  }, [])
+
+  useEffect(() => {
+    void adminFetch(adminDataUrl('/services'))
+      .then(async (r) => (r.ok ? r.json() : { services: [] }))
+      .then((data: { services?: AdminBookingService[] }) => {
+        setServices(data.services ?? [])
+      })
+      .catch(() => setServices([]))
   }, [])
 
   const fetchRange = useCallback(async (start: string, end: string, signal?: { cancelled: boolean }) => {
@@ -98,6 +112,19 @@ export default function AdminBookingsPage() {
     )
   }
 
+  async function handlePatchStatus(id: string, action: 'no-show' | 'complete') {
+    setError('')
+    try {
+      await patchReservation(id, action)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : adminCopy.bookings.errors.updateFailed)
+    }
+  }
+
+  async function handleNoShowCharge(id: string) {
+    await chargeNoShow(id)
+  }
+
   const dayRows = useMemo(() => {
     const list = rows.filter((r) => r.date === selectedYmd)
     list.sort((a, b) => a.time.localeCompare(b.time))
@@ -133,7 +160,11 @@ export default function AdminBookingsPage() {
     refreshRange()
   }
 
-  async function patchReservation(id: string, action: 'cancel' | 'no-show', reason?: string) {
+  async function patchReservation(
+    id: string,
+    action: 'cancel' | 'no-show' | 'complete',
+    reason?: string,
+  ) {
     const res = await adminFetch(adminDataUrl(`/reservations/${encodeURIComponent(id)}`), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -143,8 +174,22 @@ export default function AdminBookingsPage() {
       const j = (await res.json().catch(() => ({}))) as { error?: string }
       throw new Error(j.error ?? adminCopy.bookings.errors.updateFailed)
     }
+    const j = (await res.json().catch(() => ({}))) as { reservation?: ReservationRow }
+    const nextStatus =
+      action === 'cancel' ? 'cancelled' : action === 'no-show' ? 'no-show' : 'completed'
+    setRows((prev) =>
+      prev.map((r) =>
+        r.id === id
+          ? {
+              ...r,
+              ...(j.reservation ?? {}),
+              status: j.reservation?.status ?? nextStatus,
+              serviceName: r.serviceName,
+            }
+          : r,
+      ),
+    )
     setDetail(null)
-    refreshRange()
   }
 
   return (
@@ -179,6 +224,17 @@ export default function AdminBookingsPage() {
 
         {loading ? (
           <p className="text-sm text-muted">{adminCopy.common.loading}</p>
+        ) : !isDesktop && view === 'day' ? (
+          <TodayCardStack
+            rows={dayRows}
+            services={services}
+            closedDay={dayWindow === null && dayRows.length === 0}
+            dateYmd={selectedYmd}
+            guaranteeEnabled={guaranteeEnabled}
+            onPatchStatus={handlePatchStatus}
+            onNoShowCharge={handleNoShowCharge}
+            onCreate={() => setCreateOpen(true)}
+          />
         ) : view === 'day' ? (
           dayWindow === null && dayRows.length === 0 ? (
             <CalendarEmptyState
@@ -218,8 +274,8 @@ export default function AdminBookingsPage() {
           row={detail}
           onClose={() => setDetail(null)}
           onCancel={() => setCancelOpen(true)}
-          onNoShow={() => void patchReservation(detail.id, 'no-show')}
-          onNoShowCharge={() => void chargeNoShow(detail.id)}
+          onPatchStatus={handlePatchStatus}
+          onNoShowCharge={handleNoShowCharge}
           guaranteeEnabled={guaranteeEnabled}
         />
       )}

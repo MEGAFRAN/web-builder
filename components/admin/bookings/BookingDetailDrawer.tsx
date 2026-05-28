@@ -1,6 +1,10 @@
 'use client'
 
 import { Badge } from '@/components/content/Badge'
+import {
+  BookingAppointmentActions,
+  type BookingAppointmentPatchAction,
+} from '@/components/admin/bookings/BookingAppointmentActions'
 import { bookingDurationMinutes, timeToMinutes } from '@/lib/booking-utils'
 import { adminCopy, formatPrettyDateEs, reservationStatusDisplay } from '@/components/admin/admin-copy'
 import type { ReservationRow } from '@/types/admin'
@@ -9,8 +13,8 @@ interface BookingDetailDrawerProps {
   row: ReservationRow
   onClose: () => void
   onCancel: () => void
-  onNoShow: () => void
-  onNoShowCharge?: () => void
+  onPatchStatus: (id: string, action: BookingAppointmentPatchAction) => Promise<void>
+  onNoShowCharge?: (id: string) => Promise<void>
   guaranteeEnabled?: boolean
 }
 
@@ -22,7 +26,7 @@ export function BookingDetailDrawer({
   row,
   onClose,
   onCancel,
-  onNoShow,
+  onPatchStatus,
   onNoShowCharge,
   guaranteeEnabled = false,
 }: BookingDetailDrawerProps) {
@@ -30,6 +34,8 @@ export function BookingDetailDrawer({
   const start = timeToMinutes(row.time)
   const endMin = start + dur
   const { label: stLabel, variant } = reservationStatusDisplay(row.status)
+  const phone = row.phone.trim()
+  const telHref = phone ? `tel:${phone.replace(/\s+/g, '')}` : null
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
@@ -61,7 +67,18 @@ export function BookingDetailDrawer({
             </div>
             <div>
               <dt className="font-medium text-muted">{adminCopy.drawer.phone}</dt>
-              <dd className="text-foreground">{row.phone}</dd>
+              <dd className="text-foreground">
+                {telHref ? (
+                  <a
+                    href={telHref}
+                    className="font-medium text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+                  >
+                    {phone}
+                  </a>
+                ) : (
+                  adminCopy.common.emDash
+                )}
+              </dd>
             </div>
             <div>
               <dt className="font-medium text-muted">{adminCopy.drawer.email}</dt>
@@ -120,37 +137,13 @@ export function BookingDetailDrawer({
             >
               {adminCopy.bookings.cancelAppointment}
             </button>
-            {guaranteeEnabled &&
-            row.guarantee?.paymentMethodId &&
-            onNoShowCharge &&
-            row.status !== 'cancelled_and_charged' &&
-            row.status !== 'cancelled_charge_failed' ? (
-              <button
-                type="button"
-                disabled={
-                  row.status === 'cancelled' ||
-                  row.status === 'no-show' ||
-                  row.status === 'cancelled_and_charged'
-                }
-                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-                onClick={onNoShowCharge}
-              >
-                {adminCopy.bookings.markNoShowAndCharge}
-              </button>
-            ) : (
-              <button
-                type="button"
-                disabled={
-                  row.status === 'no-show' ||
-                  row.status === 'cancelled' ||
-                  row.status === 'cancelled_and_charged'
-                }
-                className="rounded-md bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-900 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
-                onClick={onNoShow}
-              >
-                {adminCopy.bookings.markNoShow}
-              </button>
-            )}
+            <BookingAppointmentActions
+              row={row}
+              layout="stacked"
+              guaranteeEnabled={guaranteeEnabled}
+              onPatchStatus={onPatchStatus}
+              onNoShowCharge={onNoShowCharge}
+            />
           </div>
         </div>
       </aside>

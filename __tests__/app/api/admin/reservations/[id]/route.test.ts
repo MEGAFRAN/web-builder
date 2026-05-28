@@ -118,6 +118,17 @@ describe('PATCH /api/admin/reservations/[id]', () => {
     const json = (await res.json()) as { reservation: StoredReservation }
     expect(json.reservation.status).toBe('no-show')
   })
+
+  it('applies complete status', async () => {
+    vi.mocked(updateReservation).mockImplementationOnce((_id, _cid, updater) =>
+      Promise.resolve(updater(row({ id: 'cid' }))),
+    )
+
+    const res = await PATCH(patchReq({ action: 'complete' }), ctx('cid'))
+    expect(res.status).toBe(200)
+    const json = (await res.json()) as { reservation: StoredReservation }
+    expect(json.reservation.status).toBe('completed')
+  })
 })
 
 function row(overrides: Partial<StoredReservation> = {}): StoredReservation {

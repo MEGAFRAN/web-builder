@@ -118,6 +118,22 @@ export const adminCopy = {
     closedNoBookings: 'No se aceptan reservas en esta fecha.',
     specialDayListNote:
       'Este día está marcado como cerrado o tiene horario especial; las citas aparecen abajo sin franja horaria.',
+    appointmentActions: {
+      callClient: 'Llamar al cliente',
+      markComplete: 'Marcar completada',
+      noShowConfirmTitle: '¿Marcar como ausencia?',
+      noShowConfirmMessage: (name: string, time: string) =>
+        `¿Confirmas que ${name} no se presentó a la cita de las ${time}? Esta acción no se puede deshacer fácilmente.`,
+      noShowChargeConfirmTitle: '¿Marcar no-show y cobrar?',
+      noShowChargeConfirmMessage: (name: string) =>
+        `Se cobrará la penalización acordada a ${name}. ¿Quieres continuar?`,
+      confirmNoShow: 'Confirmar ausencia',
+      confirmNoShowCharge: 'Confirmar y cobrar',
+    },
+    todayStack: {
+      heading: 'Hoy',
+      emptyToday: 'No hay citas programadas para hoy. ¡Disfruta tu día!',
+    },
     errors: {
       failedReservations: 'No se pudieron cargar las reservas.',
       failedSchedule: 'No se pudo cargar el horario.',
@@ -272,6 +288,7 @@ export function reservationStatusDisplay(status: string): {
   if (status === 'no-show') return { label: 'No asistió', variant: 'warning' }
   if (status === 'cancelled_and_charged') return { label: 'No-show cobrado', variant: 'success' }
   if (status === 'cancelled_charge_failed') return { label: 'Cobro fallido', variant: 'error' }
+  if (status === 'completed') return { label: 'Completada', variant: 'success' }
   if (status === 'pending') return { label: 'Pendiente de confirmación', variant: 'warning' }
   return { label: 'Confirmada', variant: 'success' }
 }

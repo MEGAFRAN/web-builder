@@ -12,14 +12,14 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const noop = () => {}
+const noop = async () => {}
 
 export const Confirmed: Story = {
   args: {
     row: mockReservation(),
     onClose: noop,
     onCancel: noop,
-    onNoShow: noop,
+    onPatchStatus: noop,
   },
 }
 
@@ -28,7 +28,7 @@ export const Pending: Story = {
     row: mockReservation({ id: 'res-p', status: 'pending', time: '15:30', durationMinutes: 60 }),
     onClose: noop,
     onCancel: noop,
-    onNoShow: noop,
+    onPatchStatus: noop,
   },
 }
 
@@ -41,7 +41,7 @@ export const Cancelled: Story = {
     }),
     onClose: noop,
     onCancel: noop,
-    onNoShow: noop,
+    onPatchStatus: noop,
   },
 }
 
@@ -50,11 +50,11 @@ export const NoShow: Story = {
     row: mockReservation({ id: 'res-n', status: 'no-show', durationMinutes: 30 }),
     onClose: noop,
     onCancel: noop,
-    onNoShow: noop,
+    onPatchStatus: noop,
   },
 }
 
-/** Card on file + guarantee enabled → shows "Marcar no-show y cobrar" (primary button). */
+/** Card on file + guarantee enabled → shows "Marcar no-show y cobrar" (gold button). */
 export const WithGuaranteeCharge: Story = {
   args: {
     row: mockReservation({
@@ -65,7 +65,7 @@ export const WithGuaranteeCharge: Story = {
     onNoShowCharge: noop,
     onClose: noop,
     onCancel: noop,
-    onNoShow: noop,
+    onPatchStatus: noop,
   },
 }
 
@@ -81,6 +81,6 @@ export const ChargeFailed: Story = {
     onNoShowCharge: noop,
     onClose: noop,
     onCancel: noop,
-    onNoShow: noop,
+    onPatchStatus: noop,
   },
 }

@@ -6,6 +6,19 @@ import { adminCopy, WEEK_SHORT_LABELS, weekDayHeader } from '@/components/admin/
 
 const fetchCredentials = { credentials: 'include' }
 
+function mockDesktopViewport() {
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: query.includes('min-width: 768px'),
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }))
+}
+
 vi.mock('@/lib/admin-auth-context', () => ({
   useAdminAuth: () => ({
     session: { email: 'owner@example.com', clientId: 'client-1' },
@@ -77,6 +90,7 @@ describe('AdminBookingsPage', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     vi.setSystemTime(new Date('2026-05-18T12:00:00'))
     vi.restoreAllMocks()
+    mockDesktopViewport()
   })
 
   afterEach(() => {
@@ -394,6 +408,9 @@ describe('AdminBookingsPage', () => {
     await screen.findByRole('heading', { name: adminCopy.bookings.appointment })
 
     fireEvent.click(screen.getByRole('button', { name: adminCopy.bookings.markNoShow }))
+    fireEvent.click(
+      screen.getByRole('button', { name: adminCopy.bookings.appointmentActions.confirmNoShow }),
+    )
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
@@ -617,6 +634,9 @@ describe('AdminBookingsPage', () => {
 
     fireEvent.click(
       screen.getByRole('button', { name: adminCopy.bookings.markNoShowAndCharge }),
+    )
+    fireEvent.click(
+      screen.getByRole('button', { name: adminCopy.bookings.appointmentActions.confirmNoShowCharge }),
     )
 
     await waitFor(() => {

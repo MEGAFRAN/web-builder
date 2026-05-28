@@ -25,8 +25,8 @@ export async function PATCH(
   }
 
   const action = body.action
-  if (action !== 'cancel' && action !== 'no-show') {
-    return NextResponse.json({ error: 'action must be cancel or no-show.' }, { status: 422 })
+  if (action !== 'cancel' && action !== 'no-show' && action !== 'complete') {
+    return NextResponse.json({ error: 'action must be cancel, no-show, or complete.' }, { status: 422 })
   }
 
   const reason =
@@ -37,6 +37,9 @@ export async function PATCH(
   const updated = await updateReservation(decodeURIComponent(id), clientId, (row) => {
     if (action === 'cancel') {
       return { ...row, status: 'cancelled', cancelReason: reason }
+    }
+    if (action === 'complete') {
+      return { ...row, status: 'completed' }
     }
     return { ...row, status: 'no-show' }
   })

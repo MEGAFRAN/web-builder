@@ -38,6 +38,9 @@
 # local-dev operational data (not committed — treated as per-clone state)
 /data/*.json
 
+# per-client ARM outputs (regenerate with scripts/generate-website-blob-template.mjs)
+/infra/azure/generated/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

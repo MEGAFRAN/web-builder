@@ -41,8 +41,8 @@ async function handler(
     }
 
     const action = body.action
-    if (action !== 'cancel' && action !== 'no-show') {
-      return jsonResponse(422, origin, methods, { error: 'action must be cancel or no-show.' })
+    if (action !== 'cancel' && action !== 'no-show' && action !== 'complete') {
+      return jsonResponse(422, origin, methods, { error: 'action must be cancel, no-show, or complete.' })
     }
 
     const reason =
@@ -53,6 +53,9 @@ async function handler(
     const updated = await updateReservationById(decodeURIComponent(id), session.clientId, (row) => {
       if (action === 'cancel') {
         return { ...row, status: 'cancelled', cancelReason: reason }
+      }
+      if (action === 'complete') {
+        return { ...row, status: 'completed' }
       }
       return { ...row, status: 'no-show' }
     })

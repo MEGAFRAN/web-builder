@@ -89,3 +89,7 @@ This task involves researching/spiking the optimal setup, writing a technical ru
 2. `node scripts/setup-domain.mjs --domain testclient.com --clientId 123 --storageEndpoint example.z13.web.core.windows.net` executes successfully and configures the CNAME and SSL settings on Cloudflare.
 3. Running `scripts/setup-domain.mjs` twice for the same domain update is idempotent and does not crash or throw duplicate CNAME errors.
 4. Edge requests to the custom domain successfully proxy through Cloudflare, load the index page from the corresponding Azure Blob container, and terminate SSL.
+
+NOTE:
+
+I do this manually in cloudflare, in the future will be automated.
