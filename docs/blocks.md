@@ -1,6 +1,6 @@
 # Block System
 
-> Read this file when adding, modifying, or validating block types and page content. See [architecture.md](../architecture.md) for the overall system. For the full agent-facing list of blocks and primitives, see [component-catalog.md](./agents/component-catalog.md) (auto-generated via `npm run generate:component-catalog`).
+> Read this file when adding, modifying, or validating block types and page content. See [architecture.md](../architecture.md) for the overall system. **Agents adding a new block:** start with [adding-a-block.md](./agents/adding-a-block.md), then [component-catalog.md](./agents/component-catalog.md) (auto-generated via `npm run generate:component-catalog`) and [component-affordances.json](../config/component-affordances.json).
 
 ---
 
@@ -43,8 +43,9 @@ Each entry uses `next/dynamic` with a static import path — no computed paths.
 2. Create the React component under `components/blocks/`
 3. Add one entry to `componentRegistry.ts`
 4. Create a JSON Schema file at `config/schemas/blocks/{typeName}.schema.json`
-5. Use the new `_type` value in a client's page JSON
-6. Run `npm run generate:component-catalog` to refresh `docs/agents/component-catalog.md`
+5. Add `useCases` (and optional `avoidWhen`) under `blocks.<_type>` in `config/component-affordances.json`
+6. Use the new `_type` value in a client's page JSON
+7. Run `npm run generate:component-catalog` to refresh `docs/agents/component-catalog.md`
 
 ---
 

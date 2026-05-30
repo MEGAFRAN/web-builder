@@ -9,7 +9,7 @@
 ## Preconditions
 
 Read before executing:
-- `docs/agents/component-catalog.md` — verify component paths (auto-generated; run `npm run generate:component-catalog` if stale)
+- `docs/agents/component-catalog.md` — verify paths and when-to-use (auto-generated from `config/component-affordances.json`; run `npm run generate:component-catalog` if stale)
 - The target component file if it already exists
 
 ## Process
@@ -18,6 +18,7 @@ Read before executing:
 
 1. Determine the correct directory by category: `components/inputs/`, `components/content/`, `components/data/`, `components/layout/`, `components/navigation/`, `components/sections/`, `components/blocks/`
 2. Write or update the `.tsx` file. Follow all agent constraints (Tailwind only, no `any`, no `"use client"` unless required).
+2b. Add or update `useCases` in `config/component-affordances.json` under `primitives/<category>/<Name>` or `blocks.<_type>` when adding a primitive or block.
 3. Export the component as a named export for primitives, or default export for blocks/sections.
 4. If the component has inputs, just allow the expected data to be added: if the input is email expect @ if the input is phone number just expect numbers, etc
 

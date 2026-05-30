@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import {
   assertCatalogContracts,
   collectCatalogData,
+  normalizeCatalogMarkdown,
   renderCatalogMarkdown,
 } from './lib/component-catalog.mjs'
 
@@ -15,7 +16,22 @@ const data = collectCatalogData(repoRoot)
 assertCatalogContracts(data)
 
 const markdown = renderCatalogMarkdown(data)
-fs.mkdirSync(path.dirname(outPath), { recursive: true })
-fs.writeFileSync(outPath, markdown, 'utf8')
+const relOut = path.relative(repoRoot, outPath)
+const summary = `${data.blocks.length} blocks, ${Object.values(data.primitives).flat().length} primitives`
 
-console.log(`Wrote ${path.relative(repoRoot, outPath)} (${data.blocks.length} blocks, ${Object.values(data.primitives).flat().length} primitives)`)
+fs.mkdirSync(path.dirname(outPath), { recursive: true })
+
+if (!fs.existsSync(outPath)) {
+  fs.writeFileSync(outPath, markdown, 'utf8')
+  console.log(`Wrote ${relOut} (${summary}, created)`)
+  process.exit(0)
+}
+
+const existing = fs.readFileSync(outPath, 'utf8')
+if (normalizeCatalogMarkdown(existing) === normalizeCatalogMarkdown(markdown)) {
+  console.log(`Component catalog up to date: ${relOut} (${summary})`)
+  process.exit(0)
+}
+
+fs.writeFileSync(outPath, markdown, 'utf8')
+console.log(`Wrote ${relOut} (${summary})`)

@@ -1,0 +1,399 @@
+{
+  "blocks": {
+    "blog_list": {
+      "useCases": [
+        "Blog index or news listing page when the tenant has the blog feature enabled.",
+        "Paginated grid of posts with thumbnails and read-time metadata."
+      ],
+      "avoidWhen": ["Single static article content — use a custom page or rich blocks instead."]
+    },
+    "breadcrumb": {
+      "useCases": [
+        "Nested page hierarchies (e.g. /services/consulting) where users need parent context.",
+        "Placed near the top of content pages below the navbar."
+      ],
+      "avoidWhen": ["Flat single-level sites with only the homepage and one contact page."]
+    },
+    "carouselBlock": {
+      "useCases": [
+        "Rotating image galleries, testimonial strips, or card highlights on marketing pages.",
+        "When you need arrows, indicators, or autoplay across multiple slides."
+      ],
+      "avoidWhen": ["A single static image or quote — use a simpler content block instead."]
+    },
+    "caseStudiesBlock": {
+      "useCases": [
+        "Portfolio or success-stories index linking to individual case study pages.",
+        "Grid of client work with cover image, industry, and summary."
+      ],
+      "avoidWhen": ["One long case study narrative — use caseStudyDetailBlock on the detail page."]
+    },
+    "caseStudyDetailBlock": {
+      "useCases": [
+        "Full case study article: challenge, solution, tech stack, impact metrics.",
+        "Dedicated slug page under /case-studies/ or similar."
+      ],
+      "avoidWhen": ["Listing multiple projects — use caseStudiesBlock."]
+    },
+    "contact": {
+      "useCases": [
+        "All-in-one contact page with info cards plus embedded messaging form.",
+        "When phone, email, address, and form should appear together."
+      ],
+      "avoidWhen": ["Split layout with sidebar info and main form only — use contactInfoBlock or contactFormSection."]
+    },
+    "contactFormSection": {
+      "useCases": [
+        "Standalone lead-capture form section (name, email, message).",
+        "Full-width form without adjacent address/phone cards."
+      ],
+      "avoidWhen": ["Form already inside contactInfoBlock — do not duplicate on the same page."]
+    },
+    "contactInfoBlock": {
+      "useCases": [
+        "Contact page with form plus email, phone, and address in a side column.",
+        "Company profile fallbacks merge into empty contact fields at build time."
+      ],
+      "avoidWhen": ["Map-first location page — use location block; form-only — use contactFormSection."]
+    },
+    "ctaBlock": {
+      "useCases": [
+        "Mid-page or bottom-of-page conversion push with headline and single CTA.",
+        "Between content sections on homepage or pricing adjacent pages."
+      ],
+      "avoidWhen": ["Primary above-the-fold hero — use hero or heroBlock."]
+    },
+    "divider": {
+      "useCases": [
+        "Visual separation between two block regions on the same page.",
+        "Light structural break without extra content."
+      ]
+    },
+    "faqBlock": {
+      "useCases": [
+        "Accordion FAQ on contact, pricing, or booking pages.",
+        "Answering objections before reservation or contact submission."
+      ],
+      "avoidWhen": ["FAQ is part of a full pricing layout — pricingPageBlock includes its own FAQ region."]
+    },
+    "featureGridBlock": {
+      "useCases": [
+        "Product or platform benefits in a scannable multi-column grid.",
+        "Homepage or landing sections with icon/title/description items."
+      ],
+      "avoidWhen": ["Bookable service menu with prices — use services or servicesPageBlock."]
+    },
+    "footer": {
+      "useCases": [
+        "Site-wide footer with link columns and copyright on every page.",
+        "Typically the last block in page JSON or injected via client chrome."
+      ]
+    },
+    "hero": {
+      "useCases": [
+        "Simple centered hero: title, optional subtitle, one CTA.",
+        "Inner pages (menu, about subpages) that need a compact banner."
+      ],
+      "avoidWhen": ["Marketing homepage with background image and dual CTAs — use heroBlock."]
+    },
+    "heroBlock": {
+      "useCases": [
+        "Homepage hero with large imagery and primary/secondary CTAs.",
+        "Portfolio or SaaS-style above-the-fold landing sections."
+      ],
+      "avoidWhen": ["Minimal single-CTA banner — use hero."]
+    },
+    "location": {
+      "useCases": [
+        "Address, hours, and optional embedded map for visit-us pages.",
+        "Build merges company profile address when block fields are empty."
+      ],
+      "avoidWhen": ["No physical location or map — use contactInfoBlock only."]
+    },
+    "logoCloud": {
+      "useCases": [
+        "Trusted-by logo rows, press mentions, or partner strips.",
+        "Social proof between hero and features on B2B landings."
+      ]
+    },
+    "missionBlock": {
+      "useCases": [
+        "About page vision or mission statement with optional supporting image.",
+        "Single narrative column focused on why the business exists."
+      ]
+    },
+    "navbar": {
+      "useCases": [
+        "Primary site header: logo, nav links, optional CTA.",
+        "First block on most pages or provided via client header config."
+      ]
+    },
+    "pricingPageBlock": {
+      "useCases": [
+        "Dedicated pricing page: tiers, promotion banner, testimonials, and FAQ in one block.",
+        "SaaS or membership plans with compare-at-a-glance cards."
+      ],
+      "avoidWhen": ["Single inline pricing mention — use services or ctaBlock."]
+    },
+    "reservationBlock": {
+      "useCases": [
+        "Guest booking funnel: service pick, date/time, contact, confirmation.",
+        "Reservas page or embedded modal from services catalog when booking feature is on."
+      ],
+      "avoidWhen": ["Booking disabled for tenant or contact-only lead gen — use contactFormSection."]
+    },
+    "services": {
+      "useCases": [
+        "Service catalog cards on homepage or menu page with booking CTAs.",
+        "Pulls admin booking-services catalog at build/runtime when configured."
+      ],
+      "avoidWhen": ["Long-form services marketing page — use servicesPageBlock."]
+    },
+    "servicesPageBlock": {
+      "useCases": [
+        "Full services marketing page: hero, feature categories, service cards, FAQ.",
+        "Dense deliverables and pricing descriptors per offering."
+      ],
+      "avoidWhen": ["Compact homepage teaser grid — use services."]
+    },
+    "statsBlock": {
+      "useCases": [
+        "Key metrics row (users, uptime, locations) for credibility.",
+        "White, gray, or dark background variants for alternating sections."
+      ]
+    },
+    "teamBlock": {
+      "useCases": [
+        "About page team grid with photo, role, and bio per member.",
+        "Ordered member list for salons, agencies, or clinics."
+      ]
+    },
+    "testimonialsBlock": {
+      "useCases": [
+        "Homepage or landing quote grid/slider with avatars and star ratings.",
+        "Social proof before a CTA or pricing section."
+      ],
+      "avoidWhen": ["Full testimonials directory page — use testimonialsPageBlock."]
+    },
+    "testimonialsPageBlock": {
+      "useCases": [
+        "Dedicated reviews page with stats, featured quotes, logo cloud, and full list.",
+        "SEO-focused social proof hub."
+      ],
+      "avoidWhen": ["Short quote strip on homepage — use testimonialsBlock."]
+    },
+    "valuesBlock": {
+      "useCases": [
+        "About page grid of core values or principles with icons.",
+        "Three to six cards explaining how the business operates."
+      ]
+    }
+  },
+  "primitives": {
+    "content/Alert": {
+      "useCases": [
+        "Inline success, error, or warning messages after form actions.",
+        "Feedback banners inside blocks — not for page-level heroes."
+      ]
+    },
+    "content/Avatar": {
+      "useCases": [
+        "Profile images in testimonials, team cards, or comments.",
+        "Shows initials fallback when photo URL is missing."
+      ]
+    },
+    "content/Badge": {
+      "useCases": [
+        "Status labels (New, Beta), category tags, or inline state chips.",
+        "Small metadata on cards and list items."
+      ]
+    },
+    "content/Heading": {
+      "useCases": [
+        "Semantic page and section titles (h1–h4) with design-system sizing.",
+        "Any block that needs a controlled heading level and color."
+      ]
+    },
+    "content/Image": {
+      "useCases": [
+        "Responsive photos and illustrations with optional rounding.",
+        "Product shots and content imagery inside blocks."
+      ]
+    },
+    "content/Text": {
+      "useCases": [
+        "Body copy, descriptions, and supporting paragraphs.",
+        "Muted or emphasized variants for secondary copy."
+      ]
+    },
+    "data/Card": {
+      "useCases": [
+        "Bordered content grouping: blog previews, team members, service details.",
+        "Contained panels inside Section/Container layouts."
+      ]
+    },
+    "data/List": {
+      "useCases": [
+        "Bulleted or numbered feature lists and step sequences.",
+        "When a table would be heavier than needed."
+      ]
+    },
+    "data/Table": {
+      "useCases": [
+        "Labeled rows and columns for comparisons or tabular data.",
+        "Spec sheets and structured exports in content blocks."
+      ]
+    },
+    "inputs/Button": {
+      "useCases": [
+        "Primary, secondary, and destructive actions in forms and CTAs.",
+        "Navigation and submit triggers inside blocks."
+      ]
+    },
+    "inputs/Checkbox": {
+      "useCases": [
+        "Boolean form options such as terms acceptance or feature toggles."
+      ]
+    },
+    "inputs/ContactForm": {
+      "useCases": [
+        "Standard name/email/message form when composing custom contact UIs.",
+        "Prefer contactFormSection block for tenant pages unless building a new block."
+      ]
+    },
+    "inputs/Input": {
+      "useCases": [
+        "Single-line fields: name, email, search, phone in custom forms."
+      ]
+    },
+    "inputs/Select": {
+      "useCases": [
+        "Dropdown for one-of-many choices: country, category, service filter."
+      ]
+    },
+    "inputs/Textarea": {
+      "useCases": [
+        "Multi-line message or notes fields in forms."
+      ]
+    },
+    "layout/Container": {
+      "useCases": [
+        "Max-width wrapper and horizontal padding for block inner content.",
+        "Center content on wide viewports inside Section."
+      ]
+    },
+    "layout/Divider": {
+      "useCases": [
+        "Horizontal rule inside cards or between stacked regions.",
+        "Prefer divider block for full-page section breaks."
+      ]
+    },
+    "layout/Grid": {
+      "useCases": [
+        "Responsive multi-column layouts for cards, features, or galleries.",
+        "Repeated items in columns across breakpoints."
+      ]
+    },
+    "layout/Modal": {
+      "useCases": [
+        "Overlay dialogs inside blocks (e.g. service detail, booking) with focus trap.",
+        "Not a CMS block — composed within ServicesBlock and similar."
+      ]
+    },
+    "layout/Section": {
+      "useCases": [
+        "Full-width band with background color and vertical padding.",
+        "Alternating white/gray/dark page regions."
+      ]
+    },
+    "layout/Stack": {
+      "useCases": [
+        "Vertical spacing between form fields or stacked text blocks.",
+        "Consistent gap without manual margin classes."
+      ]
+    },
+    "navigation/BottomCtaBar": {
+      "useCases": [
+        "Fixed mobile bottom bar with tel:, mailto:, WhatsApp, or path links.",
+        "Configured in client.json — not a CMS page block."
+      ]
+    },
+    "navigation/Breadcrumb": {
+      "useCases": [
+        "Primitive breadcrumb trail inside custom layouts.",
+        "Prefer breadcrumb block for tenant pages."
+      ]
+    },
+    "navigation/Footer": {
+      "useCases": [
+        "Primitive footer markup inside composite blocks.",
+        "Prefer footer block or client footer config for full pages."
+      ]
+    },
+    "navigation/Navbar": {
+      "useCases": [
+        "Primitive header inside page-level blocks.",
+        "Prefer navbar block for standard tenant chrome."
+      ]
+    },
+    "navigation/NavLink": {
+      "useCases": [
+        "Single nav item with active state inside Navbar compositions."
+      ]
+    },
+    "sections/Carousel": {
+      "useCases": [
+        "Section-level carousel used by carouselBlock.",
+        "Do not reference from page JSON — use carouselBlock _type."
+      ]
+    },
+    "sections/CTA": {
+      "useCases": [
+        "Section CTA layout composed inside ctaBlock.",
+        "Use ctaBlock in page JSON, not this component directly."
+      ]
+    },
+    "sections/FAQ": {
+      "useCases": [
+        "Accordion FAQ section inside faqBlock and pricing layouts.",
+        "Use faqBlock in page JSON for tenant pages."
+      ]
+    },
+    "sections/FeatureGrid": {
+      "useCases": [
+        "Feature grid section inside featureGridBlock and servicesPageBlock.",
+        "Use featureGridBlock in page JSON."
+      ]
+    },
+    "sections/Hero": {
+      "useCases": [
+        "Hero section layout inside heroBlock and servicesPageBlock.",
+        "Use hero or heroBlock in page JSON for tenant pages."
+      ]
+    },
+    "sections/LogoCloud": {
+      "useCases": [
+        "Logo row section inside logoCloud and testimonialsPageBlock.",
+        "Use logoCloud block in page JSON."
+      ]
+    },
+    "sections/PricingTable": {
+      "useCases": [
+        "Pricing tiers inside pricingPageBlock.",
+        "Use pricingPageBlock in page JSON."
+      ]
+    },
+    "sections/StatsBar": {
+      "useCases": [
+        "Stats row inside statsBlock and testimonialsPageBlock.",
+        "Use statsBlock in page JSON."
+      ]
+    },
+    "sections/Testimonials": {
+      "useCases": [
+        "Testimonial layout inside testimonialsBlock and pricingPageBlock.",
+        "Use testimonialsBlock in page JSON."
+      ]
+    }
+  }
+}

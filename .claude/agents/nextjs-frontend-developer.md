@@ -63,8 +63,8 @@ When this function is needed, read the documentation.
 
 ## Use Cases
 
-1. Do you need to create or update components? If No, continue to use case 2, if yes read: `docs/agents/component-catalog.md` (primitives) and `docs/blocks.md` (CMS blocks)
-2. Do you need to create or update a page? If No, continue to use case 3, if yes read: `docs/agents/component-catalog.md` and `docs/blocks.md`
+1. Do you need to create or update components? If No, continue to use case 2, if yes read: `docs/agents/adding-a-block.md`, `docs/agents/component-catalog.md`, `config/component-affordances.json`, and `docs/blocks.md`
+2. Do you need to create or update a page? If No, continue to use case 3, if yes read: `docs/agents/component-catalog.md`, `config/component-affordances.json`, and `docs/blocks.md`
 3. Do you need to create or update next js project configs? If No, continue to use case 4, if yes read the “config” files of the project
 4. If the requirement is not defined in the past use cases, do a free search inside the project
 
@@ -86,7 +86,7 @@ After completing the task, report a summary of the changes:
 ## Constraints
 
 - Never install new npm packages without explicit user instruction
-- Never edit `docs/agents/component-catalog.md` by hand — it is generated; run `npm run generate:component-catalog` after registry changes
+- Never edit `docs/agents/component-catalog.md` by hand — it is generated; update `config/component-affordances.json` for when-to-use guidance, then run `npm run generate:component-catalog`
 - Never remove existing content from `app/layout.tsx` without explicit instruction
 - Never use `any` type in TypeScript
 - Never write CSS modules or styled-components — Tailwind only
