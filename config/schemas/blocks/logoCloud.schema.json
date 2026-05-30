@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "logoCloud",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_type",
+    "logos"
+  ],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "logoCloud"
+    },
+    "title": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "context": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "logos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "alt"
+        ],
+        "properties": {
+          "src": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "alt": {
+            "type": "string"
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

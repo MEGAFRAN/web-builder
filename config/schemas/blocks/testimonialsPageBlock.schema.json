@@ -1,0 +1,314 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "testimonialsPageBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_type"
+  ],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "testimonialsPageBlock"
+    },
+    "stats": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "label"
+            ],
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "featuredTestimonials": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "authorName",
+              "quote",
+              "featured"
+            ],
+            "properties": {
+              "authorName": {
+                "type": "string"
+              },
+              "authorRole": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "authorCompany": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "authorPhotoUrl": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "quote": {
+                "type": "string"
+              },
+              "featured": {
+                "type": "boolean"
+              },
+              "publishedAt": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "allTestimonials": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "authorName",
+              "quote",
+              "featured"
+            ],
+            "properties": {
+              "authorName": {
+                "type": "string"
+              },
+              "authorRole": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "authorCompany": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "authorPhotoUrl": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "quote": {
+                "type": "string"
+              },
+              "featured": {
+                "type": "boolean"
+              },
+              "publishedAt": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "logoCloudLogos": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "alt"
+            ],
+            "properties": {
+              "src": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "alt": {
+                "type": "string"
+              },
+              "name": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "navbarLogo": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "navbarLinks": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "href"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "footerColumns": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "links"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "href"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "href": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "footerCopyright": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

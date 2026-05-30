@@ -233,6 +233,11 @@ export type ContactInfoBlock = {
   fallbackEmail?: string | null
 }
 
+export type ContactFormSectionBlock = {
+  _type: 'contactFormSection'
+  fallbackEmail?: string | null
+}
+
 // Homepage block types
 
 export type HomepageHeroBlock = {
@@ -387,6 +392,7 @@ export type Block =
   | CaseStudiesBlock
   | FaqBlock
   | ContactInfoBlock
+  | ContactFormSectionBlock
   | HomepageHeroBlock
   | FeatureGridBlock
   | TestimonialsBlock

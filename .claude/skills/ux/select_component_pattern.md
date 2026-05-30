@@ -9,13 +9,13 @@
 
 ## Preconditions
 
-- Read `components/registry.ts` to confirm available components
+- Read `docs/agents/component-catalog.md` to confirm available components
 
 ## Process
 
 1. Identify the user's goal and the interaction model it requires
 2. Match the goal to an established UX convention (progressive disclosure, Fitts's Law, Hick's Law, etc.)
-3. Map the convention to specific registry component names; verify each name exists in `registry.ts`
+3. Map the convention to CMS block `_type` values or primitive names; verify each exists in `docs/agents/component-catalog.md`
 4. If the registry cannot satisfy the need, describe the gap with: component name, required props, expected behavior, and use case
 
 ## Card Component Rules

@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "contactFormSection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_type"
+  ],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "contactFormSection"
+    },
+    "fallbackEmail": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

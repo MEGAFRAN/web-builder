@@ -1,0 +1,249 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pricingPageBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_type",
+    "tiers",
+    "testimonials",
+    "faqItems"
+  ],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "pricingPageBlock"
+    },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "price",
+          "billingCadence",
+          "features",
+          "recommended",
+          "ctaLabel"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0
+          },
+          "billingCadence": {
+            "type": "string"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recommended": {
+            "type": "boolean"
+          },
+          "ctaLabel": {
+            "type": "string"
+          },
+          "ctaHref": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "promotionBanner": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "message",
+            "expiresAt"
+          ],
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "expiresAt": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "testimonials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "quote"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "company": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "role": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quote": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "faqItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "question",
+          "answer"
+        ],
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "navbarLogo": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "navbarLinks": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "href"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "footerColumns": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "links"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "href"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "href": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "footerCopyright": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

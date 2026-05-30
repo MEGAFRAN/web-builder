@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "servicesPageBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_type"
+  ],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "servicesPageBlock"
+    },
+    "heroHeading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "heroText": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "featureCategories": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "summary",
+              "categoryBadge"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "categoryBadge": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "serviceCards": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "description",
+              "deliverables"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "deliverables": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "imageUrl": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "imageAlt": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "ctaLabel": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "ctaHref": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "slug": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "faqItems": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "question",
+              "answer"
+            ],
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "answer": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "navbarLogo": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "navbarLinks": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "href"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "footerColumns": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "links"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "href"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "href": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "footerCopyright": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

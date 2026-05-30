@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "caseStudyDetailBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_type",
+    "title",
+    "challengeBody",
+    "techStack",
+    "solutionItems",
+    "ahaBody",
+    "impactItems"
+  ],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "caseStudyDetailBlock"
+    },
+    "title": {
+      "type": "string"
+    },
+    "breadcrumbItems": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "href": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "challengeHeading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "challengeBody": {
+      "type": "string"
+    },
+    "techStackHeading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "techStack": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "category",
+          "items"
+        ],
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "solutionHeading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "solutionItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ahaHeading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ahaBody": {
+      "type": "string"
+    },
+    "impactHeading": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "impactItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "label",
+          "value"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tags": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

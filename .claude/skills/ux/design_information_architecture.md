@@ -18,7 +18,7 @@
 2. Apply IA principles: clear labels, shallow hierarchy (max 3 levels), predictable groupings
 3. Identify wayfinding requirements: how users know where they are and where they can go
 4. Recommend specific Navbar/NavLink/Breadcrumb/Footer compositions using registry component names
-5. Verify every recommended component exists in `components/registry.ts`
+5. Verify every recommended component exists in `docs/agents/component-catalog.md`
 
 ## Output
 

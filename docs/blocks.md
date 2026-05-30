@@ -1,6 +1,6 @@
 # Block System
 
-> Read this file when adding, modifying, or validating block types and page content. See [architecture.md](../architecture.md) for the overall system.
+> Read this file when adding, modifying, or validating block types and page content. See [architecture.md](../architecture.md) for the overall system. For the full agent-facing list of blocks and primitives, see [component-catalog.md](./agents/component-catalog.md) (auto-generated via `npm run generate:component-catalog`).
 
 ---
 
@@ -30,7 +30,7 @@ componentRegistry: Record<string, React.ComponentType>
     ├── 'hero'      → dynamic(() => import('./blocks/HeroBlock'))
     ├── 'services'  → dynamic(() => import('./blocks/ServicesBlock'))
     ├── 'contact'   → dynamic(() => import('./blocks/ContactBlock'))
-    └── ...23 entries total
+    └── ...see component-catalog.md for the current list
 ```
 
 Each entry uses `next/dynamic` with a static import path — no computed paths.
@@ -44,6 +44,7 @@ Each entry uses `next/dynamic` with a static import path — no computed paths.
 3. Add one entry to `componentRegistry.ts`
 4. Create a JSON Schema file at `config/schemas/blocks/{typeName}.schema.json`
 5. Use the new `_type` value in a client's page JSON
+6. Run `npm run generate:component-catalog` to refresh `docs/agents/component-catalog.md`
 
 ---
 

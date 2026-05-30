@@ -39,7 +39,7 @@ Read before executing:
 
 Do **not** modify:
 - `config/templates/` (templates stay generic with placeholders)
-- `components/registry.ts`
+- `docs/agents/component-catalog.md`
 - Block component source files
 
 ## Process

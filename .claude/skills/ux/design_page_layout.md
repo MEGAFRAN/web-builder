@@ -9,14 +9,14 @@
 
 ## Preconditions
 
-- Read `components/registry.ts` to confirm available components
+- Read `docs/agents/component-catalog.md` to confirm available components
 - Glob `app/**/*.tsx` to read existing pages and understand established patterns
 
 ## Process
 
 1. Identify the primary user goal and the secondary goals for this page type
 2. Map established UX reading patterns (F-pattern, Z-pattern) to section placement
-3. Assign registry components to each section; verify every component name exists in `registry.ts`
+3. Assign CMS block `_type` values or primitives from the catalog; verify each name exists in `docs/agents/component-catalog.md`
 4. Apply visual hierarchy: order sections so weight matches content priority
 5. Flag every user need that no current registry component can satisfy
 
@@ -43,6 +43,6 @@ Next Step: <one action for nextjs-frontend-developer>
 Failure:
 ```
 FAILED at step <N> — <step name>
-Reason: <exact error, e.g., registry.ts not found>
+Reason: <exact error, e.g., component-catalog.md not found>
 Suggested fix: <one-line actionable hint>
 ```

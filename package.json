@@ -18,8 +18,9 @@
     "storybook:build": "storybook build -o storybook-static",
     "rebase": "git fetch origin main && git rebase origin/main",
     "generate:blob-template": "node scripts/generate-website-blob-template.mjs",
-    "validate": "npm run lint && npm run test && npx tsc --noEmit",
-    "validate:quick": "npm run lint && npm run test:quick && npx tsc --noEmit"
+    "generate:component-catalog": "node scripts/generate-component-catalog.mjs",
+    "validate": "npm run generate:component-catalog && npm run lint && npm run test && npx tsc --noEmit",
+    "validate:quick": "npm run generate:component-catalog && npm run lint && npm run test:quick && npx tsc --noEmit"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^3.10.0",

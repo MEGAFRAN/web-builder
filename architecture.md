@@ -236,6 +236,8 @@ Theming is pure CSS variables injected at build time via `resolveTheme()` → `b
 
 Pages are arrays of typed blocks dispatched through a component registry (`componentRegistry.ts`). Each block type has a JSON Schema under `config/schemas/blocks/` — agents must validate before writing.
 
+**→ Agent-facing component catalog (auto-generated): [`docs/agents/component-catalog.md`](docs/agents/component-catalog.md)** — run `npm run generate:component-catalog` after registry/schema/primitive changes.
+
 **→ Block rendering pipeline, adding new block types, schema rules, page file format, content layer: [`docs/blocks.md`](docs/blocks.md)**
 
 ---

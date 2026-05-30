@@ -11,7 +11,7 @@
 
 - **Read [`architecture-booking-system.md`] in full** before any recommendation — it is the source of truth for routes, APIs, data model, booking steps, and file map
 - Read `architecture.md` and `docs/theme.md` for tenant theming and block registry rules
-- For layout/component names: read `components/registry.ts` and, when relevant, `components/blocks/ReservationBlock.tsx`, `components/admin/`, and `components/admin/admin-copy.ts` (Spanish UI copy)
+- For layout/component names: read `docs/agents/component-catalog.md` and, when relevant, `components/blocks/ReservationBlock.tsx`, `components/admin/`, and `components/admin/admin-copy.ts` (Spanish UI copy)
 - Do not invent booking APIs, fields, or steps that contradict `architecture-booking-system.md`
 
 ## Booking surfaces (quick reference)

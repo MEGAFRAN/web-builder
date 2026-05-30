@@ -9,7 +9,7 @@
 ## Preconditions
 
 Read before executing:
-- `components/registry.ts` — verify component path and props contract
+- `docs/agents/component-catalog.md` — verify component paths (auto-generated; run `npm run generate:component-catalog` if stale)
 - The target component file if it already exists
 
 ## Process
