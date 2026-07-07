@@ -45,20 +45,9 @@
         ]
       },
       {
-        "title": "Services",
-        "links": [
-          { "label": "Analytics Engineering", "href": "/" },
-          { "label": "Data Layer Design", "href": "/" },
-          { "label": "A/B Testing Strategy", "href": "/" },
-          { "label": "Frontend Development", "href": "/" }
-        ]
-      },
-      {
         "title": "Contact",
         "links": [
-          { "label": "francisco.cruz.contact@gmail.com", "href": "mailto:francisco.cruz.contact@gmail.com" },
-          { "label": "+57 311 275 77 93", "href": "tel:+573112757793" },
-          { "label": "Bogota, Colombia", "href": "#" }
+          { "label": "francisco.cruz.contact@gmail.com", "href": "mailto:francisco.cruz.contact@gmail.com" }
         ]
       }
     ]

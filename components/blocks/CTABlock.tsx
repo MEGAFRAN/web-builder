@@ -5,6 +5,7 @@ export default function CTABlock({
   headline,
   subtext,
   ctaLabel,
+  ctaHref,
   background,
 }: CTABlockType) {
   return (
@@ -13,6 +14,7 @@ export default function CTABlock({
         headline={headline}
         subtext={subtext}
         ctaLabel={ctaLabel}
+        ctaAction={ctaHref}
         background={background ?? 'gray'}
       />
     </div>

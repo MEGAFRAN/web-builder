@@ -60,6 +60,16 @@ describe('CTA', () => {
       renderCTA({ headline: 'H', ctaLabel: 'Subscribe' })
       expect(screen.getByRole('button', { name: 'Subscribe' })).toBeInTheDocument()
     })
+
+    it('renders a link when ctaAction is provided', () => {
+      renderCTA({
+        headline: 'H',
+        ctaLabel: 'Email me',
+        ctaAction: 'mailto:hello@example.com',
+      })
+      const link = screen.getByRole('link', { name: 'Email me' })
+      expect(link).toHaveAttribute('href', 'mailto:hello@example.com')
+    })
   })
 
   describe('background prop', () => {

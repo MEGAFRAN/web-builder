@@ -2,6 +2,20 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { getLocalIpv4Addresses } from './get-local-ipv4-addresses.mjs';
+
+function printHostAddresses(port) {
+  const ips = getLocalIpv4Addresses();
+  if (ips.length === 0) {
+    console.warn('\n  No LAN IPv4 address found. Use localhost or check your network.\n');
+    return;
+  }
+  console.log('\n  Accessible on your local network:');
+  for (const { name, address } of ips) {
+    console.log(`    http://${address}:${port}  (${name})`);
+  }
+  console.log('');
+}
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const nextBin = path.join(root, 'node_modules/next/dist/bin/next');
@@ -27,6 +41,7 @@ const useTurbopack = process.env.NEXT_DEV_TURBOPACK === '1';
 const nextArgs = ['dev', ...(useTurbopack ? ['--turbopack'] : ['--webpack'])];
 if (listenHost) {
   nextArgs.push('-H', '0.0.0.0');
+  printHostAddresses(process.env.PORT ?? 3000);
 }
 
 const child = spawn(process.execPath, [nextBin, ...nextArgs], {

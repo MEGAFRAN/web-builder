@@ -21,6 +21,21 @@ describe('CTABlock', () => {
     expect(screen.getByRole('button', { name: 'Sign Up Now' })).toBeInTheDocument()
   })
 
+  it('renders a link when ctaHref is provided', () => {
+    render(
+      <CTABlock
+        _type="ctaBlock"
+        headline="Go"
+        ctaLabel="Email me"
+        ctaHref="mailto:hello@example.com"
+      />
+    )
+    expect(screen.getByRole('link', { name: 'Email me' })).toHaveAttribute(
+      'href',
+      'mailto:hello@example.com'
+    )
+  })
+
   it('renders subtext when provided', () => {
     render(
       <CTABlock
