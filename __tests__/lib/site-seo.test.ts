@@ -78,13 +78,18 @@ describe('buildSitemapEntries', () => {
 
 describe('buildSitemapFromConfig', () => {
   it('builds sitemap entries from the client config', () => {
-    const config = {
+    const config: ClientConfig = {
+      clientId: 'test-client',
+      displayName: 'Test Client',
       customDomain: 'example.com',
+      swaResourceName: 'swa-test',
+      features: { blog: false, booking: false, gallery: false, menu: false },
+      theme: { primaryColor: '#000' },
       pages: [
         { slug: '', blocks: [] },
         { slug: 'about', blocks: [] },
       ],
-    } as ClientConfig
+    }
 
     const entries = buildSitemapFromConfig(config, false)
 
