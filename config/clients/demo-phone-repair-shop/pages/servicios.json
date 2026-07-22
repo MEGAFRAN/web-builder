@@ -1,0 +1,142 @@
+{
+  "metadata": {
+    "title": "Nuestros servicios de reparación",
+    "description": "Reparación profesional de smartphones de todas las marcas principales. Cambio de pantalla, batería, puerto de carga y más — la mayoría de reparaciones el mismo día.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "servicesPageBlock",
+      "heroHeading": "Nuestros servicios de reparación",
+      "heroText": "Reparaciones profesionales para todas las marcas principales de smartphone. La mayoría de reparaciones el mismo día.",
+      "breadcrumbHomeLabel": "Inicio",
+      "breadcrumbPageLabel": "Servicios",
+      "featureGridTitle": "Qué reparamos",
+      "featureGridSubtitle": "Un vistazo a nuestras áreas de servicio.",
+      "serviceDetailsHeading": "Detalle de servicios",
+      "serviceDetailsSubtext": "Qué incluye cada reparación y cómo empezar.",
+      "deliverablesLabel": "Qué incluye:",
+      "faqTitle": "Preguntas frecuentes",
+      "bottomCtaHeading": "¿No sabes qué reparación necesitas?",
+      "bottomCtaSubtext": "Llámanos o escríbenos por WhatsApp y te orientamos.",
+      "bottomCtaLabel": "Contactar",
+      "bottomCtaHref": "/contacto",
+      "featureCategories": [
+        {
+          "title": "Pantalla y display",
+          "summary": "Cristal roto, píxeles muertos y problemas táctiles — restaurados con calidad de fábrica.",
+          "categoryBadge": "📱"
+        },
+        {
+          "title": "Batería y energía",
+          "summary": "Baterías hinchadas, carga lenta y fallos de encendido, diagnosticados y reparados al momento.",
+          "categoryBadge": "🔋"
+        },
+        {
+          "title": "Accesorios",
+          "summary": "Fundas, cargadores, protectores de pantalla y auriculares en stock y listos para llevarte.",
+          "categoryBadge": "🎧"
+        }
+      ],
+      "serviceCards": [
+        {
+          "title": "Reparación y cambio de pantalla",
+          "description": "Pantallas rotas o que no responden al tacto, sustituidas con piezas de alta calidad. Todas las marcas principales.",
+          "deliverables": [
+            "Sustitución de panel LCD/OLED",
+            "Calibración del digitalizador y tacto",
+            "Garantía de 90 días en piezas y mano de obra"
+          ],
+          "imageUrl": "https://picsum.photos/seed/demo-phone-repair-screen/600/400",
+          "imageAlt": "Reparación de pantalla de smartphone",
+          "ctaLabel": "Llámanos",
+          "ctaHref": "tel:+34915550198"
+        },
+        {
+          "title": "Cambio de batería",
+          "description": "Recupera la autonomía de un día completo. Usamos celdas de calidad adaptadas a tu modelo.",
+          "deliverables": [
+            "Diagnóstico del estado de la batería",
+            "Celda de sustitución de calidad equivalente al original",
+            "Entrega el mismo día en la mayoría de modelos"
+          ],
+          "imageUrl": "https://picsum.photos/seed/demo-phone-repair-battery/600/400",
+          "imageAlt": "Cambio de batería de móvil",
+          "ctaLabel": "Llámanos",
+          "ctaHref": "tel:+34915550198"
+        },
+        {
+          "title": "Reparación de puerto de carga",
+          "description": "Puertos de carga sueltos, doblados o corroídos, limpiados y reparados para que tu móvil cargue bien.",
+          "deliverables": [
+            "Inspección y limpieza del puerto",
+            "Sustitución del conector si es necesario",
+            "Prueba de verificación del ciclo de carga"
+          ],
+          "imageUrl": "https://picsum.photos/seed/demo-phone-repair-port/600/400",
+          "imageAlt": "Reparación de puerto de carga",
+          "ctaLabel": "Llámanos",
+          "ctaHref": "tel:+34915550198"
+        },
+        {
+          "title": "Recuperación por agua",
+          "description": "¿Se te cayó el móvil al agua? Desmontaje y limpieza rápidos para salvar tu dispositivo y tus datos.",
+          "deliverables": [
+            "Apagado inmediato e inspección",
+            "Limpieza ultrasónica de componentes afectados",
+            "Evaluación de recuperación de datos"
+          ],
+          "imageUrl": "https://picsum.photos/seed/demo-phone-repair-water/600/400",
+          "imageAlt": "Reparación de móvil con daños por agua",
+          "ctaLabel": "Llámanos",
+          "ctaHref": "tel:+34915550198"
+        },
+        {
+          "title": "Diagnóstico de software",
+          "description": "Bucles de arranque, pantallas bloqueadas y desbloqueos de operador, resueltos por técnicos con experiencia.",
+          "deliverables": [
+            "Escaneo de diagnóstico e informe de errores",
+            "Restauración del sistema y copia de seguridad de datos",
+            "Desbloqueo de operador cuando aplique"
+          ],
+          "imageUrl": "https://picsum.photos/seed/demo-phone-repair-software/600/400",
+          "imageAlt": "Diagnóstico de software de móvil",
+          "ctaLabel": "WhatsApp",
+          "ctaHref": "https://wa.me/34915550198"
+        },
+        {
+          "title": "Accesorios",
+          "description": "Protege y personaliza tu dispositivo con fundas, cargadores, protectores de pantalla y auriculares.",
+          "deliverables": [
+            "Fundas y protectores de pantalla",
+            "Cargadores y cables",
+            "Auriculares y accesorios Bluetooth"
+          ],
+          "imageUrl": "https://picsum.photos/seed/demo-phone-repair-accessories/600/400",
+          "imageAlt": "Accesorios para móvil",
+          "ctaLabel": "Visitar la tienda",
+          "ctaHref": "/contacto"
+        }
+      ],
+      "faqItems": [
+        {
+          "question": "¿Ofrecéis garantía en las reparaciones?",
+          "answer": "Sí — todas las reparaciones incluyen 90 días de garantía en piezas y mano de obra."
+        },
+        {
+          "question": "¿Cuánto tarda una reparación de pantalla?",
+          "answer": "La mayoría de cambios de pantalla se completan en 30–60 minutos."
+        },
+        {
+          "question": "¿Necesito cita previa?",
+          "answer": "Puedes venir sin cita. Llámanos o escríbenos por WhatsApp y te confirmamos disponibilidad al momento."
+        },
+        {
+          "question": "¿Qué marcas de móvil reparáis?",
+          "answer": "Reparamos todas las marcas principales, incluidas Apple, Samsung, Google y más."
+        }
+      ]
+    }
+  ]
+}

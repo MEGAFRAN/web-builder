@@ -1,0 +1,80 @@
+{
+  "clientId": "{{clientId}}",
+  "displayName": "{{businessName}}",
+  "customDomain": "{{customDomain}}",
+  "swaResourceName": "swa-{{clientId}}",
+  "template": "cell-phone-repair-shop",
+  "vertical": "repair",
+  "externalReviewUrl": "{{externalReviewUrl}}",
+  "externalReviewPlatform": "Google",
+  "features": {
+    "blog": false,
+    "booking": true,
+    "gallery": false,
+    "menu": false
+  },
+  "theme": {
+    "primaryColor": "#1d4ed8",
+    "accentColor": "#f59e0b",
+    "backgroundColor": "#f8fafc",
+    "textColor": "#0f172a",
+    "surfaceColor": "#ffffff",
+    "surfaceDark": "#1e3a8a",
+    "fontHeading": "Inter",
+    "fontBody": "Inter",
+    "borderRadius": 8,
+    "pageInset": "clamp(1rem, 5vw, 2rem)",
+    "sectionSpacing": "5rem",
+    "contentGap": "1rem"
+  },
+  "siteMetadata": {
+    "siteName": "{{businessName}}",
+    "titleTemplate": "%s | {{businessName}}",
+    "defaultDescription": "{{businessName}} — {{primaryService}} rápida y fiable en {{serviceArea}}. Reserva online o pásate por la tienda. Garantía de {{warrantyDays}} días en todas las reparaciones.",
+    "defaultOgImage": null
+  },
+  "header": {
+    "logo": "{{businessName}}",
+    "ctaLabel": "Reservar reparación",
+    "ctaAction": "#services",
+    "links": [
+      { "label": "Servicios", "href": "/servicios" },
+      { "label": "Contacto", "href": "/contacto" }
+    ]
+  },
+  "footer": {
+    "copyright": "© {{businessName}}. Todos los derechos reservados.",
+    "columns": [
+      {
+        "title": "Navegación",
+        "links": [
+          { "label": "Servicios", "href": "/servicios" },
+          { "label": "Contacto", "href": "/contacto" }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "links": [
+          { "label": "{{phone}}", "href": "tel:{{phone}}" },
+          { "label": "{{address}}", "href": "#" }
+        ]
+      }
+    ]
+  },
+  "bottomActionBar": {
+    "items": [
+      {
+        "label": "Llamar",
+        "href": "tel:{{phone}}",
+        "icon": "public/call.svg",
+        "iconColor": "#ffffff"
+      },
+      {
+        "label": "Reservar",
+        "href": "#services",
+        "icon": "public/calendar.svg",
+        "iconColor": "#ffffff"
+      }
+    ]
+  }
+}

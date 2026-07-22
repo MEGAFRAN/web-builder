@@ -438,6 +438,20 @@ export type ServicesPageBlock = {
   navbarLinks?: Array<{ label: string; href: string }> | null
   footerColumns?: Array<{ title: string; links: Array<{ label: string; href: string }> }> | null
   footerCopyright?: string | null
+  breadcrumbHomeLabel?: string | null
+  breadcrumbPageLabel?: string | null
+  heroCtaLabel?: string | null
+  heroCtaHref?: string | null
+  featureGridTitle?: string | null
+  featureGridSubtitle?: string | null
+  serviceDetailsHeading?: string | null
+  serviceDetailsSubtext?: string | null
+  deliverablesLabel?: string | null
+  faqTitle?: string | null
+  bottomCtaHeading?: string | null
+  bottomCtaSubtext?: string | null
+  bottomCtaLabel?: string | null
+  bottomCtaHref?: string | null
 }
 
 // Testimonials page block types

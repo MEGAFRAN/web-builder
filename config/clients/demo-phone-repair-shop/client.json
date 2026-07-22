@@ -1,0 +1,80 @@
+{
+  "clientId": "demo-phone-repair-shop",
+  "displayName": "QuickFix Reparación Móvil",
+  "customDomain": "demo-phone-repair-shop.com",
+  "swaResourceName": "swa-demo-phone-repair-shop",
+  "template": "cell-phone-repair-shop",
+  "vertical": "repair",
+  "externalReviewUrl": "https://g.page/quickfix-reparacion-movil-madrid",
+  "externalReviewPlatform": "Google",
+  "features": {
+    "blog": false,
+    "booking": false,
+    "gallery": false,
+    "menu": false
+  },
+  "theme": {
+    "primaryColor": "#1d4ed8",
+    "accentColor": "#f59e0b",
+    "backgroundColor": "#f8fafc",
+    "textColor": "#0f172a",
+    "surfaceColor": "#ffffff",
+    "surfaceDark": "#1e3a8a",
+    "fontHeading": "Inter",
+    "fontBody": "Inter",
+    "borderRadius": 8,
+    "pageInset": "clamp(1rem, 5vw, 2rem)",
+    "sectionSpacing": "5rem",
+    "contentGap": "1rem"
+  },
+  "siteMetadata": {
+    "siteName": "QuickFix Reparación Móvil",
+    "titleTemplate": "%s | QuickFix Reparación Móvil",
+    "defaultDescription": "QuickFix Reparación Móvil — reparación rápida y fiable de pantallas de móvil en Madrid Centro. Llámanos o escríbenos por WhatsApp. Garantía de 90 días en todas las reparaciones.",
+    "defaultOgImage": null
+  },
+  "header": {
+    "logo": "QuickFix Reparación Móvil",
+    "ctaLabel": null,
+    "ctaAction": null,
+    "links": [
+      { "label": "Servicios", "href": "/servicios" },
+      { "label": "Contacto", "href": "/contacto" }
+    ]
+  },
+  "footer": {
+    "copyright": "© QuickFix Reparación Móvil. Todos los derechos reservados.",
+    "columns": [
+      {
+        "title": "Navegación",
+        "links": [
+          { "label": "Servicios", "href": "/servicios" },
+          { "label": "Contacto", "href": "/contacto" }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "links": [
+          { "label": "+34 915 550 198", "href": "tel:+34915550198" },
+          { "label": "Calle Génova 22, 28004 Madrid", "href": "#" }
+        ]
+      }
+    ]
+  },
+  "bottomActionBar": {
+    "items": [
+      {
+        "label": "Llamar",
+        "href": "tel:+34915550198",
+        "icon": "public/call.svg",
+        "iconColor": "#ffffff"
+      },
+      {
+        "label": "WhatsApp",
+        "href": "https://wa.me/34915550198",
+        "icon": "public/whatsapp.svg",
+        "iconColor": "#25D366"
+      }
+    ]
+  }
+}

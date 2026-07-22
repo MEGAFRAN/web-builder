@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "title": "Contacto",
+    "description": "¿Móvil roto? Llama o escríbenos por WhatsApp. {{businessName}} en {{address}}. Abierto {{bookingHoursWeekday}}.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "hero",
+      "title": "¿Necesitas ayuda urgente?",
+      "subtitle": "Llámanos o escríbenos por WhatsApp. Respuesta rápida para reparaciones el mismo día.",
+      "placeholderCopy": {
+        "title": "Titular de la página de contacto — tono urgente",
+        "subtitle": "Subtítulo animando a llamar o escribir por WhatsApp"
+      }
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "Llámanos ahora",
+      "subtext": "{{phone}} · Abierto {{bookingHoursWeekday}}",
+      "ctaLabel": "Llamar",
+      "ctaHref": "tel:{{phone}}",
+      "background": "gray",
+      "placeholderCopy": {
+        "headline": "Titular del bloque de llamada",
+        "subtext": "Teléfono visible y horario de apertura",
+        "ctaHref": "Enlace tel: con {{phone}}"
+      }
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "Escríbenos por WhatsApp",
+      "subtext": "Envíanos fotos del daño y te damos presupuesto al momento.",
+      "ctaLabel": "Abrir WhatsApp",
+      "ctaHref": "{{whatsappUrl}}",
+      "background": "white",
+      "placeholderCopy": {
+        "headline": "Titular del bloque de WhatsApp",
+        "subtext": "Texto de apoyo para presupuesto rápido",
+        "ctaHref": "URL completa de WhatsApp, p. ej. https://wa.me/34600000000"
+      }
+    },
+    {
+      "_type": "faqBlock",
+      "title": "Preguntas frecuentes",
+      "items": [
+        {
+          "question": "¿Puedo llamar sin cita previa?",
+          "answer": "Sí. Para urgencias, llámanos directamente o escríbenos por WhatsApp y te confirmamos disponibilidad al momento."
+        },
+        {
+          "question": "¿Cuánto tarda una reparación de pantalla?",
+          "answer": "La mayoría de cambios de pantalla se completan en 30–60 minutos."
+        },
+        {
+          "question": "¿Ofrecéis garantía en las reparaciones?",
+          "answer": "Sí — todas las reparaciones incluyen {{warrantyDays}} días de garantía en piezas y mano de obra."
+        },
+        {
+          "question": "¿Qué marcas de móvil reparáis?",
+          "answer": "Reparamos todas las marcas principales, incluidas Apple, Samsung, Google y más."
+        },
+        {
+          "question": "¿Cómo os envío fotos del móvil dañado?",
+          "answer": "Abre WhatsApp desde el botón de arriba, cuéntanos el modelo y adjunta fotos del daño. Te respondemos con presupuesto y tiempo estimado."
+        }
+      ],
+      "placeholderCopy": {
+        "title": "Título de la sección FAQ",
+        "items[2].answer": "Periodo de garantía en días"
+      }
+    }
+  ]
+}

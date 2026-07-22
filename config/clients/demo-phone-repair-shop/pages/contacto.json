@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "title": "Contacto",
+    "description": "¿Móvil roto? Llama al +34 915 550 198 o escríbenos por WhatsApp. QuickFix Reparación Móvil en Madrid. Abierto de lunes a sábado de 9:00 a 19:00.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "hero",
+      "title": "¿Necesitas ayuda urgente?",
+      "subtitle": "Llámanos o escríbenos por WhatsApp. Respuesta rápida para reparaciones el mismo día."
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "Llámanos ahora",
+      "subtext": "+34 915 550 198 · Abierto de lunes a sábado de 9:00 a 19:00",
+      "ctaLabel": "Llamar",
+      "ctaHref": "tel:+34915550198",
+      "background": "gray"
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "Escríbenos por WhatsApp",
+      "subtext": "Envíanos fotos del daño y te damos presupuesto al momento.",
+      "ctaLabel": "Abrir WhatsApp",
+      "ctaHref": "https://wa.me/34915550198",
+      "background": "white"
+    },
+    {
+      "_type": "faqBlock",
+      "title": "Preguntas frecuentes",
+      "items": [
+        {
+          "question": "¿Puedo llamar sin cita previa?",
+          "answer": "Sí. Para urgencias, llámanos directamente o escríbenos por WhatsApp y te confirmamos disponibilidad al momento."
+        },
+        {
+          "question": "¿Cuánto tarda una reparación de pantalla?",
+          "answer": "La mayoría de cambios de pantalla se completan en 30–60 minutos."
+        },
+        {
+          "question": "¿Ofrecéis garantía en las reparaciones?",
+          "answer": "Sí — todas las reparaciones incluyen 90 días de garantía en piezas y mano de obra."
+        },
+        {
+          "question": "¿Qué marcas de móvil reparáis?",
+          "answer": "Reparamos todas las marcas principales, incluidas Apple, Samsung, Google y más."
+        },
+        {
+          "question": "¿Cómo os envío fotos del móvil dañado?",
+          "answer": "Abre WhatsApp desde el botón de arriba, cuéntanos el modelo y adjunta fotos del daño. Te respondemos con presupuesto y tiempo estimado."
+        }
+      ]
+    }
+  ]
+}

@@ -54,9 +54,41 @@ export default function ServicesPageBlock({
   featureCategories,
   serviceCards,
   faqItems,
+  breadcrumbHomeLabel,
+  breadcrumbPageLabel,
+  heroCtaLabel,
+  heroCtaHref,
+  featureGridTitle,
+  featureGridSubtitle,
+  serviceDetailsHeading,
+  serviceDetailsSubtext,
+  deliverablesLabel,
+  faqTitle,
+  bottomCtaHeading,
+  bottomCtaSubtext,
+  bottomCtaLabel,
+  bottomCtaHref,
 }: ServicesPageBlockType) {
   const resolvedFaqItems =
     faqItems && faqItems.length > 0 ? faqItems : defaultFaqItems
+
+  const resolvedBreadcrumbHomeLabel = breadcrumbHomeLabel ?? 'Home'
+  const resolvedBreadcrumbPageLabel = breadcrumbPageLabel ?? 'Services'
+  const resolvedFeatureGridTitle = featureGridTitle ?? 'What We Offer'
+  const resolvedFeatureGridSubtitle =
+    featureGridSubtitle ??
+    'A clear picture of our service areas — find the right fit at a glance.'
+  const resolvedServiceDetailsHeading = serviceDetailsHeading ?? 'Service Details'
+  const resolvedServiceDetailsSubtext =
+    serviceDetailsSubtext ??
+    'Explore each offering in depth — including what is included, expected deliverables, and how to get started.'
+  const resolvedDeliverablesLabel = deliverablesLabel ?? 'What is included:'
+  const resolvedFaqTitle = faqTitle ?? 'Common Questions'
+  const resolvedBottomCtaHeading = bottomCtaHeading ?? 'Not sure which service fits?'
+  const resolvedBottomCtaSubtext =
+    bottomCtaSubtext ?? "Let's talk — we'll help you find the right solution."
+  const resolvedBottomCtaLabel = bottomCtaLabel ?? 'Book a Free Consultation'
+  const resolvedBottomCtaHref = bottomCtaHref ?? '/contact'
 
   // Map featureCategories to the shape FeatureGrid expects
   const featureGridItems = (featureCategories ?? []).map((cat) => ({
@@ -74,8 +106,8 @@ export default function ServicesPageBlock({
         <Container maxWidth="2xl" padding="md">
           <Breadcrumb
             items={[
-              { label: 'Home', href: '/' },
-              { label: 'Services' },
+              { label: resolvedBreadcrumbHomeLabel, href: '/' },
+              { label: resolvedBreadcrumbPageLabel },
             ]}
           />
         </Container>
@@ -90,7 +122,8 @@ export default function ServicesPageBlock({
               heroText ??
               'We deliver end-to-end solutions tailored to your goals — from strategy and design through to development and ongoing support. Every engagement starts with understanding your problem, not selling you a package.'
             }
-            ctaLabel="Talk to Us"
+            ctaLabel={heroCtaLabel}
+            ctaAction={heroCtaHref}
             align="center"
           />
         </Container>
@@ -100,8 +133,8 @@ export default function ServicesPageBlock({
       {featureGridItems.length > 0 && (
         <Section background="white" paddingY="lg">
           <FeatureGrid
-            title="What We Offer"
-            subtitle="A clear picture of our service areas — find the right fit at a glance."
+            title={resolvedFeatureGridTitle}
+            subtitle={resolvedFeatureGridSubtitle}
             features={featureGridItems}
             cols="3"
           />
@@ -122,13 +155,13 @@ export default function ServicesPageBlock({
             <Stack gap="lg">
               <Stack gap="sm" align="center">
                 <Heading
-                  text="Service Details"
+                  text={resolvedServiceDetailsHeading}
                   level="h2"
                   align="center"
                   color="default"
                 />
                 <Text
-                  content="Explore each offering in depth — including what is included, expected deliverables, and how to get started."
+                  content={resolvedServiceDetailsSubtext}
                   size="lg"
                   color="muted"
                   align="center"
@@ -160,7 +193,7 @@ export default function ServicesPageBlock({
                       {service.deliverables && service.deliverables.length > 0 && (
                         <Stack gap="sm">
                           <Text
-                            content="What is included:"
+                            content={resolvedDeliverablesLabel}
                             size="sm"
                             color="default"
                             weight="semibold"
@@ -190,7 +223,7 @@ export default function ServicesPageBlock({
 
       {/* FAQ */}
       <Section background="gray" paddingY="lg">
-        <FAQ title="Common Questions" items={resolvedFaqItems} />
+        <FAQ title={resolvedFaqTitle} items={resolvedFaqItems} />
       </Section>
 
       {/* CTA */}
@@ -198,23 +231,23 @@ export default function ServicesPageBlock({
         <Container maxWidth="2xl" padding="md">
           <Stack gap="md" align="center">
             <Heading
-              text="Not sure which service fits?"
+              text={resolvedBottomCtaHeading}
               level="h2"
               align="center"
               color="default"
             />
             <Text
-              content="Let's talk — we'll help you find the right solution."
+              content={resolvedBottomCtaSubtext}
               size="lg"
               color="muted"
               align="center"
             />
             <div className="pt-2">
               <Link
-                href="/contact"
+                href={resolvedBottomCtaHref}
                 className="rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-fg transition-colors hover:opacity-90"
               >
-                Book a Free Consultation
+                {resolvedBottomCtaLabel}
               </Link>
             </div>
           </Stack>

@@ -1,0 +1,171 @@
+{
+  "metadata": {
+    "title": "{{businessName}}",
+    "description": "{{primaryService}} rápida y fiable en {{serviceArea}}. Reserva online o pásate por la tienda — reparaciones el mismo día con garantía de {{warrantyDays}} días.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "navbar",
+      "logo": "{{businessName}}",
+      "links": [
+        { "label": "Servicios", "href": "/servicios" },
+        { "label": "Contacto", "href": "/contacto" }
+      ],
+      "ctaLabel": "Reservar reparación",
+      "ctaAction": "#services",
+      "placeholderCopy": {
+        "logo": "Nombre del negocio en la barra de navegación"
+      }
+    },
+    {
+      "_type": "heroBlock",
+      "heading": "{{businessName}}",
+      "subtext": "{{primaryService}} rápida y fiable — servicio el mismo día. Atendemos {{serviceArea}}.",
+      "primaryButtonLabel": "Reservar reparación",
+      "primaryButtonHref": "#services",
+      "backgroundImageUrl": "https://picsum.photos/seed/cell-repair-hero/1600/900",
+      "placeholderCopy": {
+        "heading": "Titular principal del hero — nombre del negocio",
+        "subtext": "Tagline con servicio principal y zona de servicio",
+        "primaryButtonLabel": "Etiqueta del CTA principal hacia la sección de reservas"
+      }
+    },
+    {
+      "_type": "featureGridBlock",
+      "heading": "Por qué elegir {{businessName}}",
+      "items": [
+        {
+          "heading": "Garantía de {{warrantyDays}} días",
+          "description": "Todas las reparaciones incluyen garantía por escrito. Si no lo arreglamos, no pagas.",
+          "iconUrl": "🛡️"
+        },
+        {
+          "heading": "Servicio el mismo día",
+          "description": "La mayoría de reparaciones de pantalla y batería se completan en menos de 60 minutos.",
+          "iconUrl": "⏱️"
+        },
+        {
+          "heading": "Técnicos certificados",
+          "description": "Nuestro equipo ha completado {{repairsCompleted}}+ reparaciones en todas las marcas principales.",
+          "iconUrl": "⭐"
+        }
+      ],
+      "placeholderCopy": {
+        "heading": "Título de la sección de confianza con nombre del negocio",
+        "items[0].heading": "Periodo de garantía en días",
+        "items[2].description": "Estadística de reparaciones completadas"
+      }
+    },
+    {
+      "_type": "services",
+      "heading": "Servicios de reparación",
+      "bookCtaLabel": "Reservar reparación",
+      "reservationConfirmationMessage": "¡Gracias! Un técnico de {{businessName}} confirmará tu cita en menos de 30 minutos.",
+      "placeholderCopy": {
+        "heading": "Título de la sección de servicios",
+        "reservationConfirmationMessage": "Mensaje de confirmación tras solicitar cita"
+      }
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "Lo que dicen nuestros clientes",
+      "items": [
+        {
+          "name": "Javier T.",
+          "company": null,
+          "role": null,
+          "quote": "Me cambiaron la pantalla en 45 minutos. Precio justo y la reparación aguanta perfectamente — ya van 3 meses.",
+          "avatarUrl": "https://picsum.photos/seed/cell-repair-t1/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Sandra M.",
+          "company": null,
+          "role": null,
+          "quote": "Se me cayó el móvil al agua y pensé que se había estropeado. Salvaron todo. Un servicio increíble.",
+          "avatarUrl": "https://picsum.photos/seed/cell-repair-t2/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Carlos R.",
+          "company": null,
+          "role": null,
+          "quote": "{{businessName}} es mi sitio de confianza. Rapidez, precios honestos y garantía de verdad.",
+          "avatarUrl": "https://picsum.photos/seed/cell-repair-t3/100/100",
+          "stars": 5
+        }
+      ],
+      "placeholderCopy": {
+        "heading": "Título de la sección de testimonios",
+        "items[2].quote": "Testimonio que menciona el nombre del negocio"
+      }
+    },
+    {
+      "_type": "statsBlock",
+      "background": "gray",
+      "stats": [
+        { "value": "{{repairsCompleted}}+", "label": "Reparaciones realizadas" },
+        { "value": "{{warrantyDays}} días", "label": "Garantía en reparaciones" },
+        { "value": "{{yearsInBusiness}}+", "label": "Años de experiencia" }
+      ],
+      "placeholderCopy": {
+        "stats[0].value": "Total de reparaciones completadas",
+        "stats[1].value": "Periodo de garantía en días",
+        "stats[2].value": "Años en activo"
+      }
+    },
+    {
+      "_type": "location",
+      "title": "Dónde estamos",
+      "showMap": true,
+      "mapEmbedSrc": "https://www.google.com/maps?q={{address}}&output=embed",
+      "address": "{{address}}",
+      "placeholderCopy": {
+        "address": "Dirección física de la tienda",
+        "mapEmbedSrc": "URL del mapa de Google — se sustituye {{address}} al aprovisionar",
+        "title": "Título de la sección de ubicación",
+        "hoursNote": "Horario de apertura, p. ej. {{bookingHoursWeekday}}"
+      }
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "¿Móvil roto? Lo reparamos hoy.",
+      "subtext": "Pásate por la tienda o reserva online — reparaciones el mismo día en la mayoría de dispositivos.",
+      "ctaLabel": "Reservar reparación",
+      "ctaHref": "#services",
+      "background": "dark",
+      "placeholderCopy": {
+        "headline": "Titular de conversión a mitad de página",
+        "subtext": "Texto de apoyo animando a reservar o visitar la tienda",
+        "ctaLabel": "Etiqueta del botón CTA hacia la sección de servicios"
+      }
+    },
+    {
+      "_type": "footer",
+      "copyright": "© {{businessName}}. Todos los derechos reservados.",
+      "columns": [
+        {
+          "title": "Navegación",
+          "links": [
+            { "label": "Servicios", "href": "/servicios" },
+            { "label": "Contacto", "href": "/contacto" }
+          ]
+        },
+        {
+          "title": "Contacto",
+          "links": [
+            { "label": "{{phone}}", "href": "tel:{{phone}}" },
+            { "label": "{{address}}", "href": "#" }
+          ]
+        }
+      ],
+      "placeholderCopy": {
+        "copyright": "Línea de copyright con nombre del negocio",
+        "columns[1].links[0].label": "Teléfono de contacto",
+        "columns[1].links[1].label": "Dirección de la tienda"
+      }
+    }
+  ]
+}

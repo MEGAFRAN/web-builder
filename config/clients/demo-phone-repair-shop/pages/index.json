@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "title": "QuickFix Reparación Móvil",
+    "description": "Reparación rápida y fiable de pantallas de móvil en Madrid Centro. Llámanos o escríbenos por WhatsApp — reparaciones el mismo día con garantía de 90 días.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "heroBlock",
+      "heading": "QuickFix Reparación Móvil",
+      "subtext": "Reparación rápida y fiable de pantallas de móvil — servicio el mismo día. Atendemos Madrid Centro.",
+      "primaryButtonLabel": "Llamar ahora",
+      "primaryButtonHref": "tel:+34915550198",
+      "backgroundImageUrl": "https://picsum.photos/seed/demo-phone-repair-hero/1600/900"
+    },
+    {
+      "_type": "featureGridBlock",
+      "heading": "Por qué elegir QuickFix Reparación Móvil",
+      "items": [
+        {
+          "heading": "Garantía de 90 días",
+          "description": "Todas las reparaciones incluyen garantía por escrito. Si no lo arreglamos, no pagas.",
+          "iconUrl": "🛡️"
+        },
+        {
+          "heading": "Servicio el mismo día",
+          "description": "La mayoría de reparaciones de pantalla y batería se completan en menos de 60 minutos.",
+          "iconUrl": "⏱️"
+        },
+        {
+          "heading": "Técnicos certificados",
+          "description": "Nuestro equipo ha completado más de 5.000 reparaciones en todas las marcas principales.",
+          "iconUrl": "⭐"
+        }
+      ]
+    },
+    {
+      "_type": "testimonialsBlock",
+      "heading": "Lo que dicen nuestros clientes",
+      "items": [
+        {
+          "name": "Javier T.",
+          "company": null,
+          "role": null,
+          "quote": "Me cambiaron la pantalla en 45 minutos. Precio justo y la reparación aguanta perfectamente — ya van 3 meses.",
+          "avatarUrl": "https://picsum.photos/seed/demo-phone-repair-t1/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Sandra M.",
+          "company": null,
+          "role": null,
+          "quote": "Se me cayó el móvil al agua y pensé que se había estropeado. Salvaron todo. Un servicio increíble.",
+          "avatarUrl": "https://picsum.photos/seed/demo-phone-repair-t2/100/100",
+          "stars": 5
+        },
+        {
+          "name": "Carlos R.",
+          "company": null,
+          "role": null,
+          "quote": "QuickFix Reparación Móvil es mi sitio de confianza. Rapidez, precios honestos y garantía de verdad.",
+          "avatarUrl": "https://picsum.photos/seed/demo-phone-repair-t3/100/100",
+          "stars": 5
+        }
+      ]
+    },
+    {
+      "_type": "statsBlock",
+      "background": "gray",
+      "stats": [
+        { "value": "+5.000", "label": "Reparaciones realizadas" },
+        { "value": "90 días", "label": "Garantía en reparaciones" },
+        { "value": "+8", "label": "Años de experiencia" }
+      ]
+    },
+    {
+      "_type": "location",
+      "title": "Dónde estamos",
+      "showMap": true,
+      "mapEmbedSrc": "https://www.google.com/maps?q=Calle+G%C3%A9nova+22,+28004+Madrid&output=embed",
+      "address": "Calle Génova 22, 28004 Madrid"
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "¿Móvil roto? Lo reparamos hoy.",
+      "subtext": "Pásate por la tienda, llámanos o escríbenos por WhatsApp — reparaciones el mismo día en la mayoría de dispositivos.",
+      "ctaLabel": "WhatsApp",
+      "ctaHref": "https://wa.me/34915550198",
+      "background": "dark"
+    }
+  ]
+}

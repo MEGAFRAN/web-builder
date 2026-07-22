@@ -129,4 +129,27 @@ describe('ServicesPageBlock', () => {
       screen.getByRole('link', { name: 'Book a Free Consultation' })
     ).toHaveAttribute('href', '/contact')
   })
+
+  it('renders localized UI labels when provided', () => {
+    render(
+      <ServicesPageBlock
+        _type="servicesPageBlock"
+        breadcrumbHomeLabel="Inicio"
+        breadcrumbPageLabel="Servicios"
+        featureCategories={featureCategories}
+        featureGridTitle="Qué reparamos"
+        serviceDetailsHeading="Detalle de servicios"
+        deliverablesLabel="Qué incluye:"
+        faqTitle="Preguntas frecuentes"
+        bottomCtaLabel="Contactar"
+        bottomCtaHref="/contacto"
+        serviceCards={serviceCards}
+      />
+    )
+    expect(screen.getByRole('link', { name: 'Inicio' })).toHaveAttribute('href', '/')
+    expect(screen.getByText('Servicios')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Qué reparamos' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Detalle de servicios' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Contactar' })).toHaveAttribute('href', '/contacto')
+  })
 })

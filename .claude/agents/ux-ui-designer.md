@@ -95,6 +95,16 @@ When this function is needed, read the skill file and execute from its instructi
 
 ---
 
+### `create_template`
+
+`create_template(business_description: string) returns TemplateFiles: template.json + pages/index.json written to config/templates/<template-id>/`
+
+Skill: `.claude/skills/ux/create_template.md`
+
+When this function is needed, read the skill file and execute from its instructions.
+
+---
+
 ### `create_agent_task`
 
 `create_agent_task(task_description: string, target_agent: string) returns TaskFile: .md task file written to .claude/tasks/`

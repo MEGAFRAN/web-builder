@@ -258,6 +258,48 @@
         }
       ]
     },
+    "breadcrumbHomeLabel": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "breadcrumbPageLabel": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "heroCtaLabel": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "heroCtaHref": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "featureGridTitle": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "featureGridSubtitle": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "serviceDetailsHeading": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "serviceDetailsSubtext": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "deliverablesLabel": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "faqTitle": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "bottomCtaHeading": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "bottomCtaSubtext": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "bottomCtaLabel": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "bottomCtaHref": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
     "placeholderCopy": {
       "$ref": "./_common.schema.json#/definitions/placeholderCopy"
     }
