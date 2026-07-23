@@ -58,6 +58,7 @@ export default function ServicesPageBlock({
   breadcrumbPageLabel,
   heroCtaLabel,
   heroCtaHref,
+  heroBackgroundImageUrl,
   featureGridTitle,
   featureGridSubtitle,
   serviceDetailsHeading,
@@ -114,20 +115,34 @@ export default function ServicesPageBlock({
       </Section>
 
       {/* Hero — reduced height via paddingY sm on wrapping section */}
-      <Section background="gray" paddingY="md">
-        <Container maxWidth="2xl" padding="md">
-          <Hero
-            headline={heroHeading ?? 'Our Services'}
-            subtext={
-              heroText ??
-              'We deliver end-to-end solutions tailored to your goals — from strategy and design through to development and ongoing support. Every engagement starts with understanding your problem, not selling you a package.'
-            }
-            ctaLabel={heroCtaLabel}
-            ctaAction={heroCtaHref}
-            align="center"
-          />
-        </Container>
-      </Section>
+      {heroBackgroundImageUrl ? (
+        <Hero
+          headline={heroHeading ?? 'Our Services'}
+          subtext={
+            heroText ??
+            'We deliver end-to-end solutions tailored to your goals — from strategy and design through to development and ongoing support. Every engagement starts with understanding your problem, not selling you a package.'
+          }
+          ctaLabel={heroCtaLabel}
+          ctaAction={heroCtaHref}
+          align="center"
+          backgroundImageUrl={heroBackgroundImageUrl}
+        />
+      ) : (
+        <Section background="gray" paddingY="md">
+          <Container maxWidth="2xl" padding="md">
+            <Hero
+              headline={heroHeading ?? 'Our Services'}
+              subtext={
+                heroText ??
+                'We deliver end-to-end solutions tailored to your goals — from strategy and design through to development and ongoing support. Every engagement starts with understanding your problem, not selling you a package.'
+              }
+              ctaLabel={heroCtaLabel}
+              ctaAction={heroCtaHref}
+              align="center"
+            />
+          </Container>
+        </Section>
+      )}
 
       {/* Feature grid — high-level category overview */}
       {featureGridItems.length > 0 && (
@@ -151,7 +166,7 @@ export default function ServicesPageBlock({
       {/* Service Cards */}
       {serviceCards && serviceCards.length > 0 && (
         <Section background="white" paddingY="xl">
-          <Container maxWidth="2xl" padding="md">
+          <Container maxWidth="2xl" padding="md" className="md:max-w-none">
             <Stack gap="lg">
               <Stack gap="sm" align="center">
                 <Heading
@@ -170,13 +185,17 @@ export default function ServicesPageBlock({
               <Grid cols="3" gap="lg">
                 {serviceCards.map((service, i) => (
                   <Card key={i} padding="lg" border>
-                    <Stack gap="md">
+                    <Stack gap="md" className="flex-1">
                       {service.imageUrl && (
-                        <Image
-                          src={service.imageUrl}
-                          alt={service.imageAlt ?? service.title}
-                          rounded={false}
-                        />
+                        <div className="relative aspect-video w-full overflow-hidden rounded-md border border-border shadow-sm">
+                          <Image
+                            src={service.imageUrl}
+                            alt={service.imageAlt ?? service.title}
+                            fill
+                            objectFit="cover"
+                            loading="lazy"
+                          />
+                        </div>
                       )}
                       <Heading
                         text={service.title}
@@ -203,10 +222,10 @@ export default function ServicesPageBlock({
                         </Stack>
                       )}
                       {service.ctaLabel && (
-                        <div className="pt-2">
+                        <div className="mt-auto self-end pt-2">
                           <a
                             href={service.ctaHref ?? '/contact'}
-                            className="inline-block rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted-bg"
+                            className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-fg transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                           >
                             {service.ctaLabel}
                           </a>

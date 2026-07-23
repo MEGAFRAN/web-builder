@@ -442,6 +442,7 @@ export type ServicesPageBlock = {
   breadcrumbPageLabel?: string | null
   heroCtaLabel?: string | null
   heroCtaHref?: string | null
+  heroBackgroundImageUrl?: string | null
   featureGridTitle?: string | null
   featureGridSubtitle?: string | null
   serviceDetailsHeading?: string | null

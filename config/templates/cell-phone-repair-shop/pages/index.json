@@ -22,7 +22,7 @@
     {
       "_type": "heroBlock",
       "heading": "{{businessName}}",
-      "subtext": "{{primaryService}} rápida y fiable — servicio el mismo día. Atendemos {{serviceArea}}.",
+      "subtext": "{{primaryService}} rápida y fiable, servicio el mismo día. Atendemos {{serviceArea}}.",
       "primaryButtonLabel": "Reservar reparación",
       "primaryButtonHref": "#services",
       "backgroundImageUrl": "https://picsum.photos/seed/cell-repair-hero/1600/900",

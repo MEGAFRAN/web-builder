@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { NavLink } from "@/components/navigation/NavLink";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 import {
@@ -17,8 +17,13 @@ const NAVBAR_SCROLLED_SHADOW =
 const DESKTOP_CTA_CLASS =
   "rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
+const NAV_POSITION =
+  "fixed inset-x-0 top-0 z-40 w-full md:static md:sticky md:top-0";
+
 const MOBILE_CTA_CLASS =
   "mt-4 rounded-md bg-primary px-4 py-3 text-center text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+
+const DEFAULT_NAVBAR_HEIGHT = "4.5rem";
 
 function NavbarCta({
   label,
@@ -92,20 +97,19 @@ export function Navbar({
     return () => window.removeEventListener("keydown", handleKey);
   }, [isOpen]);
 
-  const navSurface = isScrolled
-    ? "border-b border-border bg-surface/95 supports-[backdrop-filter]:bg-surface/90 supports-[backdrop-filter]:backdrop-blur-sm"
-    : "border-b border-border bg-surface";
+  const navSurface = "border-b border-border bg-surface";
   const navShadow = isScrolled ? NAVBAR_SCROLLED_SHADOW : NAVBAR_SHADOW;
   const navTransition = reduceMotion
     ? ""
     : "transition-[box-shadow,background-color] duration-200";
 
   return (
-    <div className="relative">
+    <>
       <nav
         data-component="navbar"
         data-scrolled={isScrolled ? "true" : "false"}
-        className={`sticky top-0 z-40 w-full py-4 ${navSurface} ${navShadow} ${navTransition}`}
+        style={{ "--navbar-height": DEFAULT_NAVBAR_HEIGHT } as CSSProperties}
+        className={`${NAV_POSITION} py-4 ${navSurface} ${navShadow} ${navTransition}`}
       >
         <div
           className="mx-auto flex max-w-6xl items-center justify-between"
@@ -182,6 +186,11 @@ export function Navbar({
       </nav>
 
       <div
+        aria-hidden
+        className="h-[var(--navbar-height,4.5rem)] shrink-0 md:hidden"
+      />
+
+      <div
         data-component="mobile-menu"
         aria-hidden={!isOpen}
         className={[
@@ -217,6 +226,6 @@ export function Navbar({
           )}
         </nav>
       </div>
-    </div>
+    </>
   );
 }

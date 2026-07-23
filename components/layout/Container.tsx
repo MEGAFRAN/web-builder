@@ -11,26 +11,29 @@ export function Container({
   children,
   maxWidth = "xl",
   padding = "theme",
+  className,
 }: {
   children?: ReactNode;
   maxWidth?: keyof typeof maxWidthMap | null;
   padding?: keyof typeof paddingMap | "theme" | null;
+  className?: string;
 }) {
   const paddingClass =
     padding && padding !== "theme" ? paddingMap[padding] : "";
 
-  const className = [
+  const resolvedClassName = [
     "mx-auto",
     "w-full",
     maxWidthMap[maxWidth ?? "xl"],
     padding === "theme" ? "px-4 sm:px-6 md:[padding-inline:var(--page-inset)]" : "",
     paddingClass,
+    className,
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <div data-component="container" className={className}>
+    <div data-component="container" className={resolvedClassName}>
       {children}
     </div>
   );

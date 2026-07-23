@@ -270,6 +270,9 @@
     "heroCtaHref": {
       "oneOf": [{ "type": "string" }, { "type": "null" }]
     },
+    "heroBackgroundImageUrl": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
     "featureGridTitle": {
       "oneOf": [{ "type": "string" }, { "type": "null" }]
     },

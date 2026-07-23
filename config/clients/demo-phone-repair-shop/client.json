@@ -1,11 +1,11 @@
 {
   "clientId": "demo-phone-repair-shop",
-  "displayName": "QuickFix Reparación Móvil",
+  "displayName": "Super Móvil",
   "customDomain": "demo-phone-repair-shop.com",
   "swaResourceName": "swa-demo-phone-repair-shop",
   "template": "cell-phone-repair-shop",
   "vertical": "repair",
-  "externalReviewUrl": "https://g.page/quickfix-reparacion-movil-madrid",
+  "externalReviewUrl": "",
   "externalReviewPlatform": "Google",
   "features": {
     "blog": false,
@@ -28,13 +28,13 @@
     "contentGap": "1rem"
   },
   "siteMetadata": {
-    "siteName": "QuickFix Reparación Móvil",
-    "titleTemplate": "%s | QuickFix Reparación Móvil",
-    "defaultDescription": "QuickFix Reparación Móvil — reparación rápida y fiable de pantallas de móvil en Madrid Centro. Llámanos o escríbenos por WhatsApp. Garantía de 90 días en todas las reparaciones.",
+    "siteName": "Super Móvil",
+    "titleTemplate": "%s | Super Móvil",
+    "defaultDescription": "Super Móvil: reparación rápida y fiable de pantallas de móvil en Madrid Centro. Llámanos o escríbenos por WhatsApp. Garantía de 90 días en todas las reparaciones.",
     "defaultOgImage": null
   },
   "header": {
-    "logo": "QuickFix Reparación Móvil",
+    "logo": "Super Móvil",
     "ctaLabel": null,
     "ctaAction": null,
     "links": [
@@ -43,7 +43,7 @@
     ]
   },
   "footer": {
-    "copyright": "© QuickFix Reparación Móvil. Todos los derechos reservados.",
+    "copyright": "© Super Móvil. Todos los derechos reservados.",
     "columns": [
       {
         "title": "Navegación",

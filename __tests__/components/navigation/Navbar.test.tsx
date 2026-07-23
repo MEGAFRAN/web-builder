@@ -48,10 +48,20 @@ describe('Navbar', () => {
       expect(nav.className).toContain('shadow-[')
     })
 
-    it('is sticky at the top of the viewport', () => {
+    it('is fixed to the viewport on mobile and sticky from md up', () => {
       const container = renderNavbar({ logo: 'Acme' })
-      expect(desktopNav(container).className).toContain('sticky')
-      expect(desktopNav(container).className).toContain('top-0')
+      const nav = desktopNav(container)
+      expect(nav.className).toContain('fixed')
+      expect(nav.className).toContain('top-0')
+      expect(nav.className).toContain('md:sticky')
+    })
+
+    it('renders a mobile layout spacer so fixed nav does not overlap content', () => {
+      const container = renderNavbar({ logo: 'Acme' })
+      const spacer = Array.from(container.querySelectorAll('[aria-hidden="true"]')).find(
+        (el) => String(el.className).includes('md:hidden'),
+      )
+      expect(spacer).toBeDefined()
     })
   })
 

@@ -14,16 +14,22 @@ export function Stack({
   children,
   gap = "md",
   align = "stretch",
+  className,
 }: {
   children?: ReactNode;
   gap?: keyof typeof gapScale | null;
   align?: keyof typeof alignMap | null;
+  className?: string;
 }) {
   const gapValue = gapScale[gap ?? "md"]
   const stackStyle: CSSProperties = { gap: gapValue === 0 ? 0 : gapValue }
 
   return (
-    <div data-component="stack" className={`flex flex-col ${alignMap[align ?? "stretch"]}`} style={stackStyle}>
+    <div
+      data-component="stack"
+      className={["flex flex-col", alignMap[align ?? "stretch"], className].filter(Boolean).join(" ")}
+      style={stackStyle}
+    >
       {children}
     </div>
   );
