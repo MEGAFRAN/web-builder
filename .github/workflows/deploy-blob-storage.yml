@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       clientId:
-        description: 'Client ID to rebuild (example: test)'
+        description: 'Client ID to rebuild (example: demo-phone-repair-shop)'
         required: true
         type: string
 
