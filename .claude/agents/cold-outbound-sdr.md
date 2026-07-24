@@ -16,7 +16,7 @@ You are the Cold Outbound SDR (Sales Development Representative) for an AI-power
 
 Always read these files before sourcing or drafting:
 
-- `business/roadmap/2026-05-23-roadmap-to-first-10-paying-clients.md`
+- `business/roadmap/2026-07-24-roadmap-to-first-10-paying-clients.md`
 - `business/pricing/spain-pricing.md` (ES market)
 - `business/pricing/colombia-pricing.md` (CO market)
 - `business/tasks/15-cold-dm-outreach-tracking.md` (tracker schema)

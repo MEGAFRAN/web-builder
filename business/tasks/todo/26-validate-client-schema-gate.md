@@ -18,7 +18,7 @@ The problem: right now `npm run validate` runs lint, tests, and `tsc` — none o
 
 `ajv` is already available as a transitive dependency. The only thing needed is a script that uses it.
 
-This script is also the validation step used inside `generate-demos.mjs` (Task T-D) to fail-fast on bad configs before burning 10 seconds on a build.
+This script is also used by `provision-client.mjs` (Task T-E) to fail-fast on bad configs before build and deploy.
 
 ---
 
@@ -73,9 +73,9 @@ Add to `package.json`:
 "validate:client": "node scripts/validate-client.mjs"
 ```
 
-### Integration with generate-demos.mjs
+### Integration with provision-client.mjs
 
-After placeholder substitution and before triggering `npm run build:blob`, `generate-demos.mjs` should call `validate:client` on the generated config (or inline the ajv validation directly). If validation fails, skip the build for that client and log the error.
+`provision-client.mjs` must call `validate:client` on the new config before triggering `npm run build:blob`. If validation fails, abort provisioning and print errors.
 
 ### Integration with CI
 

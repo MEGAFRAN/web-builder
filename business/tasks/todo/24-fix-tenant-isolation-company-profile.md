@@ -1,11 +1,11 @@
 # Task: Fix Tenant Isolation Bug in `company-profile-local.json` (T-H)
 
 **Status:** Ready for development
-**Priority:** Critical — must be fixed BEFORE the first batch demo generation run
+**Priority:** High — must be fixed before first paying-client provision
 **Owner:** nextjs-frontend-developer
 **Estimated scope:** Small — 30 min
 **Depends on:** None
-**Milestone:** M0 (Week 1, before T-D first run)
+**Milestone:** M0 (Week 1, before T-E / provision-client)
 **Source:** `docs/meetings/summaries/2026-07-24-pivot-mobile-repair-shops-spain.md`
 
 ---
@@ -14,9 +14,9 @@
 
 `data/company-profile-local.json` is a **single global file** that currently contains real business data (reportedly a hair salon in Oviedo). The `getCompanyProfile()` function falls back to this file whenever `CLIENT_ID` is set to the client that owns this local data.
 
-When `generate-demos.mjs` (Task T-D) builds 50 demo sites in sequence, each build runs with a different `CLIENT_ID`. If any of those builds falls through to the global fallback, they will expose another business's phone number, name, and address in a prospect's demo site.
+If a paying-client build (or any build with a non-matching `CLIENT_ID`) falls through to this global fallback, it can expose another business's phone number, name, and address on a live site.
 
-This is a cross-tenant data leak. It must be fixed before the first batch run, not after.
+This is a cross-tenant data leak. Fix before running `provision-client.mjs` for the first paying client.
 
 The fix does not need to be complex. Option A is safest.
 
@@ -89,5 +89,5 @@ Before implementing, check:
 
 1. Building with `CLIENT_ID=demo-phone-repair-shop npm run build:blob` does NOT produce output containing data from any other business (verify by grepping the output for the hair salon's name or Oviedo).
 2. Building with `CLIENT_ID=nonexistent-client npm run build:blob` does not crash with an unhandled exception — it returns empty/null profile gracefully.
-3. The fix is confirmed before `generate-demos.mjs` is run for the first time.
+3. The fix is confirmed before `provision-client.mjs` is run for the first paying client.
 4. `npm run validate` passes after the fix.

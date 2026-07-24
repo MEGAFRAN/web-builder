@@ -35,7 +35,7 @@ Replace the catalog-dependent `services` block in `config/templates/cell-phone-r
 | Desbloqueo / Software | Desde {{price_software}}€ | Desbloqueo de red, recuperación de sistema y actualizaciones. |
 | Accesorios y fundas | En tienda | Fundas, protectores de pantalla, cargadores y más. |
 
-Prices use placeholder variables (`{{price_pantalla}}`, etc.) populated by `generate-demos.mjs` from the scraper CSV, or fall back to a sensible default string like `"Desde 39€"` when the field is missing.
+Prices use placeholder variables (`{{price_pantalla}}`, etc.) with **sensible defaults in `demo-phone-repair-shop/client.json`** (e.g. `"Desde 39€"`) when a field is missing. Paying clients get values from `provision-client.mjs` intake — not from the outreach scraper CSV.
 
 ### Block structure requirements
 
