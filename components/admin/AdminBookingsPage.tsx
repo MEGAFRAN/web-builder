@@ -13,6 +13,7 @@ import { WeekGrid } from '@/components/admin/bookings/WeekGrid'
 import { BookingDetailDrawer } from '@/components/admin/bookings/BookingDetailDrawer'
 import { NewAppointmentModal } from '@/components/admin/bookings/NewAppointmentModal'
 
+import { ConversionSummaryCard } from '@/components/admin/ConversionSummaryCard'
 import { formatYmd, mondayOfWeek, addDaysYmd } from '@/lib/booking-utils'
 import { adminCopy, formatPrettyDateEs } from '@/components/admin/admin-copy'
 import { resolveDayMinutesWindow } from '@/lib/booking-schedule-window'
@@ -214,6 +215,8 @@ export default function AdminBookingsPage() {
         </div>
 
         {error && <Alert variant="error" title={adminCopy.common.error} message={error} />}
+
+        <ConversionSummaryCard />
 
         <CalendarNavBar
           selectedYmd={selectedYmd}

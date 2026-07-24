@@ -51,6 +51,13 @@ export function adminClientConfigUrl(clientId: string): string {
   return '/api/admin/client-config'
 }
 
+export function adminTelemetrySummaryUrl(month?: string): string {
+  const base = adminDataUrl('/telemetry/summary')
+  if (!month) return base
+  const sep = base.includes('?') ? '&' : '?'
+  return `${base}${sep}month=${encodeURIComponent(month)}`
+}
+
 let unauthorizedHandler: (() => void) | null = null
 
 export function setAdminUnauthorizedHandler(handler: (() => void) | null): void {

@@ -68,6 +68,15 @@ export const adminCopy = {
     loadError: 'No se pudo cargar el estado de Stripe.',
     connectError: 'No se pudo iniciar la conexión con Stripe.',
   },
+  conversionSummary: {
+    title: 'Contactos desde tu web este mes',
+    whatsappLine: (n: number) => `${n} clics en WhatsApp`,
+    phoneLine: (n: number) => `${n} llamadas desde la web`,
+    totalLine: (total: number) => `${total} contactos`,
+    empty: 'Aún no hay clics este mes — comparte tu web para empezar',
+    error: 'No pudimos cargar tus estadísticas',
+    loading: 'Cargando estadísticas de contacto',
+  },
   companyProfile: {
     heading: 'Información del negocio',
     intro:

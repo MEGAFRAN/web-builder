@@ -91,6 +91,31 @@ describe('admin-api', () => {
     })
   })
 
+  describe('adminTelemetrySummaryUrl', () => {
+    it('returns the local summary route when NEXT_PUBLIC_ADMIN_API_URL is not set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_ADMIN_API_URL', '')
+      const { adminTelemetrySummaryUrl } = await import('@/lib/admin-api')
+
+      expect(adminTelemetrySummaryUrl()).toBe('/api/admin/telemetry/summary')
+    })
+
+    it('appends month query param when provided', async () => {
+      vi.stubEnv('NEXT_PUBLIC_ADMIN_API_URL', '')
+      const { adminTelemetrySummaryUrl } = await import('@/lib/admin-api')
+
+      expect(adminTelemetrySummaryUrl('2026-07')).toBe('/api/admin/telemetry/summary?month=2026-07')
+    })
+
+    it('returns the remote Azure Functions URL when NEXT_PUBLIC_ADMIN_API_URL is set', async () => {
+      vi.stubEnv('NEXT_PUBLIC_ADMIN_API_URL', 'https://fn.example.com')
+      const { adminTelemetrySummaryUrl } = await import('@/lib/admin-api')
+
+      expect(adminTelemetrySummaryUrl('2026-06')).toBe(
+        'https://fn.example.com/mgmt/telemetry/summary?month=2026-06',
+      )
+    })
+  })
+
   describe('adminFetch', () => {
     it('calls the registered unauthorized handler once on a 401 response', async () => {
       vi.stubEnv('NEXT_PUBLIC_ADMIN_API_URL', '')

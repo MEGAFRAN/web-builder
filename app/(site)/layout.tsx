@@ -5,6 +5,7 @@ import {
   mergeLayoutFooter,
   mergeLayoutHeader,
 } from '@/lib/company-profile-merge'
+import { ConversionTelemetry } from '@/components/analytics/ConversionTelemetry'
 import { Navbar } from '@/components/navigation/Navbar'
 import { Footer } from '@/components/navigation/Footer'
 import { BottomCtaBar } from '@/components/navigation/BottomCtaBar'
@@ -28,6 +29,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <>
+      <ConversionTelemetry />
       {header && (
         <Navbar
           logo={header.logo}
