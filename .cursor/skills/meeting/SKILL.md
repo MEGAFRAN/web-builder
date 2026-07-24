@@ -40,6 +40,16 @@ Parse the user's message after `/meeting` to extract agent names and topic.
    - Each agent's key points (condensed)
    - The full meeting summary (decisions, alignment, tensions, next actions)
 
+7. **Create agent task files from the summary** — execute the `create-agent-task` skill (`.cursor/skills/ux/create-agent-task/SKILL.md`) using the step 6 summary as input:
+   - Read the saved summary file (`docs/meetings/summaries/YYYY-MM-DD-<slugified-topic>.md`)
+   - Derive delegatable tasks from **Engineering Task List** and **Suggested Next Actions** (skip founder-only items with no agent owner)
+   - **Determine execution order first:** build a dependency graph from each task's blockers, then topologically sort into the order work must actually be done. Tasks with no blockers come first; a task never gets a lower number than any task it depends on.
+   - **Number by execution order, not by scan order:** write one file per task to `business/tasks/todo/` as `<NN>-<kebab-slug>.md`, where `<NN>` is the task's position in that sorted list (`01`, `02`, `03`, … zero-padded). Sorting filenames alphabetically must reveal the full execution sequence — no cross-referencing required.
+   - For each task, set `target_agent` from the summary's Owner column (e.g. `nextjs-frontend-developer`, `devops`, `cto`)
+   - Each task file must include: title prefixed with execution order (`# Task 01 — …`), **Execution order:** N of M, Status, Priority, Owner, Estimated scope, **Depends on** (prior task file paths only, e.g. `business/tasks/todo/01-….md`), **Next task** (path to the following file, or `None` for the last), Milestone, Source (path to the summary), Context, Technical Specifications, Acceptance criteria
+   - Group related engineering items into one task only when they share the same owner, dependency chain, and execution slot (e.g. T-A + T-B + T-C → one PR for `nextjs-frontend-developer` becomes a single numbered step)
+   - Do **not** launch agents yet — task files only
+
 **Format each agent's turn as:**
 ```
 ---
@@ -48,7 +58,9 @@ Parse the user's message after `/meeting` to extract agent names and topic.
 ---
 ```
 
-Then close with the synthesis and confirm the summary file was saved.
+Then close with the synthesis and confirm:
+- The summary file path under `docs/meetings/summaries/`
+- Each task file path under `business/tasks/todo/` **in execution order** (01 → last), one line per file with owner
 
 Begin the meeting now.
 
@@ -76,3 +88,24 @@ Build on what was said, add your own perspective, and note any agreements or ten
 ```
 
 Ensure `docs/meetings/summaries/` exists before writing the summary file. Slugify the topic (lowercase, hyphens, no special chars).
+
+**Step 7 — create-agent-task (Cursor):**
+
+1. Read `.cursor/skills/ux/create-agent-task/SKILL.md` and follow its process, with these meeting-specific overrides:
+   - **Input source:** the summary `.md` from step 6 (not UX design output)
+   - **Output directory:** `business/tasks/todo/` (not `.cursor/tasks/`)
+2. **Plan execution order before writing any file:**
+   - Extract all delegatable tasks and their dependencies from the summary
+   - Topologically sort into must-do order (blockers always have lower numbers than blocked tasks)
+   - Assign `<NN>` = position in that sorted list (`01`, `02`, … zero-padded)
+3. **Filename = execution order:** `<NN>-<kebab-slug>.md`. An agent listing `business/tasks/todo/` in sorted order should see the full pipeline with no jumps.
+4. Match task file structure to existing examples, plus required ordering fields:
+   - Title: `# Task 01 — …`
+   - **Execution order:** 1 of M
+   - **Depends on:** prior task file path(s) only (empty/`None` for step 01)
+   - **Next task:** path to `0(N+1)-….md`, or `None` for the last step
+   - Context, Technical Specifications, Acceptance criteria, and `Source:` pointing at the meeting summary
+5. Group related engineering items into one numbered step only when they share the same owner, dependency chain, and execution slot (e.g. T-A + T-B + T-C → one PR for `nextjs-frontend-developer`).
+6. Remove or move any prior `business/tasks/todo/` files sourced from the same meeting summary before writing the new ordered batch (avoids duplicate/conflicting numbers).
+7. Ensure `business/tasks/todo/` exists before writing.
+8. Report success in create-agent-task format, listing each file path and target agent **in execution order (01 → last)**.

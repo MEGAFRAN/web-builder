@@ -42,7 +42,7 @@ Tool reference:
 
 - `opus` — complex reasoning, multi-step architecture decisions, research synthesis
 - `sonnet` — default for most agents; balanced capability and speed
-- `haiku` — fast, simple, high-volume tasks (classifiers, formatters, simple lookups)
+- `Composer 2.5 (Fast)` — fast, simple, high-volume tasks (classifiers, formatters, simple lookups)
 - `inherit` — agent inherits the model from the parent conversation
 
 **4. Description Quality**
@@ -161,7 +161,7 @@ Include `change` and `reason` fields in the frontmatter — a PostToolUse hook h
 name: <agent-name>
 description: <routing description with trigger examples>
 tools: Tool1, Tool2, Tool3
-model: sonnet|opus|haiku|inherit
+model: sonnet|opus|Composer 2.5 (Fast)|inherit
 color: <color>
 change: <one-line description of what changed>
 reason: <why this change was made>

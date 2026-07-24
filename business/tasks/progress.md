@@ -14,11 +14,3 @@ DONE: business/tasks/done/08-cloudflare-azure-blob-custom-domain.md
 DONE: business/tasks/done/12-today-card-stack-bookings-entry-view.md
 DONE: business/tasks/done/23-unify-booking-appointment-actions.md
 DONE: bbusiness/tasks/done/17-post-mvp-block-affordance-non-cto-agents.md
-
-
-TODO: business/tasks/07-resend-transactional-email-integration.md
-TODO: business/tasks/10-scripts-provision-client.md
-TODO: business/tasks/13-in-admin-monthly-bookings-revenue-kpi-tile.md
-TODO: business/tasks/14-14-day-trial-auto-charge-billing-flow.md
-TODO: business/tasks/15-cold-dm-outreach-tracking.md
-TODO: business/tasks/16-case-study-page-referral-mechanics.md

@@ -2,7 +2,7 @@
 name: code-commit
 description: Automates the full git commit and push workflow. Use this agent when the user wants to stage, commit, and push changes to a remote repository. Generates a Conventional Commits-compliant message by inspecting the staged diff. Examples: "commit and push my changes", "stage everything and push", "create a commit for what I've done", "push my changes to the remote", "commit my work with a good message".
 tools: Read, Bash
-model: haiku
+model: Composer 2.5 (Fast)
 color: orange
 version: 1.0.1
 created: 2026-03-23
