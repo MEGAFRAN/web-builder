@@ -252,6 +252,28 @@ describe('Navbar', () => {
       window.removeEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)
     })
 
+    it('opens the mobile panel when the navbar is clicked outside the logo and hamburger', () => {
+      const container = renderNavbar({ logo: 'Acme', links: twoLinks })
+      fireEvent.click(desktopNav(container))
+      expect(mobilePanel(container)).toHaveAttribute('aria-hidden', 'false')
+    })
+
+    it('does not open the mobile panel when only the logo is clicked', () => {
+      const container = renderNavbar({ logo: 'Acme', links: twoLinks })
+      fireEvent.click(screen.getByRole('link', { name: 'Acme' }))
+      expect(mobilePanel(container)).toHaveAttribute('aria-hidden', 'true')
+    })
+
+    it('closes the mobile panel when the logo link is clicked', () => {
+      const container = renderNavbar({ logo: 'Acme', links: twoLinks })
+
+      fireEvent.click(container.querySelector('button[aria-label="Open menu"]')!)
+      expect(mobilePanel(container)).toHaveAttribute('aria-hidden', 'false')
+
+      fireEvent.click(screen.getByRole('link', { name: 'Acme' }))
+      expect(mobilePanel(container)).toHaveAttribute('aria-hidden', 'true')
+    })
+
     it('opens the booking modal when ctaAction is #book in the mobile panel', () => {
       const openHandler = vi.fn()
       window.addEventListener(BOOKING_MODAL_OPEN_EVENT, openHandler)

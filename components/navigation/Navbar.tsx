@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, type CSSProperties } from "react";
 import { NavLink } from "@/components/navigation/NavLink";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
+import { useMinWidth } from "@/lib/hooks/useMinWidth";
 import {
   dispatchOpenBookingModal,
   isBookingModalHref,
@@ -72,6 +73,14 @@ export function Navbar({
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
+  const isDesktop = useMinWidth(768);
+
+  const toggleMobileMenu = () => setIsOpen((open) => !open);
+
+  const handleMobileNavClick = () => {
+    if (isDesktop) return;
+    toggleMobileMenu();
+  };
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 8);
@@ -109,7 +118,8 @@ export function Navbar({
         data-component="navbar"
         data-scrolled={isScrolled ? "true" : "false"}
         style={{ "--navbar-height": DEFAULT_NAVBAR_HEIGHT } as CSSProperties}
-        className={`${NAV_POSITION} py-4 ${navSurface} ${navShadow} ${navTransition}`}
+        onClick={handleMobileNavClick}
+        className={`${NAV_POSITION} max-md:cursor-pointer py-4 ${navSurface} ${navShadow} ${navTransition}`}
       >
         <div
           className="mx-auto flex max-w-6xl items-center justify-between"
@@ -117,7 +127,11 @@ export function Navbar({
         >
           <Link
             href="/"
-            className="font-[family-name:var(--font-heading)] text-xl font-bold tracking-tight text-brand transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:text-2xl"
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsOpen(false);
+            }}
+            className="font-[family-name:var(--font-heading)] text-xl font-bold tracking-tight text-brand transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:cursor-auto md:text-2xl"
           >
             {logo}
           </Link>
@@ -144,7 +158,10 @@ export function Navbar({
             type="button"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
-            onClick={() => setIsOpen((v) => !v)}
+            onClick={(event) => {
+              event.stopPropagation();
+              toggleMobileMenu();
+            }}
             className="flex h-9 w-9 items-center justify-center text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden"
           >
             {isOpen ? (
@@ -211,7 +228,7 @@ export function Navbar({
               key={`${i}-${link.href}`}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="border-b border-border/40 py-3 text-base text-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="border-b border-border/40 py-3 text-xl font-bold text-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               {link.label}
             </a>
