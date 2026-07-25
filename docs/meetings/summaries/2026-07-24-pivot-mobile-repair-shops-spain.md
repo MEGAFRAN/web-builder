@@ -10,6 +10,8 @@
 
 **Amendment 3 (July 25, 2026):** Company name = **Clubtal** (`clubtal.com` owned). Demo vanity URL = **`https://demo.clubtal.com`** — replaces `tuwebdemo.es`. See `docs/meetings/summaries/2026-07-25-company-name-debate.md`.
 
+**Amendment 4 (July 25, 2026):** Demo hosting moved to **Azure Static Web Apps** with **semantic vertical subdomains**. M0 outreach URL = **`https://moviles.clubtal.com`** (mobile-shop demo SWA). Supersedes Amendment 2 (blob + `tuwebdemo.es`) and Amendment 3 (`demo.clubtal.com` as floating M0 URL). **Clubtal-owned surfaces** (`clubtal.com`, `cert.clubtal.com`, vertical demo subdomains) stay on SWA; **paying client sites** use Azure Blob Storage + Cloudflare CNAME. One SWA resource per vertical — past WhatsApp links never break when outreach shifts. See `docs/meetings/summaries/2026-07-25-company-name-debate.md` and `docs/infrastructure/demo-swa.md`.
+
 ---
 
 ## Each Agent's Key Points (Condensed)
@@ -17,7 +19,7 @@
 ### CEO
 - Approved the pivot. The cell-phone-repair-shop template **already exists** in Spanish at `config/templates/cell-phone-repair-shop/` (index, servicios, contacto pages). Vertical switch has near-zero template cost.
 - Originally proposed **personalised demo-first**: build a site from CSV data before the first WhatsApp message. **Amended:** one generic demo URL for all prospects; personalise the message, not the site.
-  - Sample DM (amended): *"Hola [Nombre], soy de Clubtal — hacemos webs profesionales para tiendas de reparación de móviles. Aquí tenéis un ejemplo: **https://demo.clubtal.com** — Si os interesa algo así para [Tienda], por 39€/mes + IVA, deducible. Sin compromiso."*
+  - Sample DM (amended): *"Hola [Nombre], soy de Clubtal — hacemos webs profesionales para tiendas de móviles. Aquí tenéis un ejemplo: **https://moviles.clubtal.com** — Si os interesa algo así para [Tienda], por 39€/mes + IVA, deducible. Sin compromiso."*
 - Unit economics: €390 MRR at 10 clients, ~94% gross margin (no Cosmos/Functions COGS).
 - ROI pitch: *"Un arreglo de pantalla son €80. Necesitas una reparación extra cada dos meses para amortizarlo. Menos de un café al día."*
 - **Cut from roadmap:** Tasks 03 (Cosmos), 04 (Functions), 05 (admin pipeline), 12–13 (admin features). No admin panel, no database, no booking system.
@@ -36,7 +38,7 @@
 
 ### CGO
 - Generic demo link is still a strong proof-of-work asset — personalise the WhatsApp copy with prospect name and shop name.
-- **Vanity domain is required for conversion** — raw Azure blob URLs in cold WhatsApp look like phishing; a readable domain (`demo.clubtal.com`) is the customer-facing link.
+- **Vanity domain is required for conversion** — raw `.azurestaticapps.net` URLs in cold WhatsApp look like phishing; a readable semantic subdomain (`moviles.clubtal.com`) is the customer-facing link.
 - **WhatsApp number warm-up is mandatory.** Text-only week 1; demo link only after reply (or once number is warmed).
 - Dedicated second WhatsApp Business number. Hard cap 20–30 DMs/day.
 - **3-touch message sequence** with A/B Castilian Spanish variants.
@@ -49,7 +51,7 @@
 - Audited the repo. **The static build already works today:** built `demo-phone-repair-shop` in 9.8 seconds with zero env vars. M1 engineering is **~1 day** of agent work after generic-demo amendment (batch pipeline cancelled).
 - **Real demo-killer:** blank `services` block without backend — fix with static priced block; prototype in `demo-phone-repair-shop`.
 - **`deploy-blob-storage.yml`** calls `exit 1` when Cosmos/admin env vars are missing — six-line fix.
-- **Demo hosting (amended):** one build of `demo-phone-repair-shop` → one Azure Storage account for the repair vertical → blob endpoint root. No `basePath`, no sub-paths. Future verticals = new storage account each. Vanity domain via Cloudflare CNAME for WhatsApp-safe URL.
+- **Demo hosting (Amendment 4):** one build of `demo-phone-repair-shop` → dedicated **Azure SWA** resource → semantic vertical subdomain **`https://moviles.clubtal.com`**. Deploy via GitHub Actions (`deploy-demo-swa.yml`). Future verticals = separate SWA + subdomain each (e.g. `restaurante.clubtal.com`). Paying clients stay on blob storage.
 - **Cloudflare Web Analytics:** cookieless, GDPR/LSSI-CE compliant — no consent banner. Works on vanity domain. WhatsApp clicks trackable via `/whatsapp/` redirect page; `tel:` links not trackable on free tier.
 - **Tenant isolation bug** in `data/company-profile-local.json` — fix before first paying-client provision.
 - **`validate:client`** required before agent-driven JSON edits are safe.
@@ -65,8 +67,8 @@
 | D3 | **Price = €39/month + 21% IVA.** Test unchanged through first 30 conversations. No monthly discounts. | CEO |
 | D4 | **Generic demo acquisition.** One live demo (`demo-phone-repair-shop`) shared in all WhatsApp outreach. Personalise message, not site. | CEO + CGO + Founder |
 | D5 | **Lead filter:** ≥20 Google reviews AND ≥4.0 rating — for outreach queue only (scraper or sheet). | CEO |
-| D6 | **Demo hosting:** one Azure Storage account per vertical; deploy at blob endpoint **root**. No sub-paths / `basePath`. | CTO + Founder |
-| D7 | **Vanity demo domain for outreach** (~€10/year + Cloudflare free CNAME → blob). Never send raw `.web.core.windows.net` in cold WhatsApp. | CGO + Founder |
+| D6 | **Demo hosting (Amendment 4):** one Azure SWA resource per vertical; M0 URL **`https://moviles.clubtal.com`**. Deploy via GitHub Actions. Clubtal-owned surfaces on SWA; paying clients on blob. | CTO + Founder |
+| D7 | **Semantic vertical subdomains for outreach** — e.g. `moviles.clubtal.com`, `restaurante.clubtal.com`. Never send raw `.azurestaticapps.net` in cold WhatsApp. | CGO + Founder |
 | D8 | **WhatsApp warm-up mandatory.** Text-only week 1. Demo link when appropriate. 20–30 DMs/day cap. | CGO |
 | D9 | **Cloudflare Web Analytics** (cookieless). Demos share one token on vanity domain. | CTO |
 | D10 | **Monthly stats = visits + WhatsApp clicks.** Automated at client #5. | CTO |
@@ -80,8 +82,9 @@
 ## Points of Alignment
 
 - Kill the booking/DB/admin/Functions stack entirely for M1.
-- **Generic demo + personalised WhatsApp + vanity domain** replaces discovery call, per-lead sites, and untrustworthy blob URLs.
-- One storage account per vertical demo — scales cleanly when adding restaurants, bars, gyms, etc.
+- **Generic demo + personalised WhatsApp + semantic vertical subdomain** replaces discovery call, per-lead sites, and untrustworthy raw Azure URLs.
+- **One SWA + semantic subdomain per vertical demo** — scales cleanly when adding restaurants, bars, gyms, etc.; past WhatsApp links never break.
+- **Clubtal-owned surfaces on SWA; paying clients on blob** — clear hosting split.
 - WhatsApp outperforms Instagram DMs for this vertical.
 - Existing template + `demo-phone-repair-shop` are the right starting point — template surgery + static prices still required.
 - Agent-driven JSON edits + redeploy is the update model at 10 clients, with schema validation.
@@ -98,7 +101,7 @@
 | U4 | Realistic founder hours/week (~5 assumed). | Founder | Before week 1 |
 | U5 | `tel:` click tracking untrackable on Cloudflare free tier. | CTO + CGO | Before first paying client |
 | U6 | Annual prepay: CEO vs CPO — defer to week 12. | CEO + CPO | Week 12 |
-| U7 | ~~Vanity domain~~ **Resolved:** `demo.clubtal.com` on founder-owned `clubtal.com`. CNAME target = repair vertical blob endpoint. | Founder | Week 1 |
+| U7 | ~~Demo subdomain~~ **Resolved (Amendment 4):** `moviles.clubtal.com` on SWA (semantic vertical subdomain). Future verticals get own subdomain + SWA (e.g. `restaurante.clubtal.com`). | Founder | Week 1 |
 
 ---
 
@@ -113,7 +116,7 @@
 | **T-F** | Cloudflare Web Analytics beacon + `/whatsapp` redirect | 30 min | None |
 | **T-A** | Template surgery: WhatsApp/phone CTAs, remove booking copy | 45 min | None |
 | **T-B** | Static priced services block on homepage | 2 h | T-A |
-| **T-D** | Deploy generic demo to repair-vertical storage account + vanity domain docs | 1 h | T-A, T-B, T-C |
+| **T-D** | Deploy generic demo to mobile-shop SWA + `moviles.clubtal.com` custom domain docs | 1 h | T-A, T-B, T-C |
 | **T-E** | `provision-client.mjs` — clone template → paying client + custom domain | 2 h | T-D, T-G |
 
 **Cancelled:** `generate-demos.mjs`, sub-path / `basePath` hosting, per-lead path prefixes, promote-demo rename flow.
@@ -128,7 +131,7 @@
 
 | Milestone | Weeks | Goal |
 |---|---|---|
-| **M0** | 1–2 | T-H through T-D complete. Generic demo live at vanity domain. First 20 WhatsApp messages (warm-up, text-first). |
+| **M0** | 1–2 | T-H through T-D complete. Generic demo live at `https://moviles.clubtal.com`. First 20 WhatsApp messages (warm-up, text-first). |
 | **M1** | 3–6 | 2 paying clients, €78 MRR. 25 DMs/day. Kill switch: <2 paying from 300 DMs. |
 | **M2** | 7–10 | 5 paying clients, €195 MRR. Monthly stats message per client. |
 | **M3** | 11–12 | 10 paying clients, €390 MRR. Referral nudge. Annual prepay evaluated. |
@@ -137,13 +140,13 @@
 
 ## Suggested Next Actions
 
-1. **Founder:** Register vanity demo domain (~€10/year); Cloudflare CNAME → repair vertical blob endpoint. Confirm hours/week and scraper CSV columns. Start alta en Hacienda in parallel.
+1. **Founder:** Configure `moviles.clubtal.com` custom domain on mobile-shop demo SWA (Azure Portal → Custom domains → CNAME `moviles` → `{swa-name}.azurestaticapps.net`). Confirm hours/week and scraper CSV columns. Start alta en Hacienda in parallel.
 2. **nextjs-frontend-developer:** Ship T-A + T-B (+ T-C deploy fix if paired) — acceptance: static build with priced services homepage.
-3. **devops:** Ship T-D (`deploy-demo-swa.yml` + `docs/infrastructure/demo-swa.md`) — demo SWA, custom domain docs, vanity URL `moviles.clubtal.com`.
+3. **devops:** Ship T-D (`deploy-demo-swa.yml` + `docs/infrastructure/demo-swa.md`) — demo SWA, custom domain docs, M0 URL `https://moviles.clubtal.com`.
 4. **Parallel:** T-F, T-G, T-H, T-J.
-5. **Founder (week 1):** WhatsApp warm-up; share **vanity domain** demo link once number is ready.
+5. **Founder (week 1):** WhatsApp warm-up; share **`https://moviles.clubtal.com`** demo link once number is ready.
 6. **CEO + Founder:** Pick Spanish-compliant invoicing tool.
 
 ---
 
-*Meeting closed. Amendments: generic demo only; blob root + one account per vertical; vanity domain for WhatsApp. Next checkpoint: end of Week 2 — demo live at vanity URL + first 20 WhatsApp messages sent.*
+*Meeting closed. Amendments: generic demo only; blob root + one account per vertical (Amendment 2, superseded for demos by Amendment 4); semantic vertical subdomains on SWA (`moviles.clubtal.com`). Next checkpoint: end of Week 2 — demo live at `https://moviles.clubtal.com` + first 20 WhatsApp messages sent.*

@@ -17,6 +17,17 @@ Clubtal-owned **vertical demo sites** deploy to **Azure Static Web Apps (SWA)** 
 
 Stay within the **10 free SWA cap** per Azure subscription.
 
+## Hosting split
+
+| Surface | Platform | Example |
+|---|---|---|
+| Clubtal marketing | SWA | `clubtal.com` |
+| Cert / internal | SWA | `cert.clubtal.com` |
+| Vertical demos (M0+) | SWA — one resource per vertical | `moviles.clubtal.com` |
+| Paying client sites | Azure Blob `$web` + Cloudflare CNAME | client-owned domain |
+
+Do **not** host vertical demos on blob storage or use Cloudflare CNAME → blob for demo outreach URLs. Do **not** reuse a single floating subdomain (e.g. `demo.clubtal.com`) redeployed per vertical.
+
 ## Canonical deploy path
 
 Deploy via **GitHub Actions** — no local deploy script.

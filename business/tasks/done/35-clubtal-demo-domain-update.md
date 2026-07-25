@@ -1,7 +1,7 @@
 # Task 35 — Update Demo Domain Strategy (Semantic Vertical Subdomains)
 
 **Execution order:** 3 of 3  
-**Status:** Ready for development  
+**Status:** Done — completed July 26, 2026  
 **Priority:** High — demo deploy task and infra docs must use owned domain + correct subdomain pattern  
 **Owner:** devops  
 **Estimated scope:** Small — 30–60 min  
@@ -34,9 +34,9 @@ Raw `.azurestaticapps.net` URLs must never appear in customer-facing outreach.
 
 | File | Change |
 |---|---|
-| `business/tasks/todo/31-deploy-generic-demo-site.md` | SWA hosting + `moviles.clubtal.com` (done in Task 31 spec) |
+| `business/tasks/done/31-deploy-generic-demo-site.md` | SWA hosting + `moviles.clubtal.com` (done in Task 31 spec) |
 | `business/tasks/todo/34-clubtal-outreach-copy.md` | Demo URL → `https://moviles.clubtal.com` |
-| `business/tasks/todo/28-cloudflare-analytics-beacon.md` | Vanity domain example → `moviles.clubtal.com` |
+| `business/tasks/backlog/28-cloudflare-analytics-beacon.md` | Vanity domain example → `moviles.clubtal.com` |
 | `business/roadmap/2026-07-24-roadmap-to-first-10-paying-clients.md` | SWA + semantic subdomain strategy |
 | `docs/meetings/summaries/2026-07-24-pivot-mobile-repair-shops-spain.md` | Amendment: M0 demo = `moviles.clubtal.com` on SWA |
 | `docs/infrastructure/demo-swa.md` | Create or update with SWA custom-domain + vertical subdomain pattern |
@@ -67,10 +67,10 @@ Canonical publish path: **GitHub Actions → Deploy Demo Site** (`.github/workfl
 
 ## Requirements
 
-- [ ] Replace `demo.clubtal.com` and `tuwebdemo.es` references in tasks 28, 31, 34, and roadmap with `moviles.clubtal.com`.
-- [ ] Document SWA custom-domain + semantic subdomain strategy in `docs/infrastructure/demo-swa.md`.
-- [ ] Add amendment to July 24 pivot meeting summary noting `moviles.clubtal.com` + SWA hosting decision.
-- [ ] Confirm no remaining references to `deploy:demo`, `deploy-demo.mjs`, demo-on-blob, Cloudflare CNAME → blob, or floating `demo.clubtal.com` as M0 outreach URL.
+- [x] Replace `demo.clubtal.com` and `tuwebdemo.es` references in tasks 28, 31, 34, and roadmap with `moviles.clubtal.com`.
+- [x] Document SWA custom-domain + semantic subdomain strategy in `docs/infrastructure/demo-swa.md`.
+- [x] Add amendment to July 24 pivot meeting summary noting `moviles.clubtal.com` + SWA hosting decision.
+- [x] Confirm no remaining references to `deploy:demo`, `deploy-demo.mjs`, demo-on-blob, Cloudflare CNAME → blob, or floating `demo.clubtal.com` as M0 outreach URL.
 
 ---
 

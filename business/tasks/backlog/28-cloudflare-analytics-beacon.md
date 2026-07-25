@@ -57,7 +57,7 @@ Use Next.js `<Script>` with `strategy="afterInteractive"` — not a raw `<script
 
 ### Demo token strategy
 
-- Demos share a single Cloudflare Web Analytics token on the **vanity demo domain** (`demo.clubtal.com` — not the raw `.web.core.windows.net` URL). Configure via `CF_ANALYTICS_TOKEN_DEMO` when `CLIENT_ID` starts with `demo-`.
+- Demos share a single Cloudflare Web Analytics token on the **vanity demo domain** (`moviles.clubtal.com` — not the raw `.azurestaticapps.net` URL). Configure via `CF_ANALYTICS_TOKEN_DEMO` when `CLIENT_ID` starts with `demo-`.
 Paying clients each get their own Cloudflare Web Analytics site on their **custom domain** (separate from the shared demo vanity domain). Token stored in `config/clients/{clientId}/client.json` under `analyticsToken`.
 - Do not hard-code any token value in `app/layout.tsx`. Read from config or env only.
 
