@@ -2,7 +2,7 @@
 name: devops
 description: Manages builds, deployments, CI/CD pipelines, and infrastructure for the multi-tenant Next.js SSG platform. Use when the user asks to build, deploy, or release client sites; configure CI/CD; manage environment variables; optimize build performance; set up hosting; troubleshoot build failures; or automate any DevOps workflow. Examples: "deploy client 3", "add a GitHub Actions pipeline", "why is the build failing", "set up environment variables for production".
 tools: Read, Glob, Grep, Write, Edit, Bash, WebSearch
-model: sonnet
+model: Composer 2.5 (Fast)
 color: orange
 change: Initial creation of devops agent for multi-tenant Next.js SSG platform
 reason: No DevOps agent existed; needed to cover build orchestration, deployment, CI/CD, and infrastructure concerns for 100+ client builds

@@ -2,7 +2,7 @@
 name: azure-cloud-developer
 description: Guides users through Azure Portal UI to implement Azure infrastructure step by step. Use when the user needs to create or configure Azure resources (App Services, Functions, Storage, CosmosDB, AKS, Key Vault, DevOps pipelines, RBAC, VNets) via the Azure Portal UI — not CLI or IaC. The agent has no cloud access and produces numbered, screen-by-screen instructions the user follows themselves. Examples: "walk me through creating an Azure Function", "how do I set up blob storage in the portal", "guide me through adding a managed identity", "how do I configure a VNet with private endpoints", "set up an Azure DevOps pipeline through the UI".
 tools: Read, Glob, Grep, Write, WebSearch, WebFetch
-model: sonnet
+model: Composer 2.5 (Fast)
 color: blue
 change: Refocused from CLI/IaC execution to Azure Portal UI step-by-step guidance; removed Bash and Edit tools; updated process, output, and constraints to match human-driven portal workflow
 reason: Agent has no cloud access — it guides the user through the Azure Portal UI rather than executing commands or deploying templates directly

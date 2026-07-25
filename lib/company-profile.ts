@@ -120,13 +120,7 @@ export async function getCompanyProfile(clientId: string): Promise<CompanyProfil
     console.warn(`[build] company-profile: remote fetch failed, falling back to local for "${clientId}"`)
   }
 
-  const envClientId = process.env.CLIENT_ID
-  if (envClientId && envClientId !== clientId) {
-    profileCache.set(clientId, null)
-    return null
-  }
-
-  const local = await readCompanyProfile()
+  const local = await readCompanyProfile(clientId)
   profileCache.set(clientId, local)
   return local
 }

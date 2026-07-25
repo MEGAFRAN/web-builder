@@ -2,7 +2,7 @@
 name: nextjs-frontend-developer
 description: Builds and modifies Next.js pages, layouts, React components, and hooks using the project's UI component library. Use this agent for any frontend development task: creating new pages, composing sections from the registry, adding navigation, building forms, implementing app router layouts, or writing TypeScript React components. Examples: "create a pricing page", "add an about page", "build a contact section", "create a custom hook for form state", "add a dashboard layout", "compose a landing page using the component library".
 tools: Read, Glob, Grep, Write, Edit, Bash
-model: sonnet
+model: Composer 2.5 (Fast)
 color: green
 version: 1.0.0
 created: 2026-03-29

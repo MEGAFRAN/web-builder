@@ -96,15 +96,15 @@ describe('getCompanyProfile', () => {
     readCompanyProfileMock.mockResolvedValueOnce(validProfile)
 
     await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
-    expect(readCompanyProfileMock).toHaveBeenCalledTimes(1)
+    expect(readCompanyProfileMock).toHaveBeenCalledWith('hair-salon')
     expect(fetch).not.toHaveBeenCalled()
   })
 
-  it('returns null without reading local data when CLIENT_ID does not match', async () => {
-    vi.stubEnv('CLIENT_ID', 'other-client')
+  it('returns null when no client-scoped local file exists for the requested clientId', async () => {
+    readCompanyProfileMock.mockResolvedValueOnce(null)
 
-    await expect(getCompanyProfile('hair-salon')).resolves.toBeNull()
-    expect(readCompanyProfileMock).not.toHaveBeenCalled()
+    await expect(getCompanyProfile('nonexistent-client')).resolves.toBeNull()
+    expect(readCompanyProfileMock).toHaveBeenCalledWith('nonexistent-client')
     expect(fetch).not.toHaveBeenCalled()
   })
 
@@ -157,7 +157,7 @@ describe('getCompanyProfile', () => {
 
     await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
     expect(fetch).not.toHaveBeenCalled()
-    expect(readCompanyProfileMock).toHaveBeenCalledTimes(1)
+    expect(readCompanyProfileMock).toHaveBeenCalledWith('hair-salon')
   })
 
   it.each([
@@ -170,7 +170,7 @@ describe('getCompanyProfile', () => {
     readCompanyProfileMock.mockResolvedValueOnce(validProfile)
 
     await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
-    expect(readCompanyProfileMock).toHaveBeenCalledTimes(1)
+    expect(readCompanyProfileMock).toHaveBeenCalledWith('hair-salon')
   })
 
   it('falls back to local read when remote fetch throws', async () => {
@@ -180,6 +180,6 @@ describe('getCompanyProfile', () => {
     readCompanyProfileMock.mockResolvedValueOnce(validProfile)
 
     await expect(getCompanyProfile('hair-salon')).resolves.toEqual(validProfile)
-    expect(readCompanyProfileMock).toHaveBeenCalledTimes(1)
+    expect(readCompanyProfileMock).toHaveBeenCalledWith('hair-salon')
   })
 })

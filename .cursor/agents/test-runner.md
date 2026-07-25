@@ -2,7 +2,7 @@
 name: test-runner
 description: Use this agent when the user wants to run tests, check test coverage, debug failing tests, or create/update tests for the Next.js app or Azure Functions. Examples: "run all tests", "run unit tests for the Button component", "add tests for tenantSettingsStore", "why are my azure-functions tests failing", "run tests and show me the failures".
 tools: Bash, Read, Glob, Grep, Write, Edit
-model: sonnet
+model: Composer 2.5 (Fast)
 color: yellow
 version: 1.3.0
 created: 2026-03-29

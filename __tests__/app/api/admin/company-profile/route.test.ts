@@ -60,6 +60,7 @@ describe('/api/admin/company-profile', () => {
     const res = await GET(req)
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ profile })
+    expect(readCompanyProfile).toHaveBeenCalledWith(session.clientId)
   })
 
   it('GET returns 401 when the admin gate fails', async () => {
@@ -105,13 +106,16 @@ describe('/api/admin/company-profile', () => {
       )
       expect(res.status).toBe(200)
       expect(await res.json()).toEqual({ ok: true })
-      expect(writeCompanyProfile).toHaveBeenCalledWith({
-        ...profile,
-        businessName: 'Acme Spa',
-        email: 'hello@acme.example',
-        logoUrl: null,
-        whatsapp: null,
-      })
+      expect(writeCompanyProfile).toHaveBeenCalledWith(
+        {
+          ...profile,
+          businessName: 'Acme Spa',
+          email: 'hello@acme.example',
+          logoUrl: null,
+          whatsapp: null,
+        },
+        session.clientId,
+      )
     })
 
     it('returns 500 when persistence fails downstream', async () => {

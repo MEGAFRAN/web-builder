@@ -2,9 +2,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import type { CompanyProfile } from '@/types/admin'
 
-const LOCAL_FILE = path.join(process.cwd(), 'data', 'company-profile-local.json')
-
-type StoredCompanyProfile = CompanyProfile & { clientId?: string }
+const CLIENT_DATA_DIR = path.join(process.cwd(), 'data', 'clients')
 
 function isAddress(value: unknown): value is CompanyProfile['address'] {
   if (typeof value !== 'object' || value === null) return false
@@ -42,33 +40,29 @@ function parseCompanyProfile(raw: unknown): CompanyProfile | null {
   }
 }
 
-export async function readCompanyProfile(): Promise<CompanyProfile | null> {
+/**
+ * Reads the company profile for the given client from
+ * `data/clients/{clientId}/company-profile.json`.
+ * Returns null when the file does not exist or contains invalid data.
+ * Never falls back to any global file.
+ */
+export async function readCompanyProfile(clientId: string): Promise<CompanyProfile | null> {
+  const filePath = path.join(CLIENT_DATA_DIR, clientId, 'company-profile.json')
   try {
-    const raw = await fs.readFile(LOCAL_FILE, 'utf-8')
+    const raw = await fs.readFile(filePath, 'utf-8')
     const parsed = JSON.parse(raw) as unknown
-    const profile = parseCompanyProfile(parsed)
-    if (!profile) return null
-
-    const storedClientId =
-      typeof parsed === 'object' && parsed !== null && 'clientId' in parsed
-        ? (parsed as StoredCompanyProfile).clientId
-        : undefined
-    const envClientId = process.env.CLIENT_ID
-    if (storedClientId && envClientId && storedClientId !== envClientId) {
-      return null
-    }
-    return profile
+    return parseCompanyProfile(parsed)
   } catch {
     return null
   }
 }
 
-export async function writeCompanyProfile(profile: CompanyProfile): Promise<void> {
-  const clientId = process.env.CLIENT_ID
-  const payload: StoredCompanyProfile = {
-    ...(clientId ? { clientId } : {}),
-    ...profile,
-  }
-  await fs.mkdir(path.dirname(LOCAL_FILE), { recursive: true })
-  await fs.writeFile(LOCAL_FILE, JSON.stringify(payload, null, 2))
+/**
+ * Persists the company profile for the given client to
+ * `data/clients/{clientId}/company-profile.json`.
+ */
+export async function writeCompanyProfile(profile: CompanyProfile, clientId: string): Promise<void> {
+  const filePath = path.join(CLIENT_DATA_DIR, clientId, 'company-profile.json')
+  await fs.mkdir(path.dirname(filePath), { recursive: true })
+  await fs.writeFile(filePath, JSON.stringify(profile, null, 2))
 }

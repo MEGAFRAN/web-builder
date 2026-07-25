@@ -14,3 +14,4 @@ DONE: business/tasks/done/08-cloudflare-azure-blob-custom-domain.md
 DONE: business/tasks/done/12-today-card-stack-bookings-entry-view.md
 DONE: business/tasks/done/23-unify-booking-appointment-actions.md
 DONE: bbusiness/tasks/done/17-post-mvp-block-affordance-non-cto-agents.md
+DONE: business/tasks/done/24-fix-tenant-isolation-company-profile.md

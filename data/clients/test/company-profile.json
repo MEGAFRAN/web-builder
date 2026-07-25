@@ -1,0 +1,14 @@
+{
+  "businessName": "hair salon",
+  "phone": "77738836",
+  "email": "hair22@gmail.com",
+  "address": {
+    "street": "calle general elorza 70",
+    "city": "oviedo",
+    "postalCode": "33002",
+    "country": "españa"
+  },
+  "hours": "lunes a viernes: 08:00 a 18:00",
+  "logoUrl": null,
+  "whatsapp": null
+}

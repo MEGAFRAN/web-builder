@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
   const gate = await requireAdminSession(req)
   if (gate instanceof NextResponse) return gate
 
-  const profile = await readCompanyProfile()
+  const profile = await readCompanyProfile(gate.clientId)
   return NextResponse.json({ profile })
 }
 
@@ -101,7 +101,7 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
-    await writeCompanyProfile(normalizeProfile(b.profile))
+    await writeCompanyProfile(normalizeProfile(b.profile), gate.clientId)
   } catch (err) {
     console.error('[admin/company-profile] write failed:', err)
     return NextResponse.json({ error: 'Failed to save company profile.' }, { status: 500 })
