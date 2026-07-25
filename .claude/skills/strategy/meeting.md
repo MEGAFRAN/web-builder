@@ -30,7 +30,7 @@ You are facilitating an orchestrated multi-agent meeting. Parse $ARGUMENTS to ex
    - Each agent's key points (condensed)
    - The full meeting summary (decisions, alignment, tensions, next actions)
 
-7. **Create agent task files from the summary** — run the `create_agent_task` skill using the step 6 summary as input:
+7. **Create agent task files from the summary** — run the `create_agent_task` skill in **engineering** mode using the step 6 summary as input. Task file format: `.claude/skills/process/task_file_template.md`.
    - Read the saved summary file (`docs/meetings/summaries/YYYY-MM-DD-<slugified-topic>.md`)
    - Derive delegatable tasks from **Engineering Task List** and **Suggested Next Actions** (skip founder-only items with no agent owner)
    - **Determine execution order first:** build a dependency graph from each task's blockers, then topologically sort into the order work must actually be done. Tasks with no blockers come first; a task never gets a lower number than any task it depends on.
@@ -51,5 +51,6 @@ You are facilitating an orchestrated multi-agent meeting. Parse $ARGUMENTS to ex
 Then close with the synthesis and confirm:
 - The summary file path under `docs/meetings/summaries/`
 - Each task file path under `business/tasks/todo/` **in execution order** (01 → last), one line per file with owner
+- Next step: `/implement-tasks --from-summary <summary-path>` or `/plan-and-implement --from-summary <summary-path>`
 
 Begin the meeting now.
