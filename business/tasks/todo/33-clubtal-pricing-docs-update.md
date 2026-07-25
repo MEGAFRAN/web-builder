@@ -26,7 +26,7 @@ Completed as part of July 25, 2026 pricing alignment pass. All active business d
 
 - `business/pricing/spain-pricing.md` — full rewrite
 - `business/pricing/colombia-pricing.md` — Phase 2 deferred, May 2026 pricing archived
-- `business/roadmap/2026-07-24-roadmap-to-first-10-paying-clients.md` — Clubtal + demo.clubtal.com
+- `business/roadmap/2026-07-24-roadmap-to-first-10-paying-clients.md` — Clubtal + demo URL (follow-up: Task 35 → `moviles.clubtal.com`)
 - `.cursor/agents/` and `.claude/agents/` — CEO, CPO, CGO, CTO, cold-outbound-sdr aligned
 
 ## Acceptance criteria
@@ -34,4 +34,4 @@ Completed as part of July 25, 2026 pricing alignment pass. All active business d
 - [x] Spain pricing reflects €39/mo + IVA, repair-shop vertical, static-only product, Clubtal brand
 - [x] Colombia pricing marked Phase 2 — no active COP pricing quoted
 - [x] Agent definitions no longer reference €19/mo or 49,000 COP as active pricing
-- [x] Roadmap TL;DR includes Clubtal and demo.clubtal.com
+- [x] Roadmap TL;DR includes Clubtal and demo URL (updated to `moviles.clubtal.com` in Task 35)

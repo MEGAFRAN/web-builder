@@ -14,7 +14,9 @@
 
 ## Context
 
-Acquisition is **WhatsApp cold DMs** to mobile repair shops in Spain (≥20 Google reviews, ≥4.0 rating). One generic demo site shared via **clubtal.com** (subdomain). The brand name **Clubtal** is coined — prospects won't infer the product from the name alone. Every message must pair the name with a fixed descriptor.
+Acquisition is **WhatsApp cold DMs** to mobile shops in Spain (≥20 Google reviews, ≥4.0 rating). One generic demo site shared via **`https://moviles.clubtal.com`** (semantic vertical subdomain on Azure Static Web Apps). The brand name **Clubtal** is coined — prospects won't infer the product from the name alone. Every message must pair the name with a fixed descriptor.
+
+**Lead targeting:** prioritize repair-first and hybrid shops (`reparación de móviles`, `servicio técnico`) — highest ROI (one screen repair covers 2–3 months of Clubtal). Accessory-only shops are lower priority but the demo URL and template still fit (includes "Accesorios y fundas" service card).
 
 CGO analysis from the naming meeting: coined brands need the descriptor to explain; the name does the remembering. Clubtal reads as a legitimate agency name in a cold DM (not spam), unlike `TuWeb` constructions.
 
@@ -37,7 +39,7 @@ Create or update: `business/outreach/spain-repair-shops-whatsapp.md`
    - Touch 3: soft close / objection pre-empt
 
 3. **Sample Touch 1 message** (template):
-   > "Hola [Nombre], soy de Clubtal — hacemos webs profesionales para tiendas de reparación de móviles. Aquí tenéis un ejemplo: **https://demo.clubtal.com** — Si os interesa algo así para [Nombre de tienda], por 39€/mes + IVA (deducible). Sin compromiso."
+   > "Hola [Nombre], soy de Clubtal — hacemos webs profesionales para tiendas de móviles. Aquí tenéis un ejemplo: **https://moviles.clubtal.com** — Si os interesa algo así para [Nombre de tienda], por 39€/mes + IVA (deducible). Sin compromiso."
 
 4. **4 objection handlers:**
    - "Ya tengo Google"
@@ -50,10 +52,11 @@ Create or update: `business/outreach/spain-repair-shops-whatsapp.md`
 
 ### Constraints
 
-- Never send raw `.web.core.windows.net` URLs — always `demo.clubtal.com` (or confirmed subdomain).
+- Never send raw `.azurestaticapps.net` URLs — always `https://moviles.clubtal.com`.
 - WhatsApp warm-up: text-only week 1; demo link only after reply or once number is warmed.
 - Hard cap: 20–30 DMs/day on dedicated second number.
 - Price always stated as €39/mes + IVA (deducible).
+- Use "tiendas de móviles" in copy (broader than "reparación" only) — matches demo subdomain and target market.
 
 ---
 
@@ -61,6 +64,7 @@ Create or update: `business/outreach/spain-repair-shops-whatsapp.md`
 
 1. `business/outreach/spain-repair-shops-whatsapp.md` exists with all 5 copy blocks above.
 2. Every message template includes "Clubtal" + descriptor within the first two lines.
-3. Demo URL uses `clubtal.com` subdomain (not `tuwebdemo.es`).
+3. Demo URL uses `https://moviles.clubtal.com` (not `tuwebdemo.es`, not `demo.clubtal.com`).
 4. Objection handlers reference static brochure value (credibility, service/price list), not booking/leads.
 5. Copy aligns with pricing in Task 33 output.
+6. ROI framing references screen repair where relevant (repair/hybrid shops).
