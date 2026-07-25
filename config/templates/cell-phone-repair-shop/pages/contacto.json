@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Contacto",
-    "description": "¿Móvil roto? Llama o escríbenos por WhatsApp. {{businessName}} en {{address}}. Abierto {{bookingHoursWeekday}}.",
+    "description": "¿Móvil roto? Llama o escríbenos por WhatsApp. {{businessName}} en {{address}}. Abierto {{hours}}.",
     "ogImage": null,
     "noIndex": false
   },
@@ -18,7 +18,7 @@
     {
       "_type": "ctaBlock",
       "headline": "Llámanos ahora",
-      "subtext": "{{phone}} · Abierto {{bookingHoursWeekday}}",
+      "subtext": "{{phone}} · Abierto {{hours}}",
       "ctaLabel": "Llamar",
       "ctaHref": "tel:{{phone}}",
       "background": "gray",
@@ -33,12 +33,12 @@
       "headline": "Escríbenos por WhatsApp",
       "subtext": "Envíanos fotos del daño y te damos presupuesto al momento.",
       "ctaLabel": "Abrir WhatsApp",
-      "ctaHref": "{{whatsappUrl}}",
+      "ctaHref": "https://wa.me/{{whatsapp}}",
       "background": "white",
       "placeholderCopy": {
         "headline": "Titular del bloque de WhatsApp",
         "subtext": "Texto de apoyo para presupuesto rápido",
-        "ctaHref": "URL completa de WhatsApp, p. ej. https://wa.me/34600000000"
+        "ctaHref": "URL de WhatsApp con {{whatsapp}}, p. ej. https://wa.me/34600000000"
       }
     },
     {

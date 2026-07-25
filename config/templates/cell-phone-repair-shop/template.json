@@ -1,18 +1,18 @@
 {
   "templateId": "cell-phone-repair-shop",
   "displayName": "Cell Phone Repair Shop",
-  "description": "Repair shop site with services, booking, and contact pages.",
+  "description": "Repair shop site with services and contact pages.",
   "defaultThemePreset": "default",
   "defaultFeatures": {
     "blog": false,
-    "booking": true,
+    "booking": false,
     "gallery": false,
     "menu": false
   },
   "header": {
     "logo": "{{businessName}}",
-    "ctaLabel": "Reservar reparación",
-    "ctaAction": "#services",
+    "ctaLabel": "WhatsApp",
+    "ctaAction": "https://wa.me/{{whatsapp}}",
     "links": [
       { "label": "Servicios", "href": "/servicios" },
       { "label": "Contacto", "href": "/contacto" }
@@ -46,10 +46,10 @@
         "iconColor": "#ffffff"
       },
       {
-        "label": "Reservar",
-        "href": "#services",
-        "icon": "public/calendar.svg",
-        "iconColor": "#ffffff"
+        "label": "WhatsApp",
+        "href": "https://wa.me/{{whatsapp}}",
+        "icon": "public/whatsapp.svg",
+        "iconColor": "#25D366"
       }
     ]
   }

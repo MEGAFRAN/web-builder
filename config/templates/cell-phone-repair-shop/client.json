@@ -9,7 +9,7 @@
   "externalReviewPlatform": "Google",
   "features": {
     "blog": false,
-    "booking": true,
+    "booking": false,
     "gallery": false,
     "menu": false
   },
@@ -30,13 +30,13 @@
   "siteMetadata": {
     "siteName": "{{businessName}}",
     "titleTemplate": "%s | {{businessName}}",
-    "defaultDescription": "{{businessName}} — {{primaryService}} rápida y fiable en {{serviceArea}}. Reserva online o pásate por la tienda. Garantía de {{warrantyDays}} días en todas las reparaciones.",
+    "defaultDescription": "{{businessName}} — {{primaryService}} rápida y fiable en {{serviceArea}}. Llámanos o escríbenos por WhatsApp. Garantía de {{warrantyDays}} días en todas las reparaciones.",
     "defaultOgImage": null
   },
   "header": {
     "logo": "{{businessName}}",
-    "ctaLabel": "Reservar reparación",
-    "ctaAction": "#services",
+    "ctaLabel": "WhatsApp",
+    "ctaAction": "https://wa.me/{{whatsapp}}",
     "links": [
       { "label": "Servicios", "href": "/servicios" },
       { "label": "Contacto", "href": "/contacto" }
@@ -70,10 +70,10 @@
         "iconColor": "#ffffff"
       },
       {
-        "label": "Reservar",
-        "href": "#services",
-        "icon": "public/calendar.svg",
-        "iconColor": "#ffffff"
+        "label": "WhatsApp",
+        "href": "https://wa.me/{{whatsapp}}",
+        "icon": "public/whatsapp.svg",
+        "iconColor": "#25D366"
       }
     ]
   }

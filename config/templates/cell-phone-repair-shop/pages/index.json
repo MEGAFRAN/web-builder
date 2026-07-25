@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "{{businessName}}",
-    "description": "{{primaryService}} rápida y fiable en {{serviceArea}}. Reserva online o pásate por la tienda — reparaciones el mismo día con garantía de {{warrantyDays}} días.",
+    "description": "{{primaryService}} rápida y fiable en {{serviceArea}}. Llámanos o escríbenos por WhatsApp — reparaciones el mismo día con garantía de {{warrantyDays}} días.",
     "ogImage": null,
     "noIndex": false
   },
@@ -13,8 +13,8 @@
         { "label": "Servicios", "href": "/servicios" },
         { "label": "Contacto", "href": "/contacto" }
       ],
-      "ctaLabel": "Reservar reparación",
-      "ctaAction": "#services",
+      "ctaLabel": "WhatsApp",
+      "ctaAction": "https://wa.me/{{whatsapp}}",
       "placeholderCopy": {
         "logo": "Nombre del negocio en la barra de navegación"
       }
@@ -23,13 +23,13 @@
       "_type": "heroBlock",
       "heading": "{{businessName}}",
       "subtext": "{{primaryService}} rápida y fiable, servicio el mismo día. Atendemos {{serviceArea}}.",
-      "primaryButtonLabel": "Reservar reparación",
-      "primaryButtonHref": "#services",
+      "primaryButtonLabel": "WhatsApp",
+      "primaryButtonHref": "https://wa.me/{{whatsapp}}",
       "backgroundImageUrl": "https://picsum.photos/seed/cell-repair-hero/1600/900",
       "placeholderCopy": {
         "heading": "Titular principal del hero — nombre del negocio",
         "subtext": "Tagline con servicio principal y zona de servicio",
-        "primaryButtonLabel": "Etiqueta del CTA principal hacia la sección de reservas"
+        "primaryButtonLabel": "Etiqueta del CTA principal hacia WhatsApp"
       }
     },
     {
@@ -61,11 +61,11 @@
     {
       "_type": "services",
       "heading": "Servicios de reparación",
-      "bookCtaLabel": "Reservar reparación",
-      "reservationConfirmationMessage": "¡Gracias! Un técnico de {{businessName}} confirmará tu cita en menos de 30 minutos.",
+      "bookCtaLabel": "WhatsApp",
+      "reservationConfirmationMessage": "¡Gracias! Un técnico de {{businessName}} te responderá por WhatsApp en menos de 30 minutos.",
       "placeholderCopy": {
         "heading": "Título de la sección de servicios",
-        "reservationConfirmationMessage": "Mensaje de confirmación tras solicitar cita"
+        "reservationConfirmationMessage": "Mensaje de confirmación tras contactar por WhatsApp"
       }
     },
     {
@@ -126,20 +126,20 @@
         "address": "Dirección física de la tienda",
         "mapEmbedSrc": "URL del mapa de Google — se sustituye {{address}} al aprovisionar",
         "title": "Título de la sección de ubicación",
-        "hoursNote": "Horario de apertura, p. ej. {{bookingHoursWeekday}}"
+        "hoursNote": "Horario de apertura, p. ej. {{hours}}"
       }
     },
     {
       "_type": "ctaBlock",
       "headline": "¿Móvil roto? Lo reparamos hoy.",
-      "subtext": "Pásate por la tienda o reserva online — reparaciones el mismo día en la mayoría de dispositivos.",
-      "ctaLabel": "Reservar reparación",
-      "ctaHref": "#services",
+      "subtext": "Pásate por la tienda, llámanos o escríbenos por WhatsApp — reparaciones el mismo día en la mayoría de dispositivos.",
+      "ctaLabel": "WhatsApp",
+      "ctaHref": "https://wa.me/{{whatsapp}}",
       "background": "dark",
       "placeholderCopy": {
         "headline": "Titular de conversión a mitad de página",
-        "subtext": "Texto de apoyo animando a reservar o visitar la tienda",
-        "ctaLabel": "Etiqueta del botón CTA hacia la sección de servicios"
+        "subtext": "Texto de apoyo animando a llamar, escribir por WhatsApp o visitar la tienda",
+        "ctaLabel": "Etiqueta del botón CTA hacia WhatsApp"
       }
     },
     {

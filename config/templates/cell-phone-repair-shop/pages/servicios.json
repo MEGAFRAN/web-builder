@@ -50,8 +50,8 @@
           ],
           "imageUrl": "https://picsum.photos/seed/cell-repair-screen/600/400",
           "imageAlt": "Reparación de pantalla de smartphone",
-          "ctaLabel": "Reservar reparación",
-          "ctaHref": "/#services"
+          "ctaLabel": "WhatsApp",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
         },
         {
           "title": "Cambio de batería",
@@ -63,8 +63,8 @@
           ],
           "imageUrl": "https://picsum.photos/seed/cell-repair-battery/600/400",
           "imageAlt": "Cambio de batería de móvil",
-          "ctaLabel": "Reservar reparación",
-          "ctaHref": "/#services"
+          "ctaLabel": "WhatsApp",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
         },
         {
           "title": "Reparación de puerto de carga",
@@ -76,8 +76,8 @@
           ],
           "imageUrl": "https://picsum.photos/seed/cell-repair-port/600/400",
           "imageAlt": "Reparación de puerto de carga",
-          "ctaLabel": "Reservar reparación",
-          "ctaHref": "/#services"
+          "ctaLabel": "WhatsApp",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
         },
         {
           "title": "Recuperación por agua",
@@ -89,8 +89,8 @@
           ],
           "imageUrl": "https://picsum.photos/seed/cell-repair-water/600/400",
           "imageAlt": "Reparación de móvil con daños por agua",
-          "ctaLabel": "Reservar reparación",
-          "ctaHref": "/#services"
+          "ctaLabel": "WhatsApp",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
         },
         {
           "title": "Diagnóstico de software",
@@ -102,8 +102,8 @@
           ],
           "imageUrl": "https://picsum.photos/seed/cell-repair-software/600/400",
           "imageAlt": "Diagnóstico de software de móvil",
-          "ctaLabel": "Reservar reparación",
-          "ctaHref": "/#services"
+          "ctaLabel": "WhatsApp",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
         },
         {
           "title": "Accesorios",
