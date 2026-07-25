@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const profile = await readCompanyProfile()
+  const profile = await readCompanyProfile(gate.clientId)
   const email = profile?.email?.trim()
   if (!email) {
     return NextResponse.json(
