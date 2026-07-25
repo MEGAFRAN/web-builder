@@ -8,6 +8,8 @@
 
 **Amendment 2 (same day, founder):** Demo hosting uses the **Azure Blob static website default URL at root** (e.g. `https://{account}.z43.web.core.windows.net/`) — **no sub-paths, no `basePath`**. **One Azure Storage account per vertical demo template** (repair shops now; restaurants, bars, gyms, etc. later). For WhatsApp outreach, use a cheap **vanity domain** (~€10/year, e.g. `tuwebdemo.es`) via Cloudflare free CNAME → blob endpoint — do **not** send raw `.web.core.windows.net` links in cold DMs (phishing appearance).
 
+**Amendment 3 (July 25, 2026):** Company name = **Clubtal** (`clubtal.com` owned). Demo vanity URL = **`https://demo.clubtal.com`** — replaces `tuwebdemo.es`. See `docs/meetings/summaries/2026-07-25-company-name-debate.md`.
+
 ---
 
 ## Each Agent's Key Points (Condensed)
@@ -15,7 +17,7 @@
 ### CEO
 - Approved the pivot. The cell-phone-repair-shop template **already exists** in Spanish at `config/templates/cell-phone-repair-shop/` (index, servicios, contacto pages). Vertical switch has near-zero template cost.
 - Originally proposed **personalised demo-first**: build a site from CSV data before the first WhatsApp message. **Amended:** one generic demo URL for all prospects; personalise the message, not the site.
-  - Sample DM (amended): *"Hola [Nombre], trabajo con tiendas de reparación de móviles en España y les monto una web profesional. Aquí hay un ejemplo: **https://tuwebdemo.es** — Si os interesa algo así para [Tienda], por 39€/mes + IVA, deducible. Sin compromiso."*
+  - Sample DM (amended): *"Hola [Nombre], soy de Clubtal — hacemos webs profesionales para tiendas de reparación de móviles. Aquí tenéis un ejemplo: **https://demo.clubtal.com** — Si os interesa algo así para [Tienda], por 39€/mes + IVA, deducible. Sin compromiso."*
 - Unit economics: €390 MRR at 10 clients, ~94% gross margin (no Cosmos/Functions COGS).
 - ROI pitch: *"Un arreglo de pantalla son €80. Necesitas una reparación extra cada dos meses para amortizarlo. Menos de un café al día."*
 - **Cut from roadmap:** Tasks 03 (Cosmos), 04 (Functions), 05 (admin pipeline), 12–13 (admin features). No admin panel, no database, no booking system.
@@ -34,7 +36,7 @@
 
 ### CGO
 - Generic demo link is still a strong proof-of-work asset — personalise the WhatsApp copy with prospect name and shop name.
-- **Vanity domain is required for conversion** — raw Azure blob URLs in cold WhatsApp look like phishing; a readable domain (`tuwebdemo.es`) is the customer-facing link.
+- **Vanity domain is required for conversion** — raw Azure blob URLs in cold WhatsApp look like phishing; a readable domain (`demo.clubtal.com`) is the customer-facing link.
 - **WhatsApp number warm-up is mandatory.** Text-only week 1; demo link only after reply (or once number is warmed).
 - Dedicated second WhatsApp Business number. Hard cap 20–30 DMs/day.
 - **3-touch message sequence** with A/B Castilian Spanish variants.
@@ -96,7 +98,7 @@
 | U4 | Realistic founder hours/week (~5 assumed). | Founder | Before week 1 |
 | U5 | `tel:` click tracking untrackable on Cloudflare free tier. | CTO + CGO | Before first paying client |
 | U6 | Annual prepay: CEO vs CPO — defer to week 12. | CEO + CPO | Week 12 |
-| U7 | Vanity domain name and registrar (e.g. `tuwebdemo.es`). CNAME target = repair vertical blob endpoint. | Founder | Week 1 |
+| U7 | ~~Vanity domain~~ **Resolved:** `demo.clubtal.com` on founder-owned `clubtal.com`. CNAME target = repair vertical blob endpoint. | Founder | Week 1 |
 
 ---
 

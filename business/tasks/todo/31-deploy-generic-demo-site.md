@@ -16,14 +16,14 @@ Acquisition uses **one generic demo site**, not a personalized site per lead.
 
 - **Demo client:** `config/clients/demo-phone-repair-shop/` (fictional repair shop, Spanish copy, static prices).
 - **Demo hosting:** one **Azure Storage account** for the repair-shop vertical, static website enabled on `$web`, deployed at the **blob endpoint root** (e.g. `https://webrepairdemo.z43.web.core.windows.net/`).
-- **WhatsApp URL:** do **not** send the raw `.web.core.windows.net` link in cold DMs — it looks like phishing. Use a cheap **vanity domain** (~€10/year, e.g. `tuwebdemo.es`) with Cloudflare free tier: CNAME → Azure blob static website endpoint. Share `https://tuwebdemo.es` in outreach.
-- **Future verticals:** one storage account per demo template (restaurants, bars, gyms, video game stores, etc.). Point the vanity domain CNAME at whichever vertical's blob endpoint is active, or add subdomains later (`repair.tuwebdemo.es`, etc.).
+- **WhatsApp URL:** do **not** send the raw `.web.core.windows.net` link in cold DMs — it looks like phishing. Use **`https://demo.clubtal.com`** (founder-owned domain) with Cloudflare free tier: CNAME → Azure blob static website endpoint.
+- **Future verticals:** one storage account per demo template (restaurants, bars, gyms, video game stores, etc.). Point subdomain CNAMEs at whichever vertical's blob endpoint is active (e.g. `repair.clubtal.com`, `restaurant.clubtal.com`).
 
 Personalise the *WhatsApp message* with the prospect's business name and city — not the *site* with their scraped data.
 
 Sample first message (after WhatsApp warm-up):
 
-> "Hola [Nombre], trabajo con tiendas de reparación de móviles en España y les monto una web profesional. Aquí hay un ejemplo de cómo quedaría: **https://tuwebdemo.es** — Si os interesa algo así para [Nombre de tienda], por 39€/mes + IVA (deducible). Sin compromiso."
+> "Hola [Nombre], soy de Clubtal — hacemos webs profesionales para tiendas de reparación de móviles. Aquí tenéis un ejemplo: **https://demo.clubtal.com** — Si os interesa algo así para [Nombre de tienda], por 39€/mes + IVA (deducible). Sin compromiso."
 
 The scraper CSV is used only for **lead selection and outreach** (phone, name, city, review filter). It is **not** used to generate per-lead websites.
 
@@ -49,11 +49,10 @@ For M0 (mobile repair shops):
 
 ### Vanity domain (founder — required for outreach)
 
-1. Register a short, trustworthy domain (e.g. `tuwebdemo.es` — founder chooses).
-2. Add the domain to Cloudflare (free tier).
-3. CNAME the apex or `www` to the Azure blob static website endpoint (or use Cloudflare CNAME flattening for apex).
-4. Enable Cloudflare proxy (orange cloud) for free SSL and CDN.
-5. Document the vanity URL as the **canonical demo link** for WhatsApp — not the raw Azure URL.
+1. Add `clubtal.com` to Cloudflare (free tier) if not already configured.
+2. CNAME `demo` → Azure blob static website endpoint for the repair-vertical storage account.
+3. Enable Cloudflare proxy (orange cloud) for free SSL and CDN on `demo.clubtal.com`.
+4. Document the vanity URL as the **canonical demo link** for WhatsApp — not the raw Azure URL.
 
 Raw Azure URL remains valid for engineering verification; vanity domain is the customer-facing link.
 
@@ -72,7 +71,7 @@ Add `scripts/deploy-demo.mjs` (or `npm run deploy:demo`) that:
 Environment variables (example):
 
 - `AZURE_DEMO_STORAGE_ACCOUNT` — repair vertical account name
-- `DEMO_VANITY_URL` — e.g. `https://tuwebdemo.es` (for script output only; DNS is manual)
+- `DEMO_VANITY_URL` — `https://demo.clubtal.com` (for script output only; DNS is manual)
 
 ### Lead filter (outreach only)
 

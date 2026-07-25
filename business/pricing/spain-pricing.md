@@ -1,7 +1,8 @@
 # Spain Pricing
 
+**Company:** Clubtal (`clubtal.com`)  
 **Market:** Spain  
-**Status:** Locked — May 23, 2026  
+**Status:** Locked — July 24, 2026 pivot (supersedes May 23, 2026 beauty/booking pricing)  
 **Currency:** EUR only (no USD prices shown to clients)  
 **Source of truth:** `business/roadmap/2026-07-24-roadmap-to-first-10-paying-clients.md`
 
@@ -9,32 +10,36 @@
 
 ## Plans
 
-| Plan | Price | Stripe SKU | Effective monthly |
+| Plan | Price | Billing (M1) | Notes |
 |---|---|---|---|
-| Monthly | **€19/mo** | `ES_MONTHLY_EUR` | €19 |
-| Annual | **€179/yr** | `ES_ANNUAL_EUR` | ~€14.92 (22% off) |
+| Monthly | **€39/mo + 21% IVA** | Bizum or payment link → Google Sheet row | Total charged: **€47.19/mo** |
+| Annual | **Deferred** | — | Revisit at week 12 after 3-month churn data |
 
-**Annual framing:** “Paga anual y te regalamos 2 meses.”
+**Price framing:** 100% tax-deductible for autónomos and companies.  
+**ROI pitch:** *"Un arreglo de pantalla son €80. Necesitas una reparación extra cada dos meses para amortizarlo."*
+
+**Constraint:** Price frozen through first 30 conversations. No monthly discounts.
 
 ---
 
-## What’s included
+## What's included
 
 One flat price. No setup fee. No tiers at MVP.
 
-- AI-built static website on a custom domain
-- Integrated booking widget (`reservationBlock`)
-- Mobile-first admin: bookings, services, availability
-- Transactional emails (booking confirmations, admin invite)
-- Self-service billing via Stripe Customer Portal (card update, cancel)
+- Static brochure website on a custom domain (services, prices, phone, address, WhatsApp CTA)
+- Mobile-first design, deployed via Azure Blob static hosting
+- Monthly stats message (visits + WhatsApp clicks) — automated at client #5
+- Site updates via WhatsApp → agent JSON edit → redeploy (~5 min)
+
+**Not included in M1:** booking widget, admin panel, Cosmos DB, Azure Functions, Stripe self-service billing.
 
 ---
 
 ## Target customer
 
-- **Segment:** Solo beauty professionals — peluquerías, uñas, cejas/pestañas, barberos autónomos
-- **Profile:** Autónomos and micro-businesses (<10 employees), price-sensitive, low technical skill, mobile-first
-- **Primary pain:** Need online presence + appointment scheduling without agency cost (€500–3,000 setup + €100–300/mo)
+- **Segment:** Mobile repair shops — smartphone repair, screen replacement, accessories, unlocking
+- **Profile:** Autónomos and micro-businesses (<10 employees), B2B buyer, price-sensitive, WhatsApp-native
+- **Primary pain:** No professional web presence; losing credibility to competitors with Google listings and service menus online
 
 ---
 
@@ -42,48 +47,45 @@ One flat price. No setup fee. No tiers at MVP.
 
 | Alternative | Typical cost | Our advantage |
 |---|---|---|
-| Wix Business | €17–25/mo + Bookings extra | Website + booking included at €19 |
-| Agency | €500–3,000 setup + €100–300/mo | Zero setup, €19/mo flat |
-| Booksy / Fresha | Free + commission | Flat fee, own brand/domain |
+| Wix / Squarespace DIY | €17–25/mo + setup time | Done for you, zero technical skill |
+| Agency | €500–3,000 setup + €100–300/mo | Zero setup, €39/mo flat + IVA |
+| Google Business only | Free | Professional domain, service/price list, WhatsApp CTA |
 
-**Positioning:** Lowest effort + lowest total cost for a solo operator who wants a real site and bookings, not a marketplace profile.
+**Positioning:** Lowest effort professional web presence for a repair shop that wants credibility and a shareable link — not a marketplace profile.
 
 ---
 
-## Payment rails
+## Payment rails (M1)
 
 | Method | Provider | When |
 |---|---|---|
-| Card (Visa/Mastercard) | Stripe Checkout (EUR) | Default at signup |
-| SEPA Direct Debit | Stripe (EUR) | Secondary — enabled in ES checkout sessions |
-| Self-service billing | Stripe Customer Portal | Ongoing (card update, cancel, plan change) |
+| Bizum | Manual | Primary at signup |
+| Payment link | Stripe or bank transfer | Fallback |
+| Tracking | Google Sheet row | Manual until Stripe ships post-M1 |
 
-**Engineering:** Task 06 — Stripe Checkout + Customer Portal (M1)
-
----
-
-## Trial & conversion flow
-
-1. Cold Instagram DM → 30-min discovery call (ES script)
-2. Founder populates `client.json` during call
-3. Live custom-domain site same day
-4. **14-day free trial** — card required at concierge call
-5. Auto-charge at trial end (no skip-trial discount)
-
-**M1 goal:** 1 paying Spain client at €19/mo by end of week 4.
+**Engineering:** Stripe Checkout + Customer Portal deferred until post-M1 validation. Old Task 06 spec is cut from active roadmap.
 
 ---
 
-## Tax (IVA) — MVP stage
+## Conversion flow
+
+1. Cold WhatsApp DM → generic demo link (`https://demo.clubtal.com`) → close in chat
+2. No discovery call. No 14-day trial.
+3. After payment, `provision-client.mjs` clones template → fill fields → build → upload → CNAME checklist
+4. Live custom-domain site within hours
+
+**M1 goal:** 2 paying Spain clients by week 6 (€78 MRR). Kill switch: <2 paying from 300 DMs.
+
+---
+
+## Tax (IVA)
 
 | Scenario | Treatment |
 |---|---|
-| B2B autónomo with valid CIF/NIF-IVA | Reverse charge — no IVA collected by us; client self-accounts |
-| Below OSS threshold (~€10K cross-border B2C/year) | No IVA collected at MVP |
-| Above OSS threshold | Register for OSS; collect IVA 21% on Spanish B2C |
+| B2B autónomo / company | **21% IVA** on €39/mo base (= €47.19 total). 100% deductible for client. |
+| Founder alta en Hacienda | Modelo 303 quarterly IVA. Spanish-compliant invoicing tool required (Holded/Billin/Quaderno). |
 
-**Client record field:** `taxStatus` on `admin-users` Cosmos document.  
-**Open question:** Formal OSS registration trigger at client #15 or €5K revenue — see roadmap T7.
+**Open question:** Formal OSS registration trigger — see roadmap U2.
 
 ---
 
@@ -91,21 +93,25 @@ One flat price. No setup fee. No tiers at MVP.
 
 | Channel | Tactic |
 |---|---|
-| Primary | Cold Instagram DMs to solo beauty pros |
-| Secondary | Local referrals, case studies (M3) |
+| Primary | Cold WhatsApp DMs to mobile repair shops (Google Maps scraper CSV) |
+| Demo | One generic demo at `https://demo.clubtal.com` — personalise message, not site |
+| Secondary | Referral nudge at client #5+ |
 
-**Kill-switch (week 6):** < 1 paying client per 100 Instagram DMs sent → pivot vertical or channel.
+**Lead filter:** ≥20 Google reviews AND ≥4.0 rating.  
+**Kill-switch (week 6):** <2 paying clients from 300 DMs sent → diagnose sub-metrics (reply rate ≥15%, demo-viewed→paid ≥5%).  
+**WhatsApp rules:** Dedicated second number. Warm-up week 1 (text-only). 20–30 DMs/day cap.
 
-**Tracking:** Task 15 outreach sheet — tab `ES-Instagram`.
+**Tracking:** Google Sheet outreach tracker (not Task 15 Airtable spec — superseded).
 
 ---
 
 ## Sales copy (Spanish)
 
-**Headline:** Tu web profesional con reservas online por €19/mes.  
-**Sub:** Sin setup. Sin comisiones. Tu dominio, tu marca.  
-**Annual CTA:** Paga €179 al año y ahorra 2 meses.  
-**Trial CTA:** Prueba 14 días gratis. Solo necesitas tu tarjeta al registrarte.
+**Brand descriptor:** *"Clubtal — tu web profesional, lista hoy"*  
+**Headline:** Tu web profesional por 39€/mes + IVA.  
+**Sub:** Sin setup. Deducible. Tu dominio, tu marca.  
+**Demo CTA:** Mira un ejemplo: https://demo.clubtal.com  
+**Close:** Sin compromiso. ¿Te interesa algo así para [Nombre de tienda]?
 
 ---
 
@@ -113,16 +119,29 @@ One flat price. No setup fee. No tiers at MVP.
 
 | Item | Task / artifact |
 |---|---|
-| Stripe 4-SKU setup | Task 06 — `scripts/setup-stripe-products.mjs` |
-| Provisioning flags | `--market ES --plan monthly\|annual` |
-| Cosmos fields | `market: "ES"`, `planSku`, `subscriptionStatus`, `paymentProvider: "stripe"`, `taxStatus` |
-| Discovery script | CPO — ES version (due week 1) |
+| Demo deploy | `business/tasks/todo/31-deploy-generic-demo-site.md` |
+| Client provision | `business/tasks/todo/32-provision-client-script.md` |
+| Analytics | `business/tasks/todo/28-cloudflare-analytics-beacon.md` |
+| Outreach copy | `business/tasks/todo/34-clubtal-outreach-copy.md` |
 
 ---
 
 ## Constraints (do not change without CEO sign-off)
 
-- Price frozen at **€19/mo** and **€179/yr** until ≥30 paying clients across both markets
+- Price frozen at **€39/mo + 21% IVA** through first 30 conversations
 - No USD-denominated prices for Spanish clients
 - No tiers, upsells, or setup fees at MVP
 - No paid ads in the 90-day window
+- No annual prepay before week 12 review
+- No booking system, admin panel, or database until a validated booking vertical is paying
+
+---
+
+## Archived — May 2026 pricing (do not use)
+
+| Plan | Price | Status |
+|---|---|---|
+| Monthly | €19/mo | Superseded |
+| Annual | €179/yr | Superseded |
+| Vertical | Solo beauty professionals + booking | Superseded |
+| Acquisition | Instagram DMs + discovery call | Superseded |

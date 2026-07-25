@@ -23,7 +23,8 @@
 | Market | **Spain only** |
 | Product | **Static brochure website** — services, prices, phone, address, WhatsApp CTA. No booking system, no admin panel, no database. |
 | Price | **€39/month + 21% IVA** (= €47.19 total). 100% tax-deductible for autonomos and companies. |
-| Acquisition | **WhatsApp cold DMs** from Google Maps scraper CSV (shops without websites, ≥20 reviews, ≥4.0 rating). One **generic demo site** shared via a **vanity domain** (`tuwebdemo.es` or similar). |
+| Company name | **Clubtal** (`clubtal.com` — domain owned) |
+| Acquisition | **WhatsApp cold DMs** from Google Maps scraper CSV (shops without websites, ≥20 reviews, ≥4.0 rating). One **generic demo site** shared via **demo.clubtal.com**. |
 | Demo hosting | One Azure Storage account per vertical → blob static endpoint at root → Cloudflare CNAME → vanity domain. |
 | Paying client infra | One Azure Storage account per paying client → Cloudflare CNAME → client's custom domain. |
 | Infra cost @ 10 clients | **~€23/month** (blob storage + Stripe fees only). Gross margin ~94%. |
@@ -58,7 +59,7 @@
 3. **Price:** €39/month + 21% IVA. Unchanged through first 30 conversations. No monthly discounts. Annual prepay deferred to week 12 review.
 4. **Acquisition:** WhatsApp cold DMs → generic demo link → close in chat. No discovery call. No personalised per-lead demo site (GDPR risk, complexity).
 5. **Demo site:** One build of `config/clients/demo-phone-repair-shop/` at the **root** of one Azure Blob static website. Shared via vanity domain for all outreach.
-6. **Vanity domain for demos:** ~€10/year domain (e.g. `tuwebdemo.es`) + Cloudflare free CNAME → blob endpoint. Never send raw `.web.core.windows.net` URLs in cold WhatsApp.
+6. **Vanity domain for demos:** `demo.clubtal.com` (founder-owned) + Cloudflare free CNAME → blob endpoint. Never send raw `.web.core.windows.net` URLs in cold WhatsApp.
 7. **One storage account per vertical demo.** Future verticals (restaurants, bars, gyms, video game stores) get their own separate account. CNAME updated when switching verticals.
 8. **WhatsApp warm-up mandatory.** Text-only week 1. Demo link only once number is warmed and/or on reply. Dedicated second WhatsApp Business number. 20–30 DMs/day hard cap.
 9. **Lead filter:** ≥20 Google reviews AND ≥4.0 rating — applied to the scraper CSV before queueing DMs. Google Sheet is the outreach tracker.
@@ -145,7 +146,7 @@ Wave 3 (sequential) ────────────────────
 | U4 | Realistic founder hours per week. Plan assumes ~5. At 3, milestone dates shift. | Founder | Before week 1 |
 | U5 | `tel:` click-to-call untrackable on Cloudflare free tier. Call tracking via redirect number if needed. | CTO + CGO | Before first paying client |
 | U6 | Annual prepay offer — CEO wants it, CPO wants churn data first. Revisit at week 12. | CEO + CPO | Week 12 |
-| U7 | Vanity domain name and registrar (e.g. `tuwebdemo.es`). | Founder | Week 1 |
+| U7 | ~~Vanity domain name~~ **Resolved:** `demo.clubtal.com` on founder-owned `clubtal.com`. | Founder | Week 1 |
 
 ---
 
@@ -162,7 +163,7 @@ Wave 3 (sequential) ────────────────────
 
 ## 7. Next Actions (week of July 28, 2026)
 
-1. **Founder:** Register vanity demo domain (~€10/year) + Cloudflare CNAME → repair vertical blob endpoint. Confirm hours/week. Start alta en Hacienda.
+1. **Founder:** Configure `demo.clubtal.com` CNAME → repair vertical blob endpoint. Confirm hours/week. Start alta en Hacienda.
 2. **nextjs-frontend-developer:** Ship Wave 2 (T-A + T-B). Acceptance: static build produces priced services homepage with WhatsApp CTAs.
 3. **devops (parallel):** Ship Wave 1 fixes (T-C, T-H). Ship Wave 3 deploy script (T-D) after Wave 2 merges.
 4. **CTO (parallel):** Ship T-G (`validate:client`), T-F (analytics beacon), T-J (CI guard).
@@ -198,4 +199,4 @@ Full archived agent discussion: see `docs/meetings/summaries/2026-07-24-pivot-mo
 
 ---
 
-*Roadmap last updated: July 24, 2026. Next executive checkpoint: end of Week 2 — demo live at vanity URL + first 20 WhatsApp messages sent.*
+*Roadmap last updated: July 25, 2026. Next executive checkpoint: end of Week 2 — demo live at demo.clubtal.com + first 20 WhatsApp messages sent.*

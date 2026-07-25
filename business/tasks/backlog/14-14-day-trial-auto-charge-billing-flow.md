@@ -1,6 +1,9 @@
 # Task: 14-Day Trial → Auto-Charge Billing Flow
 
-**Status:** Pending  
+> **⚠ Superseded — July 24, 2026 pivot**
+> M1 has **no 14-day trial** and **no Stripe billing**. Payment = Bizum or payment link → Google Sheet. See `business/pricing/spain-pricing.md`. Do not implement unless CEO reactivates booking/Stripe stack.
+
+**Status:** Superseded — archived for reference  
 **Priority:** Medium — scheduled for M2 (commercial polish)  
 **Owner:** DevOps / Next.js Frontend Developer  
 **Estimated scope:** Medium — Stripe Checkout parameters, webhook event handling, and email notifications  

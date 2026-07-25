@@ -1,6 +1,9 @@
 # Task: In-Admin Monthly Bookings Revenue KPI Tile
 
-**Status:** Pending  
+> **⚠ Superseded — July 24, 2026 pivot**
+> M1 product is **static brochure only** — no admin panel, no booking system. M1 retention KPI = monthly stats message (visits + WhatsApp clicks). See `business/roadmap/2026-07-24-roadmap-to-first-10-paying-clients.md`. Active price: **€39/mo + IVA** (not $25/mo).
+
+**Status:** Superseded — archived for reference  
 **Priority:** Low — scheduled for M2 (retention polish)  
 **Owner:** Next.js Frontend Developer  
 **Estimated scope:** Small — dashboard widget + backend aggregation API  

@@ -1,6 +1,9 @@
 # Task: Cold-DM Outreach Tracking (Out-of-Codebase)
 
-**Status:** Pending  
+> **⚠ Superseded — July 25, 2026**
+> Active initiative uses **WhatsApp** (not Instagram), **Google Sheet** tracker, kill-switch **<2 paying / 300 DMs**, vertical **mobile repair shops**. See `business/roadmap/2026-07-24-roadmap-to-first-10-paying-clients.md` and `business/tasks/todo/34-clubtal-outreach-copy.md`. Do not implement this spec as written.
+
+**Status:** Superseded — archived for reference  
 **Priority:** Medium — scheduled for M2 (operation startup)  
 **Owner:** CEO / Operations  
 **Estimated scope:** Small — operations spreadsheet setup, no codebase impact  
