@@ -73,7 +73,7 @@
 | D11 | **Kill switch week 6:** <2 paying from 300 DMs. | CEO + CGO |
 | D12 | **Fiscal setup in parallel with outreach.** | CGO |
 | D13 | **No annual plan** until 3-month churn data. | CPO |
-| D14 | **Old Task 10 spec dead.** Replace with `deploy-demo.mjs` + `provision-client.mjs`. **`generate-demos.mjs` cancelled.** | CTO |
+| D14 | **Old Task 10 spec dead.** Replace with GitHub Actions demo deploy (`deploy-demo-swa.yml`) + `provision-client.mjs`. **`generate-demos.mjs` cancelled.** | CTO |
 
 ---
 
@@ -118,7 +118,7 @@
 
 **Cancelled:** `generate-demos.mjs`, sub-path / `basePath` hosting, per-lead path prefixes, promote-demo rename flow.
 
-**Acceptance gate:** `CLIENT_ID=demo-phone-repair-shop npm run build:blob` with empty env produces homepage with visible priced services and WhatsApp CTAs; then `npm run deploy:demo` serves it at blob root + vanity domain.
+**Acceptance gate:** `CLIENT_ID=demo-phone-repair-shop npm run build:blob` with empty env produces homepage with visible priced services and WhatsApp CTAs; then **Actions → Deploy Demo Site** publishes it to SWA at `https://moviles.clubtal.com`.
 
 **Cut entirely:** Old Tasks 03–07, 10 (old spec), 12–15, batch demo pipeline.
 
@@ -139,7 +139,7 @@
 
 1. **Founder:** Register vanity demo domain (~€10/year); Cloudflare CNAME → repair vertical blob endpoint. Confirm hours/week and scraper CSV columns. Start alta en Hacienda in parallel.
 2. **nextjs-frontend-developer:** Ship T-A + T-B (+ T-C deploy fix if paired) — acceptance: static build with priced services homepage.
-3. **devops:** Ship T-D (`deploy-demo.mjs`) — one repair-vertical storage account, blob root deploy, document vanity URL.
+3. **devops:** Ship T-D (`deploy-demo-swa.yml` + `docs/infrastructure/demo-swa.md`) — demo SWA, custom domain docs, vanity URL `moviles.clubtal.com`.
 4. **Parallel:** T-F, T-G, T-H, T-J.
 5. **Founder (week 1):** WhatsApp warm-up; share **vanity domain** demo link once number is ready.
 6. **CEO + Founder:** Pick Spanish-compliant invoicing tool.

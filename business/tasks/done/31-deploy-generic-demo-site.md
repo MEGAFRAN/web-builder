@@ -1,6 +1,6 @@
 # Task: Deploy Generic Demo Site (T-D)
 
-**Status:** Ready for development
+**Status:** Done — completed July 26, 2026
 **Priority:** High — required to share one demo URL in WhatsApp outreach
 **Owner:** devops
 **Estimated scope:** Small — 1 hour (+ founder custom-domain setup)
@@ -15,7 +15,7 @@
 Acquisition uses **one generic demo site per vertical**, not a personalized site per lead.
 
 - **Demo client:** `config/clients/demo-phone-repair-shop/` (fictional mobile shop, Spanish copy, static prices — repairs + accessories).
-- **Demo hosting:** **Azure Static Web Apps (SWA)** — same platform as `clubtal.com` and `cert.clubtal.com`. Deploy via `.github/workflows/deploy-swa.yml` with `clientId: demo-phone-repair-shop`.
+- **Demo hosting:** **Azure Static Web Apps (SWA)** — same platform as `clubtal.com` and `cert.clubtal.com`. Deploy via **`.github/workflows/deploy-demo-swa.yml`** (GitHub Actions manual dispatch).
 - **M0 customer-facing URL:** **`https://moviles.clubtal.com`** — semantic vertical subdomain on the mobile-shop demo SWA. Broad enough for repair shops, hybrid shops, and accessory retailers. Do **not** send raw `.azurestaticapps.net` hostnames in cold WhatsApp DMs.
 - **Subdomain naming strategy (locked):** one **semantic vertical subdomain per SWA** — immutable links that never break when outreach shifts to a new vertical. Do **not** reuse a single floating subdomain (e.g. redeploying `demo.clubtal.com` when switching verticals).
 - **Future verticals:** one SWA resource per template with its own semantic subdomain (e.g. `restaurante.clubtal.com`, `clinica.clubtal.com`). Stay within the 10 free SWA cap per subscription.
@@ -41,19 +41,20 @@ The scraper CSV is used only for **lead selection and outreach** (phone, name, c
 CLIENT_ID=demo-phone-repair-shop npm run build:blob
 ```
 
-Output goes to `out/` — same static export as paying client blob builds.
+Output goes to `out/` — same static export as paying client blob builds. Use locally to verify before deploying; **GitHub Actions performs the build in CI**.
 
-### GitHub Actions workflow
+### GitHub Actions workflow (canonical deploy path)
 
-Use existing `.github/workflows/deploy-swa.yml`:
+Use **`.github/workflows/deploy-demo-swa.yml`**:
 
-- Manual dispatch → `clientId: demo-phone-repair-shop`
-- Requires GitHub secret `SWA_TOKEN_demo_phone_repair_shop` (hyphens → underscores)
-- Builds with `npm run build:blob`, uploads `out/` to the mobile-shop demo SWA resource
+- Manual dispatch → **Actions → Deploy Demo Site → Run workflow**
+- Hardcoded `CLIENT_ID: demo-phone-repair-shop`
+- Requires GitHub secret with the demo SWA deployment token (see Azure Portal → SWA → Manage deployment token)
+- Builds with `npm run build:blob` (minimal env when `features.booking` is `false`), uploads prebuilt `out/` to the mobile-shop demo SWA resource
 
 The demo client has `"booking": false` — no Cosmos or Azure Functions secrets required for the build.
 
-Local `npm run deploy:demo` should mirror the same build + SWA upload path.
+There is **no** local `npm run deploy:demo` script. CI is the single publish path.
 
 ### Azure SWA resource (M0 — mobile shop vertical)
 
@@ -61,7 +62,7 @@ For M0 (mobile repair / telefonía shops):
 
 - Create one SWA resource (e.g. `clubtal-demo-moviles`) in the same resource group as other Clubtal SWAs.
 - Note the default hostname: `https://{name}.azurestaticapps.net/`.
-- Copy deployment token → GitHub secret `SWA_TOKEN_demo_phone_repair_shop`.
+- Copy deployment token → GitHub Actions secret for the demo SWA.
 - When adding a new vertical later, create a **separate** SWA resource with its own semantic subdomain — do not mix verticals in one SWA or overwrite an existing vertical's subdomain.
 
 ### Custom domain (founder — required for outreach)
@@ -75,23 +76,6 @@ Raw SWA hostname remains valid for engineering verification; custom domain is th
 
 **Optional:** `demo.clubtal.com` may 301-redirect to `moviles.clubtal.com` — not required for M0 outreach.
 
-### Upload script
-
-Add `scripts/deploy-demo.mjs` (or `npm run deploy:demo`) that:
-
-1. Runs `CLIENT_ID=demo-phone-repair-shop npm run build:blob` (no `BASE_PATH`).
-2. Deploys `out/` to the mobile-shop demo SWA via the SWA deployment API (same as `deploy-swa.yml`).
-3. Prints both URLs: raw SWA hostname + custom domain (from env or config).
-
-```json
-"deploy:demo": "node scripts/deploy-demo.mjs"
-```
-
-Environment variables (example):
-
-- `SWA_TOKEN_DEMO` — deployment token for the demo SWA resource (local deploy only; CI uses `SWA_TOKEN_demo_phone_repair_shop`)
-- `DEMO_VANITY_URL` — `https://moviles.clubtal.com` (for script output only; DNS is manual in Azure Portal)
-
 ### Lead filter (outreach only)
 
 ≥20 Google reviews AND ≥4.0 rating — apply in the scraper or a Google Sheet filter when queueing WhatsApp DMs. **Not** part of this deploy task.
@@ -100,15 +84,13 @@ Environment variables (example):
 
 ## Requirements
 
-- [ ] Document demo architecture in `docs/infrastructure/demo-swa.md`: one SWA + semantic subdomain per vertical, distinction from client blob hosting.
-- [ ] Provision Azure SWA resource for mobile-shop demo vertical.
-- [ ] Set GitHub secret `SWA_TOKEN_demo_phone_repair_shop`.
-- [ ] **Founder:** add `moviles.clubtal.com` custom domain on demo SWA (document steps in `demo-swa.md`).
-- [ ] Write `scripts/deploy-demo.mjs` that builds `demo-phone-repair-shop` and deploys `out/` to SWA.
-- [ ] Add `"deploy:demo": "node scripts/deploy-demo.mjs"` to `package.json`.
-- [ ] Verify demo loads at SWA default hostname **and** at `moviles.clubtal.com` (after DNS propagates).
-- [ ] Homepage shows priced services and WhatsApp/phone CTAs (not blank sections).
-- [ ] Re-running `deploy:demo` is idempotent.
+- [x] Document demo architecture in `docs/infrastructure/demo-swa.md`: one SWA + semantic subdomain per vertical, distinction from client blob hosting, GitHub Actions as canonical deploy path.
+- [x] Provision Azure SWA resource for mobile-shop demo vertical.
+- [x] Set GitHub secret with demo SWA deployment token.
+- [x] **Founder:** add `moviles.clubtal.com` custom domain on demo SWA (document steps in `demo-swa.md`).
+- [x] Verify demo loads at SWA default hostname **and** at `moviles.clubtal.com` (after DNS propagates).
+- [x] Homepage shows priced services and WhatsApp/phone CTAs (not blank sections).
+- [x] Re-running **Deploy Demo Site** workflow is idempotent.
 
 ---
 
@@ -116,27 +98,27 @@ Environment variables (example):
 
 | Area | Paths |
 |---|---|
-| New script | `scripts/deploy-demo.mjs` (new) |
-| Package scripts | `package.json` (modified — add `deploy:demo`) |
-| Infrastructure docs | `docs/infrastructure/demo-swa.md` (new) |
+| CI workflow | `.github/workflows/deploy-demo-swa.yml` |
+| Infrastructure docs | `docs/infrastructure/demo-swa.md` |
 
 ---
 
 ## Out of scope
 
+- Local deploy script (`scripts/deploy-demo.mjs`, `npm run deploy:demo`) — CI is canonical.
 - Per-lead demo generation from CSV (`generate-demos.mjs` — **cancelled**).
 - Sub-path / `basePath` hosting.
 - Paying client custom domains (Task T-E / `32-provision-client-script.md`) — those stay on blob storage.
-- Automating Azure custom-domain DNS in the deploy script (manual for M0).
+- Automating Azure custom-domain DNS in the deploy workflow (manual for M0).
 - Floating single subdomain that gets redeployed when switching verticals.
 
 ---
 
 ## Acceptance criteria
 
-1. `npm run deploy:demo` builds and deploys `demo-phone-repair-shop` to SWA successfully.
+1. **Actions → Deploy Demo Site** builds and deploys `demo-phone-repair-shop` to SWA successfully.
 2. Demo is accessible at the SWA default hostname (engineering URL).
 3. Demo is accessible at `https://moviles.clubtal.com` (customer-facing URL for WhatsApp).
 4. Homepage shows visible priced services and working WhatsApp/phone CTAs.
 5. Demo uses **fictional** business data only — no scraped prospect identity.
-6. Re-running `deploy:demo` succeeds without duplicate or broken uploads.
+6. Re-running the workflow succeeds without duplicate or broken uploads.

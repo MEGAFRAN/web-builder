@@ -66,7 +66,7 @@ Demos and paying clients both build for root `/`. Do **not** add `basePath` to `
 
 ## Out of scope
 
-- Upload script for demos (Task T-D / `31-deploy-generic-demo-site.md`).
+- Upload script for demos — superseded by `.github/workflows/deploy-demo-swa.yml` (Task T-D / `31-deploy-generic-demo-site.md`).
 - Vanity domain DNS (founder + Task T-D docs).
 - Changes to client configs or templates (workflow reads `features.booking`; clients set it themselves).
 - `basePath` or sub-path hosting.

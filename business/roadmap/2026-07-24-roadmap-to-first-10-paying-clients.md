@@ -100,7 +100,7 @@ Task files live in `business/tasks/todo/`. Execution order reflects dependencies
 
 **Total engineering effort to first paying client: ~1 day of agent work.**
 
-**Acceptance gate:** `CLIENT_ID=demo-phone-repair-shop npm run build:blob` with empty env → priced services homepage with WhatsApp CTAs → `npm run deploy:demo` → live at `https://moviles.clubtal.com`.
+**Acceptance gate:** `CLIENT_ID=demo-phone-repair-shop npm run build:blob` with empty env → priced services homepage with WhatsApp CTAs → **Actions → Deploy Demo Site** → live at `https://moviles.clubtal.com`.
 
 ### Dependency graph
 

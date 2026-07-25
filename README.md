@@ -156,6 +156,18 @@ Same build as blob deploy, uploads to Azure Static Web Apps. Requires a **per-cl
 
 Uses the same `ADMIN_API_URL` variable and `COMPANY_PROFILE_BUILD_TOKEN` secret as the blob workflow.
 
+### Demo site — `Deploy Demo Site`
+
+Workflow: [`.github/workflows/deploy-demo-swa.yml`](.github/workflows/deploy-demo-swa.yml)
+
+Canonical path for the M0 vertical demo (`demo-phone-repair-shop` → `https://moviles.clubtal.com`). Manual dispatch only — no local deploy script.
+
+| Secret | Purpose |
+|--------|---------|
+| SWA deployment token for the demo resource | Set when linking the demo SWA to GitHub (see **Settings → Secrets and variables → Actions**) |
+
+Build uses minimal env (`features.booking` is `false`). See [`docs/infrastructure/demo-swa.md`](docs/infrastructure/demo-swa.md).
+
 ### Admin SPA — `Deploy Admin SPA`
 
 Workflow: [`.github/workflows/deploy-admin-swa.yml`](.github/workflows/deploy-admin-swa.yml)
@@ -171,10 +183,18 @@ Single shared admin deployment for all tenants (manual dispatch).
 ### Typical deploy flow
 
 ```
+Paying clients (blob):
 1. Merge client config changes to main
-2. Actions → "Deploy Website to Blob Storage" → Run workflow → clientId: demo-phone-repair-shop
-3. (Optional) Actions → "Deploy Admin SPA" if admin UI changed
-4. Verify client site URL and /admin login against production Functions
+2. Actions → "Deploy Website to Blob Storage" → Run workflow → clientId: {clientId}
+3. Verify client site URL
+
+Vertical demo (SWA):
+1. Merge demo config changes to main
+2. Actions → "Deploy Demo Site" → Run workflow
+3. Verify https://moviles.clubtal.com
+
+Admin (optional):
+1. Actions → "Deploy Admin SPA" if admin UI changed
 ```
 
 ---

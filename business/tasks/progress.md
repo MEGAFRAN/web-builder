@@ -21,3 +21,5 @@ DONE: business/tasks/done/27-ci-guard-backend-config-keys.md
 DONE: business/tasks/done/29-template-surgery-repair-shop.md
 DONE: business/tasks/done/30-static-priced-services-block.md
 DONE: business/tasks/done/36-priced-services-block.md
+DONE: business/tasks/done/31-deploy-generic-demo-site.md
+DONE: business/tasks/done/33-clubtal-pricing-docs-update.md
