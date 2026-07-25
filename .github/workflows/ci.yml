@@ -32,6 +32,8 @@ jobs:
             command: npx tsc --noEmit
           - task: Validate client configs
             command: npm run validate:client
+          - task: Guard backend config keys
+            command: npm run guard:config
 
     steps:
       - name: Checkout repository
