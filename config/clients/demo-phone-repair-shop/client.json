@@ -7,6 +7,10 @@
   "vertical": "repair",
   "externalReviewUrl": "",
   "externalReviewPlatform": "Google",
+  "price_pantalla": "Desde 39€",
+  "price_bateria": "Desde 29€",
+  "price_carga": "Desde 25€",
+  "price_software": "Desde 35€",
   "features": {
     "blog": false,
     "booking": false,

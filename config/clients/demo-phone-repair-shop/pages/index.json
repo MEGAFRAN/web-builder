@@ -33,6 +33,57 @@
       ]
     },
     {
+      "_type": "pricedServicesBlock",
+      "heading": "Servicios de reparación",
+      "subtext": "Precios orientativos para las reparaciones más habituales. Escríbenos por WhatsApp para un presupuesto personalizado.",
+      "viewAllLabel": "Ver todos los servicios y precios →",
+      "viewAllHref": "/servicios",
+      "serviceCards": [
+        {
+          "title": "Cambio de pantalla",
+          "description": "Sustitución de pantalla rota o con fallos táctiles.",
+          "price": "Desde 39€",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/34915550198"
+        },
+        {
+          "title": "Cambio de batería",
+          "description": "Batería nueva con garantía. Recupera la autonomía original.",
+          "price": "Desde 29€",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/34915550198"
+        },
+        {
+          "title": "Puerto de carga",
+          "description": "Reparación o sustitución del conector de carga.",
+          "price": "Desde 25€",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/34915550198"
+        },
+        {
+          "title": "Daños por agua",
+          "description": "Limpieza y restauración tras contacto con líquidos.",
+          "price": "Consultar precio",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/34915550198"
+        },
+        {
+          "title": "Desbloqueo / Software",
+          "description": "Desbloqueo de red, recuperación de sistema y actualizaciones.",
+          "price": "Desde 35€",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/34915550198"
+        },
+        {
+          "title": "Accesorios y fundas",
+          "description": "Fundas, protectores de pantalla, cargadores y más.",
+          "price": "En tienda",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/34915550198"
+        }
+      ]
+    },
+    {
       "_type": "testimonialsBlock",
       "heading": "Lo que dicen nuestros clientes",
       "items": [

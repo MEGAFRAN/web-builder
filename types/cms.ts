@@ -398,6 +398,7 @@ export type Block =
   | TestimonialsBlock
   | PricingPageBlock
   | ServicesPageBlock
+  | PricedServicesBlock
   | TestimonialsPageBlock
   | CaseStudyDetailBlock
   | CarouselBlock
@@ -425,6 +426,26 @@ export type ServiceCardItem = {
 export type ServicesFaqItem = {
   question: string
   answer: string
+}
+
+export type PricedServiceCardItem = {
+  title: string
+  description: string
+  price?: string | null
+  /** @deprecated Use `price` instead. Kept for backwards compatibility. */
+  deliverables?: string[]
+  ctaLabel?: string | null
+  ctaHref?: string | null
+}
+
+export type PricedServicesBlock = {
+  _type: 'pricedServicesBlock'
+  heading?: string | null
+  subtext?: string | null
+  deliverablesLabel?: string | null
+  viewAllLabel?: string | null
+  viewAllHref?: string | null
+  serviceCards?: PricedServiceCardItem[] | null
 }
 
 export type ServicesPageBlock = {

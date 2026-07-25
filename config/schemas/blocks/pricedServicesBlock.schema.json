@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pricedServicesBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_type"],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "pricedServicesBlock"
+    },
+    "heading": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "subtext": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "deliverablesLabel": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "viewAllLabel": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "viewAllHref": {
+      "oneOf": [{ "type": "string" }, { "type": "null" }]
+    },
+    "serviceCards": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "description"],
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "price": {
+                "oneOf": [{ "type": "string" }, { "type": "null" }]
+              },
+              "deliverables": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "ctaLabel": {
+                "oneOf": [{ "type": "string" }, { "type": "null" }]
+              },
+              "ctaHref": {
+                "oneOf": [{ "type": "string" }, { "type": "null" }]
+              }
+            }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

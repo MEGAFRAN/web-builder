@@ -59,13 +59,62 @@
       }
     },
     {
-      "_type": "services",
+      "_type": "pricedServicesBlock",
       "heading": "Servicios de reparación",
-      "bookCtaLabel": "WhatsApp",
-      "reservationConfirmationMessage": "¡Gracias! Un técnico de {{businessName}} te responderá por WhatsApp en menos de 30 minutos.",
+      "subtext": "Precios orientativos para las reparaciones más habituales. Escríbenos por WhatsApp para un presupuesto personalizado.",
+      "viewAllLabel": "Ver todos los servicios y precios →",
+      "viewAllHref": "/servicios",
+      "serviceCards": [
+        {
+          "title": "Cambio de pantalla",
+          "description": "Sustitución de pantalla rota o con fallos táctiles.",
+          "price": "{{price_pantalla}}",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
+        },
+        {
+          "title": "Cambio de batería",
+          "description": "Batería nueva con garantía. Recupera la autonomía original.",
+          "price": "{{price_bateria}}",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
+        },
+        {
+          "title": "Puerto de carga",
+          "description": "Reparación o sustitución del conector de carga.",
+          "price": "{{price_carga}}",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
+        },
+        {
+          "title": "Daños por agua",
+          "description": "Limpieza y restauración tras contacto con líquidos.",
+          "price": "Consultar precio",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
+        },
+        {
+          "title": "Desbloqueo / Software",
+          "description": "Desbloqueo de red, recuperación de sistema y actualizaciones.",
+          "price": "{{price_software}}",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
+        },
+        {
+          "title": "Accesorios y fundas",
+          "description": "Fundas, protectores de pantalla, cargadores y más.",
+          "price": "En tienda",
+          "ctaLabel": "Pedir presupuesto",
+          "ctaHref": "https://wa.me/{{whatsapp}}"
+        }
+      ],
       "placeholderCopy": {
-        "heading": "Título de la sección de servicios",
-        "reservationConfirmationMessage": "Mensaje de confirmación tras contactar por WhatsApp"
+        "heading": "Título de la sección de servicios en la homepage",
+        "subtext": "Subtexto con precios orientativos y CTA a WhatsApp",
+        "serviceCards[0].price": "Precio orientativo del cambio de pantalla",
+        "serviceCards[1].price": "Precio orientativo del cambio de batería",
+        "serviceCards[2].price": "Precio orientativo del puerto de carga",
+        "serviceCards[4].price": "Precio orientativo de desbloqueo/software"
       }
     },
     {

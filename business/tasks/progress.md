@@ -17,4 +17,7 @@ DONE: bbusiness/tasks/done/17-post-mvp-block-affordance-non-cto-agents.md
 DONE: business/tasks/done/24-fix-tenant-isolation-company-profile.md
 DONE: business/tasks/done/25-fix-deploy-blob-workflow.md
 DONE: business/tasks/done/26-validate-client-schema-gate.md
-DONE: business/tasks/done/27-ci-guard-backend-config-keys.mdDONE: business/tasks/done/29-template-surgery-repair-shop.md
+DONE: business/tasks/done/27-ci-guard-backend-config-keys.md
+DONE: business/tasks/done/29-template-surgery-repair-shop.md
+DONE: business/tasks/done/30-static-priced-services-block.md
+DONE: business/tasks/done/36-priced-services-block.md

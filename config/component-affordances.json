@@ -149,12 +149,21 @@
       ],
       "avoidWhen": ["Long-form services marketing page — use servicesPageBlock."]
     },
+    "pricedServicesBlock": {
+      "useCases": [
+        "Homepage or landing page grid showing key services with price tags and direct WhatsApp CTAs.",
+        "Compact service overview section with optional link to full /servicios page."
+      ],
+      "avoidWhen": [
+        "Full-page standalone services catalog with category filters and FAQs — use servicesPageBlock on subpages instead."
+      ]
+    },
     "servicesPageBlock": {
       "useCases": [
         "Full services marketing page: hero, feature categories, service cards, FAQ.",
         "Dense deliverables and pricing descriptors per offering."
       ],
-      "avoidWhen": ["Compact homepage teaser grid — use services."]
+      "avoidWhen": ["Compact homepage teaser grid — use pricedServicesBlock."]
     },
     "statsBlock": {
       "useCases": [

@@ -25,6 +25,10 @@
     },
     "externalReviewUrl": { "type": "string" },
     "externalReviewPlatform": { "type": "string" },
+    "price_pantalla": { "type": "string" },
+    "price_bateria": { "type": "string" },
+    "price_carga": { "type": "string" },
+    "price_software": { "type": "string" },
     "bookingSettings": {
       "type": "object",
       "additionalProperties": false,
