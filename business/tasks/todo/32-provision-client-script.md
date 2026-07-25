@@ -49,9 +49,9 @@ Optional: `--intake path/to/intake.json` with the same fields for agent-driven p
 2. **Clone:** copy template → `config/clients/{clientId}/`.
 3. **Substitute:** replace `{{placeholders}}` in all JSON files from CLI/intake.
 4. **Validate config:** run `npm run validate:client {clientId}` — abort on error.
-5. **Update `client.json`:** set `customDomain`, `analyticsToken` placeholder (founder fills after Cloudflare Analytics setup).
+5. **Update `client.json`:** set `customDomain`, `analyticsToken` placeholder (founder fills after Cloudflare Analytics setup). Confirm `"booking": false` in `features` — M1 paying clients are static brochure sites; the template should already set this, but the script must not leave it `true` (which would make `deploy-blob-storage.yml` require Azure Functions secrets).
 6. **Build:** `CLIENT_ID={clientId} npm run build:blob` (no `BASE_PATH`).
-7. **Deploy:** upload to client's Azure Blob container or path — document strategy.
+7. **Deploy:** upload to client's Azure Blob container or path — document strategy. GitHub Actions `deploy-blob-storage.yml` uses the same rule: static build when `features.booking` is `false`.
 8. **Print checklist:** Cloudflare CNAME, analytics token, spreadsheet row, client WhatsApp confirmation.
 
 ### Manual steps checklist (printed at end)
@@ -79,6 +79,7 @@ If `config/clients/{clientId}/` already exists, abort: `"Client {clientId} alrea
 - [ ] Substitutes placeholders in all JSON files under the new client directory.
 - [ ] Runs `validate:client` before build; aborts on validation failure.
 - [ ] Sets `customDomain` in `client.json`; builds for root `/` (no `basePath` — same as demo deploy model).
+- [ ] Ensures `features.booking` is `false` in the provisioned `client.json` (static M1 product — template default; verify after clone/substitute).
 - [ ] Builds and deploys with `CLIENT_ID={clientId}` only.
 - [ ] Prints Cloudflare DNS and post-provision checklist.
 - [ ] Aborts if target `clientId` directory already exists.

@@ -277,6 +277,29 @@
         }
       ]
     },
+    "showModal": {
+      "description": "When true, service cards open a detail modal instead of inline expansion.",
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "bookingUrl": {
+      "description": "Fallback external booking URL for service cards and pricing rows.",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "reservationConfirmationMessage": {
       "description": "Optional success message when booking from the services modal.",
       "oneOf": [

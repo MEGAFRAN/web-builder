@@ -20,7 +20,8 @@
     "generate:blob-template": "node scripts/generate-website-blob-template.mjs",
     "generate:component-catalog": "node scripts/generate-component-catalog.mjs",
     "validate": "npm run generate:component-catalog && npm run lint && npm run test && npx tsc --noEmit",
-    "validate:quick": "npm run generate:component-catalog && npm run lint && npm run test:quick && npx tsc --noEmit"
+    "validate:quick": "npm run generate:component-catalog && npm run lint && npm run test:quick && npx tsc --noEmit",
+    "validate:client": "node scripts/validate-client.mjs"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^3.10.0",

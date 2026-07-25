@@ -39,7 +39,17 @@ CLIENT_ID=demo-phone-repair-shop npm run build:blob
 
 Upload `out/` to the repair-vertical storage account's `$web` container.
 
-### Azure Storage (one account per vertical)
+### GitHub Actions workflow (T-C)
+
+`.github/workflows/deploy-blob-storage.yml` reads `features.booking` from `config/clients/{clientId}/client.json` and branches automatically:
+
+- `"booking": false` (demo and M0 paying clients) → writes `CLIENT_ID` only; no booking secrets required.
+- `"booking": true` → injects Azure Functions env vars and runs Cosmos seed (future booking clients only).
+
+For demo deploys via GitHub Actions, pass `clientId: demo-phone-repair-shop` only — no manual flags or extra env vars. The demo client already has `"booking": false`.
+
+Local `npm run deploy:demo` and the workflow use the same static build path when `features.booking` is `false`.
+
 
 For M0 (mobile repair shops):
 

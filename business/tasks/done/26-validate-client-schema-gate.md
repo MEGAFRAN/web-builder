@@ -1,6 +1,6 @@
 # Task: Offline `validate:client` Schema Gate (T-G)
 
-**Status:** Ready for development
+**Status:** Done
 **Priority:** High — required before agent-driven JSON edits are safe
 **Owner:** nextjs-frontend-developer
 **Estimated scope:** Medium — 3 hours

@@ -22,6 +22,7 @@
       "items": [
         {
           "title": "PROTOCOLOS REDUCTORES Y ANTICELULITICOS",
+          "description": "Tratamientos reductores y anticelulíticos con tecnología avanzada.",
           "subItems": [
             {
               "label": "ONDAS DE CHOQUE DE STORZ MEDICAL",
@@ -175,6 +176,7 @@
         },
         {
           "title": "MASAJES TERAPEUTICOS",
+          "description": "Masajes terapéuticos personalizados para aliviar tensiones y recuperar el bienestar.",
           "subItems": [
             {
               "label": "Masajes para peregrinos del camino de santiago",
