@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Super Móvil",
+    "title": "Reparaciones Móviles Chamartín",
     "description": "Reparación rápida y fiable de móviles con servicio el mismo día. Llámanos o escríbenos por WhatsApp: reparaciones el mismo día con garantía de 90 días.",
     "ogImage": null,
     "noIndex": false
@@ -8,7 +8,7 @@
   "blocks": [
     {
       "_type": "heroBlock",
-      "heading": "Super Móvil",
+      "heading": "Reparaciones Móviles Chamartín",
       "subtext": "Reparación rápida y fiable de móviles con servicio el mismo día.",
       "primaryButtonLabel": "Llamar ahora",
       "primaryButtonHref": "tel:+34915550198",
@@ -16,7 +16,7 @@
     },
     {
       "_type": "featureGridBlock",
-      "heading": "Por qué elegir Super Móvil",
+      "heading": "Por qué elegir Reparaciones Móviles Chamartín",
       "items": [
         {
           "heading": "Garantía de 90 días",
@@ -105,7 +105,7 @@
           "name": "Carlos R.",
           "company": null,
           "role": null,
-          "quote": "Super Móvil es mi sitio de confianza. Rapidez, precios honestos y garantía de verdad.",
+          "quote": "Reparaciones Móviles Chamartín es mi sitio de confianza. Rapidez, precios honestos y garantía de verdad.",
           "stars": 5
         }
       ]
@@ -123,8 +123,8 @@
       "_type": "location",
       "title": "Dónde estamos",
       "showMap": true,
-      "mapEmbedSrc": "https://www.google.com/maps?q=Calle+G%C3%A9nova+22,+28004+Madrid&output=embed",
-      "address": "Calle Génova 22, 28004 Madrid"
+      "mapEmbedSrc": "https://www.google.com/maps?q=Calle+de+Agust%C3%ADn+de+Fox%C3%A1,+15,+28036+Madrid&output=embed",
+      "address": "Calle de Agustín de Foxá, 15, 28036 Madrid"
     },
     {
       "_type": "ctaBlock",

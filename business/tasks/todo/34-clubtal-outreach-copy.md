@@ -1,7 +1,7 @@
 # Task 34 — Write Clubtal WhatsApp Outreach Copy
 
 **Execution order:** 2 of 3  
-**Status:** Ready for development  
+**Status:** Done — August 3, 2026  
 **Priority:** High — first WhatsApp messages need on-brand copy before outreach starts  
 **Owner:** cgo  
 **Estimated scope:** Small — 1–2 hours  

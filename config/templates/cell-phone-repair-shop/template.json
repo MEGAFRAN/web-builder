@@ -2,7 +2,7 @@
   "templateId": "cell-phone-repair-shop",
   "displayName": "Cell Phone Repair Shop",
   "description": "Repair shop site with services and contact pages.",
-  "defaultThemePreset": "default",
+  "defaultThemePreset": "repair-shop-es",
   "defaultFeatures": {
     "blog": false,
     "booking": false,

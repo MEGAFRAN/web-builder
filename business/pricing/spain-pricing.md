@@ -69,7 +69,7 @@ One flat price. No setup fee. No tiers at MVP.
 
 ## Conversion flow
 
-1. Cold WhatsApp DM → generic demo link (`https://demo.clubtal.com`) → close in chat
+1. Cold WhatsApp DM → generic demo link (`https://moviles.clubtal.com`) → close in chat
 2. No discovery call. No 14-day trial.
 3. After payment, `provision-client.mjs` clones template → fill fields → build → upload → CNAME checklist
 4. Live custom-domain site within hours
@@ -94,7 +94,7 @@ One flat price. No setup fee. No tiers at MVP.
 | Channel | Tactic |
 |---|---|
 | Primary | Cold WhatsApp DMs to mobile repair shops (Google Maps scraper CSV) |
-| Demo | One generic demo at `https://demo.clubtal.com` — personalise message, not site |
+| Demo | One generic demo at `https://moviles.clubtal.com` — personalise message, not site |
 | Secondary | Referral nudge at client #5+ |
 
 **Lead filter:** ≥20 Google reviews AND ≥4.0 rating.  
@@ -110,7 +110,7 @@ One flat price. No setup fee. No tiers at MVP.
 **Brand descriptor:** *"Clubtal — tu web profesional, lista hoy"*  
 **Headline:** Tu web profesional por 39€/mes + IVA.  
 **Sub:** Sin setup. Deducible. Tu dominio, tu marca.  
-**Demo CTA:** Mira un ejemplo: https://demo.clubtal.com  
+**Demo CTA:** Mira un ejemplo: https://moviles.clubtal.com  
 **Close:** Sin compromiso. ¿Te interesa algo así para [Nombre de tienda]?
 
 ---

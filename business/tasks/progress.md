@@ -24,3 +24,4 @@ DONE: business/tasks/done/36-priced-services-block.md
 DONE: business/tasks/done/31-deploy-generic-demo-site.md
 DONE: business/tasks/done/33-clubtal-pricing-docs-update.md
 DONE: business/tasks/done/35-clubtal-demo-domain-update.md
+DONE: business/tasks/done/01-update-repair-shop-preset-and-hero.md

@@ -218,6 +218,46 @@ export const THEME_PRESETS: Record<string, ThemePreset> = {
     contentGap: '1rem',
   },
 
+  /**
+   * Clubtal platform brand — used on clubtal.com and Clubtal-owned surfaces only.
+   * Near-neutral primary so it reads as a utility tool, not a creative agency.
+   * Do NOT assign this preset to client sites.
+   */
+  'clubtal-brand': {
+    primaryColor: '#111827',
+    accentColor: '#2563eb',
+    backgroundColor: '#ffffff',
+    textColor: '#111827',
+    surfaceColor: '#f9fafb',
+    surfaceDark: '#111827',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+    borderRadius: 4,
+    pageInset: 'clamp(1rem, 5vw, 2rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
+  },
+
+  /**
+   * Mobile repair shop vertical — Spain (moviles.clubtal.com + repair shop client sites).
+   * Strong blue primary reads as trustworthy and tech-adjacent without agency flair.
+   * Formalizes the values currently hardcoded in demo-phone-repair-shop/client.json.
+   */
+  'repair-shop-es': {
+    primaryColor: '#1d4ed8',
+    accentColor: '#f59e0b',
+    backgroundColor: '#f8fafc',
+    textColor: '#0f172a',
+    surfaceColor: '#ffffff',
+    surfaceDark: '#1e3a8a',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+    borderRadius: 4,
+    pageInset: 'clamp(1rem, 5vw, 2rem)',
+    sectionSpacing: '5rem',
+    contentGap: '1rem',
+  },
+
   /** Safe fallback used when no preset is specified and not all fields are explicit */
   default: {
     primaryColor: '#2563eb',
@@ -335,6 +375,20 @@ export const THEME_PRESET_META: Record<string, ThemePresetMeta> = {
     colorTemperature: 'neutral',
     formality: 'medium',
     description: 'Dark slate and safety orange for construction firms and trade businesses that need to project rugged reliability and professional competence.',
+  },
+  'clubtal-brand': {
+    industries: ['platform'],
+    mood: ['neutral', 'utility', 'trustworthy', 'direct'],
+    colorTemperature: 'neutral',
+    formality: 'medium',
+    description: 'Clubtal platform identity for clubtal.com and Clubtal-owned surfaces. Near-neutral palette that reads as a utility service, not a creative agency. Do not use on client sites.',
+  },
+  'repair-shop-es': {
+    industries: ['mobile-repair', 'electronics-repair', 'phone-accessories'],
+    mood: ['trustworthy', 'technical', 'direct', 'reliable'],
+    colorTemperature: 'cool',
+    formality: 'medium',
+    description: 'Mobile repair shop vertical for Spain. Strong blue primary projects technical competence and trust. Amber accent for CTAs. Default for moviles.clubtal.com and repair shop client configs.',
   },
   default: {
     industries: [],

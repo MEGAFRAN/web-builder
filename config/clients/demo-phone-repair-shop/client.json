@@ -1,6 +1,6 @@
 {
   "clientId": "demo-phone-repair-shop",
-  "displayName": "Super Móvil",
+  "displayName": "Reparaciones Móviles Chamartín",
   "customDomain": "demo-phone-repair-shop.com",
   "swaResourceName": "swa-demo-phone-repair-shop",
   "template": "cell-phone-repair-shop",
@@ -26,19 +26,19 @@
     "surfaceDark": "#1e3a8a",
     "fontHeading": "Inter",
     "fontBody": "Inter",
-    "borderRadius": 8,
+    "borderRadius": 4,
     "pageInset": "clamp(1rem, 5vw, 2rem)",
     "sectionSpacing": "5rem",
     "contentGap": "1rem"
   },
   "siteMetadata": {
-    "siteName": "Super Móvil",
-    "titleTemplate": "%s | Super Móvil",
-    "defaultDescription": "Super Móvil: reparación rápida y fiable de pantallas de móvil en Madrid Centro. Llámanos o escríbenos por WhatsApp. Garantía de 90 días en todas las reparaciones.",
+    "siteName": "Reparaciones Móviles Chamartín",
+    "titleTemplate": "%s | Reparaciones Móviles Chamartín",
+    "defaultDescription": "Reparaciones Móviles Chamartín: reparación rápida y fiable de pantallas de móvil en Chamartín, Madrid. Llámanos o escríbenos por WhatsApp. Garantía de 90 días en todas las reparaciones.",
     "defaultOgImage": null
   },
   "header": {
-    "logo": "Super Móvil",
+    "logo": "Reparaciones Móviles Chamartín",
     "ctaLabel": null,
     "ctaAction": null,
     "links": [
@@ -47,7 +47,7 @@
     ]
   },
   "footer": {
-    "copyright": "© Super Móvil. Todos los derechos reservados.",
+    "copyright": "© Reparaciones Móviles Chamartín. Todos los derechos reservados.",
     "columns": [
       {
         "title": "Navegación",
@@ -60,7 +60,7 @@
         "title": "Contacto",
         "links": [
           { "label": "+34 915 550 198", "href": "tel:+34915550198" },
-          { "label": "Calle Génova 22, 28004 Madrid", "href": "#" }
+          { "label": "Calle de Agustín de Foxá, 15, 28036 Madrid", "href": "#" }
         ]
       }
     ]

@@ -22,7 +22,7 @@
     "surfaceDark": "#1e3a8a",
     "fontHeading": "Inter",
     "fontBody": "Inter",
-    "borderRadius": 8,
+    "borderRadius": 4,
     "pageInset": "clamp(1rem, 5vw, 2rem)",
     "sectionSpacing": "5rem",
     "contentGap": "1rem"
