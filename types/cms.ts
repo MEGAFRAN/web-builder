@@ -114,6 +114,14 @@ export type MissionBlock = {
   imageAlt?: string | null
 }
 
+export type ProductExampleBlock = {
+  _type: 'productExampleBlock'
+  heading: string
+  imageUrl: string
+  imageAlt?: string | null
+  href?: string | null
+}
+
 export type ValueCard = {
   title: string
   description: string
@@ -384,6 +392,7 @@ export type Block =
   | LocationBlock
   | BlogListBlock
   | MissionBlock
+  | ProductExampleBlock
   | ValuesBlock
   | TeamBlock
   | StatsBlock

@@ -14,6 +14,7 @@ const componentRegistry: Record<string, React.ComponentType<any>> = {
   contactFormSection: dynamic(() => import('@/components/blocks/ContactFormSection')),
   blog_list: dynamic(() => import('@/components/blocks/BlogListBlock')),
   missionBlock: dynamic(() => import('@/components/blocks/MissionBlock')),
+  productExampleBlock: dynamic(() => import('@/components/blocks/ProductExampleBlock')),
   valuesBlock: dynamic(() => import('@/components/blocks/ValuesBlock')),
   teamBlock: dynamic(() => import('@/components/blocks/TeamBlock')),
   statsBlock: dynamic(() => import('@/components/blocks/StatsBlock')),

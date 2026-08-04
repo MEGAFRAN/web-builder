@@ -85,6 +85,13 @@ describe('Navbar', () => {
       expect(logoLink.className).toContain('font-[family-name:var(--font-heading)]')
       expect(logoLink.className).toContain('font-semibold')
     })
+
+    it('shows pointer cursor on the logo link at all breakpoints', () => {
+      renderNavbar({ logo: 'Acme Corp' })
+      const logoLink = screen.getByRole('link', { name: 'Acme Corp' })
+      expect(logoLink.className).toContain('cursor-pointer')
+      expect(logoLink.className).not.toContain('cursor-auto')
+    })
   })
 
   describe('desktop nav links', () => {

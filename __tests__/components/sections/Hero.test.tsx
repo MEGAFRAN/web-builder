@@ -147,6 +147,22 @@ describe('Hero', () => {
     })
   })
 
+  describe('fullViewportHeightDesktop prop', () => {
+    it('applies desktop full-viewport classes to the section when enabled', () => {
+      const container = renderHero({ headline: 'H', fullViewportHeightDesktop: true })
+      const section = container.querySelector('[data-component="section"]')
+      expect(section?.className).toContain('md:min-h-[calc(100dvh-4.5rem)]')
+      expect(section?.className).toContain('md:flex')
+      expect(section?.className).toContain('md:justify-center')
+    })
+
+    it('does not apply desktop full-viewport classes by default', () => {
+      const container = renderHero({ headline: 'H' })
+      const section = container.querySelector('[data-component="section"]')
+      expect(section?.className).not.toContain('md:min-h-[calc(100dvh-4.5rem)]')
+    })
+  })
+
   describe('backgroundImageUrl prop', () => {
     it('renders a high-priority fill image and overlay when provided', () => {
       const container = renderHero({

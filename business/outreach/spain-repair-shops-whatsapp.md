@@ -107,6 +107,45 @@ Send 5–7 days after Touch 2 if still no reply. This is the final outreach mess
 
 ---
 
+## Post-pago — Kickoff intake (WhatsApp, sin formulario)
+
+Después del pago (Bizum o payment link), **no mandes Google Forms**. Nombre, teléfono, dirección y horario ya vienen del CSV de Google Maps. Dominio no se pregunta: ninguno tiene web; se provisiona subdominio Clubtal o dominio nuevo por tu lado.
+
+Pregunta en el mismo chat solo lo que Maps no te da.
+
+### Mensaje kickoff (copiar/pegar)
+
+> ¡Pago recibido! Ya tengo nombre, dirección y teléfono de Google. Para publicar hoy solo necesito esto:
+>
+> 1) **Servicios + precios orientativos** (3 a 6 ítems), por ejemplo:
+> Pantalla iPhone — desde X€
+> Batería — desde Y€
+> …
+>
+> 2) **Logo** (opcional) — mándalo aquí o escribe “no tengo”.
+>
+> 3) **WhatsApp para leads** — ¿Este número es el del negocio? [número del Maps]. Si no, escribe el bueno.
+
+**Notas:**
+- La pregunta 3 solo si hay duda (número de Maps ≠ el chat donde estás, o el listing tiene varios). Si ya habláis por el WhatsApp del negocio, omítela.
+- No pidas propuesta de valor, personalidad de marca, SEO ni avatar ideal en el kickoff — no bloquean el deploy.
+
+### Follow-up 24h (si no responde)
+
+> Solo me faltan los precios de tus servicios más comunes para dejar la web online. ¿Me los pasas en un mensaje? (y el logo si lo tienes)
+
+### Datos que NO se preguntan (ya en Maps / decisión interna)
+
+| Campo | Fuente |
+|---|---|
+| Nombre del negocio | Google Maps / CSV |
+| Teléfono | Google Maps / CSV |
+| Dirección | Google Maps / CSV |
+| Horario | Google Maps / CSV |
+| Dominio | Decisión founder en provision (ninguno tiene web) |
+
+---
+
 ## Objection Handlers
 
 ### "Ya tengo Google"

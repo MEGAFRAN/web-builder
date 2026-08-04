@@ -14,6 +14,9 @@ const HERO_CTA_CLASS =
 const MOBILE_FULL_VIEWPORT_SECTION_CLASS =
   "max-md:min-h-[calc(100svh-7rem)] max-md:flex max-md:flex-col max-md:justify-center";
 
+const DESKTOP_FULL_VIEWPORT_SECTION_CLASS =
+  "md:min-h-[calc(100dvh-4.5rem)] md:flex md:flex-col md:justify-center";
+
 const HERO_VISUAL_BG_SECTION_CLASS = "relative isolate overflow-hidden";
 
 const HERO_PHOTO_OVERLAY_CLASS =
@@ -51,15 +54,18 @@ function HeroCta({
 
 function buildSectionClassName({
   fullViewportHeightMobile,
+  fullViewportHeightDesktop,
   hasPhotoBackground,
   hasGradientFallback,
 }: {
   fullViewportHeightMobile: boolean;
+  fullViewportHeightDesktop: boolean;
   hasPhotoBackground: boolean;
   hasGradientFallback: boolean;
 }): string | undefined {
   const classes = [
     fullViewportHeightMobile ? MOBILE_FULL_VIEWPORT_SECTION_CLASS : null,
+    fullViewportHeightDesktop ? DESKTOP_FULL_VIEWPORT_SECTION_CLASS : null,
     hasPhotoBackground || hasGradientFallback ? HERO_VISUAL_BG_SECTION_CLASS : null,
     hasPhotoBackground ? "bg-surface-dark" : null,
     hasGradientFallback ? "hero-bg-gradient" : null,
@@ -75,6 +81,7 @@ export function Hero({
   ctaAction,
   align = "center",
   fullViewportHeightMobile = false,
+  fullViewportHeightDesktop = false,
   backgroundImageUrl,
   gradientFallback = false,
 }: {
@@ -85,6 +92,8 @@ export function Hero({
   align?: "left" | "center" | null;
   /** Fills the mobile viewport below the navbar and bottom action bar. */
   fullViewportHeightMobile?: boolean;
+  /** Fills the desktop viewport below the sticky navbar. */
+  fullViewportHeightDesktop?: boolean;
   backgroundImageUrl?: string | null;
   /** Applies a theme gradient when no background image is configured. */
   gradientFallback?: boolean;
@@ -116,6 +125,7 @@ export function Hero({
       visualBg={hasVisualBackground}
       className={buildSectionClassName({
         fullViewportHeightMobile,
+        fullViewportHeightDesktop,
         hasPhotoBackground,
         hasGradientFallback,
       })}

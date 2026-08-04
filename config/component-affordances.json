@@ -123,6 +123,16 @@
         "Single narrative column focused on why the business exists."
       ]
     },
+    "productExampleBlock": {
+      "useCases": [
+        "Centered product proof: one heading and one image (e.g. phone mockup of a live site).",
+        "Homepage demo beat right after the hero when copy and CTAs already live elsewhere."
+      ],
+      "avoidWhen": [
+        "Narrative about/mission copy with body text — use missionBlock.",
+        "Multiple slides or a gallery — use carouselBlock."
+      ]
+    },
     "navbar": {
       "useCases": [
         "Primary site header: logo, nav links, optional CTA.",

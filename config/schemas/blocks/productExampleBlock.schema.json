@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "productExampleBlock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_type",
+    "heading",
+    "imageUrl"
+  ],
+  "properties": {
+    "_type": {
+      "type": "string",
+      "const": "productExampleBlock"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string",
+      "minLength": 1
+    },
+    "imageAlt": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "href": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "placeholderCopy": {
+      "$ref": "./_common.schema.json#/definitions/placeholderCopy"
+    }
+  }
+}

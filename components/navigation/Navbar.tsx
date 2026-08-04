@@ -137,7 +137,7 @@ export function Navbar({
               event.stopPropagation();
               setIsOpen(false);
             }}
-            className="font-[family-name:var(--font-heading)] text-xl font-semibold tracking-tight text-brand transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:cursor-auto md:text-2xl"
+            className="cursor-pointer font-[family-name:var(--font-heading)] text-xl font-semibold tracking-tight text-brand transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:text-2xl"
           >
             {logo}
           </Link>

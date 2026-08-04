@@ -18,6 +18,7 @@ export default function HomepageHeroBlock({
         backgroundImageUrl={backgroundImageUrl}
         gradientFallback
         fullViewportHeightMobile
+        fullViewportHeightDesktop
       />
     </div>
   )

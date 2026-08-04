@@ -118,10 +118,10 @@ body                    { font-family: var(--font-body); }
 .hero-bg-gradient {
   background-color: var(--color-bg);
   background-image: linear-gradient(
-    135deg,
+    160deg,
     var(--color-bg) 0%,
-    color-mix(in srgb, var(--color-primary) 14%, var(--color-bg)) 45%,
-    color-mix(in srgb, var(--color-accent) 10%, var(--color-bg)) 100%
+    color-mix(in srgb, var(--color-accent) 8%, var(--color-bg)) 45%,
+    color-mix(in srgb, var(--color-accent) 22%, var(--color-bg)) 100%
   );
 }
 

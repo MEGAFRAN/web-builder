@@ -89,4 +89,13 @@ describe('HomepageHeroBlock', () => {
       container.querySelector('[data-component="hero"]')?.getAttribute('data-hero-bg')
     ).toBe('gradient')
   })
+
+  it('fills the first viewport on mobile and desktop', () => {
+    const { container } = render(
+      <HomepageHeroBlock _type="heroBlock" heading="Hello" />
+    )
+    const sectionClass = container.querySelector('[data-component="section"]')?.className
+    expect(sectionClass).toContain('max-md:min-h-[calc(100svh-7rem)]')
+    expect(sectionClass).toContain('md:min-h-[calc(100dvh-4.5rem)]')
+  })
 })

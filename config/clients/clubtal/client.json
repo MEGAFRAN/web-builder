@@ -10,7 +10,9 @@
     "menu": false
   },
   "theme": {
-    "preset": "clubtal-brand"
+    "preset": "clubtal-brand",
+    "fontHeading": "Helvetica",
+    "fontBody": "Helvetica"
   },
   "siteMetadata": {
     "siteName": "Clubtal — tu web profesional, lista hoy",

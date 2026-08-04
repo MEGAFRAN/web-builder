@@ -15,6 +15,13 @@
       "backgroundImageUrl": null
     },
     {
+      "_type": "productExampleBlock",
+      "heading": "Así se ve una web Clubtal",
+      "imageUrl": "/clients/clubtal/clubtal-mobile.webp",
+      "imageAlt": "iPhone mostrando la web de Reparaciones Móviles Chamartín, un ejemplo real de Clubtal",
+      "href": "https://moviles.clubtal.com"
+    },
+    {
       "_type": "featureGridBlock",
       "heading": "Qué incluye tu web",
       "subtitle": "Todo lo que necesita tu negocio — sin complicaciones.",
@@ -51,8 +58,8 @@
       "heading": "Cómo funciona",
       "items": [
         {
-          "title": "1. Rellenas un formulario",
-          "description": "El nombre de tu negocio, tus servicios y tus precios. Un formulario sencillo — sin reuniones ni papeleos."
+          "title": "1. Nos lo dices por WhatsApp",
+          "description": "Tus servicios y tus precios en un mensaje. Sin formularios, sin reuniones ni papeleos."
         },
         {
           "title": "2. Tu web, lista el mismo día",
@@ -86,7 +93,7 @@
         },
         {
           "question": "¿Cuánto tarda en estar lista mi web?",
-          "answer": "El mismo día. Rellenas un formulario con el nombre del negocio, los servicios y los precios por la mañana y por la tarde tienes la web en tu propio dominio."
+          "answer": "El mismo día. Nos pasas los servicios y precios por WhatsApp por la mañana y por la tarde tienes la web en tu propio dominio."
         },
         {
           "question": "¿Necesito saber de informática para gestionar la web?",

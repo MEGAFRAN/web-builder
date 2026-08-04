@@ -34,6 +34,7 @@ export const WithBackgroundImage: Story = {
     ctaAction: '#book',
     backgroundImageUrl: 'https://picsum.photos/seed/hero-photo/1600/900',
     fullViewportHeightMobile: true,
+    fullViewportHeightDesktop: true,
   },
 }
 export const WithGradientFallback: Story = {
@@ -43,5 +44,6 @@ export const WithGradientFallback: Story = {
     ctaLabel: 'Get started',
     gradientFallback: true,
     fullViewportHeightMobile: true,
+    fullViewportHeightDesktop: true,
   },
 }
