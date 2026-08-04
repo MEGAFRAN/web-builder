@@ -1,4 +1,4 @@
-name: Deploy Admin SPA
+name: Deploy Client Admin Panel - SWA
 
 on:
   workflow_dispatch:

@@ -298,7 +298,7 @@ These files are **per deployment / per clone**, not shared across clients in Git
 
 ## Deployment & Secrets
 
-### Client sites — `deploy-blob-storage.yml` (blob)
+### Client sites — `deploy-blob-storage.yml` (`Deploy to Blob Storage`)
 
 Manual dispatch workflow; one run per client:
 
@@ -315,15 +315,15 @@ The workflow runs `npm run build:blob`, which excludes server-only routes via `s
 
 Azure resources are discovered by tag (`client_id` or `team_id` on the storage account) — no per-client secret needed beyond Azure OIDC credentials.
 
-### Client sites — `deploy-swa.yml` (SWA, legacy)
+### Clubtal marketing site — `deploy-swa.yml` (`Deploy Clubtal - SWA`)
 
-Alternative deploy target using Azure Static Web Apps. Runs `npm run build:blob`. Requires a per-client deploy token:
+Alternative deploy target using Azure Static Web Apps. Runs `npm run build:blob`. Defaults to `clubtal`; override `clientId` for other legacy SWA clients. Requires a per-client deploy token:
 
 | Secret | Naming convention |
 |--------|---------|
 | `SWA_TOKEN_{CLIENT_KEY}` | Hyphens in `clientId` replaced with underscores |
 
-### Admin SPA — `deploy-admin-swa.yml`
+### Admin panel — `deploy-admin-swa.yml` (`Deploy Client Admin Panel - SWA`)
 
 Triggered on push to `main` when admin-related files change, or via manual dispatch. Runs `npm run build:admin`.
 

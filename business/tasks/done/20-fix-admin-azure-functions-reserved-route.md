@@ -119,7 +119,7 @@ curl -i https://web-builder-api-hwathufterhjdtdk.eastus-01.azurewebsites.net/api
 
 The SPA must be rebuilt because `adminDataUrl` is baked into the client bundle at build time.
 
-Trigger the `deploy-admin.yml` GitHub Actions workflow (Settings → Actions → Deploy Admin SPA → Run workflow), or run locally:
+Trigger the `deploy-admin-swa.yml` GitHub Actions workflow (Settings → Actions → Deploy Client Admin Panel - SWA → Run workflow), or run locally:
 
 ```bash
 NEXT_PUBLIC_ADMIN_API_URL=https://web-builder-api-hwathufterhjdtdk.eastus-01.azurewebsites.net/api \

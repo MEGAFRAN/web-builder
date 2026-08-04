@@ -117,7 +117,7 @@ Restart `npm run dev -- demo-phone-repair-shop`.
 
 Client deploys are **manual** — one workflow run per client. In GitHub go to **Actions**, pick the workflow, click **Run workflow**, and enter the `clientId` (must match a folder under `config/clients/`).
 
-### Primary: Blob Storage — `Deploy Website to Blob Storage`
+### Primary: Blob Storage — `Deploy to Blob Storage`
 
 Workflow: [`.github/workflows/deploy-blob-storage.yml`](.github/workflows/deploy-blob-storage.yml)
 
@@ -144,11 +144,11 @@ Workflow: [`.github/workflows/deploy-blob-storage.yml`](.github/workflows/deploy
 
 **Azure setup:** tag the client's Storage account with `client_id=demo-phone-repair-shop` (or `team_id`; must match the `clientId` you deploy).
 
-### Legacy: Static Web Apps — `Deploy Client`
+### Clubtal marketing site — `Deploy Clubtal - SWA`
 
 Workflow: [`.github/workflows/deploy-swa.yml`](.github/workflows/deploy-swa.yml)
 
-Same build as blob deploy, uploads to Azure Static Web Apps. Requires a **per-client** deploy token:
+Same build as blob deploy, uploads to Azure Static Web Apps. Defaults to `clubtal`; override `clientId` for other legacy SWA clients. Requires a **per-client** deploy token:
 
 | Secret | Naming |
 |--------|--------|
@@ -156,7 +156,7 @@ Same build as blob deploy, uploads to Azure Static Web Apps. Requires a **per-cl
 
 Uses the same `ADMIN_API_URL` variable and `COMPANY_PROFILE_BUILD_TOKEN` secret as the blob workflow.
 
-### Demo site — `Deploy Demo Site`
+### Demo site — `Deploy Demo Client - SWA`
 
 Workflow: [`.github/workflows/deploy-demo-swa.yml`](.github/workflows/deploy-demo-swa.yml)
 
@@ -168,7 +168,7 @@ Canonical path for the M0 vertical demo (`demo-phone-repair-shop` → `https://m
 
 Build uses minimal env (`features.booking` is `false`). See [`docs/infrastructure/demo-swa.md`](docs/infrastructure/demo-swa.md).
 
-### Admin SPA — `Deploy Admin SPA`
+### Admin panel — `Deploy Client Admin Panel - SWA`
 
 Workflow: [`.github/workflows/deploy-admin-swa.yml`](.github/workflows/deploy-admin-swa.yml)
 
@@ -185,16 +185,16 @@ Single shared admin deployment for all tenants (manual dispatch).
 ```
 Paying clients (blob):
 1. Merge client config changes to main
-2. Actions → "Deploy Website to Blob Storage" → Run workflow → clientId: {clientId}
+2. Actions → "Deploy to Blob Storage" → Run workflow → clientId: {clientId}
 3. Verify client site URL
 
 Vertical demo (SWA):
 1. Merge demo config changes to main
-2. Actions → "Deploy Demo Site" → Run workflow
+2. Actions → "Deploy Demo Client - SWA" → Run workflow
 3. Verify https://moviles.clubtal.com
 
 Admin (optional):
-1. Actions → "Deploy Admin SPA" if admin UI changed
+1. Actions → "Deploy Client Admin Panel - SWA" if admin UI changed
 ```
 
 ---

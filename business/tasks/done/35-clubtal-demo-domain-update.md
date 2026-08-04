@@ -61,7 +61,7 @@ Each vertical keeps its URL permanently — past WhatsApp DMs never break when o
 
 ### Deploy path
 
-Canonical publish path: **GitHub Actions → Deploy Demo Site** (`.github/workflows/deploy-demo-swa.yml`). No local deploy script.
+Canonical publish path: **GitHub Actions → Deploy Demo Client - SWA** (`.github/workflows/deploy-demo-swa.yml`). No local deploy script.
 
 ---
 

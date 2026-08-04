@@ -39,4 +39,4 @@ az deployment group create \
 
 ## After provisioning
 
-Run the **Deploy Website to Blob Storage** GitHub Actions workflow with the matching `clientId` / tag value. The workflow discovers the storage account by tag and syncs the static build to `$web`.
+Run the **Deploy to Blob Storage** GitHub Actions workflow with the matching `clientId` / tag value. The workflow discovers the storage account by tag and syncs the static build to `$web`.

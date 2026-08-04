@@ -33,7 +33,7 @@ Do **not** host vertical demos on blob storage or use Cloudflare CNAME → blob 
 Deploy via **GitHub Actions** — no local deploy script.
 
 1. Merge demo config changes to `main`.
-2. GitHub → **Actions** → **Deploy Demo Site** → **Run workflow**.
+2. GitHub → **Actions** → **Deploy Demo Client - SWA** → **Run workflow**.
 3. Workflow file: [`.github/workflows/deploy-demo-swa.yml`](../../.github/workflows/deploy-demo-swa.yml)
 
 The workflow:
@@ -75,7 +75,7 @@ Customer-facing M0 URL: **`https://moviles.clubtal.com`**
 
 ## Acceptance checklist
 
-- [ ] Actions → **Deploy Demo Site** completes successfully.
+- [ ] Actions → **Deploy Demo Client - SWA** completes successfully.
 - [ ] Demo loads at SWA default hostname.
 - [ ] Demo loads at `https://moviles.clubtal.com`.
 - [ ] Homepage shows priced services and WhatsApp/phone CTAs.
@@ -83,8 +83,8 @@ Customer-facing M0 URL: **`https://moviles.clubtal.com`**
 
 ## Related workflows
 
-| Workflow | Purpose |
-|---|---|
-| [`deploy-demo-swa.yml`](../../.github/workflows/deploy-demo-swa.yml) | **Demo vertical sites** (canonical for M0) |
-| [`deploy-swa.yml`](../../.github/workflows/deploy-swa.yml) | Generic per-client SWA deploy (manual `clientId` input) |
-| [`deploy-blob-storage.yml`](../../.github/workflows/deploy-blob-storage.yml) | **Paying client** static sites on blob storage |
+| Workflow | Actions name | Purpose |
+|---|---|---|
+| [`deploy-demo-swa.yml`](../../.github/workflows/deploy-demo-swa.yml) | **Deploy Demo Client - SWA** | **Demo vertical sites** (canonical for M0) |
+| [`deploy-swa.yml`](../../.github/workflows/deploy-swa.yml) | **Deploy Clubtal - SWA** | Clubtal marketing site (defaults to `clubtal`; other `clientId` for legacy SWA clients) |
+| [`deploy-blob-storage.yml`](../../.github/workflows/deploy-blob-storage.yml) | **Deploy to Blob Storage** | **Paying client** static sites on blob storage |

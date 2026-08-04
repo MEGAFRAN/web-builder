@@ -1,12 +1,13 @@
-name: Deploy Client
+name: Deploy Clubtal - SWA
 
 on:
   workflow_dispatch:
     inputs:
       clientId:
-        description: 'Client ID to rebuild (e.g. restaurante-pepe)'
+        description: 'Client ID to rebuild (default: clubtal)'
         required: true
         type: string
+        default: clubtal
 
 permissions:
   contents: read

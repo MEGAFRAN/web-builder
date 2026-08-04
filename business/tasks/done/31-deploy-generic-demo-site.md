@@ -47,7 +47,7 @@ Output goes to `out/` — same static export as paying client blob builds. Use l
 
 Use **`.github/workflows/deploy-demo-swa.yml`**:
 
-- Manual dispatch → **Actions → Deploy Demo Site → Run workflow**
+- Manual dispatch → **Actions → Deploy Demo Client - SWA → Run workflow**
 - Hardcoded `CLIENT_ID: demo-phone-repair-shop`
 - Requires GitHub secret with the demo SWA deployment token (see Azure Portal → SWA → Manage deployment token)
 - Builds with `npm run build:blob` (minimal env when `features.booking` is `false`), uploads prebuilt `out/` to the mobile-shop demo SWA resource
@@ -90,7 +90,7 @@ Raw SWA hostname remains valid for engineering verification; custom domain is th
 - [x] **Founder:** add `moviles.clubtal.com` custom domain on demo SWA (document steps in `demo-swa.md`).
 - [x] Verify demo loads at SWA default hostname **and** at `moviles.clubtal.com` (after DNS propagates).
 - [x] Homepage shows priced services and WhatsApp/phone CTAs (not blank sections).
-- [x] Re-running **Deploy Demo Site** workflow is idempotent.
+- [x] Re-running **Deploy Demo Client - SWA** workflow is idempotent.
 
 ---
 
@@ -116,7 +116,7 @@ Raw SWA hostname remains valid for engineering verification; custom domain is th
 
 ## Acceptance criteria
 
-1. **Actions → Deploy Demo Site** builds and deploys `demo-phone-repair-shop` to SWA successfully.
+1. **Actions → Deploy Demo Client - SWA** builds and deploys `demo-phone-repair-shop` to SWA successfully.
 2. Demo is accessible at the SWA default hostname (engineering URL).
 3. Demo is accessible at `https://moviles.clubtal.com` (customer-facing URL for WhatsApp).
 4. Homepage shows visible priced services and working WhatsApp/phone CTAs.

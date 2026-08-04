@@ -121,7 +121,7 @@
 
 **Cancelled:** `generate-demos.mjs`, sub-path / `basePath` hosting, per-lead path prefixes, promote-demo rename flow.
 
-**Acceptance gate:** `CLIENT_ID=demo-phone-repair-shop npm run build:blob` with empty env produces homepage with visible priced services and WhatsApp CTAs; then **Actions → Deploy Demo Site** publishes it to SWA at `https://moviles.clubtal.com`.
+**Acceptance gate:** `CLIENT_ID=demo-phone-repair-shop npm run build:blob` with empty env produces homepage with visible priced services and WhatsApp CTAs; then **Actions → Deploy Demo Client - SWA** publishes it to SWA at `https://moviles.clubtal.com`.
 
 **Cut entirely:** Old Tasks 03–07, 10 (old spec), 12–15, batch demo pipeline.
 

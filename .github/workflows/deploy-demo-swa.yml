@@ -1,4 +1,4 @@
-name: Deploy Demo Site
+name: Deploy Demo Client - SWA
 
 on:
   workflow_dispatch:
