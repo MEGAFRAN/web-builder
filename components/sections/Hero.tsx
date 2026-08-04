@@ -6,6 +6,7 @@ import {
   dispatchOpenBookingModal,
   isBookingModalHref,
 } from "@/lib/booking-modal-events";
+import { getExternalLinkProps } from "@/lib/link-props";
 
 const HERO_CTA_CLASS =
   "rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-fg transition-colors duration-150 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
@@ -39,7 +40,7 @@ function HeroCta({
 
   if (href) {
     return (
-      <a href={href} className={HERO_CTA_CLASS}>
+      <a href={href} className={HERO_CTA_CLASS} {...getExternalLinkProps(href)}>
         {label}
       </a>
     );

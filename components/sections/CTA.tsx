@@ -5,6 +5,7 @@ import {
   dispatchOpenBookingModal,
   isBookingModalHref,
 } from "@/lib/booking-modal-events";
+import { getExternalLinkProps } from "@/lib/link-props";
 
 const bgMap = {
   white: "white",
@@ -41,7 +42,7 @@ function CtaButton({
 
   if (href) {
     return (
-      <a href={href} className={className}>
+      <a href={href} className={className} {...getExternalLinkProps(href)}>
         {label}
       </a>
     );

@@ -1,0 +1,112 @@
+{
+  "metadata": {
+    "title": "Clubtal — tu web profesional, lista hoy",
+    "description": "La web profesional para tu negocio — 39€/mes + IVA (100% deducible). Sin coste de alta.",
+    "ogImage": null,
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "heroBlock",
+      "heading": "Tu web profesional, lista hoy",
+      "subtext": "Tu sitio web por solo 39€/mes + IVA (100% deducible). Mas clientes, mas ventas.",
+      "primaryButtonLabel": "Ver un ejemplo real",
+      "primaryButtonHref": "https://moviles.clubtal.com",
+      "backgroundImageUrl": null
+    },
+    {
+      "_type": "featureGridBlock",
+      "heading": "Qué incluye tu web",
+      "items": [
+        {
+          "heading": "Tu dominio propio",
+          "description": "Tu negocio con tu nombre en la dirección web — no un perfil en un directorio. Una URL que puedes poner en tu escaparate, en Instagram o mandarte por WhatsApp."
+        },
+        {
+          "heading": "Hecha para el móvil",
+          "description": "La mayoría de tus clientes te buscan desde el móvil. Tu web se ve perfecta en cualquier pantalla — sin textos cortados ni botones imposibles de pulsar."
+        },
+        {
+          "heading": "Carga al instante",
+          "description": "Las páginas de tu web ya están construidas de antemano — no se generan en el momento de cada visita. El resultado: velocidad real desde el primer clic, en cualquier conexión."
+        },
+        {
+          "heading": "Botón de WhatsApp en cada página",
+          "description": "El cliente que visita tu web te escribe en un clic. Sin correos que no lees, sin esperas."
+        },
+        {
+          "heading": "Servicios y precios publicados",
+          "description": "Tu catálogo visible en la web con los precios que tú pongas. Los clientes llegan ya informados — menos tiempo explicando, más tiempo trabajando."
+        },
+        {
+          "heading": "Cambios incluidos en el precio",
+          "description": "Subes un precio, añades un servicio o cambias el horario. Nos lo dices por WhatsApp y lo publicamos en minutos — sin coste extra."
+        }
+      ]
+    },
+    {
+      "_type": "valuesBlock",
+      "heading": "Cómo funciona",
+      "items": [
+        {
+          "title": "1. Rellenas un formulario",
+          "description": "El nombre de tu negocio, tus servicios y tus precios. Un formulario sencillo — sin reuniones ni papeleos."
+        },
+        {
+          "title": "2. Tu web, lista el mismo día",
+          "description": "Diseñamos y publicamos tu web en horas. Tú no tienes que instalar nada ni aprender ningún programa."
+        },
+        {
+          "title": "3. Tú a lo tuyo",
+          "description": "Cuando necesites un cambio, nos lo dices por WhatsApp y lo publicamos nosotros. Sin paneles de control que aprender."
+        }
+      ]
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "39€/mes + IVA — Sin coste de alta, 100% deducible",
+      "subtext": "Gasto 100% deducible para autónomos y empresas. Factura oficial mensual. Sin permanencia: si en algún momento decides cancelar, nos lo dices y listo.",
+      "ctaLabel": "Ver un ejemplo real",
+      "ctaHref": "https://moviles.clubtal.com",
+      "background": "gray"
+    },
+    {
+      "_type": "faqBlock",
+      "title": "Preguntas frecuentes",
+      "items": [
+        {
+          "question": "¿Hay algún coste de alta o permanencia?",
+          "answer": "No. Cero euros de coste de alta y sin permanencia. Es una suscripción mensual que puedes cancelar cuando quieras sin penalizaciones ni preaviso."
+        },
+        {
+          "question": "¿Qué incluye exactamente el precio?",
+          "answer": "El diseño de la web, el hosting, el dominio, todas las actualizaciones que necesites. Sin extras ocultos ni sorpresas en la factura."
+        },
+        {
+          "question": "¿Cuánto tarda en estar lista mi web?",
+          "answer": "El mismo día. Rellenas un formulario con el nombre del negocio, los servicios y los precios por la mañana y por la tarde tienes la web en tu propio dominio."
+        },
+        {
+          "question": "¿Necesito saber de informática para gestionar la web?",
+          "answer": "No. No hay ningún panel que aprender. Cuando necesitas un cambio — un precio nuevo, un servicio nuevo, cambiar el horario — nos lo dices por WhatsApp y lo publicamos nosotros."
+        },
+        {
+          "question": "Ya tengo un perfil en Google Maps. ¿Para qué necesito una web propia?",
+          "answer": "Google Maps y una web propia se complementan. Con tu web tienes tu propio espacio para mostrar servicios, precios y fotos — sin competir con otros negocios en el mismo directorio. Además puedes compartir el enlace donde quieras: en tu escaparate, en un cartel, por WhatsApp."
+        },
+        {
+          "question": "¿Cómo sé que mi web seguirá funcionando el mes que viene?",
+          "answer": "El precio mensual cubre el hosting y el mantenimiento continuo. Tu web no depende de que tú recuerdes renovar nada — nosotros nos encargamos de que esté siempre publicada y funcionando."
+        }
+      ]
+    },
+    {
+      "_type": "ctaBlock",
+      "headline": "¿Quieres una web así para tu negocio?",
+      "subtext": "Escríbenos por WhatsApp, te tendremos la web lista hoy, atendemos todos los días.",
+      "ctaLabel": "Escríbenos por WhatsApp",
+      "ctaHref": "https://wa.me/34633062835?text=Hola%2C%20me%20interesa%20tener%20una%20web%20para%20mi%20negocio",
+      "background": "dark"
+    }
+  ]
+}

@@ -28,7 +28,7 @@
 | Demo hosting | **Azure Static Web Apps** — one SWA + semantic vertical subdomain per demo (M0: `moviles.clubtal.com`). Clubtal-owned surfaces on SWA; paying clients on blob. |
 | Paying client infra | One Azure Storage account per paying client → Cloudflare CNAME → client's custom domain. |
 | Infra cost @ 10 clients | **~€23/month** (blob storage + Stripe fees only). Gross margin ~94%. |
-| Founder bandwidth | **~10 hours/week** (2 jobs). Every process must be no-discovery-call, no-manual-code, script-driven. |
+| Founder bandwidth | **~20 hours/week** (2 jobs). Every process must be no-discovery-call, no-manual-code, script-driven. |
 | Kill switch | Week 6: <2 paying clients from 300 DMs sent. |
 | Fiscal | Alta en Hacienda + modelo 303 quarterly IVA + Spanish-compliant invoicing tool (Holded/Billin/Quaderno, Verifactu-ready). Run in parallel with outreach. |
 

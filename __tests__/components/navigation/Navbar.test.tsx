@@ -175,6 +175,25 @@ describe('Navbar', () => {
         renderNavbar({ logo: 'Acme', ctaLabel: 'Go', ctaAction: 'https://example.com' })
       ).not.toThrow()
     })
+
+    it('opens external https CTA links in a new tab on desktop', () => {
+      renderNavbar({
+        logo: 'Acme',
+        ctaLabel: 'Ver un ejemplo',
+        ctaAction: 'https://moviles.clubtal.com',
+      })
+      const link = screen.getByRole('link', { name: 'Ver un ejemplo' })
+      expect(link).toHaveAttribute('href', 'https://moviles.clubtal.com')
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+    })
+
+    it('does not use target blank for internal CTA paths', () => {
+      renderNavbar({ logo: 'Acme', ctaLabel: 'Get Started', ctaAction: '/signup' })
+      const link = screen.getByRole('link', { name: 'Get Started' })
+      expect(link).toHaveAttribute('href', '/signup')
+      expect(link).not.toHaveAttribute('target')
+    })
   })
 
   describe('fully populated — logo + links + ctaLabel', () => {
@@ -232,6 +251,20 @@ describe('Navbar', () => {
       const ctaLink = mobilePanel(container).querySelector('a[href="/contact"]')
       expect(ctaLink).not.toBeNull()
       expect(ctaLink?.textContent).toBe('Book now')
+    })
+
+    it('opens external https CTA links in a new tab in the mobile panel', () => {
+      const container = renderNavbar({
+        logo: 'Acme',
+        ctaLabel: 'Ver un ejemplo',
+        ctaAction: 'https://moviles.clubtal.com',
+      })
+      const ctaLink = mobilePanel(container).querySelector(
+        'a[href="https://moviles.clubtal.com"]',
+      )
+      expect(ctaLink).not.toBeNull()
+      expect(ctaLink).toHaveAttribute('target', '_blank')
+      expect(ctaLink).toHaveAttribute('rel', 'noopener noreferrer')
     })
 
     it('mobile panel renders no CTA link when ctaAction is omitted', () => {

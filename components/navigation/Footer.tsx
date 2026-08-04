@@ -1,4 +1,5 @@
 import { formatCopyright } from "@/lib/format-copyright";
+import { getExternalLinkProps } from "@/lib/link-props";
 
 const colsMap: Record<number, string> = {
   1: "grid-cols-1",
@@ -42,6 +43,7 @@ export function Footer({ columns, copyright }: FooterProps) {
                       <a
                         href={link.href}
                         className="text-sm text-muted transition-colors hover:text-foreground break-words"
+                        {...getExternalLinkProps(link.href)}
                       >
                         {link.label}
                       </a>

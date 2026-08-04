@@ -61,7 +61,7 @@
       "properties": {
         "preset": {
           "type": "string",
-          "enum": ["bold-restaurant", "modern-minimal", "professional-law", "vibrant-retail", "default"]
+          "enum": ["bold-restaurant", "modern-minimal", "professional-law", "vibrant-retail", "calm-healthcare", "bright-education", "modern-realestate", "warm-hospitality", "strong-fitness", "creative-studio", "community-nonprofit", "industrial-trades", "clubtal-brand", "repair-shop-es", "default"]
         },
         "primaryColor": { "type": "string" },
         "accentColor": { "type": "string" },

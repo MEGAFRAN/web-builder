@@ -9,6 +9,7 @@ import {
   dispatchOpenBookingModal,
   isBookingModalHref,
 } from "@/lib/booking-modal-events";
+import { getExternalLinkProps } from "@/lib/link-props";
 
 const NAVBAR_SHADOW =
   "shadow-[0_1px_0_color-mix(in_srgb,var(--color-text)_8%,transparent)]";
@@ -53,7 +54,12 @@ function NavbarCta({
   }
 
   return (
-    <a href={href} className={className} onClick={onActivate}>
+    <a
+      href={href}
+      className={className}
+      onClick={onActivate}
+      {...getExternalLinkProps(href)}
+    >
       {label}
     </a>
   );

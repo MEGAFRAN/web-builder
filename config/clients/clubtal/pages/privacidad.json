@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "title": "Política de privacidad",
+    "description": "Información sobre cómo tratamos los datos en clubtal.com: qué recogemos, para qué y cuáles son tus derechos según el RGPD y la LOPDGDD.",
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "missionBlock",
+      "heading": "Política de privacidad",
+      "body": "Esta política explica cómo tratamos los datos en clubtal.com, de acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD). Diseñamos este sitio con privacidad por defecto: sin cookies de seguimiento, sin formularios de contacto y sin almacenamiento de datos personales identificables.\n\nÚltima actualización: agosto de 2026.",
+      "imageUrl": null,
+      "imageAlt": null
+    },
+    {
+      "_type": "faqBlock",
+      "title": null,
+      "items": [
+        {
+          "question": "1. Responsable del tratamiento",
+          "answer": "Nombre: Francisco Antonio Cruz Julio\nEmail de contacto: francisco.cruz.contact@gmail.com\nTeléfono: +34 633 062 835\n\nNIF y domicilio: disponibles bajo solicitud escrita a francisco.cruz.contact@gmail.com.\n\nPuedes ejercer tus derechos o plantear cualquier consulta sobre privacidad escribiendo a francisco.cruz.contact@gmail.com con el asunto «Privacidad — RGPD»."
+        },
+        {
+          "question": "2. Datos que recogemos",
+          "answer": "Telemetría anónima: cuando visitas clubtal.com, se registran únicamente contadores agregados (visitas, clics en WhatsApp, clics en llamada). Estos contadores no registran tu dirección IP, tu dispositivo, tu navegador ni ningún otro dato que permita identificarte. No se usan cookies, ni rastreadores de terceros, ni herramientas como Google Analytics.\n\nBotones de WhatsApp y llamada: al pulsarlos, sales de clubtal.com y accedes a servicios externos. Solo se registra el contador agregado de clics descrito arriba.\n\nFormularios de contacto: clubtal.com no dispone de formulario de contacto. Todo el contacto comercial se realiza a través de WhatsApp o llamada telefónica, fuera del entorno web."
+        },
+        {
+          "question": "3. Finalidad y base de legitimación",
+          "answer": "Los contadores de telemetría se usan exclusivamente para medir el rendimiento del sitio de forma anónima: qué páginas generan más interacción y qué botones se pulsan con más frecuencia. La base legal es el interés legítimo del responsable conforme al artículo 6.1.f del RGPD, dado que el tratamiento se limita a estadísticas anónimas que no permiten identificar a ningún usuario ni afectan a sus derechos o libertades."
+        },
+        {
+          "question": "4. Destinatarios de los datos",
+          "answer": "Los contadores de telemetría se almacenan en infraestructura de Microsoft Azure, dentro del Espacio Económico Europeo (EEE). Microsoft actúa como encargado del tratamiento al amparo de un contrato de procesamiento de datos conforme al RGPD. No se ceden datos a terceros, no se usan plataformas de publicidad ni se realizan transferencias internacionales de datos fuera del EEE."
+        },
+        {
+          "question": "5. Plazo de conservación",
+          "answer": "Los contadores agregados de telemetría se conservan durante un máximo de 13 meses desde su registro. Pasado ese plazo, se eliminan o se agregan en estadísticas anuales sin posibilidad de trazabilidad individual. Dado que no se almacenan datos personales identificables, no existe un período de conservación relevante para información de usuarios concretos."
+        },
+        {
+          "question": "6. Tus derechos (ARSOPL)",
+          "answer": "De acuerdo con el RGPD y la LOPDGDD, tienes derecho a:\n\n• Acceso: saber si tratamos datos tuyos y obtener una copia.\n• Rectificación: corregir datos inexactos.\n• Supresión: solicitar que borremos tus datos cuando ya no sean necesarios.\n• Oposición: oponerte al tratamiento en determinadas circunstancias.\n• Portabilidad: recibir tus datos en formato estructurado y de uso común.\n• Limitación: solicitar que restrinjamos el tratamiento en determinados supuestos.\n\nPuedes ejercer estos derechos enviando un email a francisco.cruz.contact@gmail.com con el asunto «Derechos RGPD» e indicando qué derecho quieres ejercer. Responderemos en el plazo máximo de un mes.\n\nDado que este sitio no recoge datos personales identificables, en la mayoría de casos no será posible asociar tu solicitud a ningún registro existente."
+        },
+        {
+          "question": "7. Medidas de seguridad",
+          "answer": "Este sitio web se sirve exclusivamente a través de conexión cifrada HTTPS. Los datos de telemetría almacenados en Azure están protegidos mediante controles de acceso, cifrado en reposo y auditoría de accesos. La arquitectura del sitio es estática (sin base de datos de usuarios, sin sesiones), lo que elimina por diseño la mayoría de vectores de ataque habituales."
+        },
+        {
+          "question": "8. Menores de edad",
+          "answer": "Este sitio está dirigido exclusivamente a adultos y titulares de negocios. No está dirigido a menores de 14 años ni recoge conscientemente datos de menores. Si tienes conocimiento de que un menor ha facilitado datos personales a través de este sitio, comunícalo a francisco.cruz.contact@gmail.com para proceder a su eliminación."
+        },
+        {
+          "question": "9. Cambios en esta política",
+          "answer": "Esta política puede actualizarse para reflejar cambios en el servicio, en la legislación aplicable o en las prácticas de tratamiento de datos. Cuando se produzcan cambios relevantes, actualizaremos la fecha de «Última actualización» que figura al inicio de esta página. El uso continuado del sitio tras la publicación de cambios implica la aceptación de la política actualizada."
+        },
+        {
+          "question": "10. Autoridad de control",
+          "answer": "Si consideras que el tratamiento de tus datos no es correcto, tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD):\n\nAgencia Española de Protección de Datos\nC/ Jorge Juan, 6 — 28001 Madrid\nwww.aepd.es — Teléfono: 901 100 099\n\nTe recomendamos que antes de acudir a la AEPD te pongas en contacto con nosotros en francisco.cruz.contact@gmail.com para intentar resolver cualquier incidencia directamente."
+        }
+      ]
+    }
+  ]
+}

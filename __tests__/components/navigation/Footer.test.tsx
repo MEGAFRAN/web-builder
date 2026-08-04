@@ -174,6 +174,21 @@ describe('Footer', () => {
       expect(grid?.className).toContain('grid-cols-1 sm:grid-cols-2 md:grid-cols-4')
     })
 
+    it('opens external https links in a new tab', () => {
+      renderFooter({ columns: fourColumns })
+      const twitter = screen.getByRole('link', { name: 'Twitter' })
+      expect(twitter).toHaveAttribute('href', 'https://twitter.com/acme')
+      expect(twitter).toHaveAttribute('target', '_blank')
+      expect(twitter).toHaveAttribute('rel', 'noopener noreferrer')
+    })
+
+    it('does not use target blank for internal links', () => {
+      renderFooter({ columns: oneColumn })
+      const about = screen.getByRole('link', { name: 'About' })
+      expect(about).toHaveAttribute('href', '/about')
+      expect(about).not.toHaveAttribute('target')
+    })
+
     it('renders all four column titles', () => {
       renderFooter({ columns: fourColumns })
       expect(screen.getByText('Company')).toBeInTheDocument()

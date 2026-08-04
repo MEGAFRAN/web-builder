@@ -1,0 +1,50 @@
+{
+  "metadata": {
+    "title": "Aviso legal",
+    "description": "Información legal sobre el titular de clubtal.com: datos identificativos, condiciones de uso y propiedad intelectual.",
+    "noIndex": false
+  },
+  "blocks": [
+    {
+      "_type": "missionBlock",
+      "heading": "Aviso legal",
+      "body": "En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se facilita a continuación la información legal del titular de este sitio web.\n\nÚltima actualización: agosto de 2026.",
+      "imageUrl": null,
+      "imageAlt": null
+    },
+    {
+      "_type": "faqBlock",
+      "title": null,
+      "items": [
+        {
+          "question": "1. Datos identificativos del titular",
+          "answer": "El titular de clubtal.com es Francisco Antonio Cruz Julio, persona física que ejerce la actividad económica como trabajador autónomo conforme a la legislación española.\n\nEmail: francisco.cruz.contact@gmail.com\nTeléfono: +34 633 062 835\n\nNIF y domicilio: disponibles bajo solicitud escrita a francisco.cruz.contact@gmail.com, conforme al artículo 10 LSSI-CE.\n\nActividad: Diseño, publicación y mantenimiento de sitios web estáticos para autónomos y pequeñas empresas.\n\nNo inscrito en el Registro Mercantil (persona física autónoma)."
+        },
+        {
+          "question": "2. Objeto del sitio web",
+          "answer": "clubtal.com es el sitio web de presentación del servicio Clubtal, que ofrece la contratación de sitios web estáticos profesionales para negocios locales mediante suscripción mensual. A través de este sitio puedes obtener información sobre el servicio, ver ejemplos reales y ponerte en contacto con nosotros a través de WhatsApp o teléfono."
+        },
+        {
+          "question": "3. Condiciones de uso",
+          "answer": "El acceso a este sitio web es libre, gratuito y no requiere registro. El simple uso del sitio implica la aceptación de las presentes condiciones legales.\n\nTe comprometes a hacer un uso lícito de los contenidos y servicios disponibles en este sitio web, de conformidad con la legislación vigente, la moral y las buenas costumbres. Queda expresamente prohibido: utilizar el sitio con fines fraudulentos o contrarios a la ley; reproducir, copiar o distribuir los contenidos sin autorización previa; realizar actos que puedan dañar, deshabilitar o deteriorar el sitio o impedir su uso normal por otros usuarios.\n\nFrancisco Antonio Cruz Julio se reserva el derecho a modificar en cualquier momento el contenido y configuración de este sitio web, así como las presentes condiciones de uso. Los cambios serán efectivos desde su publicación en esta misma página."
+        },
+        {
+          "question": "4. Propiedad intelectual e industrial",
+          "answer": "Todos los contenidos de clubtal.com — incluyendo textos, diseño gráfico, logotipos, código fuente y cualquier otro elemento — son propiedad de Francisco Antonio Cruz Julio o disponen de la correspondiente autorización de sus titulares. El nombre comercial Clubtal y el descriptor «tu web profesional, lista hoy» están protegidos como signos distintivos.\n\nQueda prohibida la reproducción, distribución, comunicación pública o transformación de los contenidos de este sitio sin autorización escrita previa de Francisco Antonio Cruz Julio, salvo en los casos expresamente permitidos por la Ley de Propiedad Intelectual.\n\nLos sitios web publicados para clientes de Clubtal (por ejemplo, moviles.clubtal.com) contienen contenidos propiedad de cada cliente respectivo. Clubtal actúa exclusivamente como prestador técnico del servicio de alojamiento y publicación, sin adquirir ningún derecho sobre dichos contenidos."
+        },
+        {
+          "question": "5. Exclusión de responsabilidad",
+          "answer": "Francisco Antonio Cruz Julio no garantiza la disponibilidad continua e ininterrumpida del sitio web. Pueden producirse interrupciones temporales por razones de mantenimiento, fallos técnicos o causas de fuerza mayor.\n\nAunque se trabaja para mantener actualizada la información publicada, Francisco Antonio Cruz Julio no garantiza la exactitud, completitud o vigencia de todos los contenidos. La información sobre precios, condiciones del servicio y disponibilidad está sujeta a cambios sin previo aviso. Para cualquier consulta concreta, contacta directamente a través de WhatsApp o teléfono.\n\nFrancisco Antonio Cruz Julio no será responsable de ningún daño directo, indirecto, incidental o consecuente derivado del uso o de la imposibilidad de uso de este sitio web, salvo que sea legalmente imposible excluir dicha responsabilidad."
+        },
+        {
+          "question": "6. Enlaces a sitios externos",
+          "answer": "Este sitio puede contener enlaces a páginas web de terceros (por ejemplo, WhatsApp, Google Maps u otros servicios externos). Francisco Antonio Cruz Julio no tiene control sobre el contenido ni la política de privacidad de esas páginas y no asume ninguna responsabilidad respecto a ellas. El acceso a sitios externos se realiza bajo la exclusiva responsabilidad del usuario."
+        },
+        {
+          "question": "7. Legislación aplicable y jurisdicción",
+          "answer": "El presente aviso legal se rige íntegramente por la legislación española, en particular por la Ley 34/2002 de Servicios de la Sociedad de la Información (LSSI-CE), el Real Decreto Legislativo 1/1996 de Propiedad Intelectual, y demás normativa que resulte de aplicación.\n\nPara cualquier controversia derivada del acceso o uso de este sitio web, las partes se someten, con renuncia expresa a cualquier otro fuero que pudiera corresponderles, a la jurisdicción de los Juzgados y Tribunales del domicilio del titular."
+        }
+      ]
+    }
+  ]
+}

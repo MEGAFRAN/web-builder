@@ -71,6 +71,19 @@ describe('Hero', () => {
       renderHero({ headline: 'H', ctaLabel: 'View Services', ctaAction: '#services' })
       const link = screen.getByRole('link', { name: 'View Services' })
       expect(link).toHaveAttribute('href', '#services')
+      expect(link).not.toHaveAttribute('target')
+    })
+
+    it('opens external https links in a new tab', () => {
+      renderHero({
+        headline: 'H',
+        ctaLabel: 'Ver un ejemplo real',
+        ctaAction: 'https://moviles.clubtal.com',
+      })
+      const link = screen.getByRole('link', { name: 'Ver un ejemplo real' })
+      expect(link).toHaveAttribute('href', 'https://moviles.clubtal.com')
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer')
     })
 
     it('opens the booking modal when ctaAction is #book', () => {

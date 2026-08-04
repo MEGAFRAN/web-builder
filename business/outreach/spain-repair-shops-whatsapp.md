@@ -41,7 +41,7 @@ Send after warm-up is complete. One DM per lead. 20–30/day max.
 >
 > Te dejo un ejemplo: https://moviles.clubtal.com
 >
-> Son 39€/mes + IVA, deducible. Sin setup. Sin compromiso.
+> Son 39€/mes + IVA, 100% deducible. Sin coste de alta. Sin compromiso.
 >
 > ¿Te interesaría algo así para [Nombre de tienda]?
 
@@ -53,7 +53,7 @@ Send after warm-up is complete. One DM per lead. 20–30/day max.
 >
 > Un ejemplo: https://moviles.clubtal.com — 39€/mes + IVA, deducible.
 >
-> Sin agencia, sin complicaciones. ¿Lo ves útil para ti?
+> Sin complicaciones. ¿Lo ves útil para ti?
 
 **Copywriting notes:**
 - Lead with a real name (`me llamo [Nombre]`), not "soy de Clubtal" — a person is less spammy than a brand.
@@ -96,7 +96,7 @@ Send 5–7 days after Touch 2 if still no reply. This is the final outreach mess
 
 > Hola [Nombre], último mensaje de mi parte, no quiero molestar.
 >
-> Si en algún momento quieres una web profesional para [Nombre de tienda] sin complicaciones ni agencias, estamos en clubtal.com.
+> Si en algún momento quieres una web profesional para [Nombre de tienda] sin complicaciones, estamos en clubtal.com.
 >
 > Que te vaya bien.
 

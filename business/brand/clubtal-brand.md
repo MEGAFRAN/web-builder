@@ -16,7 +16,7 @@ The name is coined and carries zero meaning on arrival. The descriptor does 100%
 
 ## One-Line Positioning
 
-> La web profesional para tu tienda, sin agencia y sin complicaciones — 39€/mes + IVA.
+> La web profesional para tu negocio — 39€/mes + IVA (100% deducible). Sin coste de alta.
 
 This is not a tagline. It is the first sentence of any surface where a prospect is deciding whether to trust us.
 

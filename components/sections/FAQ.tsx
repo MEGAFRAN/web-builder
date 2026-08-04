@@ -118,7 +118,7 @@ function FaqItem({
         }}
       >
         <div ref={contentRef} className="pb-5">
-          <p className="text-base text-muted">{item.answer}</p>
+          <p className="text-base text-muted whitespace-pre-line">{item.answer}</p>
         </div>
       </div>
     </article>

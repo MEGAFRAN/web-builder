@@ -1,0 +1,83 @@
+{
+  "clientId": "clubtal",
+  "displayName": "Clubtal",
+  "customDomain": "clubtal.com",
+  "swaResourceName": "swa-clubtal",
+  "features": {
+    "blog": false,
+    "booking": false,
+    "gallery": false,
+    "menu": false
+  },
+  "theme": {
+    "preset": "clubtal-brand"
+  },
+  "siteMetadata": {
+    "siteName": "Clubtal — tu web profesional, lista hoy",
+    "titleTemplate": "%s | Clubtal",
+    "defaultDescription": "La web profesional para tu negocio — 39€/mes + IVA (100% deducible). Sin coste de alta.",
+    "defaultOgImage": null
+  },
+  "header": {
+    "logo": "clubtal",
+    "ctaLabel": "Ver un ejemplo",
+    "ctaAction": "https://moviles.clubtal.com",
+    "links": []
+  },
+  "footer": {
+    "copyright": "© 2026 Clubtal",
+    "columns": [
+      {
+        "title": "Clubtal",
+        "links": [
+          {
+            "label": "Ver demo",
+            "href": "https://moviles.clubtal.com"
+          }
+        ]
+      },
+      {
+        "title": "Contacto",
+        "links": [
+          {
+            "label": "WhatsApp",
+            "href": "https://wa.me/34633062835"
+          },
+          {
+            "label": "+34 633 062 835",
+            "href": "tel:+34633062835"
+          }
+        ]
+      },
+      {
+        "title": "Legal",
+        "links": [
+          {
+            "label": "Aviso legal",
+            "href": "/aviso-legal"
+          },
+          {
+            "label": "Privacidad",
+            "href": "/privacidad"
+          }
+        ]
+      }
+    ]
+  },
+  "bottomActionBar": {
+    "items": [
+      {
+        "label": "Llamar",
+        "href": "tel:+34633062835",
+        "icon": "public/call.svg",
+        "iconColor": "#ffffff"
+      },
+      {
+        "label": "WhatsApp",
+        "href": "https://wa.me/34633062835",
+        "icon": "public/whatsapp.svg",
+        "iconColor": "#25D366"
+      }
+    ]
+  }
+}
