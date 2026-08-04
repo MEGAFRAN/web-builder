@@ -12,12 +12,18 @@ interface FeatureGridProps {
   subtitle?: string | null;
   features: Array<{ icon?: string | null; title: string; description: string }>;
   cols?: string | null;
+  /** `card` (default) boxes each feature; `list` uses divider rows for non-interactive benefit scans. */
+  variant?: "card" | "list" | null;
 }
 
 function resolveColsClass(
   cols: string | null | undefined,
   featureCount: number,
+  variant: "card" | "list",
 ): string {
+  if (variant === "list") {
+    return "grid-cols-1";
+  }
   if (cols != null && cols in colsMap) {
     return colsMap[cols];
   }
@@ -27,15 +33,29 @@ function resolveColsClass(
   return colsMap["3"];
 }
 
-export function FeatureGrid({ title, subtitle, features, cols }: FeatureGridProps) {
-  const colsClass = resolveColsClass(cols, features?.length ?? 0);
+const itemClassByVariant = {
+  card: "flex h-full flex-col gap-3 rounded-[var(--radius)] bg-surface p-6 shadow-sm",
+  list: "flex flex-col gap-2 border-b border-border py-5 last:border-b-0",
+} as const;
+
+export function FeatureGrid({
+  title,
+  subtitle,
+  features,
+  cols,
+  variant: variantProp,
+}: FeatureGridProps) {
+  const variant = variantProp === "list" ? "list" : "card";
+  const colsClass = resolveColsClass(cols, features?.length ?? 0, variant);
+  const gridGapClass = variant === "list" ? "gap-0" : "gap-6 sm:gap-8";
+
   return (
     <Section paddingY="md">
       <Container maxWidth="2xl" padding="theme">
-        <div data-component="feature-grid">
+        <div data-component="feature-grid" data-variant={variant}>
           <Stack gap="lg">
             {(title || subtitle) && (
-              <Stack gap="lg">
+              <Stack gap="sm">
                 {title && (
                   <h2 className="text-center text-4xl font-bold tracking-tight text-brand">
                     {title}
@@ -46,9 +66,9 @@ export function FeatureGrid({ title, subtitle, features, cols }: FeatureGridProp
                 )}
               </Stack>
             )}
-            <div className={`grid ${colsClass} gap-8`}>
+            <div className={`grid ${colsClass} ${gridGapClass}`}>
               {features?.map((f, i) => (
-                <div key={i} className="flex flex-col h-full gap-3 rounded-[var(--radius)] bg-surface shadow-sm p-6">
+                <div key={i} className={itemClassByVariant[variant]}>
                   {f.icon && <span className="text-2xl">{f.icon}</span>}
                   <h3 className="text-xl font-semibold text-foreground">{f.title}</h3>
                   <p className="text-base text-muted">{f.description}</p>

@@ -3,7 +3,10 @@ import { FeatureGrid } from '@/components/sections/FeatureGrid'
 
 export default function FeatureGridBlock({
   heading,
+  subtitle,
   items,
+  cols,
+  variant,
 }: FeatureGridBlockType) {
   const features = items.map((item) => ({
     icon: item.iconUrl ?? null,
@@ -13,7 +16,13 @@ export default function FeatureGridBlock({
 
   return (
     <div data-component="feature-grid-block">
-      <FeatureGrid title={heading} features={features} />
+      <FeatureGrid
+        title={heading}
+        subtitle={subtitle}
+        features={features}
+        cols={cols}
+        variant={variant}
+      />
     </div>
   )
 }

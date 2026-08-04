@@ -79,7 +79,8 @@
     "featureGridBlock": {
       "useCases": [
         "Product or platform benefits in a scannable multi-column grid.",
-        "Homepage or landing sections with icon/title/description items."
+        "Homepage or landing sections with icon/title/description items.",
+        "Use variant list for non-interactive benefit scans (divider rows, no card chrome)."
       ],
       "avoidWhen": ["Bookable service menu with prices — use services or servicesPageBlock."]
     },
@@ -371,7 +372,8 @@
     "sections/FeatureGrid": {
       "useCases": [
         "Feature grid section inside featureGridBlock and servicesPageBlock.",
-        "Use featureGridBlock in page JSON."
+        "Use featureGridBlock in page JSON.",
+        "Pass variant list for divider-row benefit lists without card chrome."
       ]
     },
     "sections/Hero": {

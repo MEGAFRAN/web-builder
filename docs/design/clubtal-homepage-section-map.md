@@ -55,10 +55,12 @@ Watch for `.text-muted` utility classes in any component that renders muted text
 
 **Job:** Answer the implicit question after the hero: "OK, but what exactly do I get?" Four concrete deliverables, zero abstract promises.
 
-**Why `featureGridBlock`:** Scannable multi-column grid, best for a list of product benefits with heading + description pairs. Renders on a white background, creating visual separation from the hero. Items render correctly with `iconUrl` omitted — the demo-phone-repair-shop homepage uses this pattern without icons and is the existing production reference. On mobile the grid stacks to a single column.
+**Why `featureGridBlock`:** Scannable benefit list (variant `list` — divider rows, no card chrome) answering "what do I get?" after the hero. Renders on a white background, creating visual separation from the hero. Items render correctly with `iconUrl` omitted — the demo-phone-repair-shop homepage uses the card variant without icons as the existing production reference. Copy is one sentence per item for mobile scan speed.
 
 **Props used:**
 - `heading` — section title rendered as H2
+- `subtitle` — short supporting line under the H2
+- `variant` — `"list"` for divider-separated benefit rows (no decorative cards)
 - `items[]` — array of `{ heading, description }` objects; `iconUrl` omitted (null-safe)
 
 ---

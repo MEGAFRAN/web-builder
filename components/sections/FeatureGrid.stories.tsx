@@ -8,6 +8,7 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     cols: { control: 'select', options: ['2', '3'] },
+    variant: { control: 'select', options: ['card', 'list'] },
   },
 } satisfies Meta<typeof FeatureGrid>
 
@@ -39,4 +40,12 @@ export const TwoCols: Story = {
 }
 export const WithIcons: Story = {
   args: { title: 'What you get', features: featuresWithIcons, cols: '3' },
+}
+export const ListVariant: Story = {
+  args: {
+    title: 'Qué incluye tu web',
+    subtitle: 'Todo lo que necesita tu negocio — sin complicaciones.',
+    features: baseFeatures,
+    variant: 'list',
+  },
 }

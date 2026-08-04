@@ -160,6 +160,42 @@ describe('FeatureGrid', () => {
     })
   })
 
+  describe('variant prop', () => {
+    it('defaults to card chrome on feature items', () => {
+      const container = renderFeatureGrid({ features: FEATURES })
+      expect(getRoot(container).getAttribute('data-variant')).toBe('card')
+      const item = getGrid(container).firstElementChild as HTMLElement
+      expect(item.className).toContain('bg-surface')
+      expect(item.className).toContain('shadow-sm')
+    })
+
+    it('variant="list" uses divider rows without card chrome', () => {
+      const container = renderFeatureGrid({ features: FEATURES, variant: 'list' })
+      expect(getRoot(container).getAttribute('data-variant')).toBe('list')
+      const item = getGrid(container).firstElementChild as HTMLElement
+      expect(item.className).toContain('border-b')
+      expect(item.className).not.toContain('bg-surface')
+      expect(item.className).not.toContain('shadow-sm')
+    })
+
+    it('variant="list" forces a single-column grid', () => {
+      const container = renderFeatureGrid({ features: FEATURES, cols: '3', variant: 'list' })
+      expect(getGrid(container).className).toContain('grid-cols-1')
+      expect(getGrid(container).className).not.toContain('sm:grid-cols-3')
+    })
+
+    it('variant="list" uses gap-0 between rows', () => {
+      const container = renderFeatureGrid({ features: FEATURES, variant: 'list' })
+      expect(getGrid(container).className).toContain('gap-0')
+    })
+
+    it('card variant uses responsive gap-6 sm:gap-8', () => {
+      const container = renderFeatureGrid({ features: FEATURES })
+      expect(getGrid(container).className).toContain('gap-6')
+      expect(getGrid(container).className).toContain('sm:gap-8')
+    })
+  })
+
   describe('combined props', () => {
     it('renders title, subtitle, and all feature cards together', () => {
       renderFeatureGrid({ title: 'Features', subtitle: 'All included', features: FEATURES, cols: '3' })

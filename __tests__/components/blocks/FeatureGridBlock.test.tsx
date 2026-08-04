@@ -53,4 +53,25 @@ describe('FeatureGridBlock', () => {
       container.querySelector('[data-component="feature-grid-block"]')
     ).toBeInTheDocument()
   })
+
+  it('forwards subtitle to the feature grid', () => {
+    render(
+      <FeatureGridBlock
+        _type="featureGridBlock"
+        heading="Why Choose Us"
+        subtitle="Everything included"
+        items={items}
+      />
+    )
+    expect(screen.getByText('Everything included')).toBeInTheDocument()
+  })
+
+  it('forwards variant="list" to the feature grid', () => {
+    const { container } = render(
+      <FeatureGridBlock _type="featureGridBlock" items={items} variant="list" />
+    )
+    expect(
+      container.querySelector('[data-component="feature-grid"]')
+    ).toHaveAttribute('data-variant', 'list')
+  })
 })

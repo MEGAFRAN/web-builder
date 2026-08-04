@@ -17,30 +17,32 @@
     {
       "_type": "featureGridBlock",
       "heading": "Qué incluye tu web",
+      "subtitle": "Todo lo que necesita tu negocio — sin complicaciones.",
+      "variant": "list",
       "items": [
         {
           "heading": "Tu dominio propio",
-          "description": "Tu negocio con tu nombre en la dirección web — no un perfil en un directorio. Una URL que puedes poner en tu escaparate, en Instagram o mandarte por WhatsApp."
+          "description": "Tu nombre en la dirección web — no un perfil en un directorio."
         },
         {
           "heading": "Hecha para el móvil",
-          "description": "La mayoría de tus clientes te buscan desde el móvil. Tu web se ve perfecta en cualquier pantalla — sin textos cortados ni botones imposibles de pulsar."
+          "description": "Se ve perfecta en cualquier pantalla, sin textos cortados ni botones imposibles."
         },
         {
           "heading": "Carga al instante",
-          "description": "Las páginas de tu web ya están construidas de antemano — no se generan en el momento de cada visita. El resultado: velocidad real desde el primer clic, en cualquier conexión."
+          "description": "Velocidad real desde el primer clic, en cualquier conexión."
         },
         {
           "heading": "Botón de WhatsApp en cada página",
-          "description": "El cliente que visita tu web te escribe en un clic. Sin correos que no lees, sin esperas."
+          "description": "El cliente que visita tu web te escribe en un clic."
         },
         {
           "heading": "Servicios y precios publicados",
-          "description": "Tu catálogo visible en la web con los precios que tú pongas. Los clientes llegan ya informados — menos tiempo explicando, más tiempo trabajando."
+          "description": "Los clientes llegan ya informados — menos tiempo explicando."
         },
         {
           "heading": "Cambios incluidos en el precio",
-          "description": "Subes un precio, añades un servicio o cambias el horario. Nos lo dices por WhatsApp y lo publicamos en minutos — sin coste extra."
+          "description": "Nos lo dices por WhatsApp y lo actualizamos — sin coste extra."
         }
       ]
     },

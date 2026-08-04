@@ -22,6 +22,38 @@
         }
       ]
     },
+    "subtitle": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cols": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["2", "3"]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "variant": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["card", "list"]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "items": {
       "type": "array",
       "items": {

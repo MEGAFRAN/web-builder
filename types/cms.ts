@@ -258,7 +258,11 @@ export type FeatureGridItem = {
 export type FeatureGridBlock = {
   _type: 'featureGridBlock'
   heading?: string | null
+  subtitle?: string | null
   items: FeatureGridItem[]
+  cols?: '2' | '3' | null
+  /** `card` boxes each item; `list` uses divider rows for scannable benefit lists. */
+  variant?: 'card' | 'list' | null
 }
 
 export type TestimonialItem = {
