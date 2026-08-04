@@ -155,7 +155,10 @@
           "additionalProperties": false,
           "required": ["logo"],
           "properties": {
-            "logo": { "type": "string" },
+            "logo": {
+              "type": "string",
+              "description": "Text wordmark rendered by Navbar as heading typography. Image URLs are not supported — use site metadata icon/opengraph routes for raster brand assets."
+            },
             "ctaLabel": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
             "ctaAction": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
             "links": {

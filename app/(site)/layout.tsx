@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getClientConfig } from '@/lib/client-config'
 import { getCompanyProfile } from '@/lib/company-profile'
 import {
@@ -9,6 +10,19 @@ import { ConversionTelemetry } from '@/components/analytics/ConversionTelemetry'
 import { Navbar } from '@/components/navigation/Navbar'
 import { Footer } from '@/components/navigation/Footer'
 import { BottomCtaBar } from '@/components/navigation/BottomCtaBar'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const clientId = process.env.CLIENT_ID!
+  const config = getClientConfig(clientId)
+
+  if (!config.customDomain) {
+    return {}
+  }
+
+  return {
+    metadataBase: new URL(`https://${config.customDomain}`),
+  }
+}
 
 /** Space for fixed `BottomCtaBar` so page content is not hidden behind it. */
 const BODY_PAD_WITH_BOTTOM_CTA =

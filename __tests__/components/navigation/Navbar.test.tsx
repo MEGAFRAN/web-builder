@@ -83,6 +83,7 @@ describe('Navbar', () => {
       const logoLink = screen.getByRole('link', { name: 'Acme Corp' })
       expect(logoLink.className).toContain('text-brand')
       expect(logoLink.className).toContain('font-[family-name:var(--font-heading)]')
+      expect(logoLink.className).toContain('font-semibold')
     })
   })
 

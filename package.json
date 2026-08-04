@@ -22,6 +22,7 @@
     "validate": "npm run generate:component-catalog && npm run lint && npm run test && npx tsc --noEmit",
     "validate:quick": "npm run generate:component-catalog && npm run lint && npm run test:quick && npx tsc --noEmit",
     "validate:client": "node scripts/validate-client.mjs",
+    "generate:clubtal-assets": "node scripts/export-clubtal-brand-assets.mjs",
     "guard:config": "node scripts/guard-config-keys.mjs"
   },
   "dependencies": {
