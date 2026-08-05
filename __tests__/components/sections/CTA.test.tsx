@@ -75,10 +75,10 @@ describe('CTA', () => {
     it('opens external https links in a new tab', () => {
       renderCTA({
         headline: 'H',
-        ctaLabel: 'Ver un ejemplo real',
+        ctaLabel: 'Ver una web real',
         ctaAction: 'https://moviles.clubtal.com',
       })
-      const link = screen.getByRole('link', { name: 'Ver un ejemplo real' })
+      const link = screen.getByRole('link', { name: 'Ver una web real' })
       expect(link).toHaveAttribute('href', 'https://moviles.clubtal.com')
       expect(link).toHaveAttribute('target', '_blank')
       expect(link).toHaveAttribute('rel', 'noopener noreferrer')

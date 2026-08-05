@@ -10,7 +10,7 @@
       "_type": "heroBlock",
       "heading": "Tu web profesional, lista hoy",
       "subtext": "Tu sitio web por solo 39€/mes + IVA (100% deducible). Mas clientes, mas ventas.",
-      "primaryButtonLabel": "Ver un ejemplo real",
+      "primaryButtonLabel": "Ver una web real",
       "primaryButtonHref": "https://moviles.clubtal.com",
       "backgroundImageUrl": null
     },
@@ -75,7 +75,7 @@
       "_type": "ctaBlock",
       "headline": "39€/mes + IVA — Sin coste de alta, 100% deducible",
       "subtext": "Gasto 100% deducible para autónomos y empresas. Factura oficial mensual. Sin permanencia: si en algún momento decides cancelar, nos lo dices y listo.",
-      "ctaLabel": "Ver un ejemplo real",
+      "ctaLabel": "Ver una web real",
       "ctaHref": "https://moviles.clubtal.com",
       "background": "gray"
     },

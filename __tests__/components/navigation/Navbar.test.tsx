@@ -187,10 +187,10 @@ describe('Navbar', () => {
     it('opens external https CTA links in a new tab on desktop', () => {
       renderNavbar({
         logo: 'Acme',
-        ctaLabel: 'Ver un ejemplo',
+        ctaLabel: 'Ver cómo queda',
         ctaAction: 'https://moviles.clubtal.com',
       })
-      const link = screen.getByRole('link', { name: 'Ver un ejemplo' })
+      const link = screen.getByRole('link', { name: 'Ver cómo queda' })
       expect(link).toHaveAttribute('href', 'https://moviles.clubtal.com')
       expect(link).toHaveAttribute('target', '_blank')
       expect(link).toHaveAttribute('rel', 'noopener noreferrer')
@@ -264,7 +264,7 @@ describe('Navbar', () => {
     it('opens external https CTA links in a new tab in the mobile panel', () => {
       const container = renderNavbar({
         logo: 'Acme',
-        ctaLabel: 'Ver un ejemplo',
+        ctaLabel: 'Ver cómo queda',
         ctaAction: 'https://moviles.clubtal.com',
       })
       const ctaLink = mobilePanel(container).querySelector(

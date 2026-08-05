@@ -22,7 +22,7 @@
   },
   "header": {
     "logo": "clubtal",
-    "ctaLabel": "Ver un ejemplo",
+    "ctaLabel": "Ver cómo queda",
     "ctaAction": "https://moviles.clubtal.com",
     "links": []
   },
@@ -33,7 +33,7 @@
         "title": "Clubtal",
         "links": [
           {
-            "label": "Ver demo",
+            "label": "Ver una web real",
             "href": "https://moviles.clubtal.com"
           }
         ]
@@ -69,13 +69,13 @@
   "bottomActionBar": {
     "items": [
       {
-        "label": "Llamar",
+        "label": "Llámanos",
         "href": "tel:+34633062835",
         "icon": "public/call.svg",
         "iconColor": "#ffffff"
       },
       {
-        "label": "WhatsApp",
+        "label": "Escríbenos",
         "href": "https://wa.me/34633062835",
         "icon": "public/whatsapp.svg",
         "iconColor": "#25D366"

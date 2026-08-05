@@ -137,7 +137,7 @@ Watch for `.text-muted` utility classes in any component that renders muted text
 
 **Rationale:** No block type in `types/cms.ts` exposes an `id` prop, so anchor links in the navbar cannot target specific sections in the rendered HTML. Broken anchor links on a credibility site are worse than no links at all. The page is six sections and scrolls in under 10 seconds on mobile.
 
-The navbar CTA "Ver un ejemplo" → `https://moviles.clubtal.com` is the only interactive element needed in the header. Adding navigation links dilutes this CTA (Hick's Law: fewer choices reduce decision time).
+The navbar CTA "Ver cómo queda" → `https://moviles.clubtal.com` is the only interactive element needed in the header. Adding navigation links dilutes this CTA (Hick's Law: fewer choices reduce decision time).
 
 **Future gap:** If anchor navigation is ever needed, each block type in `types/cms.ts` needs an optional `anchorId?: string | null` prop, and each block component needs to render `id={anchorId}` on its outermost element.
 
@@ -154,7 +154,7 @@ The original footer had one column (Demo link) and a bare copyright. This is leg
 
 **What was updated in `client.json`:**
 - `copyright` changed from `"© Clubtal"` to `"© 2026 Clubtal"` (year is expected by convention and avoids the page looking stale)
-- "Demo" column renamed to "Clubtal" with a cleaner link label ("Ver demo")
+- "Demo" column renamed to "Clubtal" with a cleaner link label ("Ver una web real")
 - "Legal" column added with two links: "Aviso legal" → `/aviso-legal` and "Privacidad" → `/privacidad`
 
 **Gap — legal pages not yet created:**
