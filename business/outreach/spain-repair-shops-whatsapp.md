@@ -29,6 +29,27 @@ Never send a DM that mentions Clubtal without the descriptor within the first tw
 
 ---
 
+## Send Timing (Spain local time)
+
+Target: repair shop owners at the counter — not during rush, not off-hours. All times are **Peninsula Spain (CET/CEST)**.
+
+| Rank | Day / window | Time (Spain local) | Quality | Why |
+|------|--------------|--------------------|---------|-----|
+| 1 | Tue–Thu mid-morning | **10:30–12:30** | Best | Shop open, morning rush easing; owner can glance at WhatsApp between walk-ins. Highest reply odds. |
+| 2 | Tue–Thu early afternoon | **16:30–18:00** | Excellent | After comida reopen; before evening drop-off rush. Decision-maker usually back and calmer. |
+| 3 | Wednesday mid-morning | **10:30–12:00** | Excellent | Midweek peak attention; least "start/end of week" noise. Prefer Wed if you only send one batch. |
+| 4 | Tuesday mid-morning | **10:30–12:00** | Very good | Strong midweek window; slightly better than Thu for first Touch 1. |
+| 5 | Thursday mid-morning | **10:30–12:00** | Very good | Still solid; replies can slip into Friday — keep Touch 1 earlier in the week when you can. |
+| 6 | Monday late morning | **11:00–12:30** | OK | Better than Monday 9:00, but owners are clearing weekend backlog — expect slower replies. |
+| 7 | Friday morning | **10:30–12:00** | Weak | Some replies; mental mode is "finish week." Worse for closing same day. |
+| 8 | Sat morning (if shop open) | **10:30–12:00** | Poor | Many shops are open and busy with walk-ins; owner distracted, cold pitch feels interruptive. |
+| 9 | Lunch / mid-comida | **14:00–16:00** | Poor | Many shops closed or owner eating; messages sit unread and feel spammy when they return. |
+| 10 | Sun / late evening / early open | **Sun any; Mon–Sat before 09:30 or after 20:30** | Worst | Closed, off-hours, or invasive. Hurts trust and block risk on a cold number. |
+
+**Default plan:** batch **20–30 DMs/day** on **Tue–Thu, 10:30–12:30**, with overflow to **16:30–18:00**. Avoid **comida (14:00–16:00)**, **Friday afternoon**, **Sunday**, and **late night**.
+
+---
+
 ## 3-Touch Sequence
 
 ### Touch 1 — Cold intro + demo link
